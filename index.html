@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Daniel Steven Moran Pizarro - PhD en Matemáticas, especialista en Álgebra Conmutativa, Geometría Algebraica e Historia de las Matemáticas">
+    <meta name="keywords" content="matemáticas, álgebra conmutativa, geometría algebraica, bases de Gröbner, ideales monomiales, historia de las matemáticas, UNAD, CINVESTAV">
+    <title>Daniel Steven Moran Pizarro - PhD en Matemáticas</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- MathJax for LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-name">Daniel</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                <li><a href="#sobre-mi" class="nav-link">Sobre Mí</a></li>
+                <li><a href="#investigacion" class="nav-link">Investigación</a></li>
+                <li><a href="#publicaciones" class="nav-link">Publicaciones</a></li>
+                <li><a href="#docencia" class="nav-link">Docencia</a></li>
+                <li><a href="#contacto" class="nav-link">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 class="hero-title">Daniel Steven Moran Pizarro</h1>
+            <p class="hero-subtitle">PhD en Matemáticas | Investigador y Docente</p>
+            <p class="hero-description">Especialista en Álgebra Conmutativa, Geometría Algebraica e Historia de las Matemáticas</p>
+            <div class="hero-buttons">
+                <a href="#sobre-mi" class="btn btn-primary">Conóceme</a>
+                <a href="#publicaciones" class="btn btn-secondary">Publicaciones</a>
+            </div>
+            <div class="social-links">
+                <a href="https://scholar.google.es/citations?user=CLZKj3YAAAAJ" target="_blank" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+                <a href="https://orcid.org/0000-0003-1791-2818" target="_blank" aria-label="ORCID"><i class="fab fa-orcid"></i></a>
+                <a href="https://www.researchgate.net/profile/Daniel-Moran-Pizarro" target="_blank" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
+                <a href="https://co.linkedin.com/in/daniel-steven-moran-6b5490331" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001560327" target="_blank" aria-label="CvLAC MinCiencias"><i class="fas fa-id-card"></i></a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="sobre-mi" class="section about">
+        <div class="container">
+            <h2 class="section-title">Sobre Mí</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="lead">Doctor en Ciencias Matemáticas con especialización en Álgebra Conmutativa y Geometría Algebraica.</p>
+                    
+                    <p>Actualmente me desempeño como <strong>Docente Tiempo Completo</strong> en la <strong>Universidad Nacional Abierta y a Distancia (UNAD)</strong>, donde lidero múltiples iniciativas académicas y de investigación. Soy Director Nacional del curso de Ecuaciones Diferenciales, Líder de la Red Curricular de Lógica, Álgebra y Cálculo, y Líder del Semillero de Investigación MATHINNOVA.</p>
+                    
+                    <p>Mi formación doctoral fue realizada en el prestigioso <strong>Centro de Investigación y de Estudios Avanzados del IPN (CINVESTAV)</strong> en Ciudad de México, donde desarrollé mi investigación sobre la signatura de ideales monomiales bajo la dirección del Dr. Carlos E. Valencia Oleta. Previamente obtuve mi Maestría en Ciencias Matemáticas en la Universidad Autónoma de Guerrero, trabajando en abanicos de Gröbner y fracciones continuas de Hirzebruch-Jung.</p>
+                    
+                    <p>Mi trayectoria académica comenzó en la <strong>Universidad del Valle</strong> (Cali, Colombia), donde obtuve mi Licenciatura en Matemáticas y Física con Tesis Laureada, explorando el desarrollo histórico de la integral desde las cuadraturas hasta la integral de Cauchy.</p>
+                    
+                    <div class="expertise">
+                        <h3>Áreas de Especialización</h3>
+                        <div class="expertise-grid">
+                            <div class="expertise-item">
+                                <i class="fas fa-project-diagram"></i>
+                                <h4>Álgebra Conmutativa</h4>
+                                <p>Bases de Gröbner, ideales monomiales, abanicos de Gröbner</p>
+                            </div>
+                            <div class="expertise-item">
+                                <i class="fas fa-shapes"></i>
+                                <h4>Geometría Algebraica</h4>
+                                <p>Geometría poliedral, geometría tórica</p>
+                            </div>
+                            <div class="expertise-item">
+                                <i class="fas fa-book-open"></i>
+                                <h4>Historia de las Matemáticas</h4>
+                                <p>Desarrollo histórico de conceptos matemáticos</p>
+                            </div>
+                            <div class="expertise-item">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <h4>Didáctica de las Matemáticas</h4>
+                                <p>Ambientes virtuales de aprendizaje, GeoGebra</p>
+                            </div>
+                            <div class="expertise-item">
+                                <i class="fas fa-chart-bar"></i>
+                                <h4>Ciencia de Datos</h4>
+                                <p>Analítica de datos aplicada a la educación</p>
+                            </div>
+                            <div class="expertise-item">
+                                <i class="fas fa-laptop-code"></i>
+                                <h4>Matemática Computacional</h4>
+                                <p>Python, algoritmos matemáticos, ciberseguridad</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section id="investigacion" class="section research">
+        <div class="container">
+            <h2 class="section-title">Investigación</h2>
+            <div class="research-intro">
+                <p>Mi investigación se centra en el álgebra conmutativa y la geometría algebraica, con especial énfasis en bases de Gröbner, ideales monomiales y sus aplicaciones. También desarrollo trabajo interdisciplinario en historia de las matemáticas y didáctica.</p>
+            </div>
+            
+            <div class="research-areas">
+                <div class="research-card">
+                    <div class="research-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Álgebra Conmutativa y Geometría Algebraica</h3>
+                    <p>Investigación doctoral sobre la signatura de ideales monomiales. Estudio de bases y abanicos de Gröbner, geometría poliedral y geometría tórica. Aplicaciones del álgebra conmutativa en problemas de geometría algebraica computacional.</p>
+                    <div class="research-math">
+                        \[ \text{signature}(I) = \text{dim}_k \frac{S}{I + I^{\perp}} \]
+                    </div>
+                </div>
+                
+                <div class="research-card">
+                    <div class="research-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>Historia de las Matemáticas</h3>
+                    <p>Análisis histórico y epistemológico del desarrollo de conceptos matemáticos fundamentales. Estudio del tránsito de la integral desde las cuadraturas griegas hasta la formalización del siglo XIX. Investigación sobre el papel del álgebra en el desarrollo de la computación cuántica.</p>
+                </div>
+                
+                <div class="research-card">
+                    <div class="research-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>Didáctica de las Matemáticas</h3>
+                    <p>Desarrollo e implementación de ambientes virtuales de aprendizaje. Uso de GeoGebra y herramientas computacionales en la enseñanza de las matemáticas. Aplicación de ciencia de datos y analítica en contextos educativos.</p>
+                </div>
+            </div>
+            
+            <div class="research-interests">
+                <h3>Intereses de Investigación Actuales</h3>
+                <div class="interests-tags">
+                    <span class="tag">Ideales Monomiales</span>
+                    <span class="tag">Bases de Gröbner</span>
+                    <span class="tag">Abanicos de Gröbner</span>
+                    <span class="tag">Geometría Tórica</span>
+                    <span class="tag">Geometría Poliedral</span>
+                    <span class="tag">Historia de las Matemáticas</span>
+                    <span class="tag">Didáctica de las Matemáticas</span>
+                    <span class="tag">Ciencia de Datos Educativa</span>
+                    <span class="tag">Inteligencia Artificial</span>
+                    <span class="tag">Computación Cuántica</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publicaciones" class="section publications">
+        <div class="container">
+            <h2 class="section-title">Publicaciones</h2>
+            
+            <div class="publication-filters">
+                <button class="filter-btn active" data-filter="all">Todas</button>
+                <button class="filter-btn" data-filter="journal">Artículos de Revista</button>
+                <button class="filter-btn" data-filter="conference">Conferencias</button>
+                <button class="filter-btn" data-filter="book">Capítulos de Libro</button>
+            </div>
+            
+            <div class="publications-list">
+                <!-- 2024 Publications -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2024</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">The signature of a monomial ideal</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Valencia, C., Villareal, R., Ibarguen, J.</p>
+                        <p class="pub-venue"><em>AIMS Mathematics</em>, Vol. 9(10), pp. 27955-27978</p>
+                        <div class="pub-links">
+                            <a href="https://doi.org/10.3934/math.20241357" class="pub-link" target="_blank">
+                                <i class="fas fa-link"></i> DOI
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2024</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Innovación social y colaboración multisectorial: impulsando el bienestar y la participación a través de modelos integrados</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Polo, M.</p>
+                        <p class="pub-venue"><em>Publicaciones E Investigación</em>, Vol. 18(3), pp. 1-5</p>
+                        <div class="pub-links">
+                            <a href="https://doi.org/10.22490/25394088.8295" class="pub-link" target="_blank">
+                                <i class="fas fa-link"></i> DOI
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2024</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Notas sobre el tránsito epistemológico de la inteligencia artificial (IA)</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Dominguez, S., Castaño, C.</p>
+                        <p class="pub-venue"><em>Publicaciones E Investigación</em>, Vol. 18(3), pp. 5-10</p>
+                        <div class="pub-links">
+                            <a href="https://doi.org/10.22490/25394088.8480" class="pub-link" target="_blank">
+                                <i class="fas fa-link"></i> DOI
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 2023 Publications -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2023</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">De Hilbert a los algoritmos cuánticos: el rol del álgebra en el desarrollo de la computación</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Dominguez, S., Castaño, C., Martinez, C.</p>
+                        <p class="pub-venue"><em>Publicaciones E Investigación</em>, Vol. 17(4), pp. 17-24</p>
+                        <div class="pub-links">
+                            <a href="https://doi.org/10.22490/25394088.7503" class="pub-link" target="_blank">
+                                <i class="fas fa-link"></i> DOI
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="publication-item" data-category="book">
+                    <div class="pub-year">2023</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Automated computer-aided diagnosis of COVID-19 and pneumonia based on chest X-ray images using deep learning</h3>
+                        <p class="pub-authors">Moreno, M., Suárez, O., <strong>Moran, D.</strong>, Sarmiento, B.</p>
+                        <p class="pub-venue">En: <em>Modern Computational Techniques for Engineering Applications</em>, CRC Press, pp. 51-67</p>
+                        <div class="pub-links">
+                            <a href="#" class="pub-link" target="_blank">
+                                <i class="fas fa-book"></i> Capítulo de Libro
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 2019 Publications -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2019</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Una introducción a las Bases de Gröbner</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong></p>
+                        <p class="pub-venue"><em>Boletín De Matemáticas</em>, Vol. 26(2), pp. 71-86</p>
+                        <div class="pub-links">
+                            <a href="#" class="pub-link" target="_blank">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2019</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Algunas reflexiones en torno al concepto de acumulación en la enseñanza del Cálculo Integral</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Santaella Forero, R.</p>
+                        <p class="pub-venue"><em>Revista Electrónica de divulgación de STEM</em>, Universidad Nacional de la Patagonia San Juan Bosco, Vol. 1(1), pp. 104-116</p>
+                        <div class="pub-links">
+                            <a href="#" class="pub-link" target="_blank">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 2018 Publications -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2018</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Etapa superestructural de la integral</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Jaramillo, C., Sigarreta, J.</p>
+                        <p class="pub-venue"><em>LOGOS Ciencia y Tecnología</em>, Vol. 10(2), pp. 135-152</p>
+                        <div class="pub-links">
+                            <a href="#" class="pub-link" target="_blank">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teaching Section -->
+    <section id="docencia" class="section teaching">
+        <div class="container">
+            <h2 class="section-title">Docencia</h2>
+            
+            <div class="teaching-intro">
+                <p>Mi enfoque pedagógico integra el rigor matemático con metodologías innovadoras en ambientes virtuales de aprendizaje, promoviendo el desarrollo del pensamiento lógico-matemático y la aplicación de tecnología educativa.</p>
+            </div>
+            
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-header">
+                        <i class="fas fa-wave-square"></i>
+                        <h3>Ecuaciones Diferenciales</h3>
+                    </div>
+                    <p class="course-topic">Análisis de Sistemas Dinámicos</p>
+                    <p class="course-description">Director Nacional del curso en UNAD. Métodos de solución de ecuaciones diferenciales ordinarias y sistemas dinámicos con aplicaciones en ingeniería y ciencias.</p>
+                    <div class="course-programs">
+                        <span class="program-tag">UNAD - Pregrado</span>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-header">
+                        <i class="fas fa-infinity"></i>
+                        <h3>Cálculo Diferencial e Integral</h3>
+                    </div>
+                    <p class="course-topic">Fundamentos del Análisis</p>
+                    <p class="course-description">Enseñanza de los conceptos fundamentales del cálculo con énfasis en aplicaciones y uso de herramientas tecnológicas como GeoGebra.</p>
+                    <div class="course-programs">
+                        <span class="program-tag">Universidad de Pamplona</span>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-header">
+                        <i class="fas fa-calculator"></i>
+                        <h3>Cálculo Multivariable</h3>
+                    </div>
+                    <p class="course-topic">Análisis Vectorial</p>
+                    <p class="course-description">Funciones de varias variables, integrales múltiples, campos vectoriales y teoremas fundamentales del cálculo vectorial.</p>
+                    <div class="course-programs">
+                        <span class="program-tag">Universidad de Pamplona</span>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-header">
+                        <i class="fas fa-matrix"></i>
+                        <h3>Álgebra Lineal</h3>
+                    </div>
+                    <p class="course-topic">Espacios Vectoriales</p>
+                    <p class="course-description">Teoría de espacios vectoriales, transformaciones lineales, valores y vectores propios con aplicaciones computacionales.</p>
+                    <div class="course-programs">
+                        <span class="program-tag">Universidad de Pamplona</span>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-header">
+                        <i class="fas fa-project-diagram"></i>
+                        <h3>Matemáticas Discretas</h3>
+                    </div>
+                    <p class="course-topic">Estructuras Discretas</p>
+                    <p class="course-description">Teoría de conjuntos, relaciones, funciones, grafos y estructuras algebraicas con aplicaciones en ciencias de la computación.</p>
+                    <div class="course-programs">
+                        <span class="program-tag">Universidad de Pamplona</span>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-header">
+                        <i class="fas fa-brain"></i>
+                        <h3>Pensamiento Lógico y Matemático</h3>
+                    </div>
+                    <p class="course-topic">Razonamiento Matemático</p>
+                    <p class="course-description">Desarrollo de habilidades de razonamiento lógico-matemático y pensamiento crítico aplicado a la resolución de problemas.</p>
+                    <div class="course-programs">
+                        <span class="program-tag">UNAD - Pregrado</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="teaching-philosophy">
+                <h3>Liderazgo Académico en UNAD</h3>
+                <div class="philosophy-grid">
+                    <div class="philosophy-item">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <h4>Director Nacional de Curso</h4>
+                        <p>Ecuaciones Diferenciales - Coordinación de contenidos y estrategias pedagógicas</p>
+                    </div>
+                    <div class="philosophy-item">
+                        <i class="fas fa-network-wired"></i>
+                        <h4>Líder Red Curricular</h4>
+                        <p>Lógica, Álgebra y Cálculo - Articulación curricular transversal</p>
+                    </div>
+                    <div class="philosophy-item">
+                        <i class="fas fa-seedling"></i>
+                        <h4>Líder Semillero MATHINNOVA</h4>
+                        <p>Formación de jóvenes investigadores en matemáticas aplicadas</p>
+                    </div>
+                    <div class="philosophy-item">
+                        <i class="fas fa-laptop-code"></i>
+                        <h4>e-Mediador AVA</h4>
+                        <p>Especialización en diseño y gestión de ambientes virtuales de aprendizaje</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="teaching-philosophy" style="margin-top: 3rem;">
+                <h3>Filosofía de Enseñanza</h3>
+                <div class="philosophy-grid">
+                    <div class="philosophy-item">
+                        <i class="fas fa-lightbulb"></i>
+                        <h4>Innovación Pedagógica</h4>
+                        <p>Uso de GeoGebra, Python y herramientas computacionales para visualización matemática</p>
+                    </div>
+                    <div class="philosophy-item">
+                        <i class="fas fa-book-reader"></i>
+                        <h4>Contextualización Histórica</h4>
+                        <p>Integración de perspectivas históricas y epistemológicas en la enseñanza</p>
+                    </div>
+                    <div class="philosophy-item">
+                        <i class="fas fa-users"></i>
+                        <h4>Aprendizaje Colaborativo</h4>
+                        <p>Fomento del trabajo en equipo y comunidades de práctica virtuales</p>
+                    </div>
+                    <div class="philosophy-item">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Evaluación Formativa</h4>
+                        <p>Uso de analítica de datos para seguimiento y mejora continua del aprendizaje</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contacto" class="section contact">
+        <div class="container">
+            <h2 class="section-title">Contacto</h2>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Información de Contacto</h3>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-university"></i>
+                        <div>
+                            <h4>Universidad Nacional Abierta y a Distancia (UNAD)</h4>
+                            <p>Docente Tiempo Completo - Investigador</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email Personal</h4>
+                            <p><a href="mailto:dmbourbaki@gmail.com">dmbourbaki@gmail.com</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-envelope-open"></i>
+                        <div>
+                            <h4>Email Institucional</h4>
+                            <p><a href="mailto:daniel.moran@unad.edu.co">daniel.moran@unad.edu.co</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Teléfono</h4>
+                            <p><a href="tel:+573028563830">+57 302 856 3830</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Ubicación</h4>
+                            <p>Cali, Colombia</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links-contact">
+                        <a href="https://scholar.google.es/citations?user=CLZKj3YAAAAJ" target="_blank" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+                        <a href="https://orcid.org/0000-0003-1791-2818" target="_blank" aria-label="ORCID"><i class="fab fa-orcid"></i></a>
+                        <a href="https://www.researchgate.net/profile/Daniel-Moran-Pizarro" target="_blank" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
+                        <a href="https://co.linkedin.com/in/daniel-steven-moran-6b5490331" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001560327" target="_blank" aria-label="CvLAC MinCiencias"><i class="fas fa-id-card"></i></a>
+                    </div>
+                </div>
+                
+                <div class="contact-form-container">
+                    <h3>Envíame un Mensaje</h3>
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Asunto</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Mensaje</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                        </button>
+                    </form>
+                    
+                    <p class="form-note">
+                        <i class="fas fa-info-circle"></i> Nota: Este formulario requiere configuración con un servicio backend. Puedes usar servicios como Formspree o EmailJS (ver README.md).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Daniel Steven Moran Pizarro. Todos los derechos reservados.</p>
+                <p>Hecho con <i class="fas fa-heart"></i> para la comunidad académica</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
