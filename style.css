@@ -1919,3 +1919,22 @@ body {
         font-size: 1.5rem;
     }
 }
+
+/* Video link styling */
+.video-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.video-link:hover {
+    color: var(--accent-color);
+}
+
+.video-link i {
+    font-size: 0.8rem;
+    margin-left: 0.25rem;
+}
