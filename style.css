@@ -1938,3 +1938,237 @@ body {
     font-size: 0.8rem;
     margin-left: 0.25rem;
 }
+
+/* ========================================
+   ESTILOS ADICIONALES PARA FORMACIÓN COMPLEMENTARIA
+   Agrega esto al final de tu archivo style.css
+   ======================================== */
+
+/* Categorías de Formación Complementaria */
+.complementary-category {
+    margin-bottom: 4rem;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid var(--primary-color);
+}
+
+.category-header i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.category-header h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* Items de Formación Complementaria Mejorados */
+.complementary-item {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--primary-color);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.complementary-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    border-left-width: 6px;
+}
+
+.item-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.item-icon i {
+    display: block;
+}
+
+.complementary-item h5 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    flex-grow: 1;
+}
+
+.complementary-item .institution {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.complementary-item .date {
+    font-size: 0.85rem;
+    color: #999;
+    font-style: italic;
+}
+
+/* Grid responsive para complementary items */
+.complementary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Stats section */
+.complementary-stats {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-top: 4rem;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.stat-item {
+    text-align: center;
+    color: white;
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.stat-label {
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.95;
+}
+
+/* Responsive adjustments */
+@media (max-width: 968px) {
+    .complementary-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .category-header h4 {
+        font-size: 1.3rem;
+    }
+
+    .complementary-stats {
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .complementary-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .category-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .category-header i {
+        font-size: 1.5rem;
+    }
+
+    .complementary-stats {
+        gap: 2rem;
+        padding: 2rem 1rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+    }
+}
+
+/* Iconos específicos por categoría */
+.complementary-category:nth-child(2) .category-header {
+    border-bottom-color: #2980b9; /* Programación - Azul */
+}
+
+.complementary-category:nth-child(2) .complementary-item {
+    border-left-color: #2980b9;
+}
+
+.complementary-category:nth-child(2) .item-icon {
+    color: #2980b9;
+}
+
+.complementary-category:nth-child(3) .category-header {
+    border-bottom-color: #e74c3c; /* Ciberseguridad - Rojo */
+}
+
+.complementary-category:nth-child(3) .complementary-item {
+    border-left-color: #e74c3c;
+}
+
+.complementary-category:nth-child(3) .item-icon {
+    color: #e74c3c;
+}
+
+.complementary-category:nth-child(4) .category-header {
+    border-bottom-color: #27ae60; /* Data Science - Verde */
+}
+
+.complementary-category:nth-child(4) .complementary-item {
+    border-left-color: #27ae60;
+}
+
+.complementary-category:nth-child(4) .item-icon {
+    color: #27ae60;
+}
+
+.complementary-category:nth-child(5) .category-header {
+    border-bottom-color: #9b59b6; /* Educación - Púrpura */
+}
+
+.complementary-category:nth-child(5) .complementary-item {
+    border-left-color: #9b59b6;
+}
+
+.complementary-category:nth-child(5) .item-icon {
+    color: #9b59b6;
+}
+
+.complementary-category:nth-child(6) .category-header {
+    border-bottom-color: #f39c12; /* Liderazgo - Naranja */
+}
+
+.complementary-category:nth-child(6) .complementary-item {
+    border-left-color: #f39c12;
+}
+
+.complementary-category:nth-child(6) .item-icon {
+    color: #f39c12;
+}
