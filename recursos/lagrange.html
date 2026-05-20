@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulador de Multiplicadores de Lagrange</title>
+<title>Multiplicadores de Lagrange</title>
 <script src="https://cdn.jsdelivr.net/npm/mathjs@12/lib/browser/math.js"></script>
 <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
@@ -357,6 +357,71 @@
     text-transform: uppercase;
   }
   #loader.show { display: flex; }
+
+  /* ══════════════════════════════════════════════
+     MÓVIL: apilado vertical, body scrolleable
+     No afecta nada en pantallas >= 769px
+  ══════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    /* Body scrolleable en móvil */
+    body {
+      height: auto;
+      min-height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Header compacto */
+    header {
+      padding: 0.65rem 1rem;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    header h1 { font-size: 1.1rem; }
+    .header-hint { display: none; }   /* demasiado largo en móvil */
+
+    /* Main en columna: controles arriba, gráficas abajo */
+    .main {
+      flex-direction: column;
+    }
+
+    /* Sidebar ocupa el ancho completo */
+    .sidebar {
+      width: 100%;
+      min-width: 0;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Los resultados se despliegan sin scroll interno */
+    .sidebar-scroll {
+      overflow-y: visible;
+      max-height: none;
+    }
+
+    /* Panel de gráficas con altura fija, debajo de los resultados */
+    .vis-panel {
+      flex: none;
+      height: 420px;
+      min-height: 360px;
+    }
+
+    /* Tab panes heredan esa altura */
+    .tab-pane.active {
+      height: 100%;
+    }
+
+    .plot-container {
+      height: calc(420px - 38px - 44px); /* total - tabs - leyenda */
+    }
+
+    /* Leyenda más compacta en móvil */
+    .vis-legend {
+      gap: 0.6rem;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.7rem;
+    }
+  }
 </style>
 </head>
 <body>
@@ -365,7 +430,7 @@
 
 <header>
   <span class="header-logo">∇</span>
-  <h1>Simulador de Multiplicadores de <em>Lagrange</em></h1>
+  <h1>Multiplicadores de <em>Lagrange</em></h1>
   <span class="header-hint">Notación: x^2, sin(x), exp(x), sqrt(x), log(x) · Variables: x, y</span>
 </header>
 
@@ -988,6 +1053,13 @@ async function solveAll() {
   }
 
   document.getElementById('loader').classList.remove('show');
+
+  // En móvil: desplazar automáticamente hacia las gráficas al terminar
+  if (window.innerWidth <= 768) {
+    setTimeout(() => {
+      document.querySelector('.vis-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 350);
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
