@@ -3,710 +3,1138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sólidos de Revolución | Daniel S. Moran P.</title>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-<script>
-  window.MathJax = {
-    tex: { inlineMath: [['\\(','\\)'],['$','$']] },
-    options: { skipHtmlTags: ['script','noscript','style','textarea'] }
-  };
-</script>
-<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<title>Simulador de Sólidos de Revolución</title>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjs@12/lib/browser/math.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --navy:#1e3a8a; --blue:#3b82f6; --sky:#60a5fa;
-  --light:#f0f6ff; --white:#ffffff;
-  --border:#dbeafe; --text:#1f2937; --muted:#6b7280;
-  --green:#059669; --orange:#d97706; --red:#dc2626;
-  --shadow:0 4px 16px rgba(30,58,138,.10);
+:root {
+  --bg:     #07090f;
+  --panel:  #0d1220;
+  --card:   #111828;
+  --border: #1c2640;
+  --gold:   #d4a84b;
+  --goldlt: #e8c97a;
+  --cyan:   #3ac2f0;
+  --red:    #f07070;
+  --green:  #50dd90;
+  --orange: #f59a4a;
+  --violet: #a88cff;
+  --text:   #dce4f0;
+  --muted:  #64768a;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{font-size:15px}
-body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);min-height:100vh}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── header ── */
-.page-header{
-  background:linear-gradient(135deg,var(--navy),var(--blue));
-  color:#fff;padding:14px 24px;
-  display:flex;align-items:center;justify-content:space-between;
-  box-shadow:var(--shadow)
-}
-.page-header a{
-  color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem;
-  display:flex;align-items:center;gap:6px;transition:color .2s
-}
-.page-header a:hover{color:#fff}
-.page-header h1{
-  font-family:'Lora',serif;font-size:1.15rem;font-weight:600;letter-spacing:.01em
-}
-.badge-new{
-  background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);
-  color:#fff;font-size:.7rem;padding:2px 8px;border-radius:12px;
-  font-family:'JetBrains Mono',monospace;letter-spacing:.06em
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Pro', Georgia, serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-/* ── layout ── */
-.app{max-width:1120px;margin:18px auto;padding:0 16px;display:flex;flex-direction:column;gap:16px}
+/* ─── HEADER ─── */
+header {
+  flex-shrink: 0;
+  background: linear-gradient(90deg, #050810 0%, #0d1626 60%, #07090f 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 0.9rem 1.8rem;
+  display: flex; align-items: center; gap: 1.2rem;
+}
+.header-logo {
+  font-family: 'Oswald', sans-serif; font-size: 0.7rem;
+  letter-spacing: 0.35em; color: var(--gold);
+  text-transform: uppercase; border: 1px solid var(--gold);
+  padding: 0.25rem 0.55rem; opacity: 0.85;
+}
+header h1 { font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 1.5rem; letter-spacing: 0.08em; }
+header h1 em { color: var(--gold); font-style: normal; }
+.header-hint { margin-left: auto; font-size: 0.82rem; color: var(--muted); font-style: italic; }
 
-/* ── controls ── */
-.ctrl-bar{
-  background:var(--white);border-radius:10px;border:1px solid var(--border);
-  padding:16px 20px;box-shadow:var(--shadow);
-  display:flex;flex-wrap:wrap;align-items:flex-end;gap:18px
-}
-.ctrl-group{display:flex;flex-direction:column;gap:5px;min-width:140px}
-.ctrl-group label{
-  font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
-  color:var(--navy)
-}
-select, input[type=range]{
-  font-family:'Nunito',sans-serif;font-size:.85rem;padding:5px 8px;
-  border:1.5px solid var(--border);border-radius:6px;background:var(--white);
-  color:var(--text);outline:none;transition:border-color .2s;cursor:pointer
-}
-select:focus{border-color:var(--blue)}
-input[type=range]{
-  -webkit-appearance:none;height:6px;border:none;border-radius:3px;padding:0;
-  background:linear-gradient(90deg,var(--blue),var(--sky))
-}
-input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
-  background:var(--navy);border:2px solid #fff;cursor:pointer;
-  box-shadow:0 0 4px rgba(30,58,138,.3)
-}
-.range-row{display:flex;align-items:center;gap:8px}
-.range-val{
-  font-family:'JetBrains Mono',monospace;font-size:.78rem;
-  color:var(--navy);font-weight:500;min-width:32px;text-align:right
-}
-.btn-anim{
-  padding:8px 20px;background:var(--navy);color:#fff;border:none;
-  border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;
-  font-size:.85rem;cursor:pointer;transition:all .2s;white-space:nowrap;
-  box-shadow:0 2px 8px rgba(30,58,138,.25)
-}
-.btn-anim:hover{background:var(--blue);transform:translateY(-1px)}
-.btn-anim.running{background:var(--red)}
+/* ─── MAIN LAYOUT ─── */
+.main { flex: 1; display: flex; min-height: 0; }
 
-/* ── canvases ── */
-.viz-row{display:grid;grid-template-columns:1fr 1.5fr;gap:16px}
-.canvas-card{
-  background:var(--white);border-radius:10px;border:1px solid var(--border);
-  box-shadow:var(--shadow);overflow:hidden
+/* ─── COLUMNS ─── */
+.col-controls {
+  width: 20%; min-width: 210px; flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  overflow-y: auto; padding: 1.1rem 1.1rem 1.4rem;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
 }
-.canvas-label{
-  padding:8px 14px;background:var(--navy);color:#fff;
-  font-size:.73rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-  display:flex;align-items:center;gap:8px
-}
-.canvas-label .dot{
-  width:8px;height:8px;border-radius:50%;background:var(--sky);
-  animation:pulse-dot 2s ease-in-out infinite
-}
-@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
-canvas{display:block;width:100%}
+.col-controls::-webkit-scrollbar { width: 4px; }
+.col-controls::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-/* ── formula panel ── */
-.formula-panel{
-  background:var(--white);border-radius:10px;border:1px solid var(--border);
-  padding:18px 24px;box-shadow:var(--shadow);
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:start
+.col-results {
+  width: 20%; min-width: 200px; flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
 }
-.fpanel-block h4{
-  font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
-  color:var(--navy);margin-bottom:8px;border-bottom:2px solid var(--border);padding-bottom:5px
+.col-results-header {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--panel); border-bottom: 1px solid var(--border);
+  padding: 0.6rem 1rem; flex-shrink: 0;
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: 'Oswald', sans-serif; font-size: 0.67rem;
+  letter-spacing: 0.22em; color: var(--gold); text-transform: uppercase;
 }
-.formula-box{
-  font-family:'Lora',serif;font-size:1.05rem;line-height:2.0;color:var(--text)
+.col-results-header::before {
+  content: ''; display: inline-block;
+  width: 3px; height: 10px; background: var(--gold); border-radius: 1px;
 }
-.volume-result{
-  font-family:'JetBrains Mono',monospace;font-size:1.6rem;
-  color:var(--navy);font-weight:500;letter-spacing:-.01em
-}
-.volume-sub{font-size:.8rem;color:var(--muted);margin-top:3px}
-.slices-display{
-  font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.9;
-  color:var(--muted)
-}
-.slices-display span{color:var(--blue);font-weight:500}
+#results { flex: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+#results::-webkit-scrollbar { width: 4px; }
+#results::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-/* ── method tabs ── */
-.method-tabs{display:flex;gap:8px;margin-bottom:12px}
-.mtab{
-  padding:4px 14px;border:1.5px solid var(--border);border-radius:20px;
-  font-size:.78rem;font-weight:700;cursor:pointer;color:var(--muted);
-  background:transparent;transition:all .2s;font-family:'Nunito',sans-serif
-}
-.mtab.active{border-color:var(--blue);color:var(--blue);background:rgba(59,130,246,.07)}
+.vis-panel { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+#three-canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+#three-canvas:active { cursor: grabbing; }
 
-/* ── footer ── */
-.page-footer{
-  text-align:center;padding:12px;color:var(--muted);font-size:.78rem
+.vis-footer {
+  flex-shrink: 0; padding: 0.38rem 1rem;
+  display: flex; gap: 1.1rem; flex-wrap: wrap;
+  background: var(--panel); border-top: 1px solid var(--border);
 }
+.leg-item { display: flex; align-items: center; gap: 0.32rem; font-size: 0.73rem; color: var(--muted); }
+.leg-line  { width: 18px; height: 2.5px; flex-shrink: 0; border-radius: 2px; }
+.leg-dot   { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
-@media(max-width:700px){
-  .viz-row{grid-template-columns:1fr}
-  .formula-panel{grid-template-columns:1fr}
-  .ctrl-bar{gap:12px}
+/* ─── CONTROLS ─── */
+.stitle {
+  font-family: 'Oswald', sans-serif; font-weight: 400;
+  font-size: 0.67rem; letter-spacing: 0.22em;
+  color: var(--gold); text-transform: uppercase;
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+.stitle::before { content: ''; display: inline-block; width: 3px; height: 10px; background: var(--gold); border-radius: 1px; }
+
+.field { margin-bottom: 0.65rem; }
+.field label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.28rem; }
+.field label .math { color: var(--text); font-style: italic; font-size: 1rem; }
+
+input[type=text], input[type=number], select {
+  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 3px; color: var(--text); padding: 0.5rem 0.75rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.87rem;
+  outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+}
+input:focus, select:focus { border-color: var(--gold); }
+select { cursor: pointer; }
+select option { background: var(--card); }
+
+.ab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.ab-grid label { font-size: 0.73rem; }
+
+/* Inner function row */
+.inner-fn-row { display: none; }
+.inner-fn-row.visible { display: block; }
+
+/* Radio group */
+.radio-group { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 0.65rem; }
+.radio-btn {
+  padding: 0.4rem 0; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 3px; color: var(--muted); font-family: 'Oswald', sans-serif;
+  font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.18s; text-align: center;
+}
+.radio-btn:hover { color: var(--text); border-color: var(--gold); }
+.radio-btn.active { background: rgba(212,168,75,0.12); border-color: var(--gold); color: var(--gold); }
+
+/* Slider */
+.slider-wrap { margin-bottom: 0.7rem; }
+.slider-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.35rem; }
+.slider-row .slabel { font-size: 0.8rem; color: var(--muted); flex: 1; }
+.n-display { font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; color: var(--gold); min-width: 38px; text-align: right; }
+input[type=range] {
+  -webkit-appearance: none; width: 100%; height: 4px;
+  background: var(--border); border-radius: 2px; outline: none; padding: 0; border: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--gold); cursor: pointer; transition: background 0.2s;
+}
+input[type=range]::-webkit-slider-thumb:hover { background: var(--goldlt); }
+input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--gold); cursor: pointer; border: none; }
+.slider-bounds { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--muted); margin-top: 0.15rem; font-family: 'JetBrains Mono', monospace; }
+
+/* Buttons */
+.btn-row { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+.btn-calc {
+  flex: 1; min-width: 80px; padding: 0.68rem;
+  background: var(--gold); color: var(--bg); border: none; border-radius: 3px;
+  font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 0.78rem;
+  letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+  transition: background 0.18s, transform 0.08s;
+}
+.btn-calc:hover { background: var(--goldlt); }
+.btn-calc:active { transform: scale(0.99); }
+.btn-secondary {
+  flex: 1; min-width: 80px; padding: 0.68rem;
+  background: transparent; color: var(--cyan);
+  border: 1px solid var(--cyan); border-radius: 3px;
+  font-family: 'Oswald', sans-serif; font-size: 0.78rem;
+  letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer;
+  transition: all 0.18s; white-space: nowrap;
+}
+.btn-secondary:hover { background: rgba(58,194,240,0.1); }
+.btn-secondary.active { color: var(--orange); border-color: var(--orange); }
+.btn-secondary.active:hover { background: rgba(245,154,74,0.1); }
+
+/* View toggles */
+.view-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-bottom: 0.65rem; }
+
+/* RESULTS panel */
+.empty-state { padding: 2.5rem 1.4rem; color: var(--muted); font-style: italic; font-size: 0.95rem; text-align: center; line-height: 1.8; }
+.results-inner { padding: 0.85rem 1rem; }
+
+.vol-display { text-align: center; padding: 0.9rem 0 0.8rem; border-bottom: 1px solid var(--border); margin-bottom: 0.85rem; }
+.vol-label { font-family: 'Oswald', sans-serif; font-size: 0.63rem; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.28rem; }
+.vol-value { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; color: var(--gold); letter-spacing: -0.02em; }
+.vol-units { font-size: 0.78rem; color: var(--cyan); margin-top: 0.2rem; font-style: italic; }
+
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 0.55rem 0.75rem; margin-bottom: 0.5rem; }
+.sc-label { font-family: 'Oswald', sans-serif; font-size: 0.58rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.18rem; }
+.sc-val { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; color: var(--text); }
+.sc-val.blue { color: var(--violet); }
+.sc-val.green { color: var(--green); }
+
+.formula-box {
+  background: rgba(212,168,75,0.04); border: 1px solid rgba(212,168,75,0.18);
+  border-radius: 4px; padding: 0.7rem 0.9rem; margin-bottom: 0.85rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--muted); line-height: 1.75;
+}
+.formula-box .fk { color: var(--gold); }
+.formula-box .fv { color: var(--text); }
+.formula-box .fn { color: var(--cyan); }
+
+/* 2D mini canvas */
+.mini-canvas-wrap { margin-bottom: 0.85rem; }
+.mini-canvas-label { font-family: 'Oswald', sans-serif; font-size: 0.6rem; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.3rem; }
+#canvas-2d { display: block; width: 100%; height: 140px; border-radius: 4px; border: 1px solid var(--border); background: #0b1018; }
+
+.method-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.7; padding-top: 0.5rem; border-top: 1px solid var(--border); }
+.method-desc strong { color: var(--text); }
+
+/* Cross-section info */
+.cross-info { display: flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.75rem; background: var(--card); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 0.5rem; }
+.cross-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* Loader */
+#loader { position: fixed; inset: 0; background: rgba(7,9,15,0.78); display: none; align-items: center; justify-content: center; z-index: 999; font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; }
+#loader.show { display: flex; }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  body { height: auto; min-height: 100vh; overflow-y: auto; overflow-x: hidden; }
+  header { padding: 0.65rem 1rem; flex-wrap: wrap; }
+  header h1 { font-size: 1.05rem; }
+  .header-hint { display: none; }
+  .main { flex-direction: column; }
+  .col-controls { width: 100%; min-width: 0; border-right: none; border-bottom: 1px solid var(--border); padding: 1rem; }
+  .col-results { width: 100%; min-width: 0; border-right: none; border-bottom: 1px solid var(--border); max-height: 55vh; }
+  .vis-panel { flex: none; height: 420px; }
 }
 </style>
 </head>
 <body>
 
-<header class="page-header">
-  <a href="../index.html">← Volver al sitio</a>
-  <h1>Sólidos de Revolución</h1>
-  <span class="badge-new">INTERACTIVO</span>
+<div id="loader">Generando sólido&hellip;</div>
+
+<header>
+  <span class="header-logo">∮</span>
+  <h1>Simulador de Sólidos de <em>Revolución</em></h1>
+  <span class="header-hint">Rotación de f(x) alrededor del eje — arrastra para rotar · rueda para zoom</span>
 </header>
 
-<div class="app">
+<div class="main">
 
-  <!-- ── Controls ── -->
-  <div class="ctrl-bar">
-    <div class="ctrl-group">
-      <label>Curva f(x)</label>
-      <select id="curveSelect" onchange="onCurveChange()">
-        <option value="x2">f(x) = x²</option>
-        <option value="sqrtx">f(x) = √x</option>
-        <option value="sinx">f(x) = sin(x)</option>
-        <option value="x" >f(x) = x</option>
-        <option value="dome">f(x) = 2 − x²/4</option>
-        <option value="ex" >f(x) = eˣ/3</option>
+  <!-- ════ COL 1: CONTROLES ════ -->
+  <div class="col-controls">
+
+    <div class="stitle">Función e Intervalo</div>
+
+    <div class="field">
+      <label>Función exterior <span class="math">f (x)</span></label>
+      <input type="text" id="inp-f" value="sqrt(x)" spellcheck="false">
+    </div>
+
+    <div class="field inner-fn-row" id="inner-fn-row">
+      <label>Función interior <span class="math">g (x)</span> <span style="color:var(--orange);font-size:0.75rem">(arandela)</span></label>
+      <input type="text" id="inp-g" value="x/2" spellcheck="false">
+    </div>
+
+    <div class="field">
+      <label>Ejemplo rápido</label>
+      <select id="presets" onchange="applyPreset()">
+        <option value="">— seleccionar —</option>
+        <option value="sqrt(x)|0|4|x">√x en [0,4] — eje X</option>
+        <option value="x^2|0|2|x">x² en [0,2] — eje X</option>
+        <option value="sin(x)|0|3.14159|x">sin(x) en [0,π] — eje X</option>
+        <option value="2-x^2/2|0|2|x">2−x²/2 en [0,2] — eje X</option>
+        <option value="exp(-x^2/2)|(-2)|2|x">e^(−x²/2) en [−2,2] — eje X</option>
+        <option value="sqrt(x)|0|4|y">√x en [0,4] — eje Y (cascarón)</option>
+        <option value="x^2|0|2|y">x² en [0,2] — eje Y (cascarón)</option>
+        <option value="sin(x)|0|3.14159|y">sin(x) en [0,π] — eje Y (cascarón)</option>
       </select>
     </div>
 
-    <div class="ctrl-group">
-      <label>Límite inferior a</label>
-      <div class="range-row">
-        <input type="range" id="slA" min="0" max="90" value="0" oninput="onBounds()">
-        <span class="range-val" id="valA">0.0</span>
+    <div class="field">
+      <label>Intervalo <span class="math">[a, b]</span></label>
+      <div class="ab-grid">
+        <div><label>a</label><input type="number" id="inp-a" value="0" step="0.5"></div>
+        <div><label>b</label><input type="number" id="inp-b" value="4" step="0.5"></div>
       </div>
     </div>
 
-    <div class="ctrl-group">
-      <label>Límite superior b</label>
-      <div class="range-row">
-        <input type="range" id="slB" min="10" max="100" value="100" oninput="onBounds()">
-        <span class="range-val" id="valB">2.0</span>
-      </div>
+    <div class="stitle" style="margin-top:0.55rem">Eje de Revolución</div>
+    <div class="radio-group" id="axis-group">
+      <button class="radio-btn active" data-v="x" onclick="setAxis('x')">Eje X</button>
+      <button class="radio-btn"        data-v="y" onclick="setAxis('y')">Eje Y</button>
     </div>
 
-    <div class="ctrl-group">
-      <label>Número de discos</label>
-      <div class="range-row">
-        <input type="range" id="slN" min="3" max="40" value="8" oninput="onSlices()">
-        <span class="range-val" id="valN">8</span>
-      </div>
+    <div class="stitle">Método</div>
+    <div class="radio-group" id="method-group" style="grid-template-columns:1fr 1fr 1fr">
+      <button class="radio-btn active" data-v="disk"  onclick="setMethod('disk')">Disco</button>
+      <button class="radio-btn"        data-v="shell" onclick="setMethod('shell')">Cascarón</button>
+      <button class="radio-btn"        data-v="wash"  onclick="setMethod('wash')">Arandela</button>
     </div>
 
-    <div class="ctrl-group" style="min-width:auto">
-      <label>Animación</label>
-      <button class="btn-anim" id="btnAnim" onclick="toggleAnim()">▶ Rotar</button>
+    <div class="slider-wrap">
+      <div class="slider-row">
+        <span class="slabel">Subdivisiones <span style="font-style:italic;color:var(--text)">n</span></span>
+        <span class="n-display" id="n-display">40</span>
+      </div>
+      <input type="range" id="n-slider" min="6" max="120" value="40" oninput="onSlider()">
+      <div class="slider-bounds"><span>6</span><span>40</span><span>80</span><span>120</span></div>
+    </div>
+
+    <div class="stitle" style="margin-top:0.3rem">Sección Transversal</div>
+    <div class="slider-wrap">
+      <div class="slider-row">
+        <span class="slabel">Posición <span style="font-style:italic;color:var(--text)">x₀</span></span>
+        <span class="n-display" id="cross-display" style="font-size:0.85rem">—</span>
+      </div>
+      <input type="range" id="cross-slider" min="0" max="100" value="50" oninput="onCrossSlider()">
+    </div>
+
+    <div class="stitle" style="margin-top:0.3rem">Visualización</div>
+    <div class="view-group">
+      <button class="radio-btn active" data-v="solid"     onclick="setView('solid')">Sólido</button>
+      <button class="radio-btn"        data-v="wire"      onclick="setView('wire')">Malla</button>
+      <button class="radio-btn"        data-v="both"      onclick="setView('both')">Ambos</button>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-calc" onclick="generate()">⟨ Generar ⟩</button>
+    </div>
+    <div class="btn-row" style="margin-top:0.4rem">
+      <button class="btn-secondary" id="btn-sweep" onclick="toggleSweep()">▶ Barrer</button>
+      <button class="btn-secondary" id="btn-rot"   onclick="toggleAutoRot()">⟳ Rotar</button>
+    </div>
+    <div class="btn-row" style="margin-top:0.4rem">
+      <button class="btn-secondary" onclick="resetCamera()" style="flex:1">↺ Vista</button>
+    </div>
+
+  </div><!-- /col-controls -->
+
+  <!-- ════ COL 2: RESULTADOS ════ -->
+  <div class="col-results">
+    <div class="col-results-header">Resultados</div>
+    <div id="results">
+      <div class="empty-state">Ingrese <em>f</em>(x) y el intervalo,<br>luego presione <strong>Generar</strong>.</div>
     </div>
   </div>
 
-  <!-- ── Canvases ── -->
-  <div class="viz-row">
-    <div class="canvas-card">
-      <div class="canvas-label"><span class="dot"></span>Región 2D</div>
-      <canvas id="cv2d" width="380" height="320"></canvas>
-    </div>
-    <div class="canvas-card">
-      <div class="canvas-label"><span class="dot"></span>Sólido de Revolución</div>
-      <canvas id="cv3d" width="580" height="320"></canvas>
-    </div>
-  </div>
-
-  <!-- ── Formula panel ── -->
-  <div class="formula-panel">
-    <div class="fpanel-block">
-      <h4>Método del Disco</h4>
-      <div class="formula-box" id="formulaBox">
-        \( V = \pi \displaystyle\int_a^b [f(x)]^2\, dx \)
-      </div>
-    </div>
-    <div class="fpanel-block">
-      <h4>Suma de Riemann (n discos)</h4>
-      <div class="slices-display" id="riemannBox"></div>
-    </div>
-    <div class="fpanel-block">
-      <h4>Volumen Exacto</h4>
-      <div class="volume-result" id="volumeResult">—</div>
-      <div class="volume-sub" id="volumeSub"></div>
+  <!-- ════ COL 3: VISUALIZACIÓN 3D ════ -->
+  <div class="vis-panel">
+    <canvas id="three-canvas"></canvas>
+    <div class="vis-footer">
+      <span class="leg-item"><span class="leg-line" style="background:#3ac2f0"></span>Superficie exterior</span>
+      <span class="leg-item"><span class="leg-line" style="background:rgba(58,194,240,0.3)"></span>Malla</span>
+      <span class="leg-item"><span class="leg-line" style="background:#d4a84b;height:2px"></span>Eje de revolución</span>
+      <span class="leg-item"><span class="leg-line" style="background:#f07070"></span>Curva f(x)</span>
+      <span class="leg-item" id="leg-cross"><span class="leg-dot" style="background:#d4a84b;opacity:0.7"></span>Sección transversal</span>
     </div>
   </div>
 
-</div>
-
-<footer class="page-footer">
-  © Daniel Steven Moran Pizarro · <a href="../index.html" style="color:var(--blue)">dmbourbaki.github.io</a>
-</footer>
+</div><!-- /main -->
 
 <script>
-/* ═══════════════════════════════════════════════════
-   CURVE DEFINITIONS
-═══════════════════════════════════════════════════ */
-const CURVES = {
-  x2:   { fn: x=>x*x,           domain:[0,2],   label:'x^2',      latex:'x^2' },
-  sqrtx:{ fn: x=>Math.sqrt(x),  domain:[0,2],   label:'√x',       latex:'\\sqrt{x}' },
-  sinx: { fn: x=>Math.sin(x),   domain:[0,Math.PI], label:'sin(x)', latex:'\\sin(x)' },
-  x:    { fn: x=>x,             domain:[0,2],   label:'x',        latex:'x' },
-  dome: { fn: x=>2-x*x/4,      domain:[0,2],   label:'2−x²/4',   latex:'2-\\tfrac{x^2}{4}' },
-  ex:   { fn: x=>Math.exp(x)/3, domain:[0,2],   label:'eˣ/3',     latex:'\\tfrac{e^x}{3}' }
+'use strict';
+
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+let fExpr = null, gExpr = null;
+let curAxis   = 'x';
+let curMethod = 'disk';
+let curView   = 'solid';
+let sweeping  = false, autoRotating = false;
+let sweepTheta = 0, sweepRAF = null;
+let solidMesh = null, wireMesh = null, crossMesh = null, profileLine = null;
+let innerMesh = null;
+let capMeshes = [];   // end caps tracked para limpiarlos correctamente
+
+// Camera state
+let camTheta  = 0.8;   // azimuth
+let camPhi    = 1.05;  // polar
+let camRadius = 12;
+let camTarget = new THREE.Vector3(2, 0, 0);
+let isDrag = false, lastMX = 0, lastMY = 0;
+
+// ═══════════════════════════════════════════════
+//  THREE.JS SETUP
+// ═══════════════════════════════════════════════
+const canvas = document.getElementById('three-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = false;
+renderer.setClearColor(0x0b1018);
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(42, 1, 0.01, 500);
+camera.position.set(8, 5, 8);
+
+// Lighting
+const ambient = new THREE.AmbientLight(0x334466, 1.2);
+scene.add(ambient);
+const sun = new THREE.DirectionalLight(0xffffff, 1.1);
+sun.position.set(6, 12, 8);
+scene.add(sun);
+const fill = new THREE.PointLight(0x3ac2f0, 0.6, 60);
+fill.position.set(-6, 4, 6);
+scene.add(fill);
+const rim = new THREE.PointLight(0xd4a84b, 0.4, 50);
+rim.position.set(10, -4, -5);
+scene.add(rim);
+
+// Grid
+const gridHelper = new THREE.GridHelper(30, 30, 0x1c2840, 0x131e30);
+gridHelper.position.y = -0.01;
+scene.add(gridHelper);
+
+// Coordinate axes (thin lines)
+function makeLine(p1, p2, color) {
+  const g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...p1), new THREE.Vector3(...p2)]);
+  return new THREE.Line(g, new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.35 }));
+}
+scene.add(makeLine([-15, 0, 0], [15, 0, 0], 0x4a5a70));
+scene.add(makeLine([0, -10, 0], [0, 10, 0], 0x4a5a70));
+scene.add(makeLine([0, 0, -10], [0, 0, 10], 0x4a5a70));
+
+// Revolution axis (gold, prominent) — rebuilt on generate
+let axisLine = null;
+
+// ── Camera control ──
+function updateCamera() {
+  const x = camTarget.x + camRadius * Math.sin(camPhi) * Math.cos(camTheta);
+  const y = camTarget.y + camRadius * Math.cos(camPhi);
+  const z = camTarget.z + camRadius * Math.sin(camPhi) * Math.sin(camTheta);
+  camera.position.set(x, y, z);
+  camera.lookAt(camTarget);
+}
+updateCamera();
+
+canvas.addEventListener('mousedown',  e => { isDrag = true;  lastMX = e.clientX; lastMY = e.clientY; });
+canvas.addEventListener('mouseup',    () => isDrag = false);
+canvas.addEventListener('mouseleave', () => isDrag = false);
+canvas.addEventListener('mousemove',  e => {
+  if (!isDrag) return;
+  const dx = e.clientX - lastMX, dy = e.clientY - lastMY;
+  camTheta -= dx * 0.012;
+  camPhi = Math.max(0.08, Math.min(Math.PI - 0.08, camPhi - dy * 0.012));
+  lastMX = e.clientX; lastMY = e.clientY;
+  updateCamera();
+});
+canvas.addEventListener('wheel', e => {
+  camRadius = Math.max(2, Math.min(50, camRadius + e.deltaY * 0.02));
+  updateCamera(); e.preventDefault();
+}, { passive: false });
+canvas.addEventListener('touchstart', e => { isDrag = true; lastMX = e.touches[0].clientX; lastMY = e.touches[0].clientY; e.preventDefault(); }, { passive: false });
+canvas.addEventListener('touchend',   () => isDrag = false);
+canvas.addEventListener('touchmove',  e => {
+  const dx = e.touches[0].clientX - lastMX, dy = e.touches[0].clientY - lastMY;
+  camTheta -= dx * 0.012; camPhi = Math.max(0.08, Math.min(Math.PI-0.08, camPhi - dy*0.012));
+  lastMX = e.touches[0].clientX; lastMY = e.touches[0].clientY; updateCamera(); e.preventDefault();
+}, { passive: false });
+
+// Resize
+function onResize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(onResize).observe(canvas);
+onResize();
+
+// ═══════════════════════════════════════════════
+//  ANIMATION LOOP
+// ═══════════════════════════════════════════════
+function animate() {
+  requestAnimationFrame(animate);
+  if (autoRotating) { camTheta += 0.008; updateCamera(); }
+  renderer.render(scene, camera);
+}
+animate();
+
+// ═══════════════════════════════════════════════
+//  MATH ENGINE
+// ═══════════════════════════════════════════════
+const safe = fn => { try { const v = fn(); return isFinite(v) ? v : 0; } catch { return 0; } };
+const evalF = x => safe(() => fExpr.evaluate({ x }));
+const evalG = x => safe(() => gExpr ? gExpr.evaluate({ x }) : 0);
+
+function compileExprs() {
+  const fStr = document.getElementById('inp-f').value.trim();
+  const gStr = document.getElementById('inp-g').value.trim();
+  fExpr = math.compile(fStr);
+  gExpr = gStr ? math.compile(gStr) : null;
+}
+
+// Numerical integral via composite Simpson (N=2000)
+function integrate(fn, a, b, N = 2000) {
+  if (N % 2 !== 0) N++;
+  const h = (b - a) / N;
+  let s = fn(a) + fn(b);
+  for (let i = 1; i < N; i++) s += (i % 2 === 0 ? 2 : 4) * fn(a + i * h);
+  return s * h / 3;
+}
+
+function computeVolume(a, b) {
+  if (curMethod === 'disk' && curAxis === 'x') {
+    return Math.PI * integrate(x => Math.pow(Math.max(0, evalF(x)), 2), a, b);
+  }
+  if (curMethod === 'wash' && curAxis === 'x') {
+    return Math.PI * integrate(x => Math.max(0, Math.pow(Math.max(0, evalF(x)), 2) - Math.pow(Math.max(0, evalG(x)), 2)), a, b);
+  }
+  if (curMethod === 'shell' && curAxis === 'y') {
+    return 2 * Math.PI * integrate(x => Math.abs(x) * Math.abs(evalF(x)), a, b);
+  }
+  if (curMethod === 'disk' && curAxis === 'y') {
+    return 2 * Math.PI * integrate(x => x * Math.abs(evalF(x)), a, b);
+  }
+  // Fallback
+  return Math.PI * integrate(x => Math.pow(Math.max(0, evalF(x)), 2), a, b);
+}
+
+function computeSurfaceArea(a, b) {
+  const dx = (b - a) / 4000;
+  return 2 * Math.PI * integrate(x => {
+    const f = Math.max(0, evalF(x));
+    const fp = (evalF(x + dx) - evalF(x - dx)) / (2 * dx);
+    return f * Math.sqrt(1 + fp * fp);
+  }, a, b);
+}
+
+function computeCrossSection(x0) {
+  if (curMethod === 'disk' || curMethod === 'shell') {
+    const r = Math.abs(evalF(x0));
+    return { r_outer: r, r_inner: 0, area: Math.PI * r * r };
+  }
+  if (curMethod === 'wash') {
+    const rO = Math.abs(evalF(x0));
+    const rI = Math.max(0, evalG(x0));
+    return { r_outer: rO, r_inner: rI, area: Math.PI * (rO*rO - rI*rI) };
+  }
+  const r = Math.abs(evalF(x0));
+  return { r_outer: r, r_inner: 0, area: Math.PI * r * r };
+}
+
+// ═══════════════════════════════════════════════
+//  GEOMETRY BUILDERS
+// ═══════════════════════════════════════════════
+const SEG = 72; // angular segments — smooth circle
+
+function buildRevolutionAround_X(outerFn, innerFn, a, b, n, thetaMax = 2*Math.PI) {
+  // Surface: (x, r*cos(θ), r*sin(θ))
+  const positions = [], normals = [], indices = [];
+  const dxSlope = (b - a) / (n * 8); // for derivative approx
+
+  for (let i = 0; i <= n; i++) {
+    const x = a + (b - a) * i / n;
+    const rO = Math.max(0.0001, Math.abs(outerFn(x)));   // abs: f<0 produce mismo sólido que f>0
+    const fp = (Math.abs(outerFn(x + dxSlope)) - Math.abs(outerFn(x - dxSlope))) / (2 * dxSlope);
+    const segCount = Math.ceil(SEG * thetaMax / (2 * Math.PI));
+    for (let j = 0; j <= segCount; j++) {
+      const theta = (j / segCount) * thetaMax;
+      positions.push(x, rO * Math.cos(theta), rO * Math.sin(theta));
+      // Outward normal accounting for slope
+      const len = Math.sqrt(fp*fp + 1);
+      normals.push(-fp/len, Math.cos(theta)/len, Math.sin(theta)/len);
+    }
+  }
+  const segCount = Math.ceil(SEG * thetaMax / (2 * Math.PI));
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < segCount; j++) {
+      const a0 = i*(segCount+1)+j, b0=a0+1, c0=(i+1)*(segCount+1)+j, d0=c0+1;
+      indices.push(a0,c0,b0, b0,c0,d0);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geo.setAttribute('normal',   new THREE.Float32BufferAttribute(normals,   3));
+  geo.setIndex(indices);
+  return geo;
+}
+
+function buildShellsAround_Y(fn, a, b, n) {
+  // Cylindrical shells: at each xi, cylinder with radius xi, height |f(xi)|
+  // When f(x) < 0 the shell goes downward (yBot = f(x), yTop = 0)
+  const positions = [], normals = [], indices = [];
+  const dx = (b - a) / n;
+
+  for (let i = 0; i < n; i++) {
+    const xc = a + (i + 0.5) * dx;
+    const r  = Math.max(0.001, xc);
+    const fv = fn(xc);
+    if (Math.abs(fv) < 0.0001) continue;
+
+    const yBot = Math.min(0, fv);   // bottom of shell (≤ 0)
+    const yTop = Math.max(0, fv);   // top of shell (≥ 0)
+
+    const baseIdx = positions.length / 3;
+    for (let j = 0; j <= SEG; j++) {
+      const theta = (j / SEG) * 2 * Math.PI;
+      const cx = Math.cos(theta), sz = Math.sin(theta);
+      positions.push(r*cx, yBot, r*sz); normals.push(cx, 0, sz);
+      positions.push(r*cx, yTop, r*sz); normals.push(cx, 0, sz);
+    }
+    for (let j = 0; j < SEG; j++) {
+      const a0 = baseIdx + j*2, b0=a0+1, c0=a0+2, d0=a0+3;
+      indices.push(a0,c0,b0, b0,c0,d0);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geo.setAttribute('normal',   new THREE.Float32BufferAttribute(normals,   3));
+  geo.setIndex(indices);
+  return geo;
+}
+
+// ── Superficie de revolución alrededor del eje Y ──
+// P(x,θ) = (x·cos(θ), f(x), x·sin(θ)) — muestra el sólido real, arriba Y abajo
+function buildRevolutionAroundY(fn, a, b, n, thetaMax = 2 * Math.PI) {
+  const positions = [], indices = [];
+  const segCount = Math.max(4, Math.ceil(SEG * thetaMax / (2 * Math.PI)));
+  for (let i = 0; i <= n; i++) {
+    const x = a + (b - a) * i / n;
+    const y = fn(x); // valor real (puede ser negativo)
+    for (let j = 0; j <= segCount; j++) {
+      const theta = (j / segCount) * thetaMax;
+      positions.push(x * Math.cos(theta), y, x * Math.sin(theta));
+    }
+  }
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < segCount; j++) {
+      const a0 = i*(segCount+1)+j, b0=a0+1, c0=(i+1)*(segCount+1)+j, d0=c0+1;
+      indices.push(a0, c0, b0, b0, c0, d0);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geo.setIndex(indices);
+  geo.computeVertexNormals(); // normales automáticas desde las caras
+  return geo;
+}
+
+function buildProfileCurve(fn, a, b, n = 200) {
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const x = a + (b-a)*i/n;
+    pts.push(new THREE.Vector3(x, Math.max(0, fn(x)), 0));
+  }
+  return new THREE.BufferGeometry().setFromPoints(pts);
+}
+
+function buildEndCap(x, rOuter, rInner = 0) {
+  const positions = [], normals = [], indices = [];
+  // Center + ring
+  const nSeg = SEG;
+  // Outer ring
+  for (let j = 0; j <= nSeg; j++) {
+    const theta = (j / nSeg) * 2 * Math.PI;
+    const r = rOuter;
+    positions.push(x, r*Math.cos(theta), r*Math.sin(theta));
+    normals.push(1, 0, 0);
+  }
+  // Inner ring or center
+  if (rInner > 0.01) {
+    for (let j = 0; j <= nSeg; j++) {
+      const theta = (j / nSeg) * 2 * Math.PI;
+      positions.push(x, rInner*Math.cos(theta), rInner*Math.sin(theta));
+      normals.push(1, 0, 0);
+    }
+    for (let j = 0; j < nSeg; j++) {
+      const a0=j, b0=j+1, c0=nSeg+1+j, d0=c0+1;
+      indices.push(a0,b0,c0, b0,d0,c0);
+    }
+  } else {
+    // Fan triangles from center
+    positions.push(x, 0, 0); normals.push(1, 0, 0);
+    const cIdx = nSeg + 1;
+    for (let j = 0; j < nSeg; j++) { indices.push(cIdx, j, j+1); }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geo.setAttribute('normal',   new THREE.Float32BufferAttribute(normals,   3));
+  if (indices.length) geo.setIndex(indices);
+  return geo;
+}
+
+function buildCrossSectionDisk(x0, rOuter, rInner = 0) {
+  let geo;
+  if (rInner < 0.01) {
+    geo = new THREE.CircleGeometry(rOuter, SEG);
+    geo.rotateY(Math.PI / 2);
+  } else {
+    const shape = new THREE.Shape();
+    shape.absarc(0, 0, rOuter, 0, Math.PI*2, false);
+    const hole = new THREE.Path();
+    hole.absarc(0, 0, rInner, 0, Math.PI*2, true);
+    shape.holes.push(hole);
+    geo = new THREE.ShapeGeometry(shape, SEG);
+    geo.rotateY(Math.PI / 2);
+  }
+  geo.translate(x0, 0, 0);
+  return geo;
+}
+
+// ═══════════════════════════════════════════════
+//  SCENE MANAGEMENT
+// ═══════════════════════════════════════════════
+function clearSolid() {
+  [solidMesh, wireMesh, crossMesh, profileLine, innerMesh, axisLine].forEach(m => {
+    if (m) { scene.remove(m); m.geometry?.dispose(); m.material?.dispose(); }
+  });
+  capMeshes.forEach(m => { scene.remove(m); m.geometry?.dispose(); m.material?.dispose(); });
+  capMeshes = [];
+  solidMesh = wireMesh = crossMesh = profileLine = innerMesh = axisLine = null;
+}
+
+function buildScene(thetaMax = 2 * Math.PI) {
+  const a = +document.getElementById('inp-a').value;
+  const b = +document.getElementById('inp-b').value;
+  const n = +document.getElementById('n-slider').value;
+  if (a >= b) return;
+
+  clearSolid();
+
+  // Surface material
+  const matSolid = new THREE.MeshPhongMaterial({
+    color: new THREE.Color('#0e4a75'),
+    emissive: new THREE.Color('#05192a'),
+    specular: new THREE.Color('#3ac2f0'),
+    shininess: 90,
+    transparent: true, opacity: 0.82,
+    side: THREE.DoubleSide
+  });
+
+  const matWire = new THREE.MeshBasicMaterial({
+    color: 0x3ac2f0, wireframe: true,
+    transparent: true, opacity: 0.12
+  });
+
+  // Build geometry based on axis + method
+  let solidGeo;
+
+  if (curAxis === 'x') {
+    solidGeo = buildRevolutionAround_X(evalF, evalG, a, b, n, thetaMax);
+
+    // End caps: translúcidas con material propio, rastreadas en capMeshes
+    if (thetaMax >= 2 * Math.PI - 0.05) {
+      const matCap = new THREE.MeshPhongMaterial({
+        color: new THREE.Color('#0e4a75'),
+        transparent: true, opacity: 0.40, side: THREE.DoubleSide
+      });
+      const rA = Math.abs(evalF(a)), rB = Math.abs(evalF(b));
+      const rIA = curMethod === 'wash' ? Math.max(0, evalG(a)) : 0;
+      const rIB = curMethod === 'wash' ? Math.max(0, evalG(b)) : 0;
+      const capA = new THREE.Mesh(buildEndCap(a, rA, rIA), matCap);
+      const capB = new THREE.Mesh(buildEndCap(b, rB, rIB), matCap);
+      scene.add(capA, capB);
+      capMeshes.push(capA, capB);
+    }
+
+    // Inner surface for washer
+    if (curMethod === 'wash') {
+      const innerGeo = buildRevolutionAround_X(evalG, null, a, b, n, thetaMax);
+      innerMesh = new THREE.Mesh(innerGeo, new THREE.MeshPhongMaterial({
+        color: 0x0b1018, side: THREE.BackSide, transparent: true, opacity: 0.95
+      }));
+      scene.add(innerMesh);
+    }
+
+    // Revolution axis: gold line along X
+    const axGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(a - 0.5, 0, 0), new THREE.Vector3(b + 0.5, 0, 0)
+    ]);
+    axisLine = new THREE.Line(axGeo, new THREE.LineBasicMaterial({ color: 0xd4a84b, linewidth: 2 }));
+    scene.add(axisLine);
+
+  } else { // axis Y — superficie de revolución real (muestra arriba Y abajo)
+    // Sólido principal: superficie de revolución alrededor de Y
+    solidGeo = buildRevolutionAroundY(evalF, a, b, n, thetaMax);
+
+    // Malla educativa: cascarones cilíndricos (solo cuando thetaMax completo)
+    if (thetaMax >= 2 * Math.PI - 0.05) {
+      const shellGeo = buildShellsAround_Y(evalF, a, b, Math.min(n, 50));
+      // wireMesh se reemplaza con shells para la vista educativa
+      wireMesh = new THREE.Mesh(shellGeo, matWire);
+      scene.add(wireMesh);
+    }
+
+    // Eje Y: extender según los valores máx/mín de f(x)
+    const yVals = Array.from({length:40}, (_,i) => evalF(a+(b-a)*i/39));
+    const yMax = Math.max(0.5, ...yVals), yMin = Math.min(-0.5, ...yVals);
+    const axGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(0, yMin - 0.5, 0), new THREE.Vector3(0, yMax + 0.5, 0)
+    ]);
+    axisLine = new THREE.Line(axGeo, new THREE.LineBasicMaterial({ color: 0xd4a84b, linewidth: 2 }));
+    scene.add(axisLine);
+  }
+
+  solidMesh = new THREE.Mesh(solidGeo, matSolid);
+  // Para eje X el wireGeo es clon del sólido; para eje Y ya fue creado arriba
+  if (curAxis === 'x' || !wireMesh) {
+    const wireGeo = solidGeo.clone();
+    wireMesh = new THREE.Mesh(wireGeo, matWire);
+    scene.add(wireMesh);
+  }
+  scene.add(solidMesh);
+
+  // Profile curve (curva 2D roja en plano XY)
+  const profGeo = buildProfileCurve(evalF, a, b);
+  profileLine = new THREE.Line(profGeo, new THREE.LineBasicMaterial({ color: 0xf07070, linewidth: 2 }));
+  scene.add(profileLine);
+
+  applyViewMode();
+  updateCrossSectionFromSlider();
+
+  // Ajustar cámara
+  const mid = (a + b) / 2;
+  const yVals60 = Array.from({length:60}, (_,i) => evalF(a+(b-a)*i/59));
+  const maxR = Math.max(...yVals60.map(Math.abs), 0.5);
+  const yMin60 = Math.min(0, ...yVals60);
+  const yMax60 = Math.max(0, ...yVals60);
+  const centerY = curAxis === 'y' ? (yMax60 + yMin60) / 2 : 0;
+  camTarget.set(curAxis === 'x' ? mid : 0, centerY, 0);
+  camRadius = Math.max(5, (b - a + maxR * 2) * 1.6);
+  // Para eje Y, arrancar más de lado para ver arriba Y abajo
+  if (curAxis === 'y') { camPhi = 1.35; camTheta = 0.65; }
+  updateCamera();
+}
+
+function applyViewMode() {
+  if (!solidMesh) return;
+  solidMesh.visible = curView !== 'wire';
+  if (wireMesh) wireMesh.visible = curView !== 'solid';
+}
+
+function updateCrossSectionFromSlider() {
+  const a = +document.getElementById('inp-a').value;
+  const b = +document.getElementById('inp-b').value;
+  const t = +document.getElementById('cross-slider').value / 100;
+  const x0 = a + (b - a) * t;
+  document.getElementById('cross-display').textContent = x0.toFixed(3);
+
+  if (crossMesh) { scene.remove(crossMesh); crossMesh.geometry?.dispose(); crossMesh.material?.dispose(); crossMesh = null; }
+  if (!fExpr) return;
+
+  const cs = computeCrossSection(x0);
+  const crossGeo = buildCrossSectionDisk(x0, cs.r_outer, cs.r_inner);
+  crossMesh = new THREE.Mesh(crossGeo, new THREE.MeshBasicMaterial({
+    color: 0xd4a84b, transparent: true, opacity: 0.45, side: THREE.DoubleSide
+  }));
+  scene.add(crossMesh);
+  updateCrossSectionResult(x0, cs);
+}
+
+function updateCrossSectionResult(x0, cs) {
+  const el = document.getElementById('cross-section-info');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="sc-label">Sección en x₀ = ${x0.toFixed(4)}</div>
+    <div class="sc-val">r = ${cs.r_outer.toFixed(4)}</div>
+    ${cs.r_inner > 0.001 ? `<div class="sc-val" style="color:var(--orange)">r<sub>int</sub> = ${cs.r_inner.toFixed(4)}</div>` : ''}
+    <div class="sc-val green">A = ${cs.area.toFixed(5)}</div>`;
+}
+
+// ═══════════════════════════════════════════════
+//  SWEEP ANIMATION
+// ═══════════════════════════════════════════════
+function toggleSweep() {
+  const btn = document.getElementById('btn-sweep');
+  if (sweeping) {
+    sweeping = false; if (sweepRAF) cancelAnimationFrame(sweepRAF);
+    btn.textContent = '▶ Barrer'; btn.classList.remove('active');
+    buildScene(2 * Math.PI); // complete solid
+  } else {
+    sweeping = true; sweepTheta = 0;
+    btn.textContent = '⏸ Pausa'; btn.classList.add('active');
+    doSweep();
+  }
+}
+
+function doSweep() {
+  if (!sweeping) return;
+  sweepTheta += 0.045;
+  if (sweepTheta >= 2 * Math.PI) {
+    sweepTheta = 2 * Math.PI; sweeping = false;
+    const btn = document.getElementById('btn-sweep');
+    btn.textContent = '▶ Barrer'; btn.classList.remove('active');
+    buildScene(2 * Math.PI);
+    return;
+  }
+  buildScene(sweepTheta);
+  sweepRAF = requestAnimationFrame(doSweep);
+}
+
+function toggleAutoRot() {
+  autoRotating = !autoRotating;
+  const btn = document.getElementById('btn-rot');
+  btn.textContent = autoRotating ? '⏹ Rotar' : '⟳ Rotar';
+  btn.classList.toggle('active', autoRotating);
+}
+
+function resetCamera() {
+  camTheta = 0.8; camPhi = 1.05;
+  const a = +document.getElementById('inp-a').value;
+  const b = +document.getElementById('inp-b').value;
+  const mid = (a + b) / 2;
+  camTarget.set(mid, 0, 0);
+  camRadius = 12; updateCamera();
+}
+
+// ═══════════════════════════════════════════════
+//  2D MINI CANVAS
+// ═══════════════════════════════════════════════
+function draw2D(a, b) {
+  const cv = document.getElementById('canvas-2d');
+  if (!cv || !fExpr) return;
+  const w = cv.width, h = cv.height;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#0b1018'; ctx.fillRect(0, 0, w, h);
+
+  const N = 200;
+  const ys = Array.from({length:N+1}, (_,i) => evalF(a+(b-a)*i/N));
+  const yMin = Math.min(0, ...ys), yMax = Math.max(0, ...ys);
+  const pad = 16;
+  const scX = x => pad + (x - a) / (b - a) * (w - 2*pad);
+  const scY = y => h - pad - (y - yMin) / (Math.max(yMax - yMin, 0.001)) * (h - 2*pad);
+
+  // Shaded region
+  ctx.beginPath();
+  ctx.moveTo(scX(a), scY(0));
+  for (let i = 0; i <= N; i++) ctx.lineTo(scX(a+(b-a)*i/N), scY(ys[i]));
+  ctx.lineTo(scX(b), scY(0));
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(58,194,240,0.18)'; ctx.fill();
+
+  // Axis (y=0)
+  ctx.strokeStyle = '#4a6685'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad, scY(0)); ctx.lineTo(w-pad, scY(0)); ctx.stroke();
+
+  // Curve f(x)
+  ctx.strokeStyle = '#f07070'; ctx.lineWidth = 2; ctx.beginPath();
+  for (let i = 0; i <= N; i++) {
+    const px = scX(a+(b-a)*i/N), py = scY(ys[i]);
+    i === 0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+
+  // Inner curve g(x) if washer
+  if (curMethod === 'wash' && gExpr) {
+    ctx.strokeStyle = '#f59a4a'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]); ctx.beginPath();
+    for (let i = 0; i <= N; i++) {
+      const gv = evalG(a+(b-a)*i/N);
+      const px = scX(a+(b-a)*i/N), py = scY(gv);
+      i === 0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  // Revolution axis indicator
+  if (curAxis === 'x') {
+    ctx.strokeStyle = 'rgba(212,168,75,0.6)'; ctx.lineWidth = 1.5; ctx.setLineDash([5,3]);
+    ctx.beginPath(); ctx.moveTo(pad, scY(0)); ctx.lineTo(w-pad, scY(0)); ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  // Labels
+  ctx.fillStyle = '#64768a'; ctx.font = '10px JetBrains Mono, monospace';
+  ctx.fillText('a='+a, scX(a)+2, scY(0)-4);
+  ctx.fillText('b='+b, scX(b)-22, scY(0)-4);
+}
+
+// ═══════════════════════════════════════════════
+//  RESULTS RENDER
+// ═══════════════════════════════════════════════
+const METHOD_NAMES = { disk:'Método del Disco', shell:'Método del Cascarón', wash:'Método de la Arandela' };
+const AXIS_LABEL   = { x:'Eje X', y:'Eje Y' };
+const FORMULAS = {
+  disk:  { vol:'V = π ∫[a,b] [f(x)]² dx', area:'A = 2π ∫[a,b] f(x) √(1+[f\'(x)]²) dx' },
+  wash:  { vol:'V = π ∫[a,b] {[f(x)]² − [g(x)]²} dx', area:'—' },
+  shell: { vol:'V = 2π ∫[a,b] x · f(x) dx', area:'—' }
+};
+const METHOD_DESC = {
+  disk:  'Suma de discos circulares delgados perpendiculares al eje de revolución.',
+  shell: 'Suma de cascarones cilíndricos concéntricos paralelos al eje de revolución.',
+  wash:  'Generalización del disco cuando existe una función interior g(x) que crea un hueco.'
 };
 
-/* ═══════════════════════════════════════════════════
-   STATE
-═══════════════════════════════════════════════════ */
-let curveKey = 'x2';
-let paramA = 0, paramB = 2, numSlices = 8;
-let animAngle = 0, animating = false, animId = null;
+function renderResults(a, b, vol, area) {
+  const cs  = computeCrossSection(a + (b-a) * +document.getElementById('cross-slider').value / 100);
+  const mid = (a + b) / 2;
+  const fMid = evalF(mid).toFixed(4);
 
-/* ═══════════════════════════════════════════════════
-   NUMERICAL INTEGRATION (Simpson's Rule)
-═══════════════════════════════════════════════════ */
-function simpson(fn, a, b, n=1000){
-  if(n%2!==0) n++;
-  const h=(b-a)/n;
-  let s=fn(a)+fn(b);
-  for(let i=1;i<n;i++) s+=fn(a+i*h)*(i%2===0?2:4);
-  return s*h/3;
+  document.getElementById('results').innerHTML = `
+<div class="results-inner">
+
+  <div class="vol-display">
+    <div class="vol-label">Volumen del Sólido</div>
+    <div class="vol-value">${vol.toFixed(6)}</div>
+    <div class="vol-units">${METHOD_NAMES[curMethod]} · ${AXIS_LABEL[curAxis]}</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="sc-label">Sup. Lateral Aprox.</div>
+    <div class="sc-val">${area.toFixed(6)}</div>
+  </div>
+
+  <div class="stat-card" id="cross-section-info">
+    <div class="sc-label">Sección Transversal</div>
+    <div class="sc-val">r = ${cs.r_outer.toFixed(4)}</div>
+    ${cs.r_inner > 0.001 ? `<div class="sc-val" style="color:var(--orange)">r<sub>int</sub> = ${cs.r_inner.toFixed(4)}</div>` : ''}
+    <div class="sc-val green">A = ${cs.area.toFixed(5)}</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="sc-label">f(x) en x = ${mid.toFixed(3)}</div>
+    <div class="sc-val blue">${fMid}</div>
+  </div>
+
+  <div class="formula-box">
+    <div><span class="fk">Volumen:</span></div>
+    <div class="fv" style="margin:0.3rem 0;line-height:1.9">${FORMULAS[curMethod].vol}</div>
+    <div style="margin-top:0.4rem"><span class="fk">Sup. lat.:</span></div>
+    <div class="fv" style="margin:0.3rem 0">${FORMULAS[curMethod].area}</div>
+    <div style="margin-top:0.35rem"><span class="fk">Intervalo: </span><span class="fn">[${a}, ${b}]</span></div>
+    <div><span class="fk">V ≈ </span><span class="fn">${vol.toFixed(8)}</span></div>
+  </div>
+
+  <div class="mini-canvas-wrap">
+    <div class="mini-canvas-label">Perfil 2D — Región a Rotar</div>
+    <canvas id="canvas-2d" width="200" height="140"></canvas>
+  </div>
+
+  <div class="method-desc">
+    <strong>${METHOD_NAMES[curMethod]}:</strong> ${METHOD_DESC[curMethod]}
+    ${curMethod === 'wash' ? '<br><br><span style="color:var(--orange)">Requiere f(x) > g(x) ≥ 0 en [a,b].</span>' : ''}
+  </div>
+
+</div>`;
+
+  // Draw 2D mini canvas after DOM insertion
+  setTimeout(() => {
+    const cv = document.getElementById('canvas-2d');
+    if (cv) { cv.width = cv.clientWidth || 200; cv.height = 140; draw2D(a, b); }
+  }, 30);
 }
 
-function volume(){
-  const {fn}=CURVES[curveKey];
-  return Math.PI * simpson(x=>fn(x)*fn(x), paramA, paramB);
+// ═══════════════════════════════════════════════
+//  MAIN GENERATE
+// ═══════════════════════════════════════════════
+async function generate() {
+  const a = +document.getElementById('inp-a').value;
+  const b = +document.getElementById('inp-b').value;
+  if (!isFinite(a) || !isFinite(b) || a >= b) {
+    document.getElementById('results').innerHTML = '<div class="empty-state" style="color:var(--red)">Error: se necesita a &lt; b.</div>';
+    return;
+  }
+  document.getElementById('loader').classList.add('show');
+  await new Promise(r => setTimeout(r, 30));
+  try {
+    compileExprs();
+    evalF((a+b)/2); // parse check
+    const vol  = computeVolume(a, b);
+    const area = computeSurfaceArea(a, b);
+    renderResults(a, b, vol, area);
+    buildScene(2 * Math.PI);
+  } catch(e) {
+    document.getElementById('results').innerHTML = `<div class="empty-state" style="color:var(--red)">Error: ${e.message}</div>`;
+    console.error(e);
+  }
+  document.getElementById('loader').classList.remove('show');
 }
 
-function riemannVolume(n){
-  const {fn}=CURVES[curveKey];
-  const dx=(paramB-paramA)/n;
-  let v=0;
-  for(let i=0;i<n;i++){
-    const x=paramA+(i+0.5)*dx;
-    v+=Math.PI*fn(x)*fn(x)*dx;
-  }
-  return v;
+// ═══════════════════════════════════════════════
+//  CONTROLS
+// ═══════════════════════════════════════════════
+function setAxis(v) {
+  curAxis = v;
+  document.querySelectorAll('#axis-group .radio-btn').forEach(b => b.classList.toggle('active', b.dataset.v === v));
+  // Auto-switch method
+  if (v === 'y' && curMethod === 'wash') setMethod('shell');
+  if (v === 'y' && curMethod === 'disk') setMethod('shell');
 }
 
-/* ═══════════════════════════════════════════════════
-   2D CANVAS
-═══════════════════════════════════════════════════ */
-const cv2=document.getElementById('cv2d');
-const ctx2=cv2.getContext('2d');
-const W2=cv2.width, H2=cv2.height;
-
-function draw2D(){
-  ctx2.clearRect(0,0,W2,H2);
-  const {fn, domain}=CURVES[curveKey];
-  const [dA,dB]=domain;
-  const maxY=Math.max(fn(dA),fn(dB),...Array.from({length:200},(_,i)=>fn(dA+i*(dB-dA)/200)));
-  const PAD={l:44,r:18,t:18,b:36};
-  const W=W2-PAD.l-PAD.r, H=H2-PAD.t-PAD.b;
-
-  function px(x){ return PAD.l+(x-dA)/(dB-dA)*W }
-  function py(y){ return PAD.t+H-y/maxY*H*0.88 }
-
-  // background
-  ctx2.fillStyle='#f8faff';
-  ctx2.fillRect(0,0,W2,H2);
-
-  // grid
-  ctx2.strokeStyle='#e0eaff';ctx2.lineWidth=1;
-  for(let x=Math.ceil(dA*2)/2;x<=dB;x+=0.5){
-    ctx2.beginPath();ctx2.moveTo(px(x),PAD.t);ctx2.lineTo(px(x),PAD.t+H);ctx2.stroke();
-  }
-  for(let y=0;y<=maxY;y+=0.5){
-    if(y>maxY+0.1)break;
-    ctx2.beginPath();ctx2.moveTo(PAD.l,py(y));ctx2.lineTo(PAD.l+W,py(y));ctx2.stroke();
-  }
-
-  // x-axis (this is axis of rotation — highlighted)
-  ctx2.strokeStyle='rgba(30,58,138,.7)';ctx2.lineWidth=2;
-  ctx2.setLineDash([6,4]);
-  ctx2.beginPath();ctx2.moveTo(PAD.l,py(0));ctx2.lineTo(PAD.l+W,py(0));ctx2.stroke();
-  ctx2.setLineDash([]);
-  ctx2.fillStyle='rgba(30,58,138,.55)';ctx2.font='bold 10px Nunito,sans-serif';
-  ctx2.fillText('Eje de rotación',PAD.l+4,py(0)-5);
-
-  // bounds [a,b] shading
-  const grd=ctx2.createLinearGradient(px(paramA),0,px(paramB),0);
-  grd.addColorStop(0,'rgba(59,130,246,.18)');
-  grd.addColorStop(1,'rgba(96,165,250,.22)');
-  ctx2.fillStyle=grd;
-  ctx2.beginPath();
-  ctx2.moveTo(px(paramA),py(0));
-  const steps=200;
-  for(let i=0;i<=steps;i++){
-    const x=paramA+i*(paramB-paramA)/steps;
-    ctx2.lineTo(px(x),py(fn(x)));
-  }
-  ctx2.lineTo(px(paramB),py(0));
-  ctx2.closePath();ctx2.fill();
-
-  // curve
-  ctx2.strokeStyle='#1e3a8a';ctx2.lineWidth=2.5;
-  ctx2.beginPath();
-  for(let i=0;i<=steps;i++){
-    const x=dA+i*(dB-dA)/steps;
-    i===0?ctx2.moveTo(px(x),py(fn(x))):ctx2.lineTo(px(x),py(fn(x)));
-  }
-  ctx2.stroke();
-
-  // bounds vertical lines
-  ctx2.strokeStyle='#3b82f6';ctx2.lineWidth=1.5;ctx2.setLineDash([4,3]);
-  [paramA,paramB].forEach(v=>{
-    ctx2.beginPath();ctx2.moveTo(px(v),py(0));ctx2.lineTo(px(v),py(fn(v)));ctx2.stroke();
-  });
-  ctx2.setLineDash([]);
-
-  // disks on 2D (show slices)
-  const dx=(paramB-paramA)/numSlices;
-  ctx2.fillStyle='rgba(59,130,246,.12)';ctx2.strokeStyle='rgba(30,58,138,.5)';ctx2.lineWidth=1;
-  for(let i=0;i<numSlices;i++){
-    const x=paramA+(i+0.5)*dx;
-    const r=fn(x);
-    ctx2.fillRect(px(paramA+i*dx),py(r),px(paramA+(i+1)*dx)-px(paramA+i*dx),py(0)-py(r));
-    ctx2.strokeRect(px(paramA+i*dx),py(r),px(paramA+(i+1)*dx)-px(paramA+i*dx),py(0)-py(r));
-  }
-
-  // axes
-  ctx2.strokeStyle='#374151';ctx2.lineWidth=1.5;
-  ctx2.beginPath();ctx2.moveTo(PAD.l,PAD.t);ctx2.lineTo(PAD.l,PAD.t+H+10);ctx2.stroke();
-  ctx2.beginPath();ctx2.moveTo(PAD.l-10,PAD.t+H);ctx2.lineTo(PAD.l+W,PAD.t+H);ctx2.stroke();
-
-  // axis labels
-  ctx2.fillStyle='#374151';ctx2.font='600 11px Nunito,sans-serif';
-  ctx2.fillText('y',PAD.l-12,PAD.t+5);
-  ctx2.fillText('x',PAD.l+W+4,PAD.t+H+4);
-
-  // tick labels
-  ctx2.fillStyle='#6b7280';ctx2.font='10px JetBrains Mono,monospace';
-  for(let x=Math.ceil(dA*2)/2;x<=dB;x+=0.5){
-    ctx2.fillText(x%1===0?x.toFixed(0):x.toFixed(1),px(x)-8,PAD.t+H+14);
-  }
-  for(let y=0.5;y<=maxY;y+=0.5){
-    ctx2.fillText(y.toFixed(1),PAD.l-32,py(y)+4);
-  }
-
-  // a, b labels
-  ctx2.fillStyle='#1d4ed8';ctx2.font='bold 11px Nunito,sans-serif';
-  ctx2.fillText('a='+paramA.toFixed(2),px(paramA)-14,PAD.t+H+26);
-  ctx2.fillText('b='+paramB.toFixed(2),px(paramB)-14,PAD.t+H+26);
+function setMethod(v) {
+  curMethod = v;
+  document.querySelectorAll('#method-group .radio-btn').forEach(b => b.classList.toggle('active', b.dataset.v === v));
+  document.getElementById('inner-fn-row').classList.toggle('visible', v === 'wash');
+  if (v === 'shell') setAxis('y');
 }
 
-/* ═══════════════════════════════════════════════════
-   3D CANVAS — Solid of revolution
-═══════════════════════════════════════════════════ */
-const cv3=document.getElementById('cv3d');
-const ctx3=cv3.getContext('2d');
-const W3=cv3.width, H3=cv3.height;
-
-// Oblique projection: depth axis goes upper-right
-// For a point (x_3d, r*cos(θ), r*sin(θ)):
-//   px = cX + (x-xMid)*sx + r*sin(θ)*tz*sx
-//   py = cY - r*cos(θ)*sy + r*sin(θ)*tv*sy
-
-function draw3D(sweepAngle=2*Math.PI){
-  ctx3.clearRect(0,0,W3,H3);
-  const {fn,domain}=CURVES[curveKey];
-  const [dA,dB]=domain;
-  const PAD={l:30,r:30,t:28,b:36};
-  const PW=W3-PAD.l-PAD.r, PH=H3-PAD.t-PAD.b;
-
-  const maxR=Math.max(...Array.from({length:200},(_,i)=>fn(paramA+i*(paramB-paramA)/200+1e-9)));
-  const xRange=paramB-paramA;
-
-  // Scale so solid fits nicely
-  const sx=PW*0.55/xRange;
-  const sy=PH*0.42/maxR;
-  const tz=0.42; // foreshortening (depth → horizontal)
-  const tv=0.0;  // depth → vertical (0 = flat oblique)
-
-  const cX=PAD.l+PW*0.3;  // center x (shifted left to leave room for depth)
-  const cY=PAD.t+PH*0.52;  // center y (slightly above center)
-
-  function projX(x,r,theta){ return cX+(x-(paramA+xRange/2))*sx+r*Math.sin(theta)*tz*sx }
-  function projY(x,r,theta){ return cY-r*Math.cos(theta)*sy+r*Math.sin(theta)*tv*sy }
-
-  // ── Background ──
-  ctx3.fillStyle='#f8faff';
-  ctx3.fillRect(0,0,W3,H3);
-
-  // ── SOLID BODY ──
-  // Fill the solid profile (outline at θ=0 and θ=π)
-  const STEPS=200;
-
-  // Gradient for the solid fill
-  const bodyGrad=ctx3.createLinearGradient(cX-xRange*sx/2, cY-maxR*sy, cX+xRange*sx/2+maxR*tz*sx, cY+maxR*sy);
-  bodyGrad.addColorStop(0,'rgba(30,58,138,.22)');
-  bodyGrad.addColorStop(0.5,'rgba(96,165,250,.35)');
-  bodyGrad.addColorStop(1,'rgba(30,58,138,.22)');
-
-  // Draw body silhouette (top profile θ=0 then bottom θ=π)
-  ctx3.beginPath();
-  // top profile (θ=0): going left to right
-  for(let i=0;i<=STEPS;i++){
-    const x=paramA+i*(paramB-paramA)/STEPS;
-    const r=fn(x);
-    const px=projX(x,r,0), py=projY(x,r,0);
-    i===0?ctx3.moveTo(px,py):ctx3.lineTo(px,py);
-  }
-  // right cap (partial circle at x=b, going from θ=0 to θ=π)
-  const xB=paramB, rB=fn(xB);
-  for(let i=0;i<=40;i++){
-    const theta=i/40*Math.PI;
-    ctx3.lineTo(projX(xB,rB,theta),projY(xB,rB,theta));
-  }
-  // bottom profile (θ=π): going right to left
-  for(let i=STEPS;i>=0;i--){
-    const x=paramA+i*(paramB-paramA)/STEPS;
-    const r=fn(x);
-    ctx3.lineTo(projX(x,r,Math.PI),projY(x,r,Math.PI));
-  }
-  // left cap (partial circle at x=a)
-  const xA=paramA, rA=fn(xA);
-  for(let i=40;i>=0;i--){
-    const theta=i/40*Math.PI;
-    ctx3.lineTo(projX(xA,rA,theta),projY(xA,rA,theta));
-  }
-  ctx3.closePath();
-  ctx3.fillStyle=bodyGrad;ctx3.fill();
-
-  // ── BACK cross-section ellipses (θ > π) ──
-  const nEll=12;
-  const ellPositions=Array.from({length:nEll},(_,i)=>paramA+(i+0.5)*(paramB-paramA)/nEll);
-  ctx3.strokeStyle='rgba(30,58,138,.12)';ctx3.lineWidth=1;
-  ellPositions.forEach(xi=>{
-    const r=fn(xi);
-    if(r<0.02)return;
-    const cx=projX(xi,0,0), cy=projY(xi,0,0);
-    const rx=r*tz*sx, ry=r*sy;
-    ctx3.beginPath();
-    // draw back half (θ from π to 2π)
-    for(let k=0;k<=40;k++){
-      const theta=Math.PI+k/40*Math.PI;
-      const px=cx+r*Math.sin(theta)*tz*sx;
-      const py=cy-r*Math.cos(theta)*sy;
-      k===0?ctx3.moveTo(px,py):ctx3.lineTo(px,py);
-    }
-    ctx3.stroke();
-  });
-
-  // ── AXIS OF ROTATION ──
-  ctx3.strokeStyle='rgba(30,58,138,.6)';ctx3.lineWidth=2;ctx3.setLineDash([7,4]);
-  const axL=projX(Math.max(0,paramA-0.2),0,0), axR=projX(paramB+0.15,0,0);
-  ctx3.beginPath();ctx3.moveTo(axL,projY(Math.max(0,paramA-0.2),0,0));
-  ctx3.lineTo(axR,projY(paramB+0.15,0,0));ctx3.stroke();
-  ctx3.setLineDash([]);
-  ctx3.fillStyle='rgba(30,58,138,.6)';ctx3.font='11px Nunito,sans-serif';
-  ctx3.fillText('Eje x',axR+6,projY(paramB,0,0)+4);
-
-  // ── SWEEP ANIMATION ARC ──
-  if(sweepAngle<2*Math.PI-0.01){
-    const xi=paramA+xRange/2;
-    const ri=fn(xi);
-    const cxS=projX(xi,0,0), cyS=projY(xi,0,0);
-    ctx3.strokeStyle='rgba(220,38,38,.6)';ctx3.lineWidth=2;
-    ctx3.beginPath();ctx3.moveTo(cxS,cyS);
-    for(let k=0;k<=40;k++){
-      const theta=k/40*sweepAngle;
-      ctx3.lineTo(cxS+ri*Math.sin(theta)*tz*sx, cyS-ri*Math.cos(theta)*sy);
-    }
-    ctx3.stroke();
-    // sweep curve outline
-    ctx3.strokeStyle='rgba(220,38,38,.8)';ctx3.lineWidth=2;
-    ctx3.beginPath();
-    for(let i=0;i<=STEPS;i++){
-      const x=paramA+i*xRange/STEPS;
-      const r=fn(x);
-      const px=projX(x,r,sweepAngle), py=projY(x,r,sweepAngle);
-      i===0?ctx3.moveTo(px,py):ctx3.lineTo(px,py);
-    }
-    ctx3.stroke();
-  }
-
-  // ── FRONT cross-section ellipses ──
-  ellPositions.forEach((xi,ii)=>{
-    const r=fn(xi);
-    if(r<0.02)return;
-    const cx=projX(xi,0,0), cy=projY(xi,0,0);
-    // front half (θ from 0 to π)
-    const alpha=Math.min(1,sweepAngle/Math.PI);
-    ctx3.strokeStyle=`rgba(30,58,138,${0.28+ii/nEll*0.12})`;ctx3.lineWidth=1.2;
-    ctx3.beginPath();
-    for(let k=0;k<=40;k++){
-      const theta=k/40*Math.min(Math.PI,sweepAngle);
-      const px=cx+r*Math.sin(theta)*tz*sx;
-      const py=cy-r*Math.cos(theta)*sy;
-      k===0?ctx3.moveTo(px,py):ctx3.lineTo(px,py);
-    }
-    ctx3.stroke();
-  });
-
-  // ── OUTLINE CURVE (top, θ=0) ──
-  ctx3.strokeStyle='#1e3a8a';ctx3.lineWidth=2.5;
-  ctx3.beginPath();
-  for(let i=0;i<=STEPS;i++){
-    const x=paramA+i*xRange/STEPS;
-    const r=fn(x);
-    const px=projX(x,r,0), py=projY(x,r,0);
-    i===0?ctx3.moveTo(px,py):ctx3.lineTo(px,py);
-  }
-  ctx3.stroke();
-
-  // ── OUTLINE CURVE (bottom, θ=π) ──
-  ctx3.strokeStyle='rgba(30,58,138,.5)';ctx3.lineWidth=1.8;
-  ctx3.beginPath();
-  for(let i=0;i<=STEPS;i++){
-    const x=paramA+i*xRange/STEPS;
-    const r=fn(x);
-    const px=projX(x,r,Math.PI), py=projY(x,r,Math.PI);
-    i===0?ctx3.moveTo(px,py):ctx3.lineTo(px,py);
-  }
-  ctx3.stroke();
-
-  // ── End caps ──
-  // Left cap at x=a
-  if(fn(paramA)>0.02){
-    const r=fn(paramA), cx=projX(paramA,0,0), cy=projY(paramA,0,0);
-    const ellGrd=ctx3.createRadialGradient(cx,cy,0,cx,cy,r*sy);
-    ellGrd.addColorStop(0,'rgba(96,165,250,.35)');
-    ellGrd.addColorStop(1,'rgba(30,58,138,.15)');
-    ctx3.beginPath();
-    ctx3.ellipse(cx,cy,r*tz*sx,r*sy,0,0,2*Math.PI);
-    ctx3.fillStyle=ellGrd;ctx3.fill();
-    ctx3.strokeStyle='rgba(30,58,138,.4)';ctx3.lineWidth=1;ctx3.stroke();
-  }
-  // Right cap at x=b
-  {
-    const r=fn(paramB), cx=projX(paramB,0,0), cy=projY(paramB,0,0);
-    if(r>0.02){
-      const ellGrd2=ctx3.createRadialGradient(cx+r*tz*sx*0.3,cy-r*sy*0.3,0,cx,cy,r*sy);
-      ellGrd2.addColorStop(0,'rgba(147,197,253,.5)');
-      ellGrd2.addColorStop(1,'rgba(30,58,138,.2)');
-      ctx3.beginPath();
-      ctx3.ellipse(cx,cy,r*tz*sx,r*sy,0,0,2*Math.PI);
-      ctx3.fillStyle=ellGrd2;ctx3.fill();
-      ctx3.strokeStyle='rgba(30,58,138,.5)';ctx3.lineWidth=1.5;ctx3.stroke();
-    }
-  }
-
-  // ── Riemann disks on 3D ──
-  const dx=(paramB-paramA)/numSlices;
-  for(let i=0;i<numSlices;i++){
-    const x=paramA+(i+0.5)*dx;
-    const r=fn(x);
-    if(r<0.01)continue;
-    const cx=projX(x,0,0), cy=projY(x,0,0);
-    // draw disk (ellipse) with semi-transparent fill
-    ctx3.strokeStyle='rgba(220,38,38,.6)';ctx3.lineWidth=1.2;
-    ctx3.fillStyle='rgba(239,68,68,.06)';
-    ctx3.beginPath();
-    ctx3.ellipse(cx,cy,r*tz*sx,r*sy,0,0,2*Math.PI);
-    ctx3.fill();ctx3.stroke();
-  }
-
-  // ── Labels ──
-  ctx3.fillStyle='#1e3a8a';ctx3.font='bold 11px Nunito,sans-serif';
-  ctx3.fillText('a='+paramA.toFixed(2),projX(paramA,0,0)-10,projY(paramA,-maxR*.1,0)+16);
-  ctx3.fillText('b='+paramB.toFixed(2),projX(paramB,0,0)-10,projY(paramB,-maxR*.1,0)+16);
-
-  // Title label
-  ctx3.fillStyle='rgba(30,58,138,.7)';ctx3.font='12px Lora,serif';
-  ctx3.fillText('f(x) = '+CURVES[curveKey].label,PAD.l,PAD.t-8);
+function setView(v) {
+  curView = v;
+  document.querySelectorAll('.view-group .radio-btn').forEach(b => b.classList.toggle('active', b.dataset.v === v));
+  applyViewMode();
 }
 
-/* ═══════════════════════════════════════════════════
-   FORMULA PANEL UPDATE
-═══════════════════════════════════════════════════ */
-function updateFormula(){
-  const lat=CURVES[curveKey].latex;
-  const vol=volume();
-  const rv=riemannVolume(numSlices);
-  const err=Math.abs(vol-rv);
-
-  document.getElementById('formulaBox').innerHTML=
-    `\\( V = \\pi \\displaystyle\\int_{${paramA.toFixed(2)}}^{${paramB.toFixed(2)}} [${lat}]^2\\, dx \\)`;
-
-  document.getElementById('riemannBox').innerHTML=
-    `n = <span>${numSlices}</span> discos<br>` +
-    `Δx = <span>${((paramB-paramA)/numSlices).toFixed(4)}</span><br>` +
-    `V_n ≈ <span>${rv.toFixed(5)}</span><br>` +
-    `Error = <span>${err.toFixed(5)}</span>`;
-
-  document.getElementById('volumeResult').textContent=vol.toFixed(5);
-  document.getElementById('volumeSub').textContent='unidades³';
-
-  if(window.MathJax && MathJax.typesetPromise)
-    MathJax.typesetPromise([document.getElementById('formulaBox')]).catch(()=>{});
+function onSlider() {
+  const n = document.getElementById('n-slider').value;
+  document.getElementById('n-display').textContent = n;
 }
 
-/* ═══════════════════════════════════════════════════
-   ANIMATION
-═══════════════════════════════════════════════════ */
-function toggleAnim(){
-  animating=!animating;
-  const btn=document.getElementById('btnAnim');
-  if(animating){
-    btn.textContent='■ Detener';btn.classList.add('running');
-    animAngle=0;
-    function step(){
-      if(!animating){animId=null;return}
-      animAngle+=0.04;
-      if(animAngle>=2*Math.PI){ animAngle=2*Math.PI; animating=false; btn.textContent='▶ Rotar'; btn.classList.remove('running'); }
-      draw3D(animAngle);
-      if(animating) animId=requestAnimationFrame(step);
-    }
-    animId=requestAnimationFrame(step);
-  } else {
-    btn.textContent='▶ Rotar';btn.classList.remove('running');
-    if(animId){cancelAnimationFrame(animId);animId=null}
-    draw3D();
-  }
+function onCrossSlider() {
+  if (!fExpr) return;
+  updateCrossSectionFromSlider();
 }
 
-/* ═══════════════════════════════════════════════════
-   CONTROL HANDLERS
-═══════════════════════════════════════════════════ */
-function onCurveChange(){
-  curveKey=document.getElementById('curveSelect').value;
-  const [dA,dB]=CURVES[curveKey].domain;
-  paramA=dA; paramB=dB;
-  document.getElementById('slA').value=0;
-  document.getElementById('slB').value=100;
-  document.getElementById('valA').textContent=paramA.toFixed(2);
-  document.getElementById('valB').textContent=paramB.toFixed(2);
-  render();
+function applyPreset() {
+  const val = document.getElementById('presets').value;
+  if (!val) return;
+  const parts = val.split('|');
+  document.getElementById('inp-f').value = parts[0];
+  document.getElementById('inp-a').value = parts[1];
+  document.getElementById('inp-b').value = parts[2];
+  const ax = parts[3] || 'x';
+  if (ax === 'y') { setAxis('y'); setMethod('shell'); } else { setAxis('x'); setMethod('disk'); }
+  document.getElementById('presets').value = '';
+  generate();
 }
 
-function onBounds(){
-  const {domain}=CURVES[curveKey];
-  const [dA,dB]=domain;
-  const a01=document.getElementById('slA').value/100;
-  const b01=document.getElementById('slB').value/100;
-  paramA=dA+a01*(dB-dA);
-  paramB=dA+b01*(dB-dA);
-  if(paramB-paramA<0.05) paramB=paramA+0.05;
-  document.getElementById('valA').textContent=paramA.toFixed(2);
-  document.getElementById('valB').textContent=paramB.toFixed(2);
-  render();
-}
+// Enter key
+['inp-f','inp-g','inp-a','inp-b'].forEach(id => {
+  document.getElementById(id)?.addEventListener('keydown', e => { if (e.key === 'Enter') generate(); });
+});
 
-function onSlices(){
-  numSlices=parseInt(document.getElementById('slN').value);
-  document.getElementById('valN').textContent=numSlices;
-  render();
-}
-
-function render(){
-  draw2D();
-  draw3D();
-  updateFormula();
-}
-
-// Boot
-render();
+// ═══════════════════════════════════════════════
+//  AUTO-INIT
+// ═══════════════════════════════════════════════
+window.addEventListener('load', () => {
+  const check = (k=0) => {
+    if (typeof math !== 'undefined' && typeof THREE !== 'undefined') {
+      setTimeout(generate, 400);
+    } else if (k < 30) { setTimeout(() => check(k+1), 200); }
+  };
+  check();
+});
 </script>
 </body>
 </html>
