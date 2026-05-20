@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Multiplicadores de Lagrange</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.3/math.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.2/plotly.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjs@12/lib/browser/math.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -1007,21 +1007,8 @@ function switchTab(id) {
   }, 50);
 }
 
-// ── Auto-run on load — wait for Plotly + mathjs ──
-window.addEventListener('load', () => {
-  const check = (n=0) => {
-    if (typeof Plotly !== 'undefined' && typeof math !== 'undefined') {
-      setTimeout(solveAll, 200);
-    } else if (n < 30) {
-      setTimeout(() => check(n+1), 200);
-    } else {
-      document.getElementById('results').innerHTML =
-        '<div class="error-msg">No se pudieron cargar las librerías.<br>Verifique su conexión e intente recargar.</div>';
-      document.getElementById('loader').classList.remove('show');
-    }
-  };
-  check();
-});
+// ── Auto-run on load ──
+window.addEventListener('load', () => { setTimeout(solveAll, 400); });
 </script>
 </body>
 </html>
