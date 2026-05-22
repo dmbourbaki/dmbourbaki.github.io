@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Campo de Direcciones</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjs@12/lib/browser/math.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090f;--panel:#0d1220;--card:#111828;--border:#1c2640;--gold:#d4a84b;--cyan:#3ac2f0;--red:#f07070;--green:#50dd90;--orange:#f59a4a;--violet:#a88cff;--text:#dce4f0;--muted:#64768a;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;display:flex;flex-direction:column;}
+header{flex-shrink:0;background:linear-gradient(90deg,#050810,#0d1626 60%,#07090f);border-bottom:1px solid var(--border);padding:.75rem 1.4rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.logo{font-family:'Oswald',sans-serif;font-size:.68rem;letter-spacing:.35em;color:var(--gold);border:1px solid var(--gold);padding:.2rem .5rem;}
+header h1{font-family:'Oswald',sans-serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;}
+header h1 em{color:var(--gold);font-style:normal;}
+/* Equation bar */
+.eq-bar{display:flex;align-items:center;gap:.55rem;margin-left:auto;flex-wrap:wrap;}
+.eq-label{font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--muted);}
+.eq-label em{color:var(--gold);font-style:italic;font-size:1.1rem;}
+#inp-eq{background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:.42rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.92rem;width:260px;outline:none;transition:border-color .2s;}
+#inp-eq:focus{border-color:var(--gold);}
+#eq-status{font-family:'JetBrains Mono',monospace;font-size:1rem;width:16px;}
+select{background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:.42rem .6rem;font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.04em;outline:none;cursor:pointer;}
+select:focus{border-color:var(--gold);}select option{background:var(--card);}
+.btn-graf{padding:.42rem 1rem;background:var(--gold);color:var(--bg);border:none;border-radius:4px;font-family:'Oswald',sans-serif;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .15s;}
+.btn-graf:hover{background:#e8c97a;}
+/* Main layout */
+.main{flex:1;display:flex;min-height:0;}
+/* Left panel */
+.left{width:210px;flex-shrink:0;border-right:1px solid var(--border);overflow-y:auto;padding:.85rem .9rem 1.2rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.sec{margin-bottom:1rem;}
+.sec-title{font-family:'Oswald',sans-serif;font-size:.63rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:.4rem;margin-bottom:.65rem;}
+.sec-title::before{content:'';display:inline-block;width:3px;height:9px;background:var(--gold);border-radius:1px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:.38rem;margin-bottom:.4rem;}
+.fld{display:flex;flex-direction:column;gap:.18rem;}
+.fld label{font-size:.72rem;color:var(--muted);}
+.fld input[type=number]{background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--gold);padding:.3rem .4rem;font-family:'JetBrains Mono',monospace;font-size:.82rem;outline:none;width:100%;transition:border-color .2s;-webkit-appearance:none;}
+.fld input:focus{border-color:var(--gold);}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--border);border-radius:2px;outline:none;padding:0;border:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--gold);cursor:pointer;}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--gold);cursor:pointer;border:none;}
+.sl-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem;}
+.sl-val{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--gold);min-width:28px;text-align:right;}
+.chk-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.38rem;font-size:.8rem;color:var(--muted);cursor:pointer;}
+.chk-row input{accent-color:var(--gold);width:14px;height:14px;cursor:pointer;flex-shrink:0;}
+.btn-sm{width:100%;padding:.5rem;background:transparent;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:all .17s;margin-bottom:.35rem;text-align:center;}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold);}
+.btn-sm.red:hover{border-color:var(--red);color:var(--red);}
+.curve-colors{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.5rem;}
+.cc{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+/* Middle panel */
+.mid{width:185px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.mid-hd{flex-shrink:0;background:var(--panel);border-bottom:1px solid var(--border);padding:.55rem .85rem;font-family:'Oswald',sans-serif;font-size:.67rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:.4rem;}
+.mid-hd::before{content:'';display:inline-block;width:3px;height:9px;background:var(--gold);border-radius:1px;}
+#analysis{flex:1;overflow-y:auto;padding:.75rem .85rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.ana-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.55rem .7rem;margin-bottom:.5rem;}
+.ac-label{font-family:'Oswald',sans-serif;font-size:.56rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:.15rem;}
+.ac-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text);}
+.big-dir{text-align:center;padding:1rem .5rem;margin-bottom:.6rem;}
+.dir-arrow{font-size:2.8rem;line-height:1;}
+.dir-text{font-family:'Oswald',sans-serif;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;margin-top:.3rem;}
+.eq-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.5rem .7rem;margin-bottom:.4rem;}
+.eq-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.4rem;vertical-align:middle;}
+.eq-stab{font-family:'Oswald',sans-serif;font-size:.65rem;letter-spacing:.05em;}
+.hint-text{font-size:.75rem;color:var(--muted);font-style:italic;text-align:center;margin-top:.6rem;line-height:1.55;}
+/* Canvas */
+.canvas-wrap{flex:1;position:relative;overflow:hidden;cursor:crosshair;}
+#cv{display:block;}
+.cv-toolbar{position:absolute;top:10px;right:10px;display:flex;gap:.4rem;}
+.cv-btn{padding:.35rem .7rem;background:rgba(13,18,32,.85);border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'Oswald',sans-serif;font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .17s;backdrop-filter:blur(4px);}
+.cv-btn:hover{border-color:var(--gold);color:var(--gold);}
+.cv-tooltip{position:absolute;background:rgba(11,16,24,.92);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--text);pointer-events:none;white-space:nowrap;display:none;backdrop-filter:blur(4px);}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo">∂y/∂x</span>
+  <h1>Simulador de Campo de <em>Direcciones</em></h1>
+  <div class="eq-bar">
+    <span class="eq-label"><em>y′</em> = </span>
+    <input id="inp-eq" type="text" value="y*(1-y)" placeholder="f(x, y)" oninput="compileExpr()" onkeydown="if(event.key==='Enter')drawAll()">
+    <span id="eq-status" style="color:var(--green)">✓</span>
+    <select id="sel-preset" onchange="applyPreset()">
+      <option value="">— Presets —</option>
+      <optgroup label="Autónomas y' = f(y)">
+        <option value="y">Crecimiento: y</option>
+        <option value="-y">Decaimiento: -y</option>
+        <option value="y*(1-y)">Logístico: y(1−y)</option>
+        <option value="y*(1-y)*(y+1)">Múltiple: y(1−y)(y+1)</option>
+        <option value="sin(y)">Sinusoidal: sin(y)</option>
+        <option value="-sin(y)">Péndulo: -sin(y)</option>
+        <option value="y^2-1">Cuadrática: y²−1</option>
+        <option value="y^2">Cuadrática pura: y²</option>
+      </optgroup>
+      <optgroup label="No autónomas y' = f(x,y)">
+        <option value="x-y">Lineal: x−y</option>
+        <option value="x+y">Lineal: x+y</option>
+        <option value="x*y">Separable: xy</option>
+        <option value="x^2+y^2">No lineal: x²+y²</option>
+        <option value="-x/y">Círculos: −x/y</option>
+        <option value="x^2-y">Parábolas: x²−y</option>
+        <option value="cos(x)-y">Forzado: cos(x)−y</option>
+        <option value="y/x">Homogénea: y/x</option>
+      </optgroup>
+    </select>
+    <button class="btn-graf" onclick="drawAll()">Graficar</button>
+  </div>
+</header>
+
+<div class="main">
+  <!-- ═══ PANEL IZQUIERDO ═══ -->
+  <div class="left">
+
+    <div class="sec">
+      <div class="sec-title">Ventana</div>
+      <div class="row2">
+        <div class="fld"><label>x mín</label><input type="number" id="xMin" value="-5" step="0.5" oninput="drawAll()"></div>
+        <div class="fld"><label>x máx</label><input type="number" id="xMax" value="5"  step="0.5" oninput="drawAll()"></div>
+        <div class="fld"><label>y mín</label><input type="number" id="yMin" value="-4" step="0.5" oninput="drawAll()"></div>
+        <div class="fld"><label>y máx</label><input type="number" id="yMax" value="4"  step="0.5" oninput="drawAll()"></div>
+      </div>
+      <button class="btn-sm" onclick="resetWindow()">↺ Ventana por defecto</button>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Flechas</div>
+      <div class="sl-row">
+        <span style="font-size:.78rem;color:var(--muted);flex:1">Densidad</span>
+        <span class="sl-val" id="d-dens">18</span>
+      </div>
+      <input type="range" id="sl-dens" min="6" max="32" step="2" value="18" oninput="document.getElementById('d-dens').textContent=this.value;drawAll()">
+      <div class="sl-row" style="margin-top:.45rem">
+        <span style="font-size:.78rem;color:var(--muted);flex:1">Tamaño</span>
+        <span class="sl-val" id="d-size">14</span>
+      </div>
+      <input type="range" id="sl-size" min="6" max="24" step="1" value="14" oninput="document.getElementById('d-size').textContent=this.value;drawAll()">
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Visualización</div>
+      <label class="chk-row"><input type="checkbox" id="chk-bg"   checked oninput="drawAll()">Fondo por signo (nullclines)</label>
+      <label class="chk-row"><input type="checkbox" id="chk-color" checked oninput="drawAll()">Color por pendiente</label>
+      <label class="chk-row"><input type="checkbox" id="chk-axes" checked oninput="drawAll()">Ejes y cuadrícula</label>
+      <label class="chk-row"><input type="checkbox" id="chk-null" checked oninput="drawAll()">Resaltar nullclines</label>
+      <label class="chk-row"><input type="checkbox" id="chk-eq"   checked oninput="drawAll()">Detectar equilibrios</label>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Curvas solución</div>
+      <div class="curve-colors" id="color-swatch"></div>
+      <button class="btn-sm red" onclick="clearCurves()">✕ Limpiar curvas</button>
+      <div style="font-size:.73rem;color:var(--muted);line-height:1.55">Haz clic en el campo para trazar la curva solución a través de ese punto.</div>
+    </div>
+  </div>
+
+  <!-- ═══ PANEL ANÁLISIS ═══ -->
+  <div class="mid">
+    <div class="mid-hd">Análisis</div>
+    <div id="analysis">
+      <div class="hint-text" style="padding:2rem .5rem">Mueve el cursor sobre el campo para analizar el punto.<br><br>Haz clic para trazar la curva solución.</div>
+    </div>
+  </div>
+
+  <!-- ═══ CANVAS ═══ -->
+  <div class="canvas-wrap" id="canvas-wrap">
+    <canvas id="cv"></canvas>
+    <div class="cv-toolbar">
+      <button class="cv-btn" onclick="zoomIn()">+ Zoom</button>
+      <button class="cv-btn" onclick="zoomOut()">− Zoom</button>
+      <button class="cv-btn" onclick="resetWindow()">⌂</button>
+    </div>
+    <div class="cv-tooltip" id="tooltip"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+// ═══════════════════════════════════
+//  ESTADO
+// ═══════════════════════════════════
+let compiledF = null;
+let curves = [];   // [{points:[{x,y}], color}]
+let hoverX = null, hoverY = null;
+const CURVE_COLORS = ['#50dd90','#3ac2f0','#a88cff','#f59a4a','#f07070','#d4a84b','#ff6b9d','#00e5ff'];
+let colorIdx = 0;
+
+// ═══════════════════════════════════
+//  VENTANA
+// ═══════════════════════════════════
+const getXMin = ()=>+document.getElementById('xMin').value;
+const getXMax = ()=>+document.getElementById('xMax').value;
+const getYMin = ()=>+document.getElementById('yMin').value;
+const getYMax = ()=>+document.getElementById('yMax').value;
+
+function resetWindow(){
+  document.getElementById('xMin').value=-5;
+  document.getElementById('xMax').value=5;
+  document.getElementById('yMin').value=-4;
+  document.getElementById('yMax').value=4;
+  drawAll();
+}
+function zoomIn(){
+  const cx=(getXMin()+getXMax())/2, cy=(getYMin()+getYMax())/2;
+  const rx=(getXMax()-getXMin())*0.35, ry=(getYMax()-getYMin())*0.35;
+  document.getElementById('xMin').value=(cx-rx).toFixed(2);
+  document.getElementById('xMax').value=(cx+rx).toFixed(2);
+  document.getElementById('yMin').value=(cy-ry).toFixed(2);
+  document.getElementById('yMax').value=(cy+ry).toFixed(2);
+  drawAll();
+}
+function zoomOut(){
+  const cx=(getXMin()+getXMax())/2, cy=(getYMin()+getYMax())/2;
+  const rx=(getXMax()-getXMin())*0.7, ry=(getYMax()-getYMin())*0.7;
+  document.getElementById('xMin').value=(cx-rx).toFixed(2);
+  document.getElementById('xMax').value=(cx+rx).toFixed(2);
+  document.getElementById('yMin').value=(cy-ry).toFixed(2);
+  document.getElementById('yMax').value=(cy+ry).toFixed(2);
+  drawAll();
+}
+
+// ═══════════════════════════════════
+//  COORDENADAS
+// ═══════════════════════════════════
+let W=0, H=0;
+const toCanvasX = x=>(x-getXMin())/(getXMax()-getXMin())*W;
+const toCanvasY = y=>H-(y-getYMin())/(getYMax()-getYMin())*H;
+const toMathX = cx=>getXMin()+cx/W*(getXMax()-getXMin());
+const toMathY = cy=>getYMin()+(H-cy)/H*(getYMax()-getYMin());
+
+// ═══════════════════════════════════
+//  EXPRESIÓN
+// ═══════════════════════════════════
+function compileExpr(){
+  const expr = document.getElementById('inp-eq').value.trim();
+  const st = document.getElementById('eq-status');
+  try{
+    compiledF = math.compile(expr);
+    compiledF.evaluate({x:0,y:0,t:0,pi:Math.PI,e:Math.E}); // test
+    st.textContent='✓'; st.style.color='var(--green)';
+    return true;
+  }catch{
+    compiledF=null; st.textContent='✗'; st.style.color='var(--red)';
+    return false;
+  }
+}
+
+function evalF(x,y){
+  if(!compiledF) return NaN;
+  try{
+    const v=compiledF.evaluate({x,y,t:x,pi:Math.PI,e:Math.E});
+    return typeof v==='number'?v:NaN;
+  }catch{return NaN;}
+}
+
+function applyPreset(){
+  const val=document.getElementById('sel-preset').value;
+  if(!val) return;
+  document.getElementById('inp-eq').value=val;
+  compileExpr();
+  clearCurves();
+  drawAll();
+}
+
+// ═══════════════════════════════════
+//  EQUILIBRIOS (ecuaciones autónomas)
+// ═══════════════════════════════════
+function isAutonomous(){
+  // Check if f is independent of x
+  const yVals=[-2,-1,0,1,2];
+  for(const y of yVals){
+    const f0=evalF(0,y), f1=evalF(1,y), f2=evalF(-1,y);
+    if(Math.abs(f1-f0)>0.01||Math.abs(f2-f0)>0.01) return false;
+  }
+  return true;
+}
+
+function findEquilibria(){
+  // Scan for y where f(x,y)≈0 — only meaningful for autonomous
+  if(!isAutonomous()) return [];
+  const yMin=getYMin(), yMax=getYMax();
+  const N=500, h=(yMax-yMin)/N;
+  const equil=[];
+  let prev=evalF(0,yMin);
+  for(let i=1;i<=N;i++){
+    const y=yMin+i*h;
+    const cur=evalF(0,y);
+    if(!isFinite(prev)||!isFinite(cur)){prev=cur;continue;}
+    if(prev*cur<0||Math.abs(cur)<1e-5){
+      // Zero crossing — refine with bisection
+      let ya=y-h, yb=y;
+      for(let j=0;j<20;j++){
+        const ym=(ya+yb)/2, fm=evalF(0,ym);
+        if(!isFinite(fm)) break;
+        if(evalF(0,ya)*fm<0) yb=ym; else ya=ym;
+      }
+      const yeq=(ya+yb)/2;
+      // Compute derivative numerically
+      const dh=1e-5;
+      const dfdy=(evalF(0,yeq+dh)-evalF(0,yeq-dh))/(2*dh);
+      let type;
+      if(Math.abs(dfdy)<1e-4) type='semi-estable';
+      else if(dfdy<0) type='estable';
+      else type='inestable';
+      // Avoid duplicates
+      if(!equil.some(e=>Math.abs(e.y-yeq)<h*2)){
+        equil.push({y:yeq.toFixed(5),dfdy:dfdy.toFixed(5),type});
+      }
+    }
+    prev=cur;
+  }
+  return equil;
+}
+
+// ═══════════════════════════════════
+//  RK4 PARA CURVAS SOLUCIÓN
+// ═══════════════════════════════════
+function rk4(x,y,h){
+  const k1=evalF(x,y);
+  const k2=evalF(x+h/2,y+k1*h/2);
+  const k3=evalF(x+h/2,y+k2*h/2);
+  const k4=evalF(x+h,y+k3*h);
+  return y+h/6*(k1+2*k2+2*k3+k4);
+}
+
+function traceCurve(x0,y0){
+  const xMn=getXMin(),xMx=getXMax(),yMn=getYMin()-Math.abs(getYMax()-getYMin())*0.5,yMx=getYMax()+Math.abs(getYMax()-getYMin())*0.5;
+  const steps=600, hFwd=(xMx-x0)/steps, hBwd=(x0-xMn)/steps;
+  const fwd=[{x:x0,y:y0}];
+  let x=x0,y=y0;
+  for(let i=0;i<steps;i++){
+    y=rk4(x,y,hFwd); x+=hFwd;
+    if(!isFinite(y)||y<yMn||y>yMx) break;
+    fwd.push({x,y});
+  }
+  const bwd=[];
+  x=x0; y=y0;
+  for(let i=0;i<steps;i++){
+    y=rk4(x,y,-hBwd); x-=hBwd;
+    if(!isFinite(y)||y<yMn||y>yMx) break;
+    bwd.unshift({x,y});
+  }
+  return [...bwd,{x:x0,y:y0},...fwd.slice(1)];
+}
+
+// ═══════════════════════════════════
+//  DIBUJAR TODO
+// ═══════════════════════════════════
+function drawAll(){
+  const cv=document.getElementById('cv');
+  const wrap=document.getElementById('canvas-wrap');
+  W=wrap.clientWidth; H=wrap.clientHeight;
+  cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+
+  ctx.fillStyle='#07090f'; ctx.fillRect(0,0,W,H);
+
+  if(!compiledF) return;
+
+  const showBg = document.getElementById('chk-bg').checked;
+  const showColor = document.getElementById('chk-color').checked;
+  const showAxes = document.getElementById('chk-axes').checked;
+  const showNull = document.getElementById('chk-null').checked;
+  const showEq = document.getElementById('chk-eq').checked;
+  const n = +document.getElementById('sl-dens').value;
+  const arrowLen = +document.getElementById('sl-size').value;
+
+  // 1. Background (sign of f)
+  if(showBg){
+    const BG=60;
+    const cw=W/BG, ch=H/BG;
+    for(let i=0;i<BG;i++){
+      for(let j=0;j<BG;j++){
+        const x=toMathX(i*cw+cw/2), y=toMathY(j*ch+ch/2);
+        const fv=evalF(x,y);
+        if(!isFinite(fv)) continue;
+        if(fv>0)      ctx.fillStyle='rgba(80,221,144,0.065)';
+        else if(fv<0) ctx.fillStyle='rgba(240,112,112,0.065)';
+        else continue;
+        ctx.fillRect(i*cw,j*ch,cw,ch);
+      }
+    }
+  }
+
+  // 2. Axes & grid
+  if(showAxes) drawAxes(ctx);
+
+  // 3. Nullcline highlight (where |f| is small)
+  if(showNull) drawNullclineHighlight(ctx);
+
+  // 4. Direction field arrows
+  drawField(ctx, n, arrowLen, showColor);
+
+  // 5. Equilibria markers
+  if(showEq) drawEquilibria(ctx);
+
+  // 6. Solution curves
+  for(const c of curves) drawCurve(ctx, c);
+
+  // 7. Hover crosshair
+  if(hoverX!==null) drawCrosshair(ctx, hoverX, hoverY);
+}
+
+function drawAxes(ctx){
+  const x0=toCanvasX(0), y0=toCanvasY(0);
+  const xMn=getXMin(),xMx=getXMax(),yMn=getYMin(),yMx=getYMax();
+  // Grid lines
+  ctx.strokeStyle='rgba(28,38,64,.6)'; ctx.lineWidth=1;
+  const dx=niceStep(xMx-xMn,8), dy=niceStep(yMx-yMn,8);
+  const xs=Math.ceil(xMn/dx)*dx, ys=Math.ceil(yMn/dy)*dy;
+  for(let xg=xs;xg<=xMx+dx*.01;xg+=dx){
+    const cx=toCanvasX(xg);
+    ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,H);ctx.stroke();
+    ctx.fillStyle='rgba(100,118,138,.5)'; ctx.font='9px JetBrains Mono,monospace'; ctx.textAlign='center';
+    ctx.fillText(xg.toFixed(Math.abs(xg)<.001?0:1),cx,Math.min(H-3,y0+13));
+  }
+  for(let yg=ys;yg<=yMx+dy*.01;yg+=dy){
+    const cy=toCanvasY(yg);
+    ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();
+    if(Math.abs(yg)>dy*.1){
+      ctx.fillStyle='rgba(100,118,138,.5)'; ctx.font='9px JetBrains Mono,monospace'; ctx.textAlign='right';
+      ctx.fillText(yg.toFixed(Math.abs(yg)<.001?0:1),Math.max(24,x0-5),cy+3);
+    }
+  }
+  // Main axes
+  ctx.strokeStyle='rgba(100,118,138,.9)'; ctx.lineWidth=1.8;
+  if(y0>=0&&y0<=H){ctx.beginPath();ctx.moveTo(0,y0);ctx.lineTo(W,y0);ctx.stroke();}
+  if(x0>=0&&x0<=W){ctx.beginPath();ctx.moveTo(x0,0);ctx.lineTo(x0,H);ctx.stroke();}
+  // Labels
+  ctx.fillStyle='rgba(100,118,138,.7)'; ctx.font='10px Oswald,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('x',W-8,Math.min(H-6,y0+13));
+  ctx.textAlign='left'; ctx.fillText('y',Math.max(3,x0+4),12);
+}
+
+function niceStep(range, targetN){
+  const raw=range/targetN;
+  const p=Math.pow(10,Math.floor(Math.log10(raw)));
+  const f=raw/p;
+  return f<1.5?p:f<3.5?2*p:f<7.5?5*p:10*p;
+}
+
+function drawNullclineHighlight(ctx){
+  // Draw a thin bright curve where |f|<threshold by scanning columns
+  const COL=W;
+  const yMn=getYMin(), yMx=getYMax(), yRange=yMx-yMn;
+  const SCAN=80; // y samples per column
+  ctx.strokeStyle='rgba(212,168,75,.55)'; ctx.lineWidth=1.5;
+  for(let ci=0;ci<COL;ci+=3){
+    const x=toMathX(ci);
+    let prevF=null, prevJ=null;
+    for(let ji=0;ji<=SCAN;ji++){
+      const y=yMn+ji*yRange/SCAN;
+      const fv=evalF(x,y);
+      if(!isFinite(fv)){prevF=null;continue;}
+      if(prevF!==null&&prevF*fv<0){
+        // Sign change: nullcline crossing
+        const yfrac=-prevF/(fv-prevF); // linear interpolation
+        const ycross=yMn+(prevJ+yfrac)*yRange/SCAN;
+        const cy=toCanvasY(ycross);
+        ctx.beginPath();ctx.arc(ci,cy,1.5,0,Math.PI*2);ctx.fill();
+      }
+      prevF=fv; prevJ=ji;
+    }
+  }
+}
+
+function drawField(ctx,n,arrowLen,showColor){
+  const xMn=getXMin(),xMx=getXMax(),yMn=getYMin(),yMx=getYMax();
+  const dx=(xMx-xMn)/n, dy=(yMx-yMn)/n;
+  for(let i=0;i<=n;i++){
+    for(let j=0;j<=n;j++){
+      const x=xMn+(i+.5)*dx-(dx/2), y=yMn+(j+.5)*dy-(dy/2);
+      const fv=evalF(x,y);
+      if(!isFinite(fv)||Math.abs(fv)>1e6) continue;
+      const cx=toCanvasX(x), cy=toCanvasY(y);
+      const color=showColor?slopeColor(fv):'rgba(212,168,75,0.85)';
+      drawArrow(ctx,cx,cy,fv,arrowLen,color);
+    }
+  }
+}
+
+function slopeColor(m){
+  const t=Math.tanh(m*0.4); // -1..1
+  if(t<0){
+    // negative: gold → cyan
+    const f=-t;
+    const r=Math.round(212-154*f), g=Math.round(168+26*f), b=Math.round(75+165*f);
+    return `rgba(${r},${g},${b},0.9)`;
+  }else{
+    // positive: gold → green
+    const f=t;
+    const r=Math.round(212-132*f), g=Math.round(168+53*f), b=Math.round(75-75*f);
+    return `rgba(${r},${g},${b},0.9)`;
+  }
+}
+
+function drawArrow(ctx,cx,cy,slope,len,color){
+  if(!isFinite(slope)) return;
+  const clamp=Math.max(-50,Math.min(50,slope));
+  const mag=Math.sqrt(1+clamp*clamp);
+  const ux=1/mag, uy=-clamp/mag; // canvas direction (y flipped)
+  const h2=len/2;
+  const x1=cx-h2*ux, y1=cy-h2*uy;
+  const x2=cx+h2*ux, y2=cy+h2*uy;
+
+  ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+
+  // Arrowhead
+  const hl=Math.min(5,len*.35), hw=2.2;
+  const px=-uy, py=ux; // perpendicular
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-hl*ux+hw*px, y2-hl*uy+hw*py);
+  ctx.lineTo(x2-hl*ux-hw*px, y2-hl*uy-hw*py);
+  ctx.closePath(); ctx.fill();
+}
+
+function drawEquilibria(ctx){
+  if(!isAutonomous()) return;
+  const eqs=findEquilibria();
+  for(const eq of eqs){
+    const y=+eq.y;
+    const cy=toCanvasY(y);
+    const color=eq.type==='estable'?'var(--green)':eq.type==='inestable'?'var(--red)':'var(--orange)';
+    // Horizontal line across canvas
+    ctx.strokeStyle=color.replace('var(--green)','rgba(80,221,144,.5)').replace('var(--red)','rgba(240,112,112,.5)').replace('var(--orange)','rgba(245,154,74,.5)');
+    ctx.lineWidth=1.5; ctx.setLineDash([5,5]);
+    ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();
+    ctx.setLineDash([]);
+    // Dot on y-axis
+    const xax=toCanvasX(0);
+    const dotColor=eq.type==='estable'?'#50dd90':eq.type==='inestable'?'#f07070':'#f59a4a';
+    ctx.shadowColor=dotColor; ctx.shadowBlur=8;
+    ctx.fillStyle=dotColor; ctx.beginPath(); ctx.arc(xax,cy,5,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+    // Label
+    ctx.fillStyle=dotColor; ctx.font='bold 10px Oswald,sans-serif'; ctx.textAlign='left';
+    ctx.fillText(`y*=${(+eq.y).toFixed(3)} (${eq.type})`,xax+9,cy-5);
+  }
+}
+
+function drawCurve(ctx,c){
+  const pts=c.points;
+  if(pts.length<2) return;
+  ctx.strokeStyle=c.color; ctx.lineWidth=2.2;
+  ctx.shadowColor=c.color; ctx.shadowBlur=6;
+  ctx.beginPath();
+  let pen=false;
+  for(const p of pts){
+    const cx=toCanvasX(p.x), cy=toCanvasY(p.y);
+    if(!pen){ctx.moveTo(cx,cy);pen=true;}
+    else{ctx.lineTo(cx,cy);}
+  }
+  ctx.stroke();
+  ctx.shadowBlur=0;
+  // Starting dot
+  const p0=pts[Math.floor(pts.length/2)];
+  if(p0){ctx.fillStyle=c.color;ctx.beginPath();ctx.arc(toCanvasX(p0.x),toCanvasY(p0.y),4.5,0,Math.PI*2);ctx.fill();}
+}
+
+function drawCrosshair(ctx,mx,my){
+  const cx=toCanvasX(mx), cy=toCanvasY(my);
+  ctx.strokeStyle='rgba(212,168,75,.55)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,H);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle='rgba(212,168,75,.8)'; ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.stroke();
+}
+
+// ═══════════════════════════════════
+//  ANÁLISIS EN CURSOR
+// ═══════════════════════════════════
+function updateAnalysis(mx, my){
+  const fv=evalF(mx,my);
+  if(!isFinite(fv)||!compiledF){
+    document.getElementById('analysis').innerHTML='<div class="hint-text">Fuera del dominio</div>';
+    return;
+  }
+  const angle=Math.atan(fv)*180/Math.PI;
+  const isEq=Math.abs(fv)<0.05;
+  let dirHTML='';
+  if(isEq){
+    // Check stability for autonomous case
+    const dh=1e-5;
+    const dfdy=(evalF(mx,my+dh)-evalF(mx,my-dh))/(2*dh);
+    let stabText='Punto de equilibrio';
+    let stabColor='var(--gold)';
+    if(!isAutonomous()){stabText='Nullcline (f=0)'; stabColor='var(--gold)';}
+    else if(dfdy<-1e-4){stabText='Equilibrio Estable ★';stabColor='var(--green)';}
+    else if(dfdy>1e-4){stabText='Equilibrio Inestable ✗';stabColor='var(--red)';}
+    else{stabText='Semi-estable ◈';stabColor='var(--orange)';}
+    dirHTML=`<div class="big-dir" style="border:1px solid rgba(212,168,75,.25);border-radius:6px;background:rgba(212,168,75,.05);margin-bottom:.6rem"><div class="dir-arrow" style="color:${stabColor}">≈ 0</div><div class="dir-text" style="color:${stabColor}">${stabText}</div></div>`;
+  }else if(fv>0){
+    dirHTML=`<div class="big-dir" style="border:1px solid rgba(80,221,144,.2);border-radius:6px;background:rgba(80,221,144,.05);margin-bottom:.6rem"><div class="dir-arrow" style="color:var(--green)">↑</div><div class="dir-text" style="color:var(--green)">y crece</div></div>`;
+  }else{
+    dirHTML=`<div class="big-dir" style="border:1px solid rgba(240,112,112,.2);border-radius:6px;background:rgba(240,112,112,.05);margin-bottom:.6rem"><div class="dir-arrow" style="color:var(--red)">↓</div><div class="dir-text" style="color:var(--red)">y decrece</div></div>`;
+  }
+
+  // Equilibria list
+  let eqHTML='';
+  if(document.getElementById('chk-eq').checked&&isAutonomous()){
+    const eqs=findEquilibria();
+    if(eqs.length){
+      eqHTML='<div class="ana-card" style="margin-top:.3rem"><div class="ac-label">Equilibrios (autónoma)</div>';
+      for(const eq of eqs){
+        const dotColor=eq.type==='estable'?'#50dd90':eq.type==='inestable'?'#f07070':'#f59a4a';
+        eqHTML+=`<div style="margin:.22rem 0;font-size:.78rem"><span class="eq-dot" style="background:${dotColor}"></span><span style="font-family:'JetBrains Mono',monospace;color:var(--text)">y*=${eq.y}</span> <span class="eq-stab" style="color:${dotColor}">${eq.type}</span></div>`;
+      }
+      eqHTML+='</div>';
+    }
+  }
+
+  // Derivative at point
+  const dh=1e-4;
+  const dfdx=(evalF(mx+dh,my)-evalF(mx-dh,my))/(2*dh);
+  const dfdy=(evalF(mx,my+dh)-evalF(mx,my-dh))/(2*dh);
+
+  document.getElementById('analysis').innerHTML=`
+${dirHTML}
+<div class="ana-card"><div class="ac-label">Posición</div>
+  <div class="ac-val">x = ${mx.toFixed(4)}</div>
+  <div class="ac-val">y = ${my.toFixed(4)}</div>
+</div>
+<div class="ana-card"><div class="ac-label">Pendiente f(x,y)</div>
+  <div class="ac-val" style="color:${fv>0.05?'var(--green)':fv<-0.05?'var(--red)':'var(--gold)'}">${fv.toFixed(6)}</div>
+  <div style="font-size:.72rem;color:var(--muted);margin-top:.2rem">Ángulo: ${angle.toFixed(2)}°</div>
+</div>
+<div class="ana-card"><div class="ac-label">Gradiente de f</div>
+  <div style="font-size:.78rem;color:var(--muted)">∂f/∂x = <span style="color:var(--text);font-family:'JetBrains Mono',monospace">${dfdx.toFixed(4)}</span></div>
+  <div style="font-size:.78rem;color:var(--muted)">∂f/∂y = <span style="color:var(--text);font-family:'JetBrains Mono',monospace">${dfdy.toFixed(4)}</span></div>
+</div>
+${eqHTML}
+<div class="hint-text">Clic → trazar solución</div>`;
+}
+
+// ═══════════════════════════════════
+//  CURVAS
+// ═══════════════════════════════════
+function clearCurves(){curves=[];colorIdx=0;drawAll();}
+
+function addCurve(x0,y0){
+  const pts=traceCurve(x0,y0);
+  const color=CURVE_COLORS[colorIdx%CURVE_COLORS.length];
+  colorIdx++;
+  curves.push({points:pts,color,x0,y0});
+  drawAll();
+}
+
+// Color swatches
+function renderSwatches(){
+  const wrap=document.getElementById('color-swatch');
+  wrap.innerHTML=CURVE_COLORS.map((c,i)=>
+    `<div class="cc" style="background:${c};opacity:${i<colorIdx?1:.3}" title="${c}"></div>`
+  ).join('');
+}
+
+// ═══════════════════════════════════
+//  EVENTOS DEL CANVAS
+// ═══════════════════════════════════
+function setupCanvasEvents(){
+  const cv=document.getElementById('cv');
+  let isPanning=false, panSX, panSY, panXMin, panXMax, panYMin, panYMax;
+
+  cv.addEventListener('mousemove',e=>{
+    const rect=cv.getBoundingClientRect();
+    const cx=e.clientX-rect.left, cy=e.clientY-rect.top;
+    hoverX=toMathX(cx); hoverY=toMathY(cy);
+
+    // Tooltip
+    const tt=document.getElementById('tooltip');
+    const fv=evalF(hoverX,hoverY);
+    tt.style.display='block';
+    tt.style.left=(cx+14)+'px'; tt.style.top=(cy-8)+'px';
+    tt.textContent=isFinite(fv)?`(${hoverX.toFixed(2)}, ${hoverY.toFixed(2)})  f = ${fv.toFixed(4)}`:`(${hoverX.toFixed(2)}, ${hoverY.toFixed(2)})  f = undef`;
+
+    if(isPanning){
+      const dx_math=(cx-panSX)/W*(getXMax()-getXMin());
+      const dy_math=(cy-panSY)/H*(getYMax()-getYMin());
+      document.getElementById('xMin').value=(panXMin-dx_math).toFixed(3);
+      document.getElementById('xMax').value=(panXMax-dx_math).toFixed(3);
+      document.getElementById('yMin').value=(panYMin+dy_math).toFixed(3);
+      document.getElementById('yMax').value=(panYMax+dy_math).toFixed(3);
+      drawAll(); return;
+    }
+
+    updateAnalysis(hoverX,hoverY);
+    renderSwatches();
+    drawAll();
+  });
+
+  cv.addEventListener('mouseleave',()=>{
+    hoverX=null;hoverY=null;isPanning=false;
+    document.getElementById('tooltip').style.display='none';
+    document.getElementById('analysis').innerHTML='<div class="hint-text">Mueve el cursor sobre el campo para analizar el punto.<br><br>Haz clic para trazar la curva solución.</div>';
+    drawAll();
+  });
+
+  cv.addEventListener('click',e=>{
+    if(!compiledF) return;
+    const rect=cv.getBoundingClientRect();
+    const mx=toMathX(e.clientX-rect.left), my=toMathY(e.clientY-rect.top);
+    addCurve(mx,my);
+    renderSwatches();
+  });
+
+  // Right-click drag to pan
+  cv.addEventListener('mousedown',e=>{
+    if(e.button!==2&&e.button!==1) return;
+    e.preventDefault();
+    isPanning=true; panSX=e.clientX-cv.getBoundingClientRect().left; panSY=e.clientY-cv.getBoundingClientRect().top;
+    panXMin=getXMin();panXMax=getXMax();panYMin=getYMin();panYMax=getYMax();
+  });
+  cv.addEventListener('mouseup',()=>{isPanning=false;});
+  cv.addEventListener('contextmenu',e=>e.preventDefault());
+
+  // Scroll to zoom
+  cv.addEventListener('wheel',e=>{
+    e.preventDefault();
+    const rect=cv.getBoundingClientRect();
+    const mx=toMathX(e.clientX-rect.left), my=toMathY(e.clientY-rect.top);
+    const factor=e.deltaY>0?1.12:0.88;
+    const xMn=getXMin(),xMx=getXMax(),yMn=getYMin(),yMx=getYMax();
+    document.getElementById('xMin').value=((xMn-mx)*factor+mx).toFixed(3);
+    document.getElementById('xMax').value=((xMx-mx)*factor+mx).toFixed(3);
+    document.getElementById('yMin').value=((yMn-my)*factor+my).toFixed(3);
+    document.getElementById('yMax').value=((yMx-my)*factor+my).toFixed(3);
+    drawAll();
+  },{passive:false});
+}
+
+// ═══════════════════════════════════
+//  INICIO
+// ═══════════════════════════════════
+window.addEventListener('load',()=>{
+  compileExpr();
+  setupCanvasEvents();
+  new ResizeObserver(()=>drawAll()).observe(document.getElementById('canvas-wrap'));
+  drawAll();
+});
+</script>
+</body>
+</html>

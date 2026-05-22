@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador Péndulo Simple</title>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090f;--panel:#0d1220;--card:#111828;--border:#1c2640;--gold:#d4a84b;--cyan:#3ac2f0;--red:#f07070;--green:#50dd90;--orange:#f59a4a;--violet:#a88cff;--text:#dce4f0;--muted:#64768a;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+header{flex-shrink:0;background:linear-gradient(90deg,#050810,#0d1626 60%,#07090f);border-bottom:1px solid var(--border);padding:.85rem 1.8rem;display:flex;align-items:center;gap:1.2rem;}
+.logo{font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.35em;color:var(--gold);border:1px solid var(--gold);padding:.22rem .5rem;opacity:.85;}
+header h1{font-family:'Oswald',sans-serif;font-weight:300;font-size:1.5rem;letter-spacing:.08em;}
+header h1 em{color:var(--gold);font-style:normal;}
+.hint{margin-left:auto;font-size:.82rem;color:var(--muted);font-style:italic;}
+.main{flex:1;display:flex;min-height:0;}
+/* Columns */
+.col-c{width:20%;min-width:210px;flex-shrink:0;border-right:1px solid var(--border);overflow-y:auto;padding:.9rem .95rem 1.4rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.col-r{width:20%;min-width:195px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.col-r-hd{flex-shrink:0;background:var(--panel);border-bottom:1px solid var(--border);padding:.6rem .95rem;display:flex;align-items:center;gap:.45rem;font-family:'Oswald',sans-serif;font-size:.67rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;}
+.col-r-hd::before{content:'';display:inline-block;width:3px;height:10px;background:var(--gold);border-radius:1px;}
+#results{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.vis{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
+.tabs{flex-shrink:0;display:flex;border-bottom:1px solid var(--border);background:var(--panel);padding:0 1rem;}
+.tab{padding:.72rem 1.1rem;font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;user-select:none;}
+.tab:hover{color:var(--text);}.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.pane{flex:1;display:none;flex-direction:column;min-height:0;}.pane.active{display:flex;}
+.pane-inner{flex:1;min-height:0;}.pane-inner>div,.pane-inner>canvas{width:100%;height:100%;display:block;}
+.vis-foot{flex-shrink:0;padding:.35rem 1rem;display:flex;gap:1rem;flex-wrap:wrap;background:var(--panel);border-top:1px solid var(--border);}
+.leg{display:flex;align-items:center;gap:.3rem;font-size:.73rem;color:var(--muted);}
+.lline{width:18px;height:2.5px;border-radius:2px;flex-shrink:0;}
+/* Controls */
+.stitle{font-family:'Oswald',sans-serif;font-size:.67rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:.45rem;margin-bottom:.7rem;}
+.stitle::before{content:'';display:inline-block;width:3px;height:10px;background:var(--gold);border-radius:1px;}
+.prow{display:flex;align-items:center;gap:.45rem;margin-bottom:.25rem;}
+.prow .lbl{font-size:.79rem;color:var(--muted);flex:1;}
+.pinp{width:66px;background:var(--card);border:1px solid var(--border);border-radius:3px;color:var(--gold);padding:.28rem .38rem;font-family:'JetBrains Mono',monospace;font-size:.82rem;text-align:right;outline:none;transition:border-color .2s;}
+.pinp:focus{border-color:var(--gold);}
+select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--text);padding:.45rem .65rem;font-family:'Oswald',sans-serif;font-size:.78rem;letter-spacing:.04em;outline:none;cursor:pointer;-webkit-appearance:none;}
+select:focus{border-color:var(--gold);}select option{background:var(--card);}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--border);border-radius:2px;outline:none;padding:0;border:none;margin-bottom:.08rem;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer;}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer;border:none;}
+.btn-main{width:100%;padding:.65rem;background:var(--gold);color:var(--bg);border:none;border-radius:3px;font-family:'Oswald',sans-serif;font-weight:500;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .17s;margin-bottom:.4rem;}
+.btn-main:hover{background:#e8c97a;}
+.btn-row{display:flex;gap:.4rem;margin-bottom:.4rem;}
+.btn2{flex:1;padding:.6rem;background:transparent;border:1px solid var(--border);border-radius:3px;font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;color:var(--muted);transition:all .17s;}
+.btn2:hover{border-color:var(--gold);color:var(--gold);}
+.btn2.cyan{color:var(--cyan);border-color:rgba(58,194,240,.4);}
+.btn2.cyan:hover{background:rgba(58,194,240,.08);}
+.btn2.red{color:var(--red);border-color:rgba(240,112,112,.4);}
+.btn2.red:hover{background:rgba(240,112,112,.08);}
+.btn2.playing{color:var(--orange);border-color:var(--orange);}
+/* Results */
+.ri{padding:.75rem .9rem;}
+.bvw{text-align:center;padding:.8rem 0 .65rem;border-bottom:1px solid var(--border);margin-bottom:.75rem;}
+.blbl{font-family:'Oswald',sans-serif;font-size:.63rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:.2rem;}
+.bval{font-family:'JetBrains Mono',monospace;font-size:1.08rem;color:var(--gold);}
+.badge{display:inline-block;margin-top:.28rem;padding:.2rem .7rem;border-radius:12px;font-family:'Oswald',sans-serif;font-size:.67rem;letter-spacing:.07em;text-transform:uppercase;}
+.b-nd{background:rgba(80,221,144,.12);color:var(--green);border:1px solid rgba(80,221,144,.3);}
+.b-ud{background:rgba(58,194,240,.12);color:var(--cyan);border:1px solid rgba(58,194,240,.3);}
+.b-cd{background:rgba(212,168,75,.12);color:var(--gold);border:1px solid rgba(212,168,75,.3);}
+.b-od{background:rgba(240,112,112,.12);color:var(--red);border:1px solid rgba(240,112,112,.3);}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.48rem .68rem;margin-bottom:.42rem;}
+.sclbl{font-family:'Oswald',sans-serif;font-size:.57rem;letter-spacing:.13em;color:var(--muted);text-transform:uppercase;margin-bottom:.13rem;}
+.scval{font-family:'JetBrains Mono',monospace;font-size:.83rem;color:var(--text);}
+.fbox{background:rgba(212,168,75,.04);border:1px solid rgba(212,168,75,.18);border-radius:4px;padding:.6rem .8rem;margin-bottom:.75rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);line-height:1.9;}
+.fbox .fk{color:var(--gold);}.fbox .fv{color:var(--text);}.fbox .fn{color:var(--cyan);}
+.info-note{padding:.5rem .7rem;background:rgba(58,194,240,.06);border:1px solid rgba(58,194,240,.18);border-radius:4px;font-size:.76rem;color:var(--muted);line-height:1.65;margin-bottom:.5rem;}
+@media(max-width:768px){body{height:auto;overflow-y:auto;}.main{flex-direction:column;}.col-c,.col-r{width:100%;min-width:0;border-right:none;border-bottom:1px solid var(--border);}.col-r{max-height:50vh;}.vis{flex:none;height:420px;}.pane.active{height:100%;}}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">θ″</span>
+  <h1>Simulador <em>Péndulo Simple</em></h1>
+  <span class="hint">θ″ + γθ′ + ω₀²·sin(θ) = 0 — No lineal vs Lineal</span>
+</header>
+<div class="main">
+
+<!-- ═══ CONTROLES ═══ -->
+<div class="col-c">
+  <div class="stitle">Péndulo</div>
+
+  <div class="prow">
+    <span class="lbl">Longitud <em style="color:var(--text)">L</em> (m)</span>
+    <input class="pinp" id="inp-L" type="number" min="0.1" max="5" step="0.05" value="1.5" oninput="sync('L',0.1,5)">
+  </div>
+  <input type="range" id="sl-L" min="0.1" max="5" step="0.05" value="1.5" oninput="slSync('L')">
+
+  <div class="prow" style="margin-top:.5rem">
+    <span class="lbl">Amortiguamiento <em style="color:var(--text)">γ</em></span>
+    <input class="pinp" id="inp-g" type="number" min="0" max="5" step="0.01" value="0.15" oninput="sync('g',0,5)">
+  </div>
+  <input type="range" id="sl-g" min="0" max="5" step="0.01" value="0.15" oninput="slSync('g')">
+
+  <div class="stitle" style="margin-top:.6rem">Condiciones Iniciales</div>
+
+  <div class="prow">
+    <span class="lbl">Ángulo <em style="color:var(--text)">θ₀</em> (°)</span>
+    <input class="pinp" id="inp-t0" type="number" min="-175" max="175" step="1" value="45" oninput="sync('t0',-175,175)">
+  </div>
+  <input type="range" id="sl-t0" min="-175" max="175" step="1" value="45" oninput="slSync('t0')">
+
+  <div class="prow" style="margin-top:.5rem">
+    <span class="lbl">Vel. angular <em style="color:var(--text)">θ′(0)</em></span>
+    <input class="pinp" id="inp-w0" type="number" min="-8" max="8" step="0.1" value="0" oninput="sync('w0',-8,8)">
+  </div>
+  <input type="range" id="sl-w0" min="-8" max="8" step="0.1" value="0" oninput="slSync('w0')">
+
+  <div class="stitle" style="margin-top:.6rem">Gravedad <em style="color:var(--text);font-size:.75rem">g</em></div>
+  <select id="sel-g" onchange="onGravity()">
+    <option value="9.81">🌍 Tierra — 9.81 m/s²</option>
+    <option value="1.62">🌕 Luna — 1.62 m/s²</option>
+    <option value="3.72">🔴 Marte — 3.72 m/s²</option>
+    <option value="24.79">🪐 Júpiter — 24.79 m/s²</option>
+    <option value="custom">✏️ Personalizado</option>
+  </select>
+  <div id="g-custom" style="display:none;margin-top:.4rem">
+    <div class="prow">
+      <span class="lbl">g (m/s²)</span>
+      <input class="pinp" id="inp-gcustom" type="number" min="0.1" max="50" step="0.1" value="9.81" oninput="sync('gc',0.1,50)">
+    </div>
+    <input type="range" id="sl-gc" min="0.1" max="50" step="0.1" value="9.81" oninput="slSync('gc')">
+  </div>
+
+  <div style="margin-top:.75rem">
+    <button class="btn-main" onclick="resetSim()">▶ Simular</button>
+    <div class="btn-row">
+      <button class="btn2 cyan" id="btn-play" onclick="togglePlay()">⏸ Pausar</button>
+      <button class="btn2" onclick="clearSim()">↺ Reset</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn2 red" onclick="push(-2.5)">← Empujar</button>
+      <button class="btn2 red" onclick="push(+2.5)">Empujar →</button>
+    </div>
+    <div style="font-size:.73rem;color:var(--muted);text-align:center;margin-top:.1rem">añade ±2.5 rad/s</div>
+  </div>
+</div>
+
+<!-- ═══ ANÁLISIS ═══ -->
+<div class="col-r">
+  <div class="col-r-hd">Análisis</div>
+  <div id="results"><div style="padding:2.5rem 1rem;color:var(--muted);font-style:italic;text-align:center">Presiona ▶ Simular…</div></div>
+</div>
+
+<!-- ═══ VISUALIZACIÓN ═══ -->
+<div class="vis">
+  <div class="tabs">
+    <div class="tab active" id="tab-anim"  onclick="switchTab('anim')">Animación</div>
+    <div class="tab"        id="tab-theta" onclick="switchTab('theta')">θ(t)</div>
+    <div class="tab"        id="tab-fase"  onclick="switchTab('fase')">Fase</div>
+  </div>
+
+  <div class="pane active" id="pane-anim">
+    <div class="pane-inner"><canvas id="cv"></canvas></div>
+  </div>
+  <div class="pane" id="pane-theta">
+    <div class="pane-inner"><div id="plot-theta"></div></div>
+  </div>
+  <div class="pane" id="pane-fase">
+    <div class="pane-inner"><div id="plot-fase"></div></div>
+  </div>
+
+  <div class="vis-foot">
+    <span class="leg"><span class="lline" style="background:var(--green)"></span>No lineal</span>
+    <span class="leg"><span class="lline" style="background:var(--gold);opacity:.6;border-top:2px dashed var(--gold);background:none"></span>Linealizado</span>
+    <span class="leg"><span class="lline" style="background:var(--cyan)"></span>Trayectoria fase</span>
+  </div>
+</div>
+
+</div>
+<script>
+'use strict';
+// ══════════════════════════════════
+//  PARÁMETROS
+// ══════════════════════════════════
+let pL=1.5, gamma=0.15, theta0=45*Math.PI/180, omega0_init=0, grav=9.81;
+const SPEED=[.5,1,2,4]; let spd=1;
+
+// ══════════════════════════════════
+//  ESTADO
+// ══════════════════════════════════
+let sT=0, sTheta=theta0, sOmega=omega0_init;
+// Parallel linearized simulation
+let sThetaL=theta0, sOmegaL=omega0_init;
+const MAX=3000, DT=1/240;
+let hist={t:[0],th:[theta0],om:[omega0_init],thL:[theta0]};
+// Trail positions
+let trail=[];
+let playing=false, frame=0, activeTab='anim';
+
+// ══════════════════════════════════
+//  SYNC SLIDER ↔ INPUT
+// ══════════════════════════════════
+function slSync(id){
+  const v=+document.getElementById('sl-'+id).value;
+  document.getElementById('inp-'+id).value=v;
+  applyParams(); if(playing) resetSim();
+}
+function sync(id,mn,mx){
+  let v=+document.getElementById('inp-'+id).value;
+  if(!isFinite(v)) return;
+  v=Math.max(mn,Math.min(mx,v));
+  document.getElementById('inp-'+id).value=v;
+  const sl=document.getElementById('sl-'+id);
+  if(sl) sl.value=v;
+  applyParams(); if(playing) resetSim();
+}
+function applyParams(){
+  pL=+document.getElementById('sl-L').value;
+  gamma=+document.getElementById('sl-g').value;
+  theta0=(+document.getElementById('sl-t0').value)*Math.PI/180;
+  omega0_init=+document.getElementById('sl-w0').value;
+  const sel=document.getElementById('sel-g').value;
+  grav=(sel==='custom')?+document.getElementById('sl-gc').value:+sel;
+}
+function onGravity(){
+  const v=document.getElementById('sel-g').value;
+  document.getElementById('g-custom').style.display=v==='custom'?'block':'none';
+  if(v!=='custom'){grav=+v; if(playing) resetSim();}
+}
+
+// ══════════════════════════════════
+//  RK4 — no lineal y lineal
+// ══════════════════════════════════
+function rk4NL(t,th,om,h){
+  const w2=grav/pL;
+  const f=(th,om)=>[-gamma*om-w2*Math.sin(th)];
+  const a=(th,om)=>-gamma*om-w2*Math.sin(th);
+  const k1t=om,k1o=a(th,om);
+  const k2t=om+k1o*h/2,k2o=a(th+k1t*h/2,om+k1o*h/2);
+  const k3t=om+k2o*h/2,k3o=a(th+k2t*h/2,om+k2o*h/2);
+  const k4t=om+k3o*h,  k4o=a(th+k3t*h,  om+k3o*h);
+  return[th+h/6*(k1t+2*k2t+2*k3t+k4t), om+h/6*(k1o+2*k2o+2*k3o+k4o)];
+}
+function rk4Lin(t,th,om,h){
+  const w2=grav/pL;
+  const a=(th,om)=>-gamma*om-w2*th;  // sin(θ)≈θ
+  const k1t=om,k1o=a(th,om);
+  const k2t=om+k1o*h/2,k2o=a(th+k1t*h/2,om+k1o*h/2);
+  const k3t=om+k2o*h/2,k3o=a(th+k2t*h/2,om+k2o*h/2);
+  const k4t=om+k3o*h,  k4o=a(th+k3t*h,  om+k3o*h);
+  return[th+h/6*(k1t+2*k2t+2*k3t+k4t), om+h/6*(k1o+2*k2o+2*k3o+k4o)];
+}
+
+// ══════════════════════════════════
+//  ANÁLISIS
+// ══════════════════════════════════
+function analyze(){
+  const omega0=Math.sqrt(grav/pL);
+  const T0=2*Math.PI/omega0;
+  const alpha=gamma/2;
+  const disc=gamma*gamma-4*grav/pL;
+  const zeta=gamma/(2*omega0);
+  let type,wd=0;
+  if(gamma<1e-10){type='nodamp';}
+  else if(Math.abs(disc)<1e-6){type='crit';}
+  else if(disc>0){type='over';}
+  else{type='under';wd=Math.sqrt(-disc)/2;}
+  return{omega0,T0,alpha,disc,zeta,type,wd};
+}
+
+// ══════════════════════════════════
+//  PANEL DE RESULTADOS
+// ══════════════════════════════════
+const TL2={nodamp:'Sin Amortiguación',under:'Subamortiguado',crit:'Críticamente Amort.',over:'Sobreamortiguado'};
+const TB2={nodamp:'b-nd',under:'b-ud',crit:'b-cd',over:'b-od'};
+const TC2={nodamp:'var(--green)',under:'var(--cyan)',crit:'var(--gold)',over:'var(--red)'};
+
+function renderResults(an){
+  const{omega0,T0,alpha,zeta,type,wd}=an;
+  const degNow=(sTheta*180/Math.PI).toFixed(2);
+  const linError=Math.abs(sTheta-sThetaL)*180/Math.PI;
+  const Ekin=0.5*pL*pL*sOmega*sOmega;
+  const Epot=grav*pL*(1-Math.cos(sTheta));
+  // Approximate nonlinear period (Kidd & Fogg approximation)
+  const th0abs=Math.abs(theta0);
+  const Tnonlin=T0*(1+th0abs*th0abs/16+11*Math.pow(th0abs,4)/3072);
+
+  document.getElementById('results').innerHTML=`
+<div class="ri">
+  <div class="bvw">
+    <div class="blbl">Régimen</div>
+    <div class="bval" style="color:${TC2[type]};font-size:.98rem">${TL2[type]}</div>
+    <span class="badge ${TB2[type]}">ζ = ${zeta.toFixed(4)}</span>
+  </div>
+
+  <div class="fbox">
+    <div><span class="fk">No lineal:</span></div>
+    <div class="fv">θ″ + <span class="fn">${gamma.toFixed(2)}</span>θ′ + <span class="fn">${(grav/pL).toFixed(3)}</span>sin(θ)=0</div>
+    <div style="margin-top:.35rem"><span class="fk">Linealizada (|θ|≪1):</span></div>
+    <div class="fv">θ″ + ${gamma.toFixed(2)}θ′ + ${(grav/pL).toFixed(3)}θ = 0</div>
+    <div style="margin-top:.35rem"><span class="fk">Ec. Característica:</span></div>
+    <div class="fv">λ² + ${gamma.toFixed(2)}λ + ${(grav/pL).toFixed(3)} = 0</div>
+    <div style="margin-top:.28rem"><span class="fk">Δ = </span><span class="fn">${(gamma*gamma-4*grav/pL).toFixed(5)}</span></div>
+    ${type==='under'?`<div><span class="fk">λ = </span><span class="fn">${(-alpha).toFixed(4)}±${wd.toFixed(4)}i</span></div>`:''}
+  </div>
+
+  <div class="sc"><div class="sclbl">ω₀ = √(g/L)</div><div class="scval" style="color:var(--cyan)">${omega0.toFixed(5)} rad/s</div></div>
+  <div class="sc"><div class="sclbl">T₀ lineal = 2π/ω₀</div><div class="scval">${T0.toFixed(4)} s</div></div>
+  <div class="sc"><div class="sclbl">T no lineal ≈ (θ₀=${(th0abs*180/Math.PI).toFixed(1)}°)</div><div class="scval" style="color:var(--orange)">${Tnonlin.toFixed(4)} s</div></div>
+  ${type==='under'?`<div class="sc"><div class="sclbl">ω_d (amortiguada)</div><div class="scval">${wd.toFixed(5)} rad/s</div></div>`:''}
+  <div class="sc">
+    <div class="sclbl">t = ${sT.toFixed(2)} s</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.18rem;margin-top:.18rem">
+      <div><div class="sclbl" style="font-size:.5rem">θ (°)</div><div class="scval" style="color:var(--green)">${degNow}</div></div>
+      <div><div class="sclbl" style="font-size:.5rem">θ′ (rad/s)</div><div class="scval" style="color:var(--orange)">${sOmega.toFixed(4)}</div></div>
+      <div><div class="sclbl" style="font-size:.5rem">E_cin (J)</div><div class="scval">${Ekin.toFixed(4)}</div></div>
+      <div><div class="sclbl" style="font-size:.5rem">E_pot (J)</div><div class="scval">${Epot.toFixed(4)}</div></div>
+    </div>
+  </div>
+
+  <div class="info-note">
+    <strong style="color:var(--cyan)">Error lineal:</strong> |θ − θ_lin| = ${linError.toFixed(3)}°<br>
+    La linealización es válida para |θ₀| ≲ 15°. Para ángulos grandes el período real es mayor que T₀.
+  </div>
+
+  <div class="info-note" style="border-color:rgba(212,168,75,.18);background:rgba(212,168,75,.04)">
+    <strong style="color:var(--gold)">Gravedad:</strong> g = ${grav.toFixed(2)} m/s² &nbsp;·&nbsp; L = ${pL.toFixed(2)} m<br>
+    T ∝ √(L/g) — doble L → período √2 × mayor
+  </div>
+</div>`;
+}
+
+// ══════════════════════════════════
+//  CANVAS: ANIMACIÓN DEL PÉNDULO
+// ══════════════════════════════════
+const TRAIL_N=80;
+function drawPendulum(){
+  const cv=document.getElementById('cv');
+  if(!cv) return;
+  const W=cv.clientWidth||cv.width, H=cv.clientHeight||cv.height;
+  if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H;}
+  const ctx=cv.getContext('2d');
+
+  // Background
+  ctx.fillStyle='#07090f'; ctx.fillRect(0,0,W,H);
+  // Subtle grid
+  ctx.strokeStyle='rgba(28,38,64,.4)'; ctx.lineWidth=1;
+  for(let gx=0;gx<W;gx+=44){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+  for(let gy=0;gy<H;gy+=44){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+
+  const pivX=W/2, pivY=H*.12;
+  const Lpx=Math.min(H*.74, W*.42);
+  const massX=pivX+Lpx*Math.sin(sTheta);
+  const massY=pivY+Lpx*Math.cos(sTheta);
+  const massXL=pivX+Lpx*Math.sin(sThetaL);
+  const massYL=pivY+Lpx*Math.cos(sThetaL);
+
+  // Ceiling
+  ctx.fillStyle='#182030'; ctx.fillRect(0,0,W,pivY-10);
+  ctx.strokeStyle='rgba(80,110,150,.5)'; ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(0,pivY-10);ctx.lineTo(W,pivY-10);ctx.stroke();
+  // Ceiling hatch
+  for(let hx=8;hx<W;hx+=18){ctx.strokeStyle='rgba(50,70,100,.4)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(hx,0);ctx.lineTo(hx-14,pivY-10);ctx.stroke();}
+
+  // Equilibrium line (dashed)
+  ctx.setLineDash([5,5]); ctx.strokeStyle='rgba(100,118,138,.45)'; ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pivX,pivY);ctx.lineTo(pivX,pivY+Lpx+20);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Angle arc
+  if(Math.abs(sTheta)>.02){
+    const arcR=Lpx*.22;
+    const startA=Math.PI/2; // pointing down in canvas
+    const rodA=Math.PI/2-sTheta;
+    ctx.strokeStyle='rgba(80,221,144,.5)'; ctx.lineWidth=1.8;
+    ctx.setLineDash([4,4]);
+    ctx.beginPath();
+    if(sTheta>0) ctx.arc(pivX,pivY,arcR,rodA,startA,false);
+    else ctx.arc(pivX,pivY,arcR,startA,rodA,false);
+    ctx.stroke(); ctx.setLineDash([]);
+    // Angle label
+    const midA=(startA+rodA)/2;
+    const lx=pivX+arcR*1.28*Math.cos(midA), ly=pivY+arcR*1.28*Math.sin(midA);
+    ctx.fillStyle='rgba(80,221,144,.85)'; ctx.font='bold 11px JetBrains Mono,monospace'; ctx.textAlign='center';
+    ctx.fillText((sTheta*180/Math.PI).toFixed(1)+'°',lx,ly);
+  }
+
+  // Trail (fading)
+  if(trail.length>1){
+    for(let i=1;i<trail.length;i++){
+      const alpha=(i/trail.length)*0.55;
+      ctx.strokeStyle=`rgba(80,221,144,${alpha.toFixed(2)})`; ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(trail[i-1].x,trail[i-1].y);ctx.lineTo(trail[i].x,trail[i].y);ctx.stroke();
+    }
+  }
+
+  // Linearized ghost pendulum (faint)
+  if(Math.abs(sTheta-sThetaL)>.005){
+    ctx.strokeStyle='rgba(212,168,75,.25)'; ctx.lineWidth=1.5; ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(pivX,pivY);ctx.lineTo(massXL,massYL);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(212,168,75,.25)'; ctx.beginPath();ctx.arc(massXL,massYL,11,0,Math.PI*2);ctx.fill();
+  }
+
+  // Rod
+  const rodGrad=ctx.createLinearGradient(pivX,pivY,massX,massY);
+  rodGrad.addColorStop(0,'rgba(212,168,75,.5)'); rodGrad.addColorStop(1,'rgba(212,168,75,.9)');
+  ctx.strokeStyle=rodGrad; ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(pivX,pivY);ctx.lineTo(massX,massY);ctx.stroke();
+
+  // Mass
+  const massR=18;
+  ctx.shadowColor='rgba(58,194,240,.55)'; ctx.shadowBlur=18;
+  const mg=ctx.createRadialGradient(massX-4,massY-4,2,massX,massY,massR);
+  mg.addColorStop(0,'#3aaeee'); mg.addColorStop(1,'#0c3d6e');
+  ctx.fillStyle=mg; ctx.beginPath();ctx.arc(massX,massY,massR,0,Math.PI*2);ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle='rgba(58,194,240,.7)'; ctx.lineWidth=2; ctx.beginPath();ctx.arc(massX,massY,massR,0,Math.PI*2);ctx.stroke();
+
+  // Velocity arrow
+  if(Math.abs(sOmega)>.05){
+    const vscale=Lpx*.18, vdir=Math.sign(sOmega);
+    const vx=massX+vscale*Math.cos(sTheta)*vdir;
+    const vy=massY-vscale*Math.sin(sTheta)*vdir;
+    ctx.strokeStyle='rgba(245,154,74,.8)'; ctx.fillStyle='rgba(245,154,74,.8)'; ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(massX,massY);ctx.lineTo(vx,vy);ctx.stroke();
+    const dx=vx-massX,dy=vy-massY,dl=Math.sqrt(dx*dx+dy*dy)||1;
+    const ux=dx/dl,uy=dy/dl;
+    ctx.beginPath();ctx.moveTo(vx,vy);
+    ctx.lineTo(vx-ux*10+uy*5,vy-uy*10-ux*5);ctx.lineTo(vx-ux*10-uy*5,vy-uy*10+ux*5);ctx.closePath();ctx.fill();
+  }
+
+  // Pivot
+  ctx.shadowColor='rgba(58,194,240,.4)'; ctx.shadowBlur=12;
+  ctx.fillStyle='#3ac2f0'; ctx.beginPath();ctx.arc(pivX,pivY,7,0,Math.PI*2);ctx.fill();
+  ctx.shadowBlur=0;
+
+  // Info
+  ctx.textAlign='left'; ctx.font='11px JetBrains Mono,monospace';
+  ctx.fillStyle='rgba(212,168,75,.65)'; ctx.fillText('t='+sT.toFixed(2)+'s',W-120,22);
+  ctx.fillStyle='rgba(80,221,144,.75)';  ctx.fillText('θ='+(sTheta*180/Math.PI).toFixed(2)+'°',W-120,37);
+  ctx.fillStyle='rgba(245,154,74,.75)';  ctx.fillText("θ'="+sOmega.toFixed(3),W-120,52);
+}
+
+// ══════════════════════════════════
+//  PLOTLY: θ(t)
+// ══════════════════════════════════
+function updatePlotTheta(){
+  const th=hist.t, thdeg=hist.th.map(t=>t*180/Math.PI), thdegL=hist.thL.map(t=>t*180/Math.PI);
+  if(th.length<2) return;
+  const traces=[
+    {x:th,y:thdeg,type:'scatter',mode:'lines',name:'θ no lineal',
+     line:{color:'#50dd90',width:2.2},hovertemplate:'t=%{x:.3f}s<br>θ=%{y:.3f}°<extra></extra>'},
+    {x:th,y:thdegL,type:'scatter',mode:'lines',name:'θ linealizado',
+     line:{color:'rgba(212,168,75,.65)',width:1.8,dash:'longdash'},hovertemplate:'t=%{x:.3f}s<br>θ_lin=%{y:.3f}°<extra></extra>'},
+  ];
+  const ax={gridcolor:'#1e3050',zerolinecolor:'#4a6685',zerolinewidth:2,color:'#8aa0bb',showgrid:true};
+  const layout={
+    paper_bgcolor:'#07090f',plot_bgcolor:'#0b1018',uirevision:'pend-theta',
+    xaxis:{...ax,title:{text:'t (s)',font:{color:'#8aa0bb'}}},
+    yaxis:{...ax,title:{text:'θ (grados)',font:{color:'#8aa0bb'}}},
+    legend:{bgcolor:'rgba(11,16,24,.85)',font:{color:'#dce4f0',size:10},bordercolor:'#2a3e58',borderwidth:1},
+    margin:{l:58,r:20,t:20,b:48},
+    font:{family:"'Crimson Pro',serif",color:'#dce4f0'},hovermode:'x unified'
+  };
+  Plotly.react('plot-theta',traces,layout,{responsive:true,displayModeBar:false});
+}
+
+// ══════════════════════════════════
+//  PLOTLY: RETRATO DE FASE
+// ══════════════════════════════════
+function updatePlotFase(){
+  const thdeg=hist.th.map(t=>t*180/Math.PI);
+  const thdegL=hist.thL.map(t=>t*180/Math.PI);
+  if(thdeg.length<2) return;
+  const traces=[
+    {x:thdeg,y:hist.om,type:'scatter',mode:'lines',name:'No lineal',
+     line:{color:'#3ac2f0',width:2},hovertemplate:'θ=%{x:.2f}°<br>θ\'=%{y:.4f}<extra></extra>'},
+    {x:thdegL,y:hist.om,type:'scatter',mode:'lines',name:'Linealizado',
+     line:{color:'rgba(212,168,75,.45)',width:1.5,dash:'dot'},hoverinfo:'skip'},
+    {x:[sTheta*180/Math.PI],y:[sOmega],type:'scatter',mode:'markers',name:'Ahora',
+     marker:{color:'#d4a84b',size:11,symbol:'circle',line:{color:'#fff',width:1.5}}}
+  ];
+  const ax={gridcolor:'#1e3050',zerolinecolor:'#4a6685',zerolinewidth:2,color:'#8aa0bb',showgrid:true};
+  const layout={
+    paper_bgcolor:'#07090f',plot_bgcolor:'#0b1018',uirevision:'pend-fase',
+    xaxis:{...ax,title:{text:'θ (grados)',font:{color:'#8aa0bb'}}},
+    yaxis:{...ax,title:{text:"θ′ (rad/s)",font:{color:'#8aa0bb'}}},
+    legend:{bgcolor:'rgba(11,16,24,.85)',font:{color:'#dce4f0',size:10},bordercolor:'#2a3e58',borderwidth:1},
+    margin:{l:62,r:20,t:20,b:50},
+    font:{family:"'Crimson Pro',serif",color:'#dce4f0'},hovermode:'closest'
+  };
+  Plotly.react('plot-fase',traces,layout,{responsive:true,displayModeBar:false});
+}
+
+// ══════════════════════════════════
+//  LOOP
+// ══════════════════════════════════
+function loop(){
+  if(playing){
+    const steps=Math.ceil(spd*2);
+    for(let s=0;s<steps;s++){
+      [sTheta,sOmega]=rk4NL(sT,sTheta,sOmega,DT);
+      [sThetaL,sOmegaL]=rk4Lin(sT,sThetaL,sOmegaL,DT);
+      sT+=DT;
+      hist.t.push(sT); hist.th.push(sTheta); hist.om.push(sOmega); hist.thL.push(sThetaL);
+      if(hist.t.length>MAX){hist.t.shift();hist.th.shift();hist.om.shift();hist.thL.shift();}
+      // Trail
+      const cv=document.getElementById('cv');
+      if(cv&&cv.width>0){
+        const W=cv.width, H=cv.height;
+        const pivX=W/2, pivY=H*.12, Lpx=Math.min(H*.74,W*.42);
+        trail.push({x:pivX+Lpx*Math.sin(sTheta),y:pivY+Lpx*Math.cos(sTheta)});
+        if(trail.length>TRAIL_N) trail.shift();
+      }
+    }
+  }
+  frame++;
+  if(activeTab==='anim') drawPendulum();
+  if(frame%8===0){
+    renderResults(analyze());
+    if(activeTab==='theta') updatePlotTheta();
+    if(activeTab==='fase')  updatePlotFase();
+  }
+  requestAnimationFrame(loop);
+}
+
+// ══════════════════════════════════
+//  CONTROLES
+// ══════════════════════════════════
+function togglePlay(){
+  playing=!playing;
+  const btn=document.getElementById('btn-play');
+  btn.textContent=playing?'⏸ Pausar':'▶ Reanudar';
+  btn.classList.toggle('playing',playing);
+}
+
+function push(dw){
+  sOmega+=dw; sOmegaL+=dw;
+  if(!playing){playing=true;document.getElementById('btn-play').textContent='⏸ Pausar';document.getElementById('btn-play').classList.add('playing');}
+}
+
+function resetSim(){
+  applyParams();
+  sT=0; sTheta=theta0; sOmega=omega0_init;
+  sThetaL=theta0; sOmegaL=omega0_init;
+  hist={t:[0],th:[theta0],om:[omega0_init],thL:[theta0]};
+  trail=[];
+  if(!playing){playing=true;document.getElementById('btn-play').textContent='⏸ Pausar';document.getElementById('btn-play').classList.add('playing');}
+  setTimeout(()=>{updatePlotTheta();updatePlotFase();},80);
+}
+
+function clearSim(){
+  playing=false;
+  document.getElementById('btn-play').textContent='▶ Reanudar';
+  document.getElementById('btn-play').classList.remove('playing');
+  sT=0; sTheta=theta0; sOmega=omega0_init;
+  sThetaL=theta0; sOmegaL=omega0_init;
+  hist={t:[0],th:[theta0],om:[omega0_init],thL:[theta0]};
+  trail=[];
+}
+
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.id==='tab-'+id));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('active',p.id==='pane-'+id));
+  activeTab=id;
+  setTimeout(()=>{
+    if(id==='theta') updatePlotTheta();
+    if(id==='fase')  updatePlotFase();
+    if(id==='anim')  drawPendulum();
+  },55);
+}
+
+// ══════════════════════════════════
+//  INICIO
+// ══════════════════════════════════
+window.addEventListener('load',()=>{
+  const cv=document.getElementById('cv');
+  if(cv) new ResizeObserver(()=>{cv.width=cv.clientWidth;cv.height=cv.clientHeight;trail=[];drawPendulum();}).observe(cv);
+  applyParams();
+  playing=false;
+  renderResults(analyze());
+  drawPendulum();
+  loop();
+});
+</script>
+</body>
+</html>
