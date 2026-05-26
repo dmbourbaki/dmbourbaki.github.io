@@ -666,6 +666,59 @@
                     </div>
                 </div>
 
+
+                <!-- Simulador de Series de Taylor -->
+                <div class="digital-card" id="card-taylor">
+                    <div class="digital-card-header">
+                        <div class="digital-icon">Σ</div>
+                        <div>
+                            <h3>Simulador de Series de Taylor</h3>
+                            <span class="topic-tag">Cálculo · Análisis Matemático</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Visualiza cómo un polinomio de grado n se "pega" a cualquier función al agregar términos. Escribe f(x), elige el centro a y anima la convergencia grado a grado. Muestra la fórmula con los coeficientes exactos f⁽ᵏ⁾(a)/k!, la tabla de coeficientes, el error |f − Tₙ| en escala logarítmica y el espectro de coeficientes. Diferenciación simbólica con mathjs.</p>
+                    <div class="digital-tags">
+                        <span>Diferenciación simbólica</span>
+                        <span>Animación grado a grado</span>
+                        <span>Error |f − Tₙ| en log</span>
+                        <span>14 presets (sin, cos, eˣ, ln, arctan…)</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('taylor')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-taylor" style="display:none">
+                        <iframe src="recursos/series-taylor.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Series de Taylor"></iframe>
+                        <a href="recursos/series-taylor.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+                <!-- Simulador de Integrales Dobles -->
+                
+
+
+                <!-- Simulador de Integrales Dobles -->
+                <div class="digital-card" id="card-integrales">
+                    <div class="digital-card-header">
+                        <div class="digital-icon">∬</div>
+                        <div>
+                            <h3>Simulador de Integrales Dobles</h3>
+                            <span class="topic-tag">Cálculo Multivariable · Regiones</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Visualiza y calcula integrales dobles. Soporta Tipo I (dy dx), Tipo II (dx dy) y Polares (dr dθ). Ingresa los 4 límites: a, b, f₁(x) y f₂(x). La región se dibuja en 2D con aspecto 1:1 real, zoom con scroll y pan con arrastre; la función aparece difuminada fuera de la región. En 3D muestra el volumen como sólido paramétrico con colorscale cool-warm. Incluye botón para invertir el orden (Teorema de Fubini) y rotación animada del volumen.</p>
+                    <div class="digital-tags">
+                        <span>Tipo I · Tipo II · Polares</span>
+                        <span>Región 2D con aspecto 1:1</span>
+                        <span>Volumen 3D paramétrico</span>
+                        <span>Invertir orden · Rotación 3D</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('integrales')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-integrales" style="display:none">
+                        <iframe src="recursos/integrales-dobles.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Integrales Dobles"></iframe>
+                        <a href="recursos/integrales-dobles.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
