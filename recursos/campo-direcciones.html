@@ -1,746 +1,937 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulador de Campo de Direcciones</title>
-<script src="https://cdn.jsdelivr.net/npm/mathjs@12/lib/browser/math.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#07090f;--panel:#0d1220;--card:#111828;--border:#1c2640;--gold:#d4a84b;--cyan:#3ac2f0;--red:#f07070;--green:#50dd90;--orange:#f59a4a;--violet:#a88cff;--text:#dce4f0;--muted:#64768a;}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;}
-body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;display:flex;flex-direction:column;}
-header{flex-shrink:0;background:linear-gradient(90deg,#050810,#0d1626 60%,#07090f);border-bottom:1px solid var(--border);padding:.75rem 1.4rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
-.logo{font-family:'Oswald',sans-serif;font-size:.68rem;letter-spacing:.35em;color:var(--gold);border:1px solid var(--gold);padding:.2rem .5rem;}
-header h1{font-family:'Oswald',sans-serif;font-weight:300;font-size:1.4rem;letter-spacing:.08em;}
-header h1 em{color:var(--gold);font-style:normal;}
-/* Equation bar */
-.eq-bar{display:flex;align-items:center;gap:.55rem;margin-left:auto;flex-wrap:wrap;}
-.eq-label{font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--muted);}
-.eq-label em{color:var(--gold);font-style:italic;font-size:1.1rem;}
-#inp-eq{background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:.42rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.92rem;width:260px;outline:none;transition:border-color .2s;}
-#inp-eq:focus{border-color:var(--gold);}
-#eq-status{font-family:'JetBrains Mono',monospace;font-size:1rem;width:16px;}
-select{background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:.42rem .6rem;font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.04em;outline:none;cursor:pointer;}
-select:focus{border-color:var(--gold);}select option{background:var(--card);}
-.btn-graf{padding:.42rem 1rem;background:var(--gold);color:var(--bg);border:none;border-radius:4px;font-family:'Oswald',sans-serif;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .15s;}
-.btn-graf:hover{background:#e8c97a;}
-/* Main layout */
-.main{flex:1;display:flex;min-height:0;}
-/* Left panel */
-.left{width:210px;flex-shrink:0;border-right:1px solid var(--border);overflow-y:auto;padding:.85rem .9rem 1.2rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
-.sec{margin-bottom:1rem;}
-.sec-title{font-family:'Oswald',sans-serif;font-size:.63rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:.4rem;margin-bottom:.65rem;}
-.sec-title::before{content:'';display:inline-block;width:3px;height:9px;background:var(--gold);border-radius:1px;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:.38rem;margin-bottom:.4rem;}
-.fld{display:flex;flex-direction:column;gap:.18rem;}
-.fld label{font-size:.72rem;color:var(--muted);}
-.fld input[type=number]{background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--gold);padding:.3rem .4rem;font-family:'JetBrains Mono',monospace;font-size:.82rem;outline:none;width:100%;transition:border-color .2s;-webkit-appearance:none;}
-.fld input:focus{border-color:var(--gold);}
-input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--border);border-radius:2px;outline:none;padding:0;border:none;}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--gold);cursor:pointer;}
-input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--gold);cursor:pointer;border:none;}
-.sl-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem;}
-.sl-val{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--gold);min-width:28px;text-align:right;}
-.chk-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.38rem;font-size:.8rem;color:var(--muted);cursor:pointer;}
-.chk-row input{accent-color:var(--gold);width:14px;height:14px;cursor:pointer;flex-shrink:0;}
-.btn-sm{width:100%;padding:.5rem;background:transparent;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:all .17s;margin-bottom:.35rem;text-align:center;}
-.btn-sm:hover{border-color:var(--gold);color:var(--gold);}
-.btn-sm.red:hover{border-color:var(--red);color:var(--red);}
-.curve-colors{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.5rem;}
-.cc{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
-/* Middle panel */
-.mid{width:185px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
-.mid-hd{flex-shrink:0;background:var(--panel);border-bottom:1px solid var(--border);padding:.55rem .85rem;font-family:'Oswald',sans-serif;font-size:.67rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:.4rem;}
-.mid-hd::before{content:'';display:inline-block;width:3px;height:9px;background:var(--gold);border-radius:1px;}
-#analysis{flex:1;overflow-y:auto;padding:.75rem .85rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
-.ana-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.55rem .7rem;margin-bottom:.5rem;}
-.ac-label{font-family:'Oswald',sans-serif;font-size:.56rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:.15rem;}
-.ac-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text);}
-.big-dir{text-align:center;padding:1rem .5rem;margin-bottom:.6rem;}
-.dir-arrow{font-size:2.8rem;line-height:1;}
-.dir-text{font-family:'Oswald',sans-serif;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;margin-top:.3rem;}
-.eq-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.5rem .7rem;margin-bottom:.4rem;}
-.eq-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.4rem;vertical-align:middle;}
-.eq-stab{font-family:'Oswald',sans-serif;font-size:.65rem;letter-spacing:.05em;}
-.hint-text{font-size:.75rem;color:var(--muted);font-style:italic;text-align:center;margin-top:.6rem;line-height:1.55;}
-/* Canvas */
-.canvas-wrap{flex:1;position:relative;overflow:hidden;cursor:crosshair;}
-#cv{display:block;}
-.cv-toolbar{position:absolute;top:10px;right:10px;display:flex;gap:.4rem;}
-.cv-btn{padding:.35rem .7rem;background:rgba(13,18,32,.85);border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'Oswald',sans-serif;font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .17s;backdrop-filter:blur(4px);}
-.cv-btn:hover{border-color:var(--gold);color:var(--gold);}
-.cv-tooltip{position:absolute;background:rgba(11,16,24,.92);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--text);pointer-events:none;white-space:nowrap;display:none;backdrop-filter:blur(4px);}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Daniel Steven Moran Pizarro - PhD en Matemáticas. Áreas de interés: Álgebra Conmutativa, Combinatoria Algebraica, Álgebra Computacional, Objetos Virtuales de Aprendizaje e Historia de las Matemáticas">
+    <meta name="keywords" content="matemáticas, álgebra conmutativa, geometría algebraica, bases de Gröbner, ideales monomiales, historia de las matemáticas, UNAD, CINVESTAV, Manim, GeoGebra">
+    <title>Daniel Steven Moran Pizarro - PhD en Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== Previews de simuladores (embellecimiento) ===== */
+        .digital-preview{
+            position: relative;
+            width: 100%;
+            height: 150px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.1rem;
+            background: linear-gradient(135deg, #10182e 0%, #1c2b52 55%, #24356b 100%);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+        }
+        .digital-preview svg{
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .digital-preview::after{
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 85% 15%, rgba(255,255,255,0.10), transparent 55%);
+            pointer-events: none;
+        }
+        .digital-card:hover .digital-preview{
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14);
+        }
+        .digital-preview .p-stroke{ fill:none; stroke:#9fc7ff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+        .digital-preview .p-stroke-soft{ fill:none; stroke:#7fa8e8; stroke-width:1.4; stroke-linecap:round; opacity:0.65; }
+        .digital-preview .p-accent{ fill:none; stroke:#ffd166; stroke-width:2; stroke-linecap:round; }
+        .digital-preview .p-fill{ fill:#9fc7ff; opacity:0.16; }
+        .digital-preview .p-dot{ fill:#ffd166; }
+    </style>
 </head>
 <body>
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand"><span class="brand-name">Daniel S. Moran P.</span></div>
+            <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                <li><a href="#sobre-mi" class="nav-link">Sobre Mí</a></li>
+                <li><a href="#formacion" class="nav-link">Formación</a></li>
+                <li><a href="#investigacion" class="nav-link">Investigación</a></li>
+                <li><a href="#publicaciones" class="nav-link">Publicaciones</a></li>
+                <li><a href="#conferencias" class="nav-link">Conferencias</a></li>
+                <li><a href="#docencia" class="nav-link">Docencia</a></li>
+                <li><a href="#recursos" class="nav-link">Recursos</a></li>
+                <li><a href="#recursos-digitales" class="nav-link">Recursos Digitales</a></li>
+                <li><a href="#contacto" class="nav-link">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
 
-<header>
-  <span class="logo">∂y/∂x</span>
-  <h1>Simulador de Campo de <em>Direcciones</em></h1>
-  <div class="eq-bar">
-    <span class="eq-label"><em>y′</em> = </span>
-    <input id="inp-eq" type="text" value="y*(1-y)" placeholder="f(x, y)" oninput="compileExpr()" onkeydown="if(event.key==='Enter')drawAll()">
-    <span id="eq-status" style="color:var(--green)">✓</span>
-    <select id="sel-preset" onchange="applyPreset()">
-      <option value="">— Presets —</option>
-      <optgroup label="Autónomas y' = f(y)">
-        <option value="y">Crecimiento: y</option>
-        <option value="-y">Decaimiento: -y</option>
-        <option value="y*(1-y)">Logístico: y(1−y)</option>
-        <option value="y*(1-y)*(y+1)">Múltiple: y(1−y)(y+1)</option>
-        <option value="sin(y)">Sinusoidal: sin(y)</option>
-        <option value="-sin(y)">Péndulo: -sin(y)</option>
-        <option value="y^2-1">Cuadrática: y²−1</option>
-        <option value="y^2">Cuadrática pura: y²</option>
-      </optgroup>
-      <optgroup label="No autónomas y' = f(x,y)">
-        <option value="x-y">Lineal: x−y</option>
-        <option value="x+y">Lineal: x+y</option>
-        <option value="x*y">Separable: xy</option>
-        <option value="x^2+y^2">No lineal: x²+y²</option>
-        <option value="-x/y">Círculos: −x/y</option>
-        <option value="x^2-y">Parábolas: x²−y</option>
-        <option value="cos(x)-y">Forzado: cos(x)−y</option>
-        <option value="y/x">Homogénea: y/x</option>
-      </optgroup>
-    </select>
-    <button class="btn-graf" onclick="drawAll()">Graficar</button>
-  </div>
-</header>
+    <section id="inicio" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 class="hero-title">Daniel Steven Moran Pizarro</h1>
+            <p class="hero-subtitle">PhD en Matemáticas | Investigador y Docente</p>
+            <p class="hero-description">Áreas de interés en Álgebra Conmutativa, Combinatoria Algebraica, Álgebra Computacional, Objetos Virtuales de Aprendizaje e Historia de las Matemáticas</p>
+            <div class="hero-buttons">
+                <a href="#sobre-mi" class="btn btn-primary">Conóceme</a>
+                <a href="#publicaciones" class="btn btn-secondary">Publicaciones</a>
+                <a href="CV_Daniel_Moran__Spanish_version_.pdf" download class="btn btn-secondary"><i class="fas fa-download"></i> Descargar CV</a>
+            </div>
+            <div class="social-links">
+                <a href="https://scholar.google.es/citations?user=CLZKj3YAAAAJ" target="_blank" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+                <a href="https://orcid.org/0000-0003-1791-2818" target="_blank" aria-label="ORCID"><i class="fab fa-orcid"></i></a>
+                <a href="https://www.researchgate.net/profile/Daniel-Moran-Pizarro" target="_blank" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
+                <a href="https://co.linkedin.com/in/daniel-steven-moran-6b5490331" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/dmbourbaki" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.youtube.com/@dmbourbaki" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001560327" target="_blank" aria-label="CvLAC MinCiencias"><i class="fas fa-id-card"></i></a>
+            </div>
+        </div>
+        <div class="scroll-indicator"><span></span></div>
+    </section>
 
-<div class="main">
-  <!-- ═══ PANEL IZQUIERDO ═══ -->
-  <div class="left">
+    <section id="sobre-mi" class="section about">
+        <div class="container">
+            <h2 class="section-title">Sobre Mí</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="lead">Doctor en Ciencias Matemáticas con especialización en Álgebra Conmutativa y Combinatoria Algebraica Computacional.</p>
+                    <div style="text-align: center; margin: 2rem 0;">
+                        <img src="DanielCV.jpg" alt="Daniel Steven Moran Pizarro" style="max-width: 300px; border-radius: 50%; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                    </div>
+                    <p>Actualmente me desempeño como <strong>Docente Tiempo Completo</strong> en la <strong>Universidad Nacional Abierta y a Distancia (UNAD)</strong>, donde lidero múltiples iniciativas académicas y de investigación. Soy Director Nacional del curso de Ecuaciones Diferenciales, Líder de la Red Curricular de Lógica, Álgebra y Cálculo, y Líder del Semillero de Investigación MATHINNOVA.</p>
+                    <p>Mi formación doctoral fue realizada en el prestigioso <strong>Centro de Investigación y de Estudios Avanzados del IPN (CINVESTAV)</strong> en Ciudad de México, donde desarrollé la investigación sobre la signatura de ideales monomiales bajo la dirección del Dr. Carlos E. Valencia Oleta. Previamente obtuve una Maestría en Ciencias Matemáticas en la Universidad Autónoma de Guerrero, trabajando en abanicos de Gröbner y fracciones continuas de Hirzebruch-Jung.</p>
+                    <p>Mi trayectoria académica comenzó en la <strong>Universidad del Valle</strong> (Cali, Colombia), donde obtuve mi Licenciatura en Matemáticas y Física con Tesis Laureada, explorando el desarrollo histórico de la integral desde las cuadraturas hasta la integral de Cauchy, bajo la dirección del matemático e historiador colombiano Luis Cornelio Recalde Caicedo.</p>
+                    <div class="expertise">
+                        <h3>Áreas de Interés</h3>
+                        <div class="expertise-grid">
+                            <div class="expertise-item"><i class="fas fa-project-diagram"></i><h4>Álgebra Conmutativa</h4><p>Bases de Gröbner, ideales monomiales, abanicos de Gröbner</p></div>
+                            <div class="expertise-item"><i class="fas fa-shapes"></i><h4>Geometría Algebraica</h4><p>Geometría poliedral, geometría tórica</p></div>
+                            <div class="expertise-item"><i class="fas fa-book-open"></i><h4>Historia de las Matemáticas</h4><p>Desarrollo histórico de conceptos matemáticos</p></div>
+                            <div class="expertise-item"><i class="fas fa-chalkboard-teacher"></i><h4>Didáctica de las Matemáticas</h4><p>Ambientes virtuales de aprendizaje, GeoGebra, Manim CE</p></div>
+                            <div class="expertise-item"><i class="fas fa-chart-bar"></i><h4>Ciencia de Datos</h4><p>Analítica de datos aplicada a la educación</p></div>
+                            <div class="expertise-item"><i class="fas fa-laptop-code"></i><h4>Matemática Computacional</h4><p>Python, Manim, algoritmos matemáticos</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div class="sec">
-      <div class="sec-title">Ventana</div>
-      <div class="row2">
-        <div class="fld"><label>x mín</label><input type="number" id="xMin" value="-5" step="0.5" oninput="drawAll()"></div>
-        <div class="fld"><label>x máx</label><input type="number" id="xMax" value="5"  step="0.5" oninput="drawAll()"></div>
-        <div class="fld"><label>y mín</label><input type="number" id="yMin" value="-4" step="0.5" oninput="drawAll()"></div>
-        <div class="fld"><label>y máx</label><input type="number" id="yMax" value="4"  step="0.5" oninput="drawAll()"></div>
-      </div>
-      <button class="btn-sm" onclick="resetWindow()">↺ Ventana por defecto</button>
-    </div>
+    <section id="formacion" class="section formation">
+        <div class="container">
+            <h2 class="section-title">Formación Académica</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2020 - 2025</div>
+                        <h3>Doctor en Ciencias Matemáticas</h3>
+                        <h4>Centro de Investigación y de Estudios Avanzados del IPN (CINVESTAV)</h4>
+                        <p class="location"><i class="fas fa-map-marker-alt"></i> Ciudad de México, México</p>
+                        <p class="distinction"><i class="fas fa-award"></i> Becario CONACYT</p>
+                        <p class="thesis"><strong>Tesis:</strong> <em>The signature of a monomial ideal</em></p>
+                        <p class="advisor"><strong>Director:</strong> Dr. Carlos E. Valencia Oleta</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2015 - 2017</div>
+                        <h3>Maestría en Ciencias Matemáticas</h3>
+                        <h4>Universidad Autónoma de Guerrero</h4>
+                        <p class="location"><i class="fas fa-map-marker-alt"></i> Acapulco, México</p>
+                        <p class="distinction"><i class="fas fa-award"></i> Becario CONACYT</p>
+                        <p class="thesis"><strong>Tesis:</strong> <em>Gröbner fan through Hirzebruch-Jung continued fractions</em></p>
+                        <p class="advisor"><strong>Directores:</strong> Dr. Jesús Romero y Dr. David A. Cox</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2009 - 2014</div>
+                        <h3>Licenciatura en Matemáticas y Física</h3>
+                        <h4>Universidad del Valle</h4>
+                        <p class="location"><i class="fas fa-map-marker-alt"></i> Cali, Colombia</p>
+                        <p class="distinction"><i class="fas fa-trophy"></i> Tesis Laureada | Estudiante Distinguido (Mejor Promedio Académico)</p>
+                        <p class="thesis"><strong>Tesis:</strong> <em>De la integral como herramienta a la integral como noción formal: de las cuadraturas a la integral de Cauchy</em></p>
+                        <p class="advisor"><strong>Director:</strong> Dr. Luis C. Recalde</p>
+                    </div>
+                </div>
+            </div>
 
-    <div class="sec">
-      <div class="sec-title">Flechas</div>
-      <div class="sl-row">
-        <span style="font-size:.78rem;color:var(--muted);flex:1">Densidad</span>
-        <span class="sl-val" id="d-dens">18</span>
-      </div>
-      <input type="range" id="sl-dens" min="6" max="32" step="2" value="18" oninput="document.getElementById('d-dens').textContent=this.value;drawAll()">
-      <div class="sl-row" style="margin-top:.45rem">
-        <span style="font-size:.78rem;color:var(--muted);flex:1">Tamaño</span>
-        <span class="sl-val" id="d-size">14</span>
-      </div>
-      <input type="range" id="sl-size" min="6" max="24" step="1" value="14" oninput="document.getElementById('d-size').textContent=this.value;drawAll()">
-    </div>
+            <div class="research-stays">
+                <h3 style="text-align: center; margin-top: 3rem; margin-bottom: 2rem; color: var(--primary-color);">Estancias de Investigación</h3>
+                <div class="stays-grid">
+                    <div class="stay-card">
+                        <div class="stay-date">Jun - Jul 2017</div>
+                        <h4>Universidad de Antioquia</h4>
+                        <p class="stay-location">Medellín, Colombia</p>
+                        <p class="stay-advisor">Dr. Carlos Mario Jaramillo</p>
+                        <ul class="stay-activities"><li>Historia de las matemáticas</li><li>Artículo: "Superestructural stage of integral"</li></ul>
+                    </div>
+                    <div class="stay-card">
+                        <div class="stay-date">May - Jun 2017</div>
+                        <h4>CINVESTAV</h4>
+                        <p class="stay-location">Ciudad de México, México</p>
+                        <p class="stay-advisor">Dr. Carlos E. Valencia</p>
+                        <ul class="stay-activities"><li>Álgebra Conmutativa y Geometría Poliedral</li><li>Abanicos de Gröbner para ideales \(\langle x^d-1, y-x^k \rangle\)</li></ul>
+                    </div>
+                    <div class="stay-card">
+                        <div class="stay-date">Oct - Nov 2016</div>
+                        <h4>Amherst College &amp; UMass</h4>
+                        <p class="stay-location">Massachusetts, EE.UU.</p>
+                        <p class="stay-advisor">Dr. David A. Cox y Dr. Gabriel Sosa</p>
+                        <ul class="stay-activities"><li>Bases y abanicos de Gröbner</li><li>Libros: <em>Ideals, Varieties and Algorithms</em> y <em>Using Algebraic Geometry</em></li></ul>
+                    </div>
+                </div>
+            </div>
 
-    <div class="sec">
-      <div class="sec-title">Visualización</div>
-      <label class="chk-row"><input type="checkbox" id="chk-bg"   checked oninput="drawAll()">Fondo por signo (nullclines)</label>
-      <label class="chk-row"><input type="checkbox" id="chk-color" checked oninput="drawAll()">Color por pendiente</label>
-      <label class="chk-row"><input type="checkbox" id="chk-axes" checked oninput="drawAll()">Ejes y cuadrícula</label>
-      <label class="chk-row"><input type="checkbox" id="chk-null" checked oninput="drawAll()">Resaltar nullclines</label>
-      <label class="chk-row"><input type="checkbox" id="chk-eq"   checked oninput="drawAll()">Detectar equilibrios</label>
-    </div>
+            <div class="complementary-formation">
+                <h3 style="text-align: center; margin-top: 3rem; margin-bottom: 1rem; color: var(--primary-color);">Formación Complementaria y Certificaciones</h3>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto; color: #666;">Actualización continua en tecnologías emergentes, programación, ciberseguridad, ciencia de datos y pedagogía digital</p>
 
-    <div class="sec">
-      <div class="sec-title">Curvas solución</div>
-      <div class="curve-colors" id="color-swatch"></div>
-      <button class="btn-sm red" onclick="clearCurves()">✕ Limpiar curvas</button>
-      <div style="font-size:.73rem;color:var(--muted);line-height:1.55">Haz clic en el campo para trazar la curva solución a través de ese punto.</div>
-    </div>
-  </div>
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-code"></i><h4>Programación y Desarrollo</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fab fa-python"></i></div><h5>Variables y Estructuras de Control en Python</h5><p class="institution">SENA Colombia</p><p class="date">Diciembre 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-code"></i></div><h5>Conceptualización del Lenguaje C++</h5><p class="institution">SENA Colombia</p><p class="date">Noviembre 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fab fa-python"></i></div><h5>Fundamentos de Python 2</h5><p class="institution">Cisco Networking Academy</p><p class="date">Abril - Mayo 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fab fa-python"></i></div><h5>Fundamentos de Python 1</h5><p class="institution">Cisco Networking Academy</p><p class="date">Abril - Mayo 2025</p></div>
+                    </div>
+                </div>
 
-  <!-- ═══ PANEL ANÁLISIS ═══ -->
-  <div class="mid">
-    <div class="mid-hd">Análisis</div>
-    <div id="analysis">
-      <div class="hint-text" style="padding:2rem .5rem">Mueve el cursor sobre el campo para analizar el punto.<br><br>Haz clic para trazar la curva solución.</div>
-    </div>
-  </div>
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-shield-alt"></i><h4>Ciberseguridad y Redes</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-user-shield"></i></div><h5>CyberOps Associate</h5><p class="institution">Cisco Networking Academy</p><p class="date">Agosto - Septiembre 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-lock"></i></div><h5>Fundamentos de Ciberseguridad</h5><p class="institution">Cisco Networking Academy</p><p class="date">Mayo - Junio 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-shield-virus"></i></div><h5>Introduction to Cybersecurity</h5><p class="institution">Cisco Networking Academy</p><p class="date">Mayo - Junio 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-network-wired"></i></div><h5>Conceptos Básicos de Redes</h5><p class="institution">Cisco Networking Academy</p><p class="date">Junio - Julio 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-fingerprint"></i></div><h5>Conciencia Digital</h5><p class="institution">Cisco Networking Academy</p><p class="date">Abril - Mayo 2025</p></div>
+                    </div>
+                </div>
 
-  <!-- ═══ CANVAS ═══ -->
-  <div class="canvas-wrap" id="canvas-wrap">
-    <canvas id="cv"></canvas>
-    <div class="cv-toolbar">
-      <button class="cv-btn" onclick="zoomIn()">+ Zoom</button>
-      <button class="cv-btn" onclick="zoomOut()">− Zoom</button>
-      <button class="cv-btn" onclick="resetWindow()">⌂</button>
-    </div>
-    <div class="cv-tooltip" id="tooltip"></div>
-  </div>
-</div>
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-chart-line"></i><h4>Ciencia de Datos, IA y Analítica</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-robot"></i></div><h5>Gestión de Datos en Modelos de Inteligencia Artificial</h5><p class="institution">SENA Colombia</p><p class="date">Abril 2026</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-chart-bar"></i></div><h5>Data Analyst in Python</h5><p class="institution">DataCamp Inc.</p><p class="date">Julio - Agosto 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fab fa-python"></i></div><h5>Análisis Exploratorio de Datos en Python</h5><p class="institution">SENA Colombia</p><p class="date">Noviembre 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-chart-pie"></i></div><h5>Visualización de Datos usando Power BI</h5><p class="institution">SENA Colombia</p><p class="date">Noviembre 2024 - Febrero 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-database"></i></div><h5>Analítica de Datos y Big Data aplicada en AVA</h5><p class="institution">UNAD</p><p class="date">Junio - Agosto 2024</p></div>
+                    </div>
+                </div>
 
-<script>
-'use strict';
-// ═══════════════════════════════════
-//  ESTADO
-// ═══════════════════════════════════
-let compiledF = null;
-let curves = [];   // [{points:[{x,y}], color}]
-let hoverX = null, hoverY = null;
-const CURVE_COLORS = ['#50dd90','#3ac2f0','#a88cff','#f59a4a','#f07070','#d4a84b','#ff6b9d','#00e5ff'];
-let colorIdx = 0;
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-language"></i><h4>Inglés</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-globe-americas"></i></div><h5>English Does Work – Level 2</h5><p class="institution">SENA Colombia</p><p class="date">Febrero - Marzo 2026</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-globe-americas"></i></div><h5>English Does Work – Level 1</h5><p class="institution">SENA Colombia</p><p class="date">Noviembre - Diciembre 2025</p></div>
+                    </div>
+                </div>
 
-// ═══════════════════════════════════
-//  VENTANA
-// ═══════════════════════════════════
-const getXMin = ()=>+document.getElementById('xMin').value;
-const getXMax = ()=>+document.getElementById('xMax').value;
-const getYMin = ()=>+document.getElementById('yMin').value;
-const getYMax = ()=>+document.getElementById('yMax').value;
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-laptop"></i><h4>Educación Virtual y Pedagogía Digital</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-search"></i></div><h5>Diplomatura e-Investigador en AVA</h5><p class="institution">UNAD</p><p class="date">Agosto - Octubre 2023</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-cogs"></i></div><h5>Diplomatura e-Gestor de Cursos en AVA</h5><p class="institution">UNAD</p><p class="date">Abril - Junio 2023</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-chalkboard-teacher"></i></div><h5>El Docente/Tutor como Gestor de Cursos en AVA</h5><p class="institution">UNAD</p><p class="date">Enero 2023</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-user-graduate"></i></div><h5>Diplomatura e-Mediador en AVA</h5><p class="institution">UNAD</p><p class="date">Noviembre 2022 - Enero 2023</p></div>
+                    </div>
+                </div>
 
-function resetWindow(){
-  document.getElementById('xMin').value=-5;
-  document.getElementById('xMax').value=5;
-  document.getElementById('yMin').value=-4;
-  document.getElementById('yMax').value=4;
-  drawAll();
-}
-function zoomIn(){
-  const cx=(getXMin()+getXMax())/2, cy=(getYMin()+getYMax())/2;
-  const rx=(getXMax()-getXMin())*0.35, ry=(getYMax()-getYMin())*0.35;
-  document.getElementById('xMin').value=(cx-rx).toFixed(2);
-  document.getElementById('xMax').value=(cx+rx).toFixed(2);
-  document.getElementById('yMin').value=(cy-ry).toFixed(2);
-  document.getElementById('yMax').value=(cy+ry).toFixed(2);
-  drawAll();
-}
-function zoomOut(){
-  const cx=(getXMin()+getXMax())/2, cy=(getYMin()+getYMax())/2;
-  const rx=(getXMax()-getXMin())*0.7, ry=(getYMax()-getYMin())*0.7;
-  document.getElementById('xMin').value=(cx-rx).toFixed(2);
-  document.getElementById('xMax').value=(cx+rx).toFixed(2);
-  document.getElementById('yMin').value=(cy-ry).toFixed(2);
-  document.getElementById('yMax').value=(cy+ry).toFixed(2);
-  drawAll();
-}
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-users"></i><h4>Liderazgo y Gestión</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-crown"></i></div><h5>Diplomatura en Liderazgo Transformacional</h5><p class="institution">UNAD</p><p class="date">Octubre - Diciembre 2025</p></div>
+                    </div>
+                </div>
 
-// ═══════════════════════════════════
-//  COORDENADAS
-// ═══════════════════════════════════
-let W=0, H=0;
-const toCanvasX = x=>(x-getXMin())/(getXMax()-getXMin())*W;
-const toCanvasY = y=>H-(y-getYMin())/(getYMax()-getYMin())*H;
-const toMathX = cx=>getXMin()+cx/W*(getXMax()-getXMin());
-const toMathY = cy=>getYMin()+(H-cy)/H*(getYMax()-getYMin());
+                <div class="complementary-stats">
+                    <div class="stat-item"><div class="stat-number">25+</div><div class="stat-label">Certificaciones</div></div>
+                    <div class="stat-item"><div class="stat-number">6</div><div class="stat-label">Áreas de Especialización</div></div>
+                    <div class="stat-item"><div class="stat-number">2022-2026</div><div class="stat-label">Formación Continua</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-// ═══════════════════════════════════
-//  EXPRESIÓN
-// ═══════════════════════════════════
-function compileExpr(){
-  const expr = document.getElementById('inp-eq').value.trim();
-  const st = document.getElementById('eq-status');
-  try{
-    compiledF = math.compile(expr);
-    compiledF.evaluate({x:0,y:0,t:0,pi:Math.PI,e:Math.E}); // test
-    st.textContent='✓'; st.style.color='var(--green)';
-    return true;
-  }catch{
-    compiledF=null; st.textContent='✗'; st.style.color='var(--red)';
-    return false;
-  }
-}
+    <section id="investigacion" class="section research">
+        <div class="container">
+            <h2 class="section-title">Investigación</h2>
+            <div class="research-intro"><p>Mi investigación se centra en el álgebra conmutativa y la geometría algebraica, con especial énfasis en bases de Gröbner, ideales monomiales y sus aplicaciones. También desarrollo trabajo interdisciplinario en historia de las matemáticas y didáctica.</p></div>
+            <div class="research-areas">
+                <div class="research-card">
+                    <div class="research-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Álgebra Conmutativa y Geometría Algebraica</h3>
+                    <p>Investigación doctoral sobre la signatura de ideales monomiales. Estudio de bases y abanicos de Gröbner, geometría poliedral y geometría tórica. Aplicaciones del álgebra conmutativa en problemas de geometría algebraica computacional.</p>
+                    <div class="research-math">\[ \text{signature}(I) = \text{dim}_k \frac{S}{I + I^{\perp}} \]</div>
+                </div>
+                <div class="research-card">
+                    <div class="research-icon"><i class="fas fa-book-open"></i></div>
+                    <h3>Historia de las Matemáticas</h3>
+                    <p>Análisis histórico y epistemológico del desarrollo de conceptos matemáticos fundamentales. Estudio del tránsito de la integral desde las cuadraturas griegas hasta la formalización del siglo XIX. Investigación sobre el papel del álgebra en el desarrollo de la computación cuántica.</p>
+                </div>
+                <div class="research-card">
+                    <div class="research-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h3>Didáctica de las Matemáticas</h3>
+                    <p>Desarrollo e implementación de ambientes virtuales de aprendizaje. Uso de GeoGebra y herramientas computacionales en la enseñanza de las matemáticas. Aplicación de ciencia de datos y analítica en contextos educativos.</p>
+                </div>
+            </div>
+            <div class="research-interests">
+                <h3>Intereses de Investigación Actuales</h3>
+                <div class="interests-tags">
+                    <span class="tag">Ideales Monomiales</span><span class="tag">Bases de Gröbner</span><span class="tag">Abanicos de Gröbner</span><span class="tag">Geometría Tórica</span><span class="tag">Geometría Poliedral</span><span class="tag">Historia de las Matemáticas</span><span class="tag">Didáctica de las Matemáticas</span><span class="tag">Ciencia de Datos Educativa</span><span class="tag">Inteligencia Artificial</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-function evalF(x,y){
-  if(!compiledF) return NaN;
-  try{
-    const v=compiledF.evaluate({x,y,t:x,pi:Math.PI,e:Math.E});
-    return typeof v==='number'?v:NaN;
-  }catch{return NaN;}
-}
+    <section id="publicaciones" class="section publications">
+        <div class="container">
+            <h2 class="section-title">Publicaciones</h2>
+            <div class="publication-filters">
+                <button class="filter-btn active" data-filter="all">Todas</button>
+                <button class="filter-btn" data-filter="journal">Artículos de Revista</button>
+                <button class="filter-btn" data-filter="book">Capítulos de Libro</button>
+            </div>
+            <div class="publications-list">
 
-function applyPreset(){
-  const val=document.getElementById('sel-preset').value;
-  if(!val) return;
-  document.getElementById('inp-eq').value=val;
-  compileExpr();
-  clearCurves();
-  drawAll();
-}
+                <!-- 2026 -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2026</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Implementing TinyML in Internet of Things devices: A systematic literature review</h3>
+                        <p class="pub-authors">Solis Pino, A.F., <strong>Moran, D.</strong>, Ruiz Melenje, P.H., Agredo Delgado, V., Collazos Ordóñez, C.A.</p>
+                        <p class="pub-venue"><em>Journal of Industrial Information Integration</em>, Vol. 50, p. 101065. Elsevier</p>
+                        <div class="pub-links"><a href="https://doi.org/10.1016/j.jii.2026.101065" class="pub-link" target="_blank"><i class="fas fa-link"></i> DOI</a></div>
+                    </div>
+                </div>
 
-// ═══════════════════════════════════
-//  EQUILIBRIOS (ecuaciones autónomas)
-// ═══════════════════════════════════
-function isAutonomous(){
-  // Check if f is independent of x
-  const yVals=[-2,-1,0,1,2];
-  for(const y of yVals){
-    const f0=evalF(0,y), f1=evalF(1,y), f2=evalF(-1,y);
-    if(Math.abs(f1-f0)>0.01||Math.abs(f2-f0)>0.01) return false;
-  }
-  return true;
-}
+                <!-- 2024 -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2024</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">The signature of a monomial ideal</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Valencia, C., Villareal, R., Ibarguen, J.</p>
+                        <p class="pub-venue"><em>AIMS Mathematics</em>, Vol. 9(10), pp. 27955-27978</p>
+                        <div class="pub-links"><a href="https://doi.org/10.3934/math.20241357" class="pub-link" target="_blank"><i class="fas fa-link"></i> DOI</a></div>
+                    </div>
+                </div>
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2024</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Innovación social y colaboración multisectorial: impulsando el bienestar y la participación a través de modelos integrados</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Polo, M.</p>
+                        <p class="pub-venue"><em>Publicaciones E Investigación</em>, Vol. 18(3), pp. 1-5</p>
+                        <div class="pub-links"><a href="https://doi.org/10.22490/25394088.8295" class="pub-link" target="_blank"><i class="fas fa-link"></i> DOI</a></div>
+                    </div>
+                </div>
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2024</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Notas sobre el tránsito epistemológico de la inteligencia artificial (IA)</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Dominguez, S., Castaño, C.</p>
+                        <p class="pub-venue"><em>Publicaciones E Investigación</em>, Vol. 18(3), pp. 5-10</p>
+                        <div class="pub-links"><a href="https://doi.org/10.22490/25394088.8480" class="pub-link" target="_blank"><i class="fas fa-link"></i> DOI</a></div>
+                    </div>
+                </div>
 
-function findEquilibria(){
-  // Scan for y where f(x,y)≈0 — only meaningful for autonomous
-  if(!isAutonomous()) return [];
-  const yMin=getYMin(), yMax=getYMax();
-  const N=500, h=(yMax-yMin)/N;
-  const equil=[];
-  let prev=evalF(0,yMin);
-  for(let i=1;i<=N;i++){
-    const y=yMin+i*h;
-    const cur=evalF(0,y);
-    if(!isFinite(prev)||!isFinite(cur)){prev=cur;continue;}
-    if(prev*cur<0||Math.abs(cur)<1e-5){
-      // Zero crossing — refine with bisection
-      let ya=y-h, yb=y;
-      for(let j=0;j<20;j++){
-        const ym=(ya+yb)/2, fm=evalF(0,ym);
-        if(!isFinite(fm)) break;
-        if(evalF(0,ya)*fm<0) yb=ym; else ya=ym;
-      }
-      const yeq=(ya+yb)/2;
-      // Compute derivative numerically
-      const dh=1e-5;
-      const dfdy=(evalF(0,yeq+dh)-evalF(0,yeq-dh))/(2*dh);
-      let type;
-      if(Math.abs(dfdy)<1e-4) type='semi-estable';
-      else if(dfdy<0) type='estable';
-      else type='inestable';
-      // Avoid duplicates
-      if(!equil.some(e=>Math.abs(e.y-yeq)<h*2)){
-        equil.push({y:yeq.toFixed(5),dfdy:dfdy.toFixed(5),type});
-      }
+                <!-- 2023 -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2023</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">De Hilbert a los algoritmos cuánticos: el rol del álgebra en el desarrollo de la computación</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Dominguez, S., Castaño, C., Martinez, C.</p>
+                        <p class="pub-venue"><em>Publicaciones E Investigación</em>, Vol. 17(4), pp. 17-24</p>
+                        <div class="pub-links"><a href="https://doi.org/10.22490/25394088.7503" class="pub-link" target="_blank"><i class="fas fa-link"></i> DOI</a></div>
+                    </div>
+                </div>
+                <div class="publication-item" data-category="book">
+                    <div class="pub-year">2023</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Automated computer-aided diagnosis of COVID-19 and pneumonia based on chest X-ray images using deep learning</h3>
+                        <p class="pub-authors">Moreno, M., Suárez, O., <strong>Moran, D.</strong>, Sarmiento, B.</p>
+                        <p class="pub-venue">En: <em>Modern Computational Techniques for Engineering Applications</em>, CRC Press, pp. 51-67</p>
+                        <div class="pub-links"><a href="https://doi.org/10.1201/9781003407409" class="pub-link" target="_blank"><i class="fas fa-book"></i> Capítulo</a></div>
+                    </div>
+                </div>
+
+                <!-- 2019 -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2019</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Una introducción a las Bases de Gröbner</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong></p>
+                        <p class="pub-venue"><em>Boletín De Matemáticas</em>, Vol. 26(2), pp. 71-86</p>
+                        <div class="pub-links"><a href="https://dialnet.unirioja.es/servlet/articulo?codigo=7528018" class="pub-link" target="_blank"><i class="fas fa-link"></i> Enlace</a></div>
+                    </div>
+                </div>
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2019</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Algunas reflexiones en torno al concepto de acumulación en la enseñanza del Cálculo Integral</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Santaella Forero, R.</p>
+                        <p class="pub-venue"><em>Revista Electrónica de divulgación de STEM</em>, Vol. 1(1), pp. 104-116</p>
+                        <div class="pub-links"><a href="https://www.revistas.unp.edu.ar/index.php/rediunp/article/view/98" class="pub-link" target="_blank"><i class="fas fa-link"></i> Enlace</a></div>
+                    </div>
+                </div>
+
+                <!-- 2018 -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2018</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Etapa superestructural de la integral</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Jaramillo, C., Sigarreta, J.</p>
+                        <p class="pub-venue"><em>LOGOS Ciencia y Tecnología</em>, Vol. 10(2), pp. 135-152</p>
+                        <div class="pub-links"><a href="https://revistalogos.policia.edu.co:8443/index.php/rlct/article/view/576" class="pub-link" target="_blank"><i class="fas fa-link"></i> Enlace</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="conferencias" class="section conferences">
+        <div class="container">
+            <h2 class="section-title">Conferencias y Presentaciones</h2>
+            <div class="conferences-intro"><p>He participado como ponente y organizador en numerosos eventos académicos nacionales e internacionales, presentando investigación en álgebra, historia de las matemáticas y didáctica.</p></div>
+            <div class="conferences-timeline">
+                <div class="conference-year-group"><h3 class="year-title">2025</h3>
+                    <div class="conference-item"><div class="conference-date">Octubre 2025</div><div class="conference-content"><h4>GeoGebra a través del código</h4><p class="conference-event">VI Congreso Internacional de GeoGebra</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Sahagún, Colombia</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Septiembre 2025</div><div class="conference-content"><h4>Descubriendo la simetría: un viaje lúdico por la lógica matemática con GeoGebra</h4><p class="conference-event">5to Workshop de Ciencias Básicas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</p><span class="conference-badge organizador">Organizador y Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Mayo 2025</div><div class="conference-content"><h4>Development and Implementation of an Intelligent System for Prediction and Prevention of Academic Failure</h4><p class="conference-event">EXPOTECH 2025</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2024</h3>
+                    <div class="conference-item"><div class="conference-date">Octubre 2024</div><div class="conference-content"><h4>V Congreso Internacional de GeoGebra</h4><p class="conference-event">Congreso Internacional de GeoGebra</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</p><span class="conference-badge asistente">Asistente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Septiembre 2024</div><div class="conference-content"><h4>Applets de GeoGebra en la resolución de problemas de cálculo</h4><p class="conference-event">4to Workshop de Ciencias Básicas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Colombia (Virtual)</p><span class="conference-badge ponente">Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Mayo 2024</div><div class="conference-content"><h4>Apuntes sobre el tránsito epistemológico de la IA</h4><p class="conference-event">EXPOTECH 2024</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Ibagué, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Mayo 2024</div><div class="conference-content"><h4>Innovación social y colaboración multisectorial</h4><p class="conference-event">EXPOTECH 2024</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Ibagué, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2023</h3>
+                    <div class="conference-item"><div class="conference-date">Octubre 2023</div><div class="conference-content"><h4>De Hilbert a los algoritmos cuánticos: el rol del álgebra en el desarrollo de la computación</h4><p class="conference-event">EXPOTECH 2023</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Barranquilla, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2021</h3>
+                    <div class="conference-item"><div class="conference-date">Sep - Dic 2021</div><div class="conference-content"><h4>Algunas ideas heurísticas en Arquímedes</h4><p class="conference-event">Seminario de Matemáticas, Universidad de Pamplona</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Colombia</p><span class="conference-badge organizador">Organizador y Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Agosto 2021</div><div class="conference-content"><h4>Del problema de las cuadraturas a las extensiones algebraicas</h4><p class="conference-event">Thursday Science Seminars</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad de la Costa, Barranquilla</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Abril 2021</div><div class="conference-content"><h4>Del problema de las cuadraturas a las extensiones algebraicas</h4><p class="conference-event">Seminario de Matemáticas, Universidad de Pamplona</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Colombia</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Febrero 2021</div><div class="conference-content"><h4>Una lectura a los Elementos de Euclides</h4><p class="conference-event">Seminario de Historia de las Matemáticas Griegas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad del Valle, Colombia</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2020</h3>
+                    <div class="conference-item"><div class="conference-date">Septiembre 2020</div><div class="conference-content"><h4>Historia del Número y Magnitud en los Elementos de Euclides</h4><p class="conference-event">Seminario Historia del Número y Magnitud</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad del Valle, Colombia</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2014</h3>
+                    <div class="conference-item"><div class="conference-date">Julio 2014</div><div class="conference-content"><h4>Usando las TICs en la Educación Matemática: El teorema de Pitágoras Generalizado</h4><p class="conference-event">I Congreso Argentino de Integración de GeoGebra en la Matemática</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Argentina</p><span class="conference-badge organizador">Organizador y Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Julio 2014</div><div class="conference-content"><h4>Los invariantes del área desde un ambiente dinámico usando GeoGebra</h4><p class="conference-event">I Congreso Argentino de Integración de GeoGebra en la Matemática</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Argentina</p><span class="conference-badge organizador">Organizador y Ponente Magistral</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2013</h3>
+                    <div class="conference-item"><div class="conference-date">Diciembre 2013</div><div class="conference-content"><h4>La armonía entre las estructuras topológicas y algebraicas: La construcción de ℝ</h4><p class="conference-event">VIII Simposio Nororiental de Matemáticas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Industrial de Santander, Colombia</p><span class="conference-badge organizador">Organizador y Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Diciembre 2013</div><div class="conference-content"><h4>El razonamiento cognitivo en Euclides</h4><p class="conference-event">VIII Simposio Nororiental de Matemáticas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Industrial de Santander, Colombia</p><span class="conference-badge organizador">Organizador y Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Noviembre 2013</div><div class="conference-content"><h4>La respuesta al problema de la medida de figuras planas en los antiguos griegos</h4><p class="conference-event">I Congreso de Educación Matemática de América Central y el Caribe</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> República Dominicana</p><span class="conference-badge organizador">Organizador y Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Octubre 2013</div><div class="conference-content"><h4>De las cuadraturas a la integral de Cauchy</h4><p class="conference-event">4ta Escuela Nacional de Historia y Educación Matemática (ENHEM4)</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad del Valle, Colombia</p><span class="conference-badge organizador">Organizador y Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Junio 2013</div><div class="conference-content"><h4>La respuesta de Euclides al problema del área: La cuadratura de figuras rectilíneas</h4><p class="conference-event">21 Encuentro Nacional de Geometría y sus Aplicaciones</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Pedagógica Nacional, Colombia</p><span class="conference-badge organizador">Organizador y Ponente</span></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="docencia" class="section teaching">
+        <div class="container">
+            <h2 class="section-title">Docencia</h2>
+            <div class="teaching-intro"><p>Mi enfoque pedagógico integra el rigor matemático con metodologías innovadoras en ambientes virtuales de aprendizaje, promoviendo el desarrollo del pensamiento lógico-matemático y la aplicación de tecnología educativa.</p></div>
+            <div class="courses-grid">
+                <div class="course-card"><div class="course-header"><i class="fas fa-wave-square"></i><h3>Ecuaciones Diferenciales</h3></div><p class="course-topic">Análisis de Sistemas Dinámicos</p><p class="course-description">Director Nacional del curso en UNAD. Métodos de solución de ecuaciones diferenciales ordinarias y sistemas dinámicos con aplicaciones en ingeniería y ciencias.</p><div class="course-programs"><span class="program-tag">UNAD - Pregrado</span></div></div>
+                <div class="course-card"><div class="course-header"><i class="fas fa-infinity"></i><h3>Cálculo Diferencial e Integral</h3></div><p class="course-topic">Fundamentos del Análisis</p><p class="course-description">Enseñanza de los conceptos fundamentales del cálculo con énfasis en aplicaciones y uso de herramientas tecnológicas como GeoGebra.</p><div class="course-programs"><span class="program-tag">Universidad de Pamplona</span></div></div>
+                <div class="course-card"><div class="course-header"><i class="fas fa-calculator"></i><h3>Cálculo Multivariable</h3></div><p class="course-topic">Análisis Vectorial</p><p class="course-description">Funciones de varias variables, integrales múltiples, campos vectoriales y teoremas fundamentales del cálculo vectorial.</p><div class="course-programs"><span class="program-tag">Universidad de Pamplona</span></div></div>
+                <div class="course-card"><div class="course-header"><i class="fas fa-project-diagram"></i><h3>Álgebra Lineal</h3></div><p class="course-topic">Espacios Vectoriales</p><p class="course-description">Teoría de espacios vectoriales, transformaciones lineales, valores y vectores propios con aplicaciones computacionales.</p><div class="course-programs"><span class="program-tag">Universidad de Pamplona</span></div></div>
+                <div class="course-card"><div class="course-header"><i class="fas fa-network-wired"></i><h3>Matemáticas Discretas</h3></div><p class="course-topic">Estructuras Discretas</p><p class="course-description">Teoría de conjuntos, relaciones, funciones, grafos y estructuras algebraicas con aplicaciones en ciencias de la computación.</p><div class="course-programs"><span class="program-tag">Universidad de Pamplona</span></div></div>
+                <div class="course-card"><div class="course-header"><i class="fas fa-brain"></i><h3>Pensamiento Lógico y Matemático</h3></div><p class="course-topic">Razonamiento Matemático</p><p class="course-description">Desarrollo de habilidades de razonamiento lógico-matemático y pensamiento crítico aplicado a la resolución de problemas.</p><div class="course-programs"><span class="program-tag">UNAD - Pregrado</span></div></div>
+            </div>
+            <div class="teaching-philosophy">
+                <h3>Liderazgo Académico en UNAD</h3>
+                <div class="philosophy-grid">
+                    <div class="philosophy-item"><i class="fas fa-chalkboard-teacher"></i><h4>Director Nacional de Curso</h4><p>Ecuaciones Diferenciales - Coordinación de contenidos y estrategias pedagógicas</p></div>
+                    <div class="philosophy-item"><i class="fas fa-network-wired"></i><h4>Líder Red Curricular</h4><p>Lógica, Álgebra y Cálculo - Articulación curricular transversal</p></div>
+                    <div class="philosophy-item"><i class="fas fa-seedling"></i><h4>Líder Semillero MATHINNOVA</h4><p>Formación de jóvenes investigadores en matemáticas aplicadas</p></div>
+                    <div class="philosophy-item"><i class="fas fa-laptop-code"></i><h4>e-Mediador AVA</h4><p>Especialización en diseño y gestión de ambientes virtuales de aprendizaje</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="recursos" class="section resources">
+        <div class="container">
+            <h2 class="section-title">Recursos Educativos</h2>
+            <div class="resources-intro"><p>Comparto recursos educativos abiertos para estudiantes y profesores: videos animados con Manim, guías de estudio, código y herramientas interactivas.</p></div>
+            <div class="resource-section">
+                <div class="resource-header"><i class="fab fa-youtube"></i><h3>Videos Educativos con Manim</h3></div>
+                <p class="resource-description">Animaciones matemáticas creadas con Manim (Mathematical Animation Engine) para visualizar conceptos de cálculo, álgebra y análisis.</p>
+                <div class="videos-grid">
+                    <div class="video-card"><div class="video-thumbnail"><iframe width="100%" height="200" src="https://www.youtube.com/embed/UcPDnWzBoHk" title="Ecuaciones cuadráticas" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="video-info"><h4>📘 Ecuaciones cuadráticas: soluciones y gráficas</h4><p>Exploramos las ecuaciones cuadráticas desde su interpretación algebraica y su representación gráfica.</p><a href="https://youtu.be/UcPDnWzBoHk" target="_blank" class="video-link">Ver en YouTube <i class="fas fa-external-link-alt"></i></a></div></div>
+                    <div class="video-card"><div class="video-thumbnail"><iframe width="100%" height="200" src="https://www.youtube.com/embed/ys261yAYZ3E" title="Ranking de Curvas Polares" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="video-info"><h4>🎥 Ranking de Curvas Polares</h4><p>Exploramos con Manim las formas más bellas en coordenadas polares: rosas, espirales y otras curvas fascinantes.</p><a href="https://youtu.be/ys261yAYZ3E" target="_blank" class="video-link">Ver en YouTube <i class="fas fa-external-link-alt"></i></a></div></div>
+                    <div class="video-card"><div class="video-thumbnail"><iframe width="100%" height="200" src="https://www.youtube.com/embed/-VfFuNPnU0w" title="Paraboloide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="video-info"><h4>🎓 ¿Qué es un paraboloide? | Superficie Cuádrica</h4><p>Visualización 3D completa con propiedades fundamentales, curvas de nivel y aplicaciones en física e ingeniería.</p><a href="https://youtu.be/-VfFuNPnU0w" target="_blank" class="video-link">Ver en YouTube <i class="fas fa-external-link-alt"></i></a></div></div>
+                    <div class="video-card"><div class="video-thumbnail"><iframe width="100%" height="200" src="https://www.youtube.com/embed/videoseries?list=PLzsXwfh2vZnVGv6SD5aG0-wN7TOiND8oG" title="Campeones Mundiales de Ajedrez" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="video-info"><h4>♟️ PODCAST: Campeones Mundiales de Ajedrez</h4><p>Desde Steinitz hasta los campeones actuales: biografías fascinantes, legado ajedrecístico y anécdotas imperdibles.</p><a href="https://www.youtube.com/playlist?list=PLzsXwfh2vZnVGv6SD5aG0-wN7TOiND8oG" target="_blank" class="video-link">Ver Playlist Completa <i class="fas fa-external-link-alt"></i></a></div></div>
+                    <div class="video-card"><div class="video-cta"><i class="fab fa-youtube" style="font-size: 3rem; color: #ff0000; margin-bottom: 1rem;"></i><h4>Más Videos Disponibles</h4><p>Visita mi canal de YouTube para ver todos mis videos educativos</p><a href="https://www.youtube.com/@dmbourbaki" target="_blank" class="btn btn-primary"><i class="fab fa-youtube"></i> Ver Canal de YouTube</a></div></div>
+                </div>
+            </div>
+            <div class="resource-section">
+                <div class="resource-header"><i class="fas fa-book"></i><h3>Guías y Material Didáctico</h3></div>
+                <p class="resource-description">Guías de estudio, talleres y material complementario organizados por tema para estudiantes de pregrado.</p>
+                <div class="guides-grid">
+                    <div class="guide-card"><i class="fas fa-infinity"></i><h4>Cálculo Diferencial e Integral</h4><p>Guías con ejercicios resueltos y problemas propuestos</p><span class="coming-soon">Próximamente en GitHub</span></div>
+                    <div class="guide-card"><i class="fas fa-wave-square"></i><h4>Ecuaciones Diferenciales</h4><p>Material complementario con métodos de solución</p><span class="coming-soon">Próximamente en GitHub</span></div>
+                    <div class="guide-card"><i class="fas fa-project-diagram"></i><h4>Álgebra Lineal</h4><p>Ejercicios y aplicaciones computacionales</p><span class="coming-soon">Próximamente en GitHub</span></div>
+                    <div class="guide-card"><i class="fas fa-shapes"></i><h4>Geometría Analítica</h4><p>Talleres con GeoGebra y visualizaciones</p><span class="coming-soon">Próximamente en GitHub</span></div>
+                </div>
+                <div class="github-repo-cta"><p><i class="fas fa-info-circle"></i> Las guías estarán disponibles próximamente en mi repositorio de GitHub</p><a href="https://github.com/dmbourbaki" target="_blank" class="btn btn-secondary"><i class="fab fa-github"></i> Visitar GitHub</a></div>
+            </div>
+            <div class="resource-section">
+                <div class="resource-header"><i class="fas fa-code"></i><h3>Código y Herramientas</h3></div>
+                <p class="resource-description">Scripts de Manim, notebooks de Python y applets de GeoGebra para enseñanza de matemáticas.</p>
+                <div class="tools-grid">
+                    <div class="tool-card"><i class="fas fa-film"></i><h4>Scripts de Manim</h4><p>Código fuente de animaciones matemáticas</p><a href="https://github.com/dmbourbaki" target="_blank" class="tool-link">Ver en GitHub <i class="fas fa-external-link-alt"></i></a></div>
+                    <div class="tool-card"><i class="fab fa-python"></i><h4>Notebooks de Python</h4><p>Jupyter notebooks con ejemplos interactivos</p><a href="https://github.com/dmbourbaki" target="_blank" class="tool-link">Ver en GitHub <i class="fas fa-external-link-alt"></i></a></div>
+                    <div class="tool-card"><i class="fas fa-compass-drafting"></i><h4>Applets de GeoGebra</h4><p>Construcciones interactivas para visualización</p><a href="#" class="tool-link">Próximamente <i class="fas fa-clock"></i></a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         RECURSOS EDUCATIVOS DIGITALES
+    ══════════════════════════════════════════════ -->
+    <section id="recursos-digitales" class="section digital-resources">
+        <div class="container">
+            <h2 class="section-title">Recursos Educativos Digitales</h2>
+            <div class="resources-intro">
+                <p>Visualizaciones interactivas para el aprendizaje de matemáticas. Desarrolladas con tecnologías web abiertas — funcionan directamente en el navegador, sin instalación.</p>
+            </div>
+            <div class="digital-grid">
+
+                <!-- Simulador de Sólidos de Revolución -->
+                <div class="digital-card" id="card-solidos">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke-soft" d="M30 120 Q90 40 150 60 Q210 78 270 30"/>
+<ellipse class="p-fill" cx="150" cy="75" rx="70" ry="18"/>
+<ellipse class="p-stroke" cx="150" cy="75" rx="70" ry="18"/>
+<ellipse class="p-stroke-soft" cx="80" cy="98" rx="20" ry="7"/>
+<ellipse class="p-stroke-soft" cx="220" cy="55" rx="16" ry="6"/>
+<path class="p-stroke" d="M80 91 L80 105"/>
+<path class="p-stroke" d="M220 49 L220 61"/>
+<path class="p-accent" d="M30 120 Q90 40 150 60 Q210 78 270 30" stroke-dasharray="0" opacity="0"/>
+</svg>
+                    </div>
+                    <div class="digital-card-header">
+                        <div class="digital-icon">∮</div>
+                        <div>
+                            <h3>Simulador de Sólidos de Revolución</h3>
+                            <span class="topic-tag">Cálculo Integral · 3D</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Visualización 3D interactiva de sólidos de revolución. Escoge entre los métodos del Disco, Cascarón cilíndrico y Arandela; ajusta el eje de revolución (X o Y); anima el barrido de 0° a 360°; y mueve la sección transversal para ver el área de cada corte. Calcula el volumen exacto y la superficie lateral.</p>
+                    <div class="digital-tags">
+                        <span>Disco · Cascarón · Arandela</span>
+                        <span>Eje X / Eje Y</span>
+                        <span>Animación de Barrido</span>
+                        <span>Sección Transversal</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('solidos')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-solidos" style="display:none">
+                        <iframe src="recursos/solidos-revolucion.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sólidos de Revolución"></iframe>
+                        <a href="recursos/solidos-revolucion.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+                <!-- Simulador de Multiplicadores de Lagrange -->
+                <div class="digital-card" id="card-lagrange">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<ellipse class="p-stroke-soft" cx="150" cy="75" rx="120" ry="55"/>
+<ellipse class="p-stroke-soft" cx="150" cy="75" rx="90" ry="40"/>
+<ellipse class="p-stroke-soft" cx="150" cy="75" rx="60" ry="26"/>
+<ellipse class="p-stroke" cx="150" cy="75" rx="30" ry="13"/>
+<path class="p-accent" d="M60 130 Q150 20 240 130" fill="none"/>
+<circle class="p-dot" cx="150" cy="40" r="4.5"/>
+<path class="p-stroke" d="M150 40 L150 15" marker-end="none"/>
+<path class="p-stroke" d="M150 40 L165 20"/>
+</svg>
+                    </div>
+                    <div class="digital-card-header">
+                        <div class="digital-icon">λ</div>
+                        <div>
+                            <h3>Simulador de Multiplicadores de Lagrange</h3>
+                            <span class="topic-tag">Cálculo Multivariable</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Interpretación geométrica de ∇f = λ·∇g. Mueve el punto sobre la restricción y observa cuándo los gradientes se vuelven paralelos. Incluye mapa de calor de f(x,y) y medidor de paralelismo en tiempo real.</p>
+                    <div class="digital-tags">
+                        <span>Optimización Restringida</span>
+                        <span>Gradientes</span>
+                        <span>Curvas de Nivel</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('lagrange')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-lagrange" style="display:none">
+                        <iframe src="recursos/lagrange.html" width="100%" height="640" frameborder="0" loading="lazy" title="Simulador de Multiplicadores de Lagrange"></iframe>
+                        <a href="recursos/lagrange.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+                <!-- Simulador de Sumas de Riemann -->
+                <div class="digital-card" id="card-riemann">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke" d="M20 120 Q100 10 280 60"/>
+<g class="p-fill">
+<rect x="30" y="95" width="34" height="30"/>
+<rect x="70" y="65" width="34" height="60"/>
+<rect x="110" y="45" width="34" height="80"/>
+<rect x="150" y="40" width="34" height="85"/>
+<rect x="190" y="48" width="34" height="77"/>
+<rect x="230" y="58" width="34" height="67"/>
+</g>
+<g class="p-stroke-soft">
+<rect x="30" y="95" width="34" height="30"/>
+<rect x="70" y="65" width="34" height="60"/>
+<rect x="110" y="45" width="34" height="80"/>
+<rect x="150" y="40" width="34" height="85"/>
+<rect x="190" y="48" width="34" height="77"/>
+<rect x="230" y="58" width="34" height="67"/>
+</g>
+<path class="p-stroke-soft" d="M20 125 L280 125"/>
+</svg>
+                    </div>
+                    <div class="digital-card-header">
+                        <div class="digital-icon">∑</div>
+                        <div>
+                            <h3>Simulador de Sumas de Riemann</h3>
+                            <span class="topic-tag">Cálculo Integral</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Explora los cinco métodos de aproximación de la integral definida: Izquierda, Derecha, Punto Medio, Trapecio y Simpson 1/3. Anima la convergencia en tiempo real, compara el error con la integral exacta y observa la tabla de convergencia del valor exacto.</p>
+                    <div class="digital-tags">
+                        <span>Izquierda · Derecha · Medio</span>
+                        <span>Trapecio · Simpson 1/3</span>
+                        <span>Convergencia y Error</span>
+                        <span>Animación con velocidad ajustable</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('riemann')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-riemann" style="display:none">
+                        <iframe src="recursos/riemann.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sumas de Riemann"></iframe>
+                        <a href="recursos/riemann.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+                <!-- Simulador Sistema Masa-Resorte -->
+                <div class="digital-card" id="card-masa">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke-soft" d="M40 15 L110 15"/>
+<path class="p-stroke" d="M40 15 L48 25 L58 5 L68 25 L78 5 L88 25 L98 5 L108 15 L110 15 L110 60"/>
+<rect class="p-fill" x="80" y="60" width="60" height="40" rx="4"/>
+<rect class="p-stroke" x="80" y="60" width="60" height="40" rx="4"/>
+<path class="p-accent" d="M20 130 Q60 90 100 130 Q140 170 180 130 Q220 90 260 130" transform="translate(0,-35)"/>
+<path class="p-stroke-soft" d="M20 145 L280 145"/>
+</svg>
+                    </div>
+                    <div class="digital-card-header">
+                        <div class="digital-icon">∂²</div>
+                        <div>
+                            <h3>Simulador Sistema Masa-Resorte</h3>
+                            <span class="topic-tag">Ecuaciones Diferenciales</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Simulación en tiempo real de my″ + by′ + ky = f(t). Observa el resorte y el amortiguador animados, clasifica el movimiento (no amortiguado, subamortiguado, críticamente amortiguado o sobreamortiguado), compara la solución numérica RK4 con la analítica exacta, y visualiza posición y(t), velocidad y′(t) y aceleración y″(t) simultáneamente.</p>
+                    <div class="digital-tags">
+                        <span>No amort. · Sub · Crítico · Sobre</span>
+                        <span>Fuerza externa f(t) libre</span>
+                        <span>RK4 + Solución analítica</span>
+                        <span>Retrato de fase</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('masa')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-masa" style="display:none">
+                        <iframe src="recursos/masa-resorte.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Sistema Masa-Resorte"></iframe>
+                        <a href="recursos/masa-resorte.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+                <!-- Simulador Circuito RLC -->
+                <div class="digital-card" id="card-rlc">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke" d="M30 40 L70 40"/>
+<path class="p-stroke" d="M70 40 L78 25 L88 55 L98 25 L108 55 L118 25 L128 40"/>
+<path class="p-stroke" d="M128 40 L160 40"/>
+<path class="p-stroke" d="M160 30 Q170 20 160 40 Q170 60 160 50 Q170 40 160 30" fill="none"/>
+<path class="p-stroke" d="M160 40 L200 40"/>
+<path class="p-stroke" d="M210 20 L210 60 M225 20 L225 60"/>
+<path class="p-stroke" d="M200 40 L210 40 M225 40 L235 40"/>
+<path class="p-stroke" d="M235 40 L235 110 L30 110 L30 40"/>
+<circle class="p-dot" cx="90" cy="110" r="3.5"/>
+<circle class="p-dot" cx="150" cy="110" r="3.5"/>
+<circle class="p-dot" cx="200" cy="40" r="3.5"/>
+</svg>
+                    </div>
+                    <div class="digital-card-header">
+                        <div class="digital-icon">⚡</div>
+                        <div>
+                            <h3>Simulador Circuito RLC</h3>
+                            <span class="topic-tag">Ecuaciones Diferenciales · Física</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Circuito RLC serie animado: Lq″ + Rq′ + q/C = V(t). Visualiza el esquemático con resistor, inductor y condensador; observa los puntos de corriente circulando en tiempo real; analiza carga q(t), corriente i(t) y voltajes V_R, V_L, V_C. Incluye la analogía completa con el sistema masa-resorte.</p>
+                    <div class="digital-tags">
+                        <span>Circuito animado (puntos de corriente)</span>
+                        <span>V_C · V_R · V_L en tiempo real</span>
+                        <span>Factor Q · Ancho de banda</span>
+                        <span>Fuente V(t) libre</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('rlc')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-rlc" style="display:none">
+                        <iframe src="recursos/circuito-rlc.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Circuito RLC"></iframe>
+                        <a href="recursos/circuito-rlc.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+                <!-- Simulador Péndulo Simple -->
+                <div class="digital-card" id="card-pendulo">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<circle class="p-stroke" cx="150" cy="15" r="4"/>
+<path class="p-stroke" d="M150 15 L195 110"/>
+<circle class="p-fill" cx="195" cy="115" r="16"/>
+<circle class="p-stroke" cx="195" cy="115" r="16"/>
+<path class="p-stroke-soft" d="M150 15 L105 110" stroke-dasharray="4 4"/>
+<circle class="p-stroke-soft" cx="105" cy="115" r="16" stroke-dasharray="4 4"/>
+<path class="p-stroke-soft" d="M75 30 A90 90 0 0 1 225 30" stroke-dasharray="3 5"/>
+</svg>
+                    </div>
+                    <div class="digital-card-header">
+                        <div class="digital-icon">θ″</div>
+                        <div>
+                            <h3>Simulador Péndulo Simple</h3>
+                            <span class="topic-tag">Ecuaciones Diferenciales · No Lineal</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Péndulo simple con la ecuación completa θ″ + γθ′ + ω₀²sin(θ) = 0. Compara en tiempo real la solución no lineal (RK4) con la linealización pequeños ángulos. Cambia la gravedad entre Tierra, Luna, Marte y Júpiter; observa el retrato de fase y cómo el período real difiere del período lineal T₀ = 2π√(L/g) para ángulos grandes.</p>
+                    <div class="digital-tags">
+                        <span>No lineal vs Linealizado</span>
+                        <span>Cuatro gravedades planetarias</span>
+                        <span>Trail de trayectoria</span>
+                        <span>Retrato de fase</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('pendulo')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-pendulo" style="display:none">
+                        <iframe src="recursos/pendulo.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Péndulo Simple"></iframe>
+                        <a href="recursos/pendulo.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+                <!-- Simulador de Campo de Direcciones -->
+                <div class="digital-card" id="card-campo">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<g class="p-stroke-soft">
+<path d="M30 30 l16 8"/><path d="M75 30 l16 4"/><path d="M120 30 l16 -2"/><path d="M165 30 l16 -6"/><path d="M210 30 l16 -10"/><path d="M255 30 l16 -12"/>
+<path d="M30 70 l16 6"/><path d="M75 70 l16 2"/><path d="M120 70 l16 -3"/><path d="M165 70 l16 -7"/><path d="M210 70 l16 -9"/><path d="M255 70 l16 -11"/>
+<path d="M30 110 l16 4"/><path d="M75 110 l16 0"/><path d="M120 110 l16 -4"/><path d="M165 110 l16 -6"/><path d="M210 110 l16 -8"/><path d="M255 110 l16 -10"/>
+</g>
+<path class="p-accent" d="M30 120 Q100 60 180 55 Q240 50 275 20"/>
+</svg>
+                    </div>
+                    <div class="digital-card-header">
+                        <div class="digital-icon">∂y/∂x</div>
+                        <div>
+                            <h3>Simulador de Campo de Direcciones</h3>
+                            <span class="topic-tag">Ecuaciones Diferenciales · Análisis Cualitativo</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Visualización interactiva del campo de direcciones de y′ = f(x, y). Escribe cualquier expresión, haz clic para trazar curvas solución (RK4), observa nullclines, detecta equilibrios estables e inestables automáticamente y analiza el comportamiento cualitativo en cualquier punto al pasar el cursor.</p>
+                    <div class="digital-tags">
+                        <span>16 presets (autónomas y no autónomas)</span>
+                        <span>Nullclines y equilibrios</span>
+                        <span>Curvas solución RK4</span>
+                        <span>Zoom · Pan · Análisis en cursor</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('campo')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-campo" style="display:none">
+                        <iframe src="recursos/campo-direcciones.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Campo de Direcciones"></iframe>
+                        <a href="recursos/campo-direcciones.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+
+                <!-- Simulador de Transformaciones Lineales -->
+                <div class="digital-card" id="card-tl">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<g class="p-stroke-soft">
+<path d="M20 30 L280 30 M20 55 L280 55 M20 80 L280 80 M20 105 L280 105 M20 130 L280 130"/>
+<path d="M60 10 L60 140 M110 10 L110 140 M160 10 L160 140 M210 10 L210 140 M260 10 L260 140"/>
+</g>
+<polygon class="p-fill" points="60,130 220,110 260,30 100,50"/>
+<polygon class="p-stroke" points="60,130 220,110 260,30 100,50"/>
+<path class="p-accent" d="M60 130 L220 110"/>
+<path class="p-accent" d="M60 130 L100 50"/>
+</svg>
+                    </div>
+                    <div class="digital-card-header">
+                        <div class="digital-icon">T</div>
+                        <div>
+                            <h3>Simulador de Transformaciones Lineales</h3>
+                            <span class="topic-tag">Álgebra Lineal · ℝ² y ℝ³</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Visualiza cómo una matriz transforma el plano y el espacio. En ℝ² deforma un oso con el grid, el paralelogramo del determinante y los eigenvectores. En ℝ³ transforma el oso 3D y muestra el paralelepípedo cuyo volumen es |det(T)|. Anima la transformación de t=0 a t=1, cambia presets, y lee el análisis completo: det, traza, eigenvalores y clasificación automática.</p>
+                    <div class="digital-tags">
+                        <span>ℝ² y ℝ³ interactivos</span>
+                        <span>Determinante como área/volumen</span>
+                        <span>Eigenvectores y clasificación</span>
+                        <span>14 presets ℝ² · 10 presets ℝ³</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('tl')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-tl" style="display:none">
+                        <iframe src="recursos/transformaciones-lineales.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Transformaciones Lineales"></iframe>
+                        <a href="recursos/transformaciones-lineales.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+
+                <!-- Simulador de Series de Taylor -->
+                <div class="digital-card" id="card-taylor">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke" d="M15 90 Q80 10 150 90 Q220 170 285 90"/>
+<path class="p-accent" d="M60 125 Q150 15 240 125" stroke-dasharray="6 5"/>
+<circle class="p-dot" cx="150" cy="90" r="4"/>
+<path class="p-stroke-soft" d="M15 90 L285 90" stroke-dasharray="3 4"/>
+</svg>
+                    </div>
+                    <div class="digital-card-header">
+                        <div class="digital-icon">Σ</div>
+                        <div>
+                            <h3>Simulador de Series de Taylor</h3>
+                            <span class="topic-tag">Cálculo · Análisis Matemático</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Visualiza cómo un polinomio de grado n se "pega" a cualquier función al agregar términos. Escribe f(x), elige el centro a y anima la convergencia grado a grado. Muestra la fórmula con los coeficientes exactos f⁽ᵏ⁾(a)/k!, la tabla de coeficientes, el error |f − Tₙ| en escala logarítmica y el espectro de coeficientes. Diferenciación simbólica con mathjs.</p>
+                    <div class="digital-tags">
+                        <span>Diferenciación simbólica</span>
+                        <span>Animación grado a grado</span>
+                        <span>Error |f − Tₙ| en log</span>
+                        <span>14 presets (sin, cos, eˣ, ln, arctan…)</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('taylor')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-taylor" style="display:none">
+                        <iframe src="recursos/series-taylor.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Series de Taylor"></iframe>
+                        <a href="recursos/series-taylor.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+                <!-- Simulador de Integrales Dobles -->
+                <div class="digital-card" id="card-integrales">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke" d="M30 110 Q90 30 150 55 Q210 78 270 25"/>
+<path class="p-stroke-soft" d="M30 130 Q90 100 150 108 Q210 114 270 95"/>
+<path class="p-fill" d="M30 110 Q90 30 150 55 Q210 78 270 25 L270 95 Q210 114 150 108 Q90 100 30 130 Z"/>
+<path class="p-stroke-soft" d="M60 60 L60 118 M100 45 L100 112 M140 55 L140 110 M180 62 L180 110 M220 45 L220 100 M260 30 L260 97" stroke-dasharray="2 4"/>
+</svg>
+                    </div>
+                    <div class="digital-card-header">
+                        <div class="digital-icon">∬</div>
+                        <div>
+                            <h3>Simulador de Integrales Dobles</h3>
+                            <span class="topic-tag">Cálculo Multivariable · Regiones</span>
+                        </div>
+                        <span class="new-badge">Nuevo</span>
+                    </div>
+                    <p class="digital-desc">Visualiza y calcula integrales dobles. Soporta Tipo I (dy dx), Tipo II (dx dy) y Polares (dr dθ). Ingresa los 4 límites: a, b, f₁(x) y f₂(x). La región se dibuja en 2D con aspecto 1:1 real, zoom con scroll y pan con arrastre; la función aparece difuminada fuera de la región. En 3D muestra el volumen como sólido paramétrico con colorscale cool-warm. Incluye botón para invertir el orden (Teorema de Fubini) y rotación animada del volumen.</p>
+                    <div class="digital-tags">
+                        <span>Tipo I · Tipo II · Polares</span>
+                        <span>Región 2D con aspecto 1:1</span>
+                        <span>Volumen 3D paramétrico</span>
+                        <span>Invertir orden · Rotación 3D</span>
+                    </div>
+                    <button class="digital-btn" onclick="toggleResource('integrales')">▶ Abrir Visualización</button>
+                    <div class="resource-frame" id="frame-integrales" style="display:none">
+                        <iframe src="recursos/integrales-dobles.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Integrales Dobles"></iframe>
+                        <a href="recursos/integrales-dobles.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- ══════════════════════════════════════════════
+         FIN RECURSOS EDUCATIVOS DIGITALES
+    ══════════════════════════════════════════════ -->
+
+    <section id="contacto" class="section contact">
+        <div class="container">
+            <h2 class="section-title">Contacto</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Información de Contacto</h3>
+                    <div class="contact-item"><i class="fas fa-university"></i><div><h4>Universidad Nacional Abierta y a Distancia (UNAD)</h4><p>Docente Tiempo Completo - Investigador</p></div></div>
+                    <div class="contact-item"><i class="fas fa-envelope"></i><div><h4>Email Personal</h4><p><a href="mailto:dmbourbaki@gmail.com">dmbourbaki@gmail.com</a></p></div></div>
+                    <div class="contact-item"><i class="fas fa-envelope-open"></i><div><h4>Email Institucional</h4><p><a href="mailto:daniel.moran@unad.edu.co">daniel.moran@unad.edu.co</a></p></div></div>
+                    <div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><h4>Ubicación</h4><p>Cali, Colombia</p></div></div>
+                    <div class="social-links-contact">
+                        <a href="https://scholar.google.es/citations?user=CLZKj3YAAAAJ" target="_blank" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+                        <a href="https://orcid.org/0000-0003-1791-2818" target="_blank" aria-label="ORCID"><i class="fab fa-orcid"></i></a>
+                        <a href="https://www.researchgate.net/profile/Daniel-Moran-Pizarro" target="_blank" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
+                        <a href="https://co.linkedin.com/in/daniel-steven-moran-6b5490331" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/dmbourbaki" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.youtube.com/@dmbourbaki" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001560327" target="_blank" aria-label="CvLAC MinCiencias"><i class="fas fa-id-card"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form-container">
+                    <h3>Envíame un Mensaje</h3>
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group"><label for="name">Nombre</label><input type="text" id="name" name="name" required></div>
+                        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" required></div>
+                        <div class="form-group"><label for="subject">Asunto</label><input type="text" id="subject" name="subject" required></div>
+                        <div class="form-group"><label for="message">Mensaje</label><textarea id="message" name="message" rows="5" required></textarea></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar Mensaje</button>
+                    </form>
+                    <p class="form-note"><i class="fas fa-info-circle"></i> Nota: Este formulario requiere configuración con un servicio backend como Formspree o EmailJS.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Daniel Steven Moran Pizarro. Todos los derechos reservados.</p>
+                <p>Hecho con <i class="fas fa-heart"></i> para la comunidad académica</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+    function toggleResource(id) {
+        const frame = document.getElementById('frame-' + id);
+        const btn = document.querySelector('#card-' + id + ' .digital-btn');
+        if (frame.style.display === 'none') {
+            frame.style.display = 'block';
+            btn.textContent = '▼ Cerrar visualización';
+            setTimeout(() => frame.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+        } else {
+            frame.style.display = 'none';
+            btn.textContent = '▶ Abrir Visualización';
+        }
     }
-    prev=cur;
-  }
-  return equil;
-}
-
-// ═══════════════════════════════════
-//  RK4 PARA CURVAS SOLUCIÓN
-// ═══════════════════════════════════
-function rk4(x,y,h){
-  const k1=evalF(x,y);
-  const k2=evalF(x+h/2,y+k1*h/2);
-  const k3=evalF(x+h/2,y+k2*h/2);
-  const k4=evalF(x+h,y+k3*h);
-  return y+h/6*(k1+2*k2+2*k3+k4);
-}
-
-function traceCurve(x0,y0){
-  const xMn=getXMin(),xMx=getXMax(),yMn=getYMin()-Math.abs(getYMax()-getYMin())*0.5,yMx=getYMax()+Math.abs(getYMax()-getYMin())*0.5;
-  const steps=600, hFwd=(xMx-x0)/steps, hBwd=(x0-xMn)/steps;
-  const fwd=[{x:x0,y:y0}];
-  let x=x0,y=y0;
-  for(let i=0;i<steps;i++){
-    y=rk4(x,y,hFwd); x+=hFwd;
-    if(!isFinite(y)||y<yMn||y>yMx) break;
-    fwd.push({x,y});
-  }
-  const bwd=[];
-  x=x0; y=y0;
-  for(let i=0;i<steps;i++){
-    y=rk4(x,y,-hBwd); x-=hBwd;
-    if(!isFinite(y)||y<yMn||y>yMx) break;
-    bwd.unshift({x,y});
-  }
-  return [...bwd,{x:x0,y:y0},...fwd.slice(1)];
-}
-
-// ═══════════════════════════════════
-//  DIBUJAR TODO
-// ═══════════════════════════════════
-function drawAll(){
-  const cv=document.getElementById('cv');
-  const wrap=document.getElementById('canvas-wrap');
-  W=wrap.clientWidth; H=wrap.clientHeight;
-  cv.width=W; cv.height=H;
-  const ctx=cv.getContext('2d');
-
-  ctx.fillStyle='#07090f'; ctx.fillRect(0,0,W,H);
-
-  if(!compiledF) return;
-
-  const showBg = document.getElementById('chk-bg').checked;
-  const showColor = document.getElementById('chk-color').checked;
-  const showAxes = document.getElementById('chk-axes').checked;
-  const showNull = document.getElementById('chk-null').checked;
-  const showEq = document.getElementById('chk-eq').checked;
-  const n = +document.getElementById('sl-dens').value;
-  const arrowLen = +document.getElementById('sl-size').value;
-
-  // 1. Background (sign of f)
-  if(showBg){
-    const BG=60;
-    const cw=W/BG, ch=H/BG;
-    for(let i=0;i<BG;i++){
-      for(let j=0;j<BG;j++){
-        const x=toMathX(i*cw+cw/2), y=toMathY(j*ch+ch/2);
-        const fv=evalF(x,y);
-        if(!isFinite(fv)) continue;
-        if(fv>0)      ctx.fillStyle='rgba(80,221,144,0.065)';
-        else if(fv<0) ctx.fillStyle='rgba(240,112,112,0.065)';
-        else continue;
-        ctx.fillRect(i*cw,j*ch,cw,ch);
-      }
-    }
-  }
-
-  // 2. Axes & grid
-  if(showAxes) drawAxes(ctx);
-
-  // 3. Nullcline highlight (where |f| is small)
-  if(showNull) drawNullclineHighlight(ctx);
-
-  // 4. Direction field arrows
-  drawField(ctx, n, arrowLen, showColor);
-
-  // 5. Equilibria markers
-  if(showEq) drawEquilibria(ctx);
-
-  // 6. Solution curves
-  for(const c of curves) drawCurve(ctx, c);
-
-  // 7. Hover crosshair
-  if(hoverX!==null) drawCrosshair(ctx, hoverX, hoverY);
-}
-
-function drawAxes(ctx){
-  const x0=toCanvasX(0), y0=toCanvasY(0);
-  const xMn=getXMin(),xMx=getXMax(),yMn=getYMin(),yMx=getYMax();
-  // Grid lines
-  ctx.strokeStyle='rgba(28,38,64,.6)'; ctx.lineWidth=1;
-  const dx=niceStep(xMx-xMn,8), dy=niceStep(yMx-yMn,8);
-  const xs=Math.ceil(xMn/dx)*dx, ys=Math.ceil(yMn/dy)*dy;
-  for(let xg=xs;xg<=xMx+dx*.01;xg+=dx){
-    const cx=toCanvasX(xg);
-    ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,H);ctx.stroke();
-    ctx.fillStyle='rgba(100,118,138,.5)'; ctx.font='9px JetBrains Mono,monospace'; ctx.textAlign='center';
-    ctx.fillText(xg.toFixed(Math.abs(xg)<.001?0:1),cx,Math.min(H-3,y0+13));
-  }
-  for(let yg=ys;yg<=yMx+dy*.01;yg+=dy){
-    const cy=toCanvasY(yg);
-    ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();
-    if(Math.abs(yg)>dy*.1){
-      ctx.fillStyle='rgba(100,118,138,.5)'; ctx.font='9px JetBrains Mono,monospace'; ctx.textAlign='right';
-      ctx.fillText(yg.toFixed(Math.abs(yg)<.001?0:1),Math.max(24,x0-5),cy+3);
-    }
-  }
-  // Main axes
-  ctx.strokeStyle='rgba(100,118,138,.9)'; ctx.lineWidth=1.8;
-  if(y0>=0&&y0<=H){ctx.beginPath();ctx.moveTo(0,y0);ctx.lineTo(W,y0);ctx.stroke();}
-  if(x0>=0&&x0<=W){ctx.beginPath();ctx.moveTo(x0,0);ctx.lineTo(x0,H);ctx.stroke();}
-  // Labels
-  ctx.fillStyle='rgba(100,118,138,.7)'; ctx.font='10px Oswald,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('x',W-8,Math.min(H-6,y0+13));
-  ctx.textAlign='left'; ctx.fillText('y',Math.max(3,x0+4),12);
-}
-
-function niceStep(range, targetN){
-  const raw=range/targetN;
-  const p=Math.pow(10,Math.floor(Math.log10(raw)));
-  const f=raw/p;
-  return f<1.5?p:f<3.5?2*p:f<7.5?5*p:10*p;
-}
-
-function drawNullclineHighlight(ctx){
-  // Draw a thin bright curve where |f|<threshold by scanning columns
-  const COL=W;
-  const yMn=getYMin(), yMx=getYMax(), yRange=yMx-yMn;
-  const SCAN=80; // y samples per column
-  ctx.strokeStyle='rgba(212,168,75,.55)'; ctx.lineWidth=1.5;
-  for(let ci=0;ci<COL;ci+=3){
-    const x=toMathX(ci);
-    let prevF=null, prevJ=null;
-    for(let ji=0;ji<=SCAN;ji++){
-      const y=yMn+ji*yRange/SCAN;
-      const fv=evalF(x,y);
-      if(!isFinite(fv)){prevF=null;continue;}
-      if(prevF!==null&&prevF*fv<0){
-        // Sign change: nullcline crossing
-        const yfrac=-prevF/(fv-prevF); // linear interpolation
-        const ycross=yMn+(prevJ+yfrac)*yRange/SCAN;
-        const cy=toCanvasY(ycross);
-        ctx.beginPath();ctx.arc(ci,cy,1.5,0,Math.PI*2);ctx.fill();
-      }
-      prevF=fv; prevJ=ji;
-    }
-  }
-}
-
-function drawField(ctx,n,arrowLen,showColor){
-  const xMn=getXMin(),xMx=getXMax(),yMn=getYMin(),yMx=getYMax();
-  const dx=(xMx-xMn)/n, dy=(yMx-yMn)/n;
-  for(let i=0;i<=n;i++){
-    for(let j=0;j<=n;j++){
-      const x=xMn+(i+.5)*dx-(dx/2), y=yMn+(j+.5)*dy-(dy/2);
-      const fv=evalF(x,y);
-      if(!isFinite(fv)||Math.abs(fv)>1e6) continue;
-      const cx=toCanvasX(x), cy=toCanvasY(y);
-      const color=showColor?slopeColor(fv):'rgba(212,168,75,0.85)';
-      drawArrow(ctx,cx,cy,fv,arrowLen,color);
-    }
-  }
-}
-
-function slopeColor(m){
-  const t=Math.tanh(m*0.4); // -1..1
-  if(t<0){
-    // negative: gold → cyan
-    const f=-t;
-    const r=Math.round(212-154*f), g=Math.round(168+26*f), b=Math.round(75+165*f);
-    return `rgba(${r},${g},${b},0.9)`;
-  }else{
-    // positive: gold → green
-    const f=t;
-    const r=Math.round(212-132*f), g=Math.round(168+53*f), b=Math.round(75-75*f);
-    return `rgba(${r},${g},${b},0.9)`;
-  }
-}
-
-function drawArrow(ctx,cx,cy,slope,len,color){
-  if(!isFinite(slope)) return;
-  const clamp=Math.max(-50,Math.min(50,slope));
-  const mag=Math.sqrt(1+clamp*clamp);
-  const ux=1/mag, uy=-clamp/mag; // canvas direction (y flipped)
-  const h2=len/2;
-  const x1=cx-h2*ux, y1=cy-h2*uy;
-  const x2=cx+h2*ux, y2=cy+h2*uy;
-
-  ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=1.4;
-  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
-
-  // Arrowhead
-  const hl=Math.min(5,len*.35), hw=2.2;
-  const px=-uy, py=ux; // perpendicular
-  ctx.beginPath();
-  ctx.moveTo(x2,y2);
-  ctx.lineTo(x2-hl*ux+hw*px, y2-hl*uy+hw*py);
-  ctx.lineTo(x2-hl*ux-hw*px, y2-hl*uy-hw*py);
-  ctx.closePath(); ctx.fill();
-}
-
-function drawEquilibria(ctx){
-  if(!isAutonomous()) return;
-  const eqs=findEquilibria();
-  for(const eq of eqs){
-    const y=+eq.y;
-    const cy=toCanvasY(y);
-    const color=eq.type==='estable'?'var(--green)':eq.type==='inestable'?'var(--red)':'var(--orange)';
-    // Horizontal line across canvas
-    ctx.strokeStyle=color.replace('var(--green)','rgba(80,221,144,.5)').replace('var(--red)','rgba(240,112,112,.5)').replace('var(--orange)','rgba(245,154,74,.5)');
-    ctx.lineWidth=1.5; ctx.setLineDash([5,5]);
-    ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();
-    ctx.setLineDash([]);
-    // Dot on y-axis
-    const xax=toCanvasX(0);
-    const dotColor=eq.type==='estable'?'#50dd90':eq.type==='inestable'?'#f07070':'#f59a4a';
-    ctx.shadowColor=dotColor; ctx.shadowBlur=8;
-    ctx.fillStyle=dotColor; ctx.beginPath(); ctx.arc(xax,cy,5,0,Math.PI*2); ctx.fill();
-    ctx.shadowBlur=0;
-    // Label
-    ctx.fillStyle=dotColor; ctx.font='bold 10px Oswald,sans-serif'; ctx.textAlign='left';
-    ctx.fillText(`y*=${(+eq.y).toFixed(3)} (${eq.type})`,xax+9,cy-5);
-  }
-}
-
-function drawCurve(ctx,c){
-  const pts=c.points;
-  if(pts.length<2) return;
-  ctx.strokeStyle=c.color; ctx.lineWidth=2.2;
-  ctx.shadowColor=c.color; ctx.shadowBlur=6;
-  ctx.beginPath();
-  let pen=false;
-  for(const p of pts){
-    const cx=toCanvasX(p.x), cy=toCanvasY(p.y);
-    if(!pen){ctx.moveTo(cx,cy);pen=true;}
-    else{ctx.lineTo(cx,cy);}
-  }
-  ctx.stroke();
-  ctx.shadowBlur=0;
-  // Starting dot
-  const p0=pts[Math.floor(pts.length/2)];
-  if(p0){ctx.fillStyle=c.color;ctx.beginPath();ctx.arc(toCanvasX(p0.x),toCanvasY(p0.y),4.5,0,Math.PI*2);ctx.fill();}
-}
-
-function drawCrosshair(ctx,mx,my){
-  const cx=toCanvasX(mx), cy=toCanvasY(my);
-  ctx.strokeStyle='rgba(212,168,75,.55)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
-  ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,H);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(W,cy);ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.strokeStyle='rgba(212,168,75,.8)'; ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.stroke();
-}
-
-// ═══════════════════════════════════
-//  ANÁLISIS EN CURSOR
-// ═══════════════════════════════════
-function updateAnalysis(mx, my){
-  const fv=evalF(mx,my);
-  if(!isFinite(fv)||!compiledF){
-    document.getElementById('analysis').innerHTML='<div class="hint-text">Fuera del dominio</div>';
-    return;
-  }
-  const angle=Math.atan(fv)*180/Math.PI;
-  const isEq=Math.abs(fv)<0.05;
-  let dirHTML='';
-  if(isEq){
-    // Check stability for autonomous case
-    const dh=1e-5;
-    const dfdy=(evalF(mx,my+dh)-evalF(mx,my-dh))/(2*dh);
-    let stabText='Punto de equilibrio';
-    let stabColor='var(--gold)';
-    if(!isAutonomous()){stabText='Nullcline (f=0)'; stabColor='var(--gold)';}
-    else if(dfdy<-1e-4){stabText='Equilibrio Estable ★';stabColor='var(--green)';}
-    else if(dfdy>1e-4){stabText='Equilibrio Inestable ✗';stabColor='var(--red)';}
-    else{stabText='Semi-estable ◈';stabColor='var(--orange)';}
-    dirHTML=`<div class="big-dir" style="border:1px solid rgba(212,168,75,.25);border-radius:6px;background:rgba(212,168,75,.05);margin-bottom:.6rem"><div class="dir-arrow" style="color:${stabColor}">≈ 0</div><div class="dir-text" style="color:${stabColor}">${stabText}</div></div>`;
-  }else if(fv>0){
-    dirHTML=`<div class="big-dir" style="border:1px solid rgba(80,221,144,.2);border-radius:6px;background:rgba(80,221,144,.05);margin-bottom:.6rem"><div class="dir-arrow" style="color:var(--green)">↑</div><div class="dir-text" style="color:var(--green)">y crece</div></div>`;
-  }else{
-    dirHTML=`<div class="big-dir" style="border:1px solid rgba(240,112,112,.2);border-radius:6px;background:rgba(240,112,112,.05);margin-bottom:.6rem"><div class="dir-arrow" style="color:var(--red)">↓</div><div class="dir-text" style="color:var(--red)">y decrece</div></div>`;
-  }
-
-  // Equilibria list
-  let eqHTML='';
-  if(document.getElementById('chk-eq').checked&&isAutonomous()){
-    const eqs=findEquilibria();
-    if(eqs.length){
-      eqHTML='<div class="ana-card" style="margin-top:.3rem"><div class="ac-label">Equilibrios (autónoma)</div>';
-      for(const eq of eqs){
-        const dotColor=eq.type==='estable'?'#50dd90':eq.type==='inestable'?'#f07070':'#f59a4a';
-        eqHTML+=`<div style="margin:.22rem 0;font-size:.78rem"><span class="eq-dot" style="background:${dotColor}"></span><span style="font-family:'JetBrains Mono',monospace;color:var(--text)">y*=${eq.y}</span> <span class="eq-stab" style="color:${dotColor}">${eq.type}</span></div>`;
-      }
-      eqHTML+='</div>';
-    }
-  }
-
-  // Derivative at point
-  const dh=1e-4;
-  const dfdx=(evalF(mx+dh,my)-evalF(mx-dh,my))/(2*dh);
-  const dfdy=(evalF(mx,my+dh)-evalF(mx,my-dh))/(2*dh);
-
-  document.getElementById('analysis').innerHTML=`
-${dirHTML}
-<div class="ana-card"><div class="ac-label">Posición</div>
-  <div class="ac-val">x = ${mx.toFixed(4)}</div>
-  <div class="ac-val">y = ${my.toFixed(4)}</div>
-</div>
-<div class="ana-card"><div class="ac-label">Pendiente f(x,y)</div>
-  <div class="ac-val" style="color:${fv>0.05?'var(--green)':fv<-0.05?'var(--red)':'var(--gold)'}">${fv.toFixed(6)}</div>
-  <div style="font-size:.72rem;color:var(--muted);margin-top:.2rem">Ángulo: ${angle.toFixed(2)}°</div>
-</div>
-<div class="ana-card"><div class="ac-label">Gradiente de f</div>
-  <div style="font-size:.78rem;color:var(--muted)">∂f/∂x = <span style="color:var(--text);font-family:'JetBrains Mono',monospace">${dfdx.toFixed(4)}</span></div>
-  <div style="font-size:.78rem;color:var(--muted)">∂f/∂y = <span style="color:var(--text);font-family:'JetBrains Mono',monospace">${dfdy.toFixed(4)}</span></div>
-</div>
-${eqHTML}
-<div class="hint-text">Clic → trazar solución</div>`;
-}
-
-// ═══════════════════════════════════
-//  CURVAS
-// ═══════════════════════════════════
-function clearCurves(){curves=[];colorIdx=0;drawAll();}
-
-function addCurve(x0,y0){
-  const pts=traceCurve(x0,y0);
-  const color=CURVE_COLORS[colorIdx%CURVE_COLORS.length];
-  colorIdx++;
-  curves.push({points:pts,color,x0,y0});
-  drawAll();
-}
-
-// Color swatches
-function renderSwatches(){
-  const wrap=document.getElementById('color-swatch');
-  wrap.innerHTML=CURVE_COLORS.map((c,i)=>
-    `<div class="cc" style="background:${c};opacity:${i<colorIdx?1:.3}" title="${c}"></div>`
-  ).join('');
-}
-
-// ═══════════════════════════════════
-//  EVENTOS DEL CANVAS
-// ═══════════════════════════════════
-function setupCanvasEvents(){
-  const cv=document.getElementById('cv');
-  let isPanning=false, panSX, panSY, panXMin, panXMax, panYMin, panYMax;
-
-  cv.addEventListener('mousemove',e=>{
-    const rect=cv.getBoundingClientRect();
-    const cx=e.clientX-rect.left, cy=e.clientY-rect.top;
-    hoverX=toMathX(cx); hoverY=toMathY(cy);
-
-    // Tooltip
-    const tt=document.getElementById('tooltip');
-    const fv=evalF(hoverX,hoverY);
-    tt.style.display='block';
-    tt.style.left=(cx+14)+'px'; tt.style.top=(cy-8)+'px';
-    tt.textContent=isFinite(fv)?`(${hoverX.toFixed(2)}, ${hoverY.toFixed(2)})  f = ${fv.toFixed(4)}`:`(${hoverX.toFixed(2)}, ${hoverY.toFixed(2)})  f = undef`;
-
-    if(isPanning){
-      const dx_math=(cx-panSX)/W*(getXMax()-getXMin());
-      const dy_math=(cy-panSY)/H*(getYMax()-getYMin());
-      document.getElementById('xMin').value=(panXMin-dx_math).toFixed(3);
-      document.getElementById('xMax').value=(panXMax-dx_math).toFixed(3);
-      document.getElementById('yMin').value=(panYMin+dy_math).toFixed(3);
-      document.getElementById('yMax').value=(panYMax+dy_math).toFixed(3);
-      drawAll(); return;
-    }
-
-    updateAnalysis(hoverX,hoverY);
-    renderSwatches();
-    drawAll();
-  });
-
-  cv.addEventListener('mouseleave',()=>{
-    hoverX=null;hoverY=null;isPanning=false;
-    document.getElementById('tooltip').style.display='none';
-    document.getElementById('analysis').innerHTML='<div class="hint-text">Mueve el cursor sobre el campo para analizar el punto.<br><br>Haz clic para trazar la curva solución.</div>';
-    drawAll();
-  });
-
-  cv.addEventListener('click',e=>{
-    if(!compiledF) return;
-    const rect=cv.getBoundingClientRect();
-    const mx=toMathX(e.clientX-rect.left), my=toMathY(e.clientY-rect.top);
-    addCurve(mx,my);
-    renderSwatches();
-  });
-
-  // Right-click drag to pan
-  cv.addEventListener('mousedown',e=>{
-    if(e.button!==2&&e.button!==1) return;
-    e.preventDefault();
-    isPanning=true; panSX=e.clientX-cv.getBoundingClientRect().left; panSY=e.clientY-cv.getBoundingClientRect().top;
-    panXMin=getXMin();panXMax=getXMax();panYMin=getYMin();panYMax=getYMax();
-  });
-  cv.addEventListener('mouseup',()=>{isPanning=false;});
-  cv.addEventListener('contextmenu',e=>e.preventDefault());
-
-  // Scroll to zoom
-  cv.addEventListener('wheel',e=>{
-    e.preventDefault();
-    const rect=cv.getBoundingClientRect();
-    const mx=toMathX(e.clientX-rect.left), my=toMathY(e.clientY-rect.top);
-    const factor=e.deltaY>0?1.12:0.88;
-    const xMn=getXMin(),xMx=getXMax(),yMn=getYMin(),yMx=getYMax();
-    document.getElementById('xMin').value=((xMn-mx)*factor+mx).toFixed(3);
-    document.getElementById('xMax').value=((xMx-mx)*factor+mx).toFixed(3);
-    document.getElementById('yMin').value=((yMn-my)*factor+my).toFixed(3);
-    document.getElementById('yMax').value=((yMx-my)*factor+my).toFixed(3);
-    drawAll();
-  },{passive:false});
-}
-
-// ═══════════════════════════════════
-//  INICIO
-// ═══════════════════════════════════
-window.addEventListener('load',()=>{
-  compileExpr();
-  setupCanvasEvents();
-  new ResizeObserver(()=>drawAll()).observe(document.getElementById('canvas-wrap'));
-  drawAll();
-});
-</script>
+    </script>
 </body>
 </html>
