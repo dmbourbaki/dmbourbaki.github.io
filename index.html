@@ -99,6 +99,48 @@
         @media (max-width: 640px){
             .digital-grid{ grid-template-columns: 1fr; }
         }
+
+        /* ===== Subcolección: Observatorio de Matemáticas Avanzadas para Ingeniería ===== */
+        .observatorio-header{
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            margin: 2.4rem 0 0.6rem;
+            padding-top: 1.6rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .observatorio-header .obs-icon{
+            width: 48px; height: 48px;
+            flex: 0 0 auto;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: #f2b417;
+        }
+        .observatorio-header h3{
+            font-size: 1.35rem;
+            margin: 0 0 0.2rem;
+        }
+        .observatorio-header p{
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-light, #666);
+        }
+        .category-group{
+            margin-top: 1.8rem;
+        }
+        .category-group h4{
+            font-size: 0.78rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--primary-color, #1e293b);
+            margin: 0 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color, #1e293b);
+            display: inline-block;
+        }
 </style>
 </head>
 <body>
@@ -156,7 +198,7 @@
                     </div>
                     <p>Actualmente me desempeño como <strong>Docente Tiempo Completo</strong> en la <strong>Universidad Nacional Abierta y a Distancia (UNAD)</strong>, donde lidero múltiples iniciativas académicas y de investigación. Soy Director Nacional del curso de Ecuaciones Diferenciales, Líder de la Red Curricular de Lógica, Álgebra y Cálculo, y Líder del Semillero de Investigación MATHINNOVA.</p>
                     <p>Mi formación doctoral fue realizada en el prestigioso <strong>Centro de Investigación y de Estudios Avanzados del IPN (CINVESTAV)</strong> en Ciudad de México, donde desarrollé la investigación sobre la signatura de ideales monomiales bajo la dirección del Dr. Carlos E. Valencia Oleta. Previamente obtuve una Maestría en Ciencias Matemáticas en la Universidad Autónoma de Guerrero, trabajando en abanicos de Gröbner y fracciones continuas de Hirzebruch-Jung.</p>
-                    <p>Mi trayectoria académica comenzó en la <strong>Universidad del Valle</strong> (Cali, Colombia), donde obtuve mi Licenciatura en Matemáticas y Física con Tesis Laureada, explorando el desarrollo histórico de la integral desde las cuadraturas hasta la integral de Cauchy, bajo la dirección del matemático e historiador colombiano Luis Cornelio Recalde Caicedo.</p>
+                    <p>Mi trayectoria académica comenzó en la <strong>Universidad del Valle</strong> (Cali, Colombia), donde obtuve mi Licenciatura en Matemáticas y Física con Tesis Laureada, explorando la constitución histórica y epistemológica de la integral desde las cuadraturas hasta la integral de Cauchy, bajo la dirección del matemático e historiador colombiano Luis Cornelio Recalde Caicedo.</p>
                     <div class="expertise">
                         <h3>Áreas de Interés</h3>
                         <div class="expertise-grid">
@@ -561,280 +603,318 @@
             <div class="resources-intro">
                 <p>Visualizaciones interactivas para el aprendizaje de matemáticas. Desarrolladas con tecnologías web abiertas — funcionan directamente en el navegador, sin instalación.</p>
             </div>
-            <div class="digital-grid">
 
-                <!-- Simulador de Sólidos de Revolución -->
-                <div class="digital-card" id="card-solidos">
-                    <div class="digital-card-header">
-                        <div class="digital-icon">∮</div>
-                        <div>
-                            <h3>Simulador de Sólidos de Revolución</h3>
-                            <span class="topic-tag">Cálculo Integral · 3D</span>
-                        </div>
-                        <span class="new-badge">Nuevo</span>
-                    </div>
-                    <p class="digital-desc">Visualización 3D interactiva de sólidos de revolución. Escoge entre los métodos del Disco, Cascarón cilíndrico y Arandela; ajusta el eje de revolución (X o Y); anima el barrido de 0° a 360°; y mueve la sección transversal para ver el área de cada corte. Calcula el volumen exacto y la superficie lateral.</p>
-                    <div class="digital-tags">
-                        <span>Disco · Cascarón · Arandela</span>
-                        <span>Eje X / Eje Y</span>
-                        <span>Animación de Barrido</span>
-                        <span>Sección Transversal</span>
-                    </div>
-                    <div class="digital-preview">
-                        <iframe src="recursos/solidos-revolucion.html" loading="lazy" title="Vista previa Sólidos de Revolución" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
-                    <button class="digital-btn" onclick="toggleResource('solidos')">▶ Abrir Visualización</button>
-                    <div class="resource-frame" id="frame-solidos" style="display:none">
-                        <iframe src="recursos/solidos-revolucion.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sólidos de Revolución"></iframe>
-                        <a href="recursos/solidos-revolucion.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
-                    </div>
+            <!-- ---- Subcolección: Observatorio de Matemáticas Avanzadas para Ingeniería ---- -->
+            <div class="observatorio-header">
+                <div class="obs-icon">🔭</div>
+                <div>
+                    <h3>Observatorio de Matemáticas Avanzadas para Ingeniería</h3>
+                    <p>Simuladores organizados por área temática: Cálculo Diferencial, Cálculo Integral, Cálculo Multivariable, Ecuaciones Diferenciales y Matemáticas Especiales.</p>
                 </div>
-
-                <!-- Simulador de Multiplicadores de Lagrange -->
-                <div class="digital-card" id="card-lagrange">
-                    <div class="digital-card-header">
-                        <div class="digital-icon">λ</div>
-                        <div>
-                            <h3>Simulador de Multiplicadores de Lagrange</h3>
-                            <span class="topic-tag">Cálculo Multivariable</span>
-                        </div>
-                        <span class="new-badge">Nuevo</span>
-                    </div>
-                    <p class="digital-desc">Interpretación geométrica de ∇f = λ·∇g. Mueve el punto sobre la restricción y observa cuándo los gradientes se vuelven paralelos. Incluye mapa de calor de f(x,y) y medidor de paralelismo en tiempo real.</p>
-                    <div class="digital-tags">
-                        <span>Optimización Restringida</span>
-                        <span>Gradientes</span>
-                        <span>Curvas de Nivel</span>
-                    </div>
-                    <div class="digital-preview">
-                        <iframe src="recursos/lagrange.html" loading="lazy" title="Vista previa Lagrange" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
-                    <button class="digital-btn" onclick="toggleResource('lagrange')">▶ Abrir Visualización</button>
-                    <div class="resource-frame" id="frame-lagrange" style="display:none">
-                        <iframe src="recursos/lagrange.html" width="100%" height="640" frameborder="0" loading="lazy" title="Simulador de Multiplicadores de Lagrange"></iframe>
-                        <a href="recursos/lagrange.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
-                    </div>
-                </div>
-
-                <!-- Simulador de Sumas de Riemann -->
-                <div class="digital-card" id="card-riemann">
-                    <div class="digital-card-header">
-                        <div class="digital-icon">∑</div>
-                        <div>
-                            <h3>Simulador de Sumas de Riemann</h3>
-                            <span class="topic-tag">Cálculo Integral</span>
-                        </div>
-                        <span class="new-badge">Nuevo</span>
-                    </div>
-                    <p class="digital-desc">Explora los cinco métodos de aproximación de la integral definida: Izquierda, Derecha, Punto Medio, Trapecio y Simpson 1/3. Anima la convergencia en tiempo real, compara el error con la integral exacta y observa la tabla de convergencia del valor exacto.</p>
-                    <div class="digital-tags">
-                        <span>Izquierda · Derecha · Medio</span>
-                        <span>Trapecio · Simpson 1/3</span>
-                        <span>Convergencia y Error</span>
-                        <span>Animación con velocidad ajustable</span>
-                    </div>
-                    <div class="digital-preview">
-                        <iframe src="recursos/riemann.html" loading="lazy" title="Vista previa Riemann" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
-                    <button class="digital-btn" onclick="toggleResource('riemann')">▶ Abrir Visualización</button>
-                    <div class="resource-frame" id="frame-riemann" style="display:none">
-                        <iframe src="recursos/riemann.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sumas de Riemann"></iframe>
-                        <a href="recursos/riemann.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
-                    </div>
-                </div>
-
-                <!-- Simulador Sistema Masa-Resorte -->
-                <div class="digital-card" id="card-masa">
-                    <div class="digital-card-header">
-                        <div class="digital-icon">∂²</div>
-                        <div>
-                            <h3>Simulador Sistema Masa-Resorte</h3>
-                            <span class="topic-tag">Ecuaciones Diferenciales</span>
-                        </div>
-                        <span class="new-badge">Nuevo</span>
-                    </div>
-                    <p class="digital-desc">Simulación en tiempo real de my″ + by′ + ky = f(t). Observa el resorte y el amortiguador animados, clasifica el movimiento (no amortiguado, subamortiguado, críticamente amortiguado o sobreamortiguado), compara la solución numérica RK4 con la analítica exacta, y visualiza posición y(t), velocidad y′(t) y aceleración y″(t) simultáneamente.</p>
-                    <div class="digital-tags">
-                        <span>No amort. · Sub · Crítico · Sobre</span>
-                        <span>Fuerza externa f(t) libre</span>
-                        <span>RK4 + Solución analítica</span>
-                        <span>Retrato de fase</span>
-                    </div>
-                    <div class="digital-preview">
-                        <iframe src="recursos/masa-resorte.html" loading="lazy" title="Vista previa Masa-Resorte" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
-                    <button class="digital-btn" onclick="toggleResource('masa')">▶ Abrir Visualización</button>
-                    <div class="resource-frame" id="frame-masa" style="display:none">
-                        <iframe src="recursos/masa-resorte.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Sistema Masa-Resorte"></iframe>
-                        <a href="recursos/masa-resorte.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
-                    </div>
-                </div>
-
-                <!-- Simulador Circuito RLC -->
-                <div class="digital-card" id="card-rlc">
-                    <div class="digital-card-header">
-                        <div class="digital-icon">⚡</div>
-                        <div>
-                            <h3>Simulador Circuito RLC</h3>
-                            <span class="topic-tag">Ecuaciones Diferenciales · Física</span>
-                        </div>
-                        <span class="new-badge">Nuevo</span>
-                    </div>
-                    <p class="digital-desc">Circuito RLC serie animado: Lq″ + Rq′ + q/C = V(t). Visualiza el esquemático con resistor, inductor y condensador; observa los puntos de corriente circulando en tiempo real; analiza carga q(t), corriente i(t) y voltajes V_R, V_L, V_C. Incluye la analogía completa con el sistema masa-resorte.</p>
-                    <div class="digital-tags">
-                        <span>Circuito animado (puntos de corriente)</span>
-                        <span>V_C · V_R · V_L en tiempo real</span>
-                        <span>Factor Q · Ancho de banda</span>
-                        <span>Fuente V(t) libre</span>
-                    </div>
-                    <div class="digital-preview">
-                        <iframe src="recursos/circuito-rlc.html" loading="lazy" title="Vista previa RLC" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
-                    <button class="digital-btn" onclick="toggleResource('rlc')">▶ Abrir Visualización</button>
-                    <div class="resource-frame" id="frame-rlc" style="display:none">
-                        <iframe src="recursos/circuito-rlc.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Circuito RLC"></iframe>
-                        <a href="recursos/circuito-rlc.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
-                    </div>
-                </div>
-
-                <!-- Simulador Péndulo Simple -->
-                <div class="digital-card" id="card-pendulo">
-                    <div class="digital-card-header">
-                        <div class="digital-icon">θ″</div>
-                        <div>
-                            <h3>Simulador Péndulo Simple</h3>
-                            <span class="topic-tag">Ecuaciones Diferenciales · No Lineal</span>
-                        </div>
-                        <span class="new-badge">Nuevo</span>
-                    </div>
-                    <p class="digital-desc">Péndulo simple con la ecuación completa θ″ + γθ′ + ω₀²sin(θ) = 0. Compara en tiempo real la solución no lineal (RK4) con la linealización pequeños ángulos. Cambia la gravedad entre Tierra, Luna, Marte y Júpiter; observa el retrato de fase y cómo el período real difiere del período lineal T₀ = 2π√(L/g) para ángulos grandes.</p>
-                    <div class="digital-tags">
-                        <span>No lineal vs Linealizado</span>
-                        <span>Cuatro gravedades planetarias</span>
-                        <span>Trail de trayectoria</span>
-                        <span>Retrato de fase</span>
-                    </div>
-                    <div class="digital-preview">
-                        <iframe src="recursos/pendulo.html" loading="lazy" title="Vista previa Péndulo" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
-                    <button class="digital-btn" onclick="toggleResource('pendulo')">▶ Abrir Visualización</button>
-                    <div class="resource-frame" id="frame-pendulo" style="display:none">
-                        <iframe src="recursos/pendulo.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Péndulo Simple"></iframe>
-                        <a href="recursos/pendulo.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
-                    </div>
-                </div>
-
-                <!-- Simulador de Campo de Direcciones -->
-                <div class="digital-card" id="card-campo">
-                    <div class="digital-card-header">
-                        <div class="digital-icon">∂y/∂x</div>
-                        <div>
-                            <h3>Simulador de Campo de Direcciones</h3>
-                            <span class="topic-tag">Ecuaciones Diferenciales · Análisis Cualitativo</span>
-                        </div>
-                        <span class="new-badge">Nuevo</span>
-                    </div>
-                    <p class="digital-desc">Visualización interactiva del campo de direcciones de y′ = f(x, y). Escribe cualquier expresión, haz clic para trazar curvas solución (RK4), observa nullclines, detecta equilibrios estables e inestables automáticamente y analiza el comportamiento cualitativo en cualquier punto al pasar el cursor.</p>
-                    <div class="digital-tags">
-                        <span>16 presets (autónomas y no autónomas)</span>
-                        <span>Nullclines y equilibrios</span>
-                        <span>Curvas solución RK4</span>
-                        <span>Zoom · Pan · Análisis en cursor</span>
-                    </div>
-                    <div class="digital-preview">
-                        <iframe src="recursos/campo-direcciones.html" loading="lazy" title="Vista previa Campo de Direcciones" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
-                    <button class="digital-btn" onclick="toggleResource('campo')">▶ Abrir Visualización</button>
-                    <div class="resource-frame" id="frame-campo" style="display:none">
-                        <iframe src="recursos/campo-direcciones.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Campo de Direcciones"></iframe>
-                        <a href="recursos/campo-direcciones.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
-                    </div>
-                </div>
-
-
-                <!-- Simulador de Transformaciones Lineales -->
-                <div class="digital-card" id="card-tl">
-                    <div class="digital-card-header">
-                        <div class="digital-icon">T</div>
-                        <div>
-                            <h3>Simulador de Transformaciones Lineales</h3>
-                            <span class="topic-tag">Álgebra Lineal · ℝ² y ℝ³</span>
-                        </div>
-                        <span class="new-badge">Nuevo</span>
-                    </div>
-                    <p class="digital-desc">Visualiza cómo una matriz transforma el plano y el espacio. En ℝ² deforma un oso con el grid, el paralelogramo del determinante y los eigenvectores. En ℝ³ transforma el oso 3D y muestra el paralelepípedo cuyo volumen es |det(T)|. Anima la transformación de t=0 a t=1, cambia presets, y lee el análisis completo: det, traza, eigenvalores y clasificación automática.</p>
-                    <div class="digital-tags">
-                        <span>ℝ² y ℝ³ interactivos</span>
-                        <span>Determinante como área/volumen</span>
-                        <span>Eigenvectores y clasificación</span>
-                        <span>14 presets ℝ² · 10 presets ℝ³</span>
-                    </div>
-                    <div class="digital-preview">
-                        <iframe src="recursos/transformaciones-lineales.html" loading="lazy" title="Vista previa Transformaciones Lineales" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
-                    <button class="digital-btn" onclick="toggleResource('tl')">▶ Abrir Visualización</button>
-                    <div class="resource-frame" id="frame-tl" style="display:none">
-                        <iframe src="recursos/transformaciones-lineales.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Transformaciones Lineales"></iframe>
-                        <a href="recursos/transformaciones-lineales.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
-                    </div>
-                </div>
-
-
-                <!-- Simulador de Series de Taylor -->
-                <div class="digital-card" id="card-taylor">
-                    <div class="digital-card-header">
-                        <div class="digital-icon">Σ</div>
-                        <div>
-                            <h3>Simulador de Series de Taylor</h3>
-                            <span class="topic-tag">Cálculo · Análisis Matemático</span>
-                        </div>
-                        <span class="new-badge">Nuevo</span>
-                    </div>
-                    <p class="digital-desc">Visualiza cómo un polinomio de grado n se "pega" a cualquier función al agregar términos. Escribe f(x), elige el centro a y anima la convergencia grado a grado. Muestra la fórmula con los coeficientes exactos f⁽ᵏ⁾(a)/k!, la tabla de coeficientes, el error |f − Tₙ| en escala logarítmica y el espectro de coeficientes. Diferenciación simbólica con mathjs.</p>
-                    <div class="digital-tags">
-                        <span>Diferenciación simbólica</span>
-                        <span>Animación grado a grado</span>
-                        <span>Error |f − Tₙ| en log</span>
-                        <span>14 presets (sin, cos, eˣ, ln, arctan…)</span>
-                    </div>
-                    <div class="digital-preview">
-                        <iframe src="recursos/series-taylor.html" loading="lazy" title="Vista previa Series de Taylor" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
-                    <button class="digital-btn" onclick="toggleResource('taylor')">▶ Abrir Visualización</button>
-                    <div class="resource-frame" id="frame-taylor" style="display:none">
-                        <iframe src="recursos/series-taylor.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Series de Taylor"></iframe>
-                        <a href="recursos/series-taylor.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
-                    </div>
-                </div>
-
-                <!-- Simulador de Integrales Dobles -->
-                <div class="digital-card" id="card-integrales">
-                    <div class="digital-card-header">
-                        <div class="digital-icon">∬</div>
-                        <div>
-                            <h3>Simulador de Integrales Dobles</h3>
-                            <span class="topic-tag">Cálculo Multivariable · Regiones</span>
-                        </div>
-                        <span class="new-badge">Nuevo</span>
-                    </div>
-                    <p class="digital-desc">Visualiza y calcula integrales dobles. Soporta Tipo I (dy dx), Tipo II (dx dy) y Polares (dr dθ). Ingresa los 4 límites: a, b, f₁(x) y f₂(x). La región se dibuja en 2D con aspecto 1:1 real, zoom con scroll y pan con arrastre; la función aparece difuminada fuera de la región. En 3D muestra el volumen como sólido paramétrico con colorscale cool-warm. Incluye botón para invertir el orden (Teorema de Fubini) y rotación animada del volumen.</p>
-                    <div class="digital-tags">
-                        <span>Tipo I · Tipo II · Polares</span>
-                        <span>Región 2D con aspecto 1:1</span>
-                        <span>Volumen 3D paramétrico</span>
-                        <span>Invertir orden · Rotación 3D</span>
-                    </div>
-                    <div class="digital-preview">
-                        <iframe src="recursos/integrales-dobles.html" loading="lazy" title="Vista previa Integrales Dobles" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
-                    <button class="digital-btn" onclick="toggleResource('integrales')">▶ Abrir Visualización</button>
-                    <div class="resource-frame" id="frame-integrales" style="display:none">
-                        <iframe src="recursos/integrales-dobles.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Integrales Dobles"></iframe>
-                        <a href="recursos/integrales-dobles.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
-                    </div>
-                </div>
-
             </div>
+
+            <div class="category-group" id="cat-ecuaciones-diferenciales">
+                <h4>Ecuaciones Diferenciales</h4>
+                <div class="digital-grid">
+
+                    <!-- Simulador Sistema Masa-Resorte -->
+                    <div class="digital-card" id="card-masa">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∂²</div>
+                            <div>
+                                <h3>Simulador Sistema Masa-Resorte</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Simulación en tiempo real de my″ + by′ + ky = f(t). Observa el resorte y el amortiguador animados, clasifica el movimiento (no amortiguado, subamortiguado, críticamente amortiguado o sobreamortiguado), compara la solución numérica RK4 con la analítica exacta, y visualiza posición y(t), velocidad y′(t) y aceleración y″(t) simultáneamente.</p>
+                        <div class="digital-tags">
+                            <span>No amort. · Sub · Crítico · Sobre</span>
+                            <span>Fuerza externa f(t) libre</span>
+                            <span>RK4 + Solución analítica</span>
+                            <span>Retrato de fase</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/masa-resorte.html" loading="lazy" title="Vista previa Masa-Resorte" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleResource('masa')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-masa" style="display:none">
+                            <iframe src="recursos/masa-resorte.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Sistema Masa-Resorte"></iframe>
+                            <a href="recursos/masa-resorte.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador Circuito RLC -->
+                    <div class="digital-card" id="card-rlc">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">⚡</div>
+                            <div>
+                                <h3>Simulador Circuito RLC</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · Física</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Circuito RLC serie animado: Lq″ + Rq′ + q/C = V(t). Visualiza el esquemático con resistor, inductor y condensador; observa los puntos de corriente circulando en tiempo real; analiza carga q(t), corriente i(t) y voltajes V_R, V_L, V_C. Incluye la analogía completa con el sistema masa-resorte.</p>
+                        <div class="digital-tags">
+                            <span>Circuito animado (puntos de corriente)</span>
+                            <span>V_C · V_R · V_L en tiempo real</span>
+                            <span>Factor Q · Ancho de banda</span>
+                            <span>Fuente V(t) libre</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/circuito-rlc.html" loading="lazy" title="Vista previa RLC" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleResource('rlc')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-rlc" style="display:none">
+                            <iframe src="recursos/circuito-rlc.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Circuito RLC"></iframe>
+                            <a href="recursos/circuito-rlc.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador Péndulo Simple -->
+                    <div class="digital-card" id="card-pendulo">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">θ″</div>
+                            <div>
+                                <h3>Simulador Péndulo Simple</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · No Lineal</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Péndulo simple con la ecuación completa θ″ + γθ′ + ω₀²sin(θ) = 0. Compara en tiempo real la solución no lineal (RK4) con la linealización pequeños ángulos. Cambia la gravedad entre Tierra, Luna, Marte y Júpiter; observa el retrato de fase y cómo el período real difiere del período lineal T₀ = 2π√(L/g) para ángulos grandes.</p>
+                        <div class="digital-tags">
+                            <span>No lineal vs Linealizado</span>
+                            <span>Cuatro gravedades planetarias</span>
+                            <span>Trail de trayectoria</span>
+                            <span>Retrato de fase</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/pendulo.html" loading="lazy" title="Vista previa Péndulo" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleResource('pendulo')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-pendulo" style="display:none">
+                            <iframe src="recursos/pendulo.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Péndulo Simple"></iframe>
+                            <a href="recursos/pendulo.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador de Campo de Direcciones -->
+                    <div class="digital-card" id="card-campo">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∂y/∂x</div>
+                            <div>
+                                <h3>Simulador de Campo de Direcciones</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · Análisis Cualitativo</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualización interactiva del campo de direcciones de y′ = f(x, y). Escribe cualquier expresión, haz clic o arrastra para trazar curvas solución (RK4), acércate con la rueda del mouse, desplaza la vista con clic derecho, observa nullclines, detecta equilibrios estables e inestables automáticamente y analiza el comportamiento cualitativo en cualquier punto al pasar el cursor.</p>
+                        <div class="digital-tags">
+                            <span>16 presets (autónomas y no autónomas)</span>
+                            <span>Nullclines y equilibrios</span>
+                            <span>Curvas solución RK4 · Arrastre múltiple</span>
+                            <span>Zoom con rueda · Pan · Análisis en cursor</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/ecuaciones-diferenciales/campo-direcciones/" loading="lazy" title="Vista previa Campo de Direcciones" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleResource('campo')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-campo" style="display:none">
+                            <iframe src="recursos/ecuaciones-diferenciales/campo-direcciones/" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Campo de Direcciones"></iframe>
+                            <a href="recursos/ecuaciones-diferenciales/campo-direcciones/" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="category-group" id="cat-calculo-integral">
+                <h4>Cálculo Integral</h4>
+                <div class="digital-grid">
+
+                    <!-- Simulador de Sólidos de Revolución -->
+                    <div class="digital-card" id="card-solidos">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∮</div>
+                            <div>
+                                <h3>Simulador de Sólidos de Revolución</h3>
+                                <span class="topic-tag">Cálculo Integral · 3D</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualización 3D interactiva de sólidos de revolución. Escoge entre los métodos del Disco, Cascarón cilíndrico y Arandela; ajusta el eje de revolución (X o Y); anima el barrido de 0° a 360°; y mueve la sección transversal para ver el área de cada corte. Calcula el volumen exacto y la superficie lateral.</p>
+                        <div class="digital-tags">
+                            <span>Disco · Cascarón · Arandela</span>
+                            <span>Eje X / Eje Y</span>
+                            <span>Animación de Barrido</span>
+                            <span>Sección Transversal</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/solidos-revolucion.html" loading="lazy" title="Vista previa Sólidos de Revolución" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleResource('solidos')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-solidos" style="display:none">
+                            <iframe src="recursos/solidos-revolucion.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sólidos de Revolución"></iframe>
+                            <a href="recursos/solidos-revolucion.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador de Sumas de Riemann -->
+                    <div class="digital-card" id="card-riemann">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∑</div>
+                            <div>
+                                <h3>Simulador de Sumas de Riemann</h3>
+                                <span class="topic-tag">Cálculo Integral</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Explora los cinco métodos de aproximación de la integral definida: Izquierda, Derecha, Punto Medio, Trapecio y Simpson 1/3. Anima la convergencia en tiempo real, compara el error con la integral exacta y observa la tabla de convergencia del valor exacto.</p>
+                        <div class="digital-tags">
+                            <span>Izquierda · Derecha · Medio</span>
+                            <span>Trapecio · Simpson 1/3</span>
+                            <span>Convergencia y Error</span>
+                            <span>Animación con velocidad ajustable</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/riemann.html" loading="lazy" title="Vista previa Riemann" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleResource('riemann')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-riemann" style="display:none">
+                            <iframe src="recursos/riemann.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sumas de Riemann"></iframe>
+                            <a href="recursos/riemann.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador de Series de Taylor -->
+                    <div class="digital-card" id="card-taylor">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">Σ</div>
+                            <div>
+                                <h3>Simulador de Series de Taylor</h3>
+                                <span class="topic-tag">Cálculo · Análisis Matemático</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualiza cómo un polinomio de grado n se "pega" a cualquier función al agregar términos. Escribe f(x), elige el centro a y anima la convergencia grado a grado. Muestra la fórmula con los coeficientes exactos f⁽ᵏ⁾(a)/k!, la tabla de coeficientes, el error |f − Tₙ| en escala logarítmica y el espectro de coeficientes. Diferenciación simbólica con mathjs.</p>
+                        <div class="digital-tags">
+                            <span>Diferenciación simbólica</span>
+                            <span>Animación grado a grado</span>
+                            <span>Error |f − Tₙ| en log</span>
+                            <span>14 presets (sin, cos, eˣ, ln, arctan…)</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/series-taylor.html" loading="lazy" title="Vista previa Series de Taylor" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleResource('taylor')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-taylor" style="display:none">
+                            <iframe src="recursos/series-taylor.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Series de Taylor"></iframe>
+                            <a href="recursos/series-taylor.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="category-group" id="cat-calculo-multivariable">
+                <h4>Cálculo Multivariable</h4>
+                <div class="digital-grid">
+
+                    <!-- Simulador de Multiplicadores de Lagrange -->
+                    <div class="digital-card" id="card-lagrange">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">λ</div>
+                            <div>
+                                <h3>Simulador de Multiplicadores de Lagrange</h3>
+                                <span class="topic-tag">Cálculo Multivariable</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Interpretación geométrica de ∇f = λ·∇g. Mueve el punto sobre la restricción y observa cuándo los gradientes se vuelven paralelos. Incluye mapa de calor de f(x,y) y medidor de paralelismo en tiempo real.</p>
+                        <div class="digital-tags">
+                            <span>Optimización Restringida</span>
+                            <span>Gradientes</span>
+                            <span>Curvas de Nivel</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/lagrange.html" loading="lazy" title="Vista previa Lagrange" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleResource('lagrange')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-lagrange" style="display:none">
+                            <iframe src="recursos/lagrange.html" width="100%" height="640" frameborder="0" loading="lazy" title="Simulador de Multiplicadores de Lagrange"></iframe>
+                            <a href="recursos/lagrange.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador de Integrales Dobles -->
+                    <div class="digital-card" id="card-integrales">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∬</div>
+                            <div>
+                                <h3>Simulador de Integrales Dobles</h3>
+                                <span class="topic-tag">Cálculo Multivariable · Regiones</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualiza y calcula integrales dobles. Soporta Tipo I (dy dx), Tipo II (dx dy) y Polares (dr dθ). Ingresa los 4 límites: a, b, f₁(x) y f₂(x). La región se dibuja en 2D con aspecto 1:1 real, zoom con scroll y pan con arrastre; la función aparece difuminada fuera de la región. En 3D muestra el volumen como sólido paramétrico con colorscale cool-warm. Incluye botón para invertir el orden (Teorema de Fubini) y rotación animada del volumen.</p>
+                        <div class="digital-tags">
+                            <span>Tipo I · Tipo II · Polares</span>
+                            <span>Región 2D con aspecto 1:1</span>
+                            <span>Volumen 3D paramétrico</span>
+                            <span>Invertir orden · Rotación 3D</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/integrales-dobles.html" loading="lazy" title="Vista previa Integrales Dobles" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleResource('integrales')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-integrales" style="display:none">
+                            <iframe src="recursos/integrales-dobles.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Integrales Dobles"></iframe>
+                            <a href="recursos/integrales-dobles.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="category-group" id="cat-matematicas-especiales">
+                <h4>Matemáticas Especiales</h4>
+                <div class="digital-grid">
+
+                    <!-- Simulador de Transformaciones Lineales -->
+                    <div class="digital-card" id="card-tl">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">T</div>
+                            <div>
+                                <h3>Simulador de Transformaciones Lineales</h3>
+                                <span class="topic-tag">Álgebra Lineal · ℝ² y ℝ³</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualiza cómo una matriz transforma el plano y el espacio. En ℝ² deforma un oso con el grid, el paralelogramo del determinante y los eigenvectores. En ℝ³ transforma el oso 3D y muestra el paralelepípedo cuyo volumen es |det(T)|. Anima la transformación de t=0 a t=1, cambia presets, y lee el análisis completo: det, traza, eigenvalores y clasificación automática.</p>
+                        <div class="digital-tags">
+                            <span>ℝ² y ℝ³ interactivos</span>
+                            <span>Determinante como área/volumen</span>
+                            <span>Eigenvectores y clasificación</span>
+                            <span>14 presets ℝ² · 10 presets ℝ³</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/transformaciones-lineales.html" loading="lazy" title="Vista previa Transformaciones Lineales" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleResource('tl')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-tl" style="display:none">
+                            <iframe src="recursos/transformaciones-lineales.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Transformaciones Lineales"></iframe>
+                            <a href="recursos/transformaciones-lineales.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="category-group" id="cat-calculo-diferencial">
+                <h4>Cálculo Diferencial</h4>
+                <p style="font-size:0.85rem; color:#888; margin-top:-0.4rem;">Próximamente — aún no hay simuladores publicados en esta categoría.</p>
+            </div>
+
         </div>
     </section>
     <!-- ══════════════════════════════════════════════
