@@ -11,14 +11,55 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ===== Previews de simuladores (embellecimiento) ===== */
-        .digital-preview{
-            width: 100%;
-            height: 190px;
+        /* ===== Recursos Educativos Digitales — grid estilo Red LAC ===== */
+        .digital-grid{
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.6rem;
+            flex-direction: unset;
+            max-width: none;
+        }
+        .digital-card{
+            display: flex;
+            flex-direction: column;
+            padding: 0;
             overflow: hidden;
-            border-radius: 12px;
+        }
+        .digital-card-header{
+            padding: 1.1rem 1.3rem 0.9rem;
+            margin-bottom: 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .digital-icon{
+            width: 44px;
+            height: 44px;
+            font-size: 1.3rem;
+            border-radius: 10px;
+        }
+        .digital-card-header h3{ font-size: 1rem; }
+        .new-badge{ align-self: center; }
+
+        .digital-desc{
+            padding: 0 1.3rem;
+            margin-top: 0.9rem;
+            margin-bottom: 0;
+            font-size: 0.85rem;
+        }
+        .digital-tags{
+            padding: 0 1.3rem;
+            margin-top: 0.7rem;
+            margin-bottom: 0;
+        }
+        .digital-tags span{ font-size: 0.7rem; }
+
+        /* Miniatura en vivo, tamaño compacto tipo tarjeta de cuadrícula */
+        .digital-preview{
+            width: calc(100% - 2.6rem);
+            margin: 1rem 1.3rem 0;
+            height: 158px;
+            overflow: hidden;
+            border-radius: 10px;
             position: relative;
-            margin-bottom: 1.1rem;
             background: #0f172a;
             border: 1px solid rgba(255,255,255,0.08);
         }
@@ -28,7 +69,7 @@
             left: 0;
             width: 1200px;
             height: 640px;
-            transform: scale(0.34);
+            transform: scale(0.283);
             transform-origin: top left;
             border: none;
             pointer-events: none;
@@ -39,10 +80,24 @@
             inset: 0;
             background: linear-gradient(to bottom, transparent 65%, rgba(15,23,42,0.55));
             pointer-events: none;
-            border-radius: 12px;
+            border-radius: 10px;
         }
         .digital-card:hover .digital-preview{
             border-color: rgba(255,255,255,0.16);
+        }
+
+        .digital-btn{
+            margin: 1.1rem 1.3rem 1.3rem;
+            width: calc(100% - 2.6rem);
+        }
+        .resource-frame{
+            margin: 0 1.3rem 1.3rem;
+            border-radius: 10px;
+        }
+        .open-full{ font-size: 0.75rem; }
+
+        @media (max-width: 640px){
+            .digital-grid{ grid-template-columns: 1fr; }
         }
 </style>
 </head>
@@ -510,9 +565,6 @@
 
                 <!-- Simulador de Sólidos de Revolución -->
                 <div class="digital-card" id="card-solidos">
-                    <div class="digital-preview">
-                        <iframe src="recursos/solidos-revolucion.html" loading="lazy" title="Vista previa Sólidos de Revolución" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">∮</div>
                         <div>
@@ -528,6 +580,9 @@
                         <span>Animación de Barrido</span>
                         <span>Sección Transversal</span>
                     </div>
+                    <div class="digital-preview">
+                        <iframe src="recursos/solidos-revolucion.html" loading="lazy" title="Vista previa Sólidos de Revolución" tabindex="-1" aria-hidden="true"></iframe>
+                    </div>
                     <button class="digital-btn" onclick="toggleResource('solidos')">▶ Abrir Visualización</button>
                     <div class="resource-frame" id="frame-solidos" style="display:none">
                         <iframe src="recursos/solidos-revolucion.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sólidos de Revolución"></iframe>
@@ -537,9 +592,6 @@
 
                 <!-- Simulador de Multiplicadores de Lagrange -->
                 <div class="digital-card" id="card-lagrange">
-                    <div class="digital-preview">
-                        <iframe src="recursos/lagrange.html" loading="lazy" title="Vista previa Lagrange" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">λ</div>
                         <div>
@@ -554,6 +606,9 @@
                         <span>Gradientes</span>
                         <span>Curvas de Nivel</span>
                     </div>
+                    <div class="digital-preview">
+                        <iframe src="recursos/lagrange.html" loading="lazy" title="Vista previa Lagrange" tabindex="-1" aria-hidden="true"></iframe>
+                    </div>
                     <button class="digital-btn" onclick="toggleResource('lagrange')">▶ Abrir Visualización</button>
                     <div class="resource-frame" id="frame-lagrange" style="display:none">
                         <iframe src="recursos/lagrange.html" width="100%" height="640" frameborder="0" loading="lazy" title="Simulador de Multiplicadores de Lagrange"></iframe>
@@ -563,9 +618,6 @@
 
                 <!-- Simulador de Sumas de Riemann -->
                 <div class="digital-card" id="card-riemann">
-                    <div class="digital-preview">
-                        <iframe src="recursos/riemann.html" loading="lazy" title="Vista previa Riemann" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">∑</div>
                         <div>
@@ -581,6 +633,9 @@
                         <span>Convergencia y Error</span>
                         <span>Animación con velocidad ajustable</span>
                     </div>
+                    <div class="digital-preview">
+                        <iframe src="recursos/riemann.html" loading="lazy" title="Vista previa Riemann" tabindex="-1" aria-hidden="true"></iframe>
+                    </div>
                     <button class="digital-btn" onclick="toggleResource('riemann')">▶ Abrir Visualización</button>
                     <div class="resource-frame" id="frame-riemann" style="display:none">
                         <iframe src="recursos/riemann.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sumas de Riemann"></iframe>
@@ -590,9 +645,6 @@
 
                 <!-- Simulador Sistema Masa-Resorte -->
                 <div class="digital-card" id="card-masa">
-                    <div class="digital-preview">
-                        <iframe src="recursos/masa-resorte.html" loading="lazy" title="Vista previa Masa-Resorte" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">∂²</div>
                         <div>
@@ -608,6 +660,9 @@
                         <span>RK4 + Solución analítica</span>
                         <span>Retrato de fase</span>
                     </div>
+                    <div class="digital-preview">
+                        <iframe src="recursos/masa-resorte.html" loading="lazy" title="Vista previa Masa-Resorte" tabindex="-1" aria-hidden="true"></iframe>
+                    </div>
                     <button class="digital-btn" onclick="toggleResource('masa')">▶ Abrir Visualización</button>
                     <div class="resource-frame" id="frame-masa" style="display:none">
                         <iframe src="recursos/masa-resorte.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Sistema Masa-Resorte"></iframe>
@@ -617,9 +672,6 @@
 
                 <!-- Simulador Circuito RLC -->
                 <div class="digital-card" id="card-rlc">
-                    <div class="digital-preview">
-                        <iframe src="recursos/circuito-rlc.html" loading="lazy" title="Vista previa RLC" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">⚡</div>
                         <div>
@@ -635,6 +687,9 @@
                         <span>Factor Q · Ancho de banda</span>
                         <span>Fuente V(t) libre</span>
                     </div>
+                    <div class="digital-preview">
+                        <iframe src="recursos/circuito-rlc.html" loading="lazy" title="Vista previa RLC" tabindex="-1" aria-hidden="true"></iframe>
+                    </div>
                     <button class="digital-btn" onclick="toggleResource('rlc')">▶ Abrir Visualización</button>
                     <div class="resource-frame" id="frame-rlc" style="display:none">
                         <iframe src="recursos/circuito-rlc.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Circuito RLC"></iframe>
@@ -644,9 +699,6 @@
 
                 <!-- Simulador Péndulo Simple -->
                 <div class="digital-card" id="card-pendulo">
-                    <div class="digital-preview">
-                        <iframe src="recursos/pendulo.html" loading="lazy" title="Vista previa Péndulo" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">θ″</div>
                         <div>
@@ -662,6 +714,9 @@
                         <span>Trail de trayectoria</span>
                         <span>Retrato de fase</span>
                     </div>
+                    <div class="digital-preview">
+                        <iframe src="recursos/pendulo.html" loading="lazy" title="Vista previa Péndulo" tabindex="-1" aria-hidden="true"></iframe>
+                    </div>
                     <button class="digital-btn" onclick="toggleResource('pendulo')">▶ Abrir Visualización</button>
                     <div class="resource-frame" id="frame-pendulo" style="display:none">
                         <iframe src="recursos/pendulo.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Péndulo Simple"></iframe>
@@ -671,9 +726,6 @@
 
                 <!-- Simulador de Campo de Direcciones -->
                 <div class="digital-card" id="card-campo">
-                    <div class="digital-preview">
-                        <iframe src="recursos/campo-direcciones.html" loading="lazy" title="Vista previa Campo de Direcciones" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">∂y/∂x</div>
                         <div>
@@ -689,6 +741,9 @@
                         <span>Curvas solución RK4</span>
                         <span>Zoom · Pan · Análisis en cursor</span>
                     </div>
+                    <div class="digital-preview">
+                        <iframe src="recursos/campo-direcciones.html" loading="lazy" title="Vista previa Campo de Direcciones" tabindex="-1" aria-hidden="true"></iframe>
+                    </div>
                     <button class="digital-btn" onclick="toggleResource('campo')">▶ Abrir Visualización</button>
                     <div class="resource-frame" id="frame-campo" style="display:none">
                         <iframe src="recursos/campo-direcciones.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Campo de Direcciones"></iframe>
@@ -699,9 +754,6 @@
 
                 <!-- Simulador de Transformaciones Lineales -->
                 <div class="digital-card" id="card-tl">
-                    <div class="digital-preview">
-                        <iframe src="recursos/transformaciones-lineales.html" loading="lazy" title="Vista previa Transformaciones Lineales" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">T</div>
                         <div>
@@ -717,6 +769,9 @@
                         <span>Eigenvectores y clasificación</span>
                         <span>14 presets ℝ² · 10 presets ℝ³</span>
                     </div>
+                    <div class="digital-preview">
+                        <iframe src="recursos/transformaciones-lineales.html" loading="lazy" title="Vista previa Transformaciones Lineales" tabindex="-1" aria-hidden="true"></iframe>
+                    </div>
                     <button class="digital-btn" onclick="toggleResource('tl')">▶ Abrir Visualización</button>
                     <div class="resource-frame" id="frame-tl" style="display:none">
                         <iframe src="recursos/transformaciones-lineales.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Transformaciones Lineales"></iframe>
@@ -727,9 +782,6 @@
 
                 <!-- Simulador de Series de Taylor -->
                 <div class="digital-card" id="card-taylor">
-                    <div class="digital-preview">
-                        <iframe src="recursos/series-taylor.html" loading="lazy" title="Vista previa Series de Taylor" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">Σ</div>
                         <div>
@@ -745,6 +797,9 @@
                         <span>Error |f − Tₙ| en log</span>
                         <span>14 presets (sin, cos, eˣ, ln, arctan…)</span>
                     </div>
+                    <div class="digital-preview">
+                        <iframe src="recursos/series-taylor.html" loading="lazy" title="Vista previa Series de Taylor" tabindex="-1" aria-hidden="true"></iframe>
+                    </div>
                     <button class="digital-btn" onclick="toggleResource('taylor')">▶ Abrir Visualización</button>
                     <div class="resource-frame" id="frame-taylor" style="display:none">
                         <iframe src="recursos/series-taylor.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Series de Taylor"></iframe>
@@ -754,9 +809,6 @@
 
                 <!-- Simulador de Integrales Dobles -->
                 <div class="digital-card" id="card-integrales">
-                    <div class="digital-preview">
-                        <iframe src="recursos/integrales-dobles.html" loading="lazy" title="Vista previa Integrales Dobles" tabindex="-1" aria-hidden="true"></iframe>
-                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">∬</div>
                         <div>
@@ -771,6 +823,9 @@
                         <span>Región 2D con aspecto 1:1</span>
                         <span>Volumen 3D paramétrico</span>
                         <span>Invertir orden · Rotación 3D</span>
+                    </div>
+                    <div class="digital-preview">
+                        <iframe src="recursos/integrales-dobles.html" loading="lazy" title="Vista previa Integrales Dobles" tabindex="-1" aria-hidden="true"></iframe>
                     </div>
                     <button class="digital-btn" onclick="toggleResource('integrales')">▶ Abrir Visualización</button>
                     <div class="resource-frame" id="frame-integrales" style="display:none">
