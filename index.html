@@ -11,6 +11,39 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== Previews de simuladores (embellecimiento) ===== */
+        .digital-preview{
+            position: relative;
+            width: 100%;
+            height: 150px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.1rem;
+            background: linear-gradient(135deg, #10182e 0%, #1c2b52 55%, #24356b 100%);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+        }
+        .digital-preview svg{
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .digital-preview::after{
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 85% 15%, rgba(255,255,255,0.10), transparent 55%);
+            pointer-events: none;
+        }
+        .digital-card:hover .digital-preview{
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14);
+        }
+        .digital-preview .p-stroke{ fill:none; stroke:#9fc7ff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+        .digital-preview .p-stroke-soft{ fill:none; stroke:#7fa8e8; stroke-width:1.4; stroke-linecap:round; opacity:0.65; }
+        .digital-preview .p-accent{ fill:none; stroke:#ffd166; stroke-width:2; stroke-linecap:round; }
+        .digital-preview .p-fill{ fill:#9fc7ff; opacity:0.16; }
+        .digital-preview .p-dot{ fill:#ffd166; }
+    </style>
 </head>
 <body>
     <nav class="navbar" id="navbar">
@@ -476,6 +509,18 @@
 
                 <!-- Simulador de Sólidos de Revolución -->
                 <div class="digital-card" id="card-solidos">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke-soft" d="M30 120 Q90 40 150 60 Q210 78 270 30"/>
+<ellipse class="p-fill" cx="150" cy="75" rx="70" ry="18"/>
+<ellipse class="p-stroke" cx="150" cy="75" rx="70" ry="18"/>
+<ellipse class="p-stroke-soft" cx="80" cy="98" rx="20" ry="7"/>
+<ellipse class="p-stroke-soft" cx="220" cy="55" rx="16" ry="6"/>
+<path class="p-stroke" d="M80 91 L80 105"/>
+<path class="p-stroke" d="M220 49 L220 61"/>
+<path class="p-accent" d="M30 120 Q90 40 150 60 Q210 78 270 30" stroke-dasharray="0" opacity="0"/>
+</svg>
+                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">∮</div>
                         <div>
@@ -500,6 +545,18 @@
 
                 <!-- Simulador de Multiplicadores de Lagrange -->
                 <div class="digital-card" id="card-lagrange">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<ellipse class="p-stroke-soft" cx="150" cy="75" rx="120" ry="55"/>
+<ellipse class="p-stroke-soft" cx="150" cy="75" rx="90" ry="40"/>
+<ellipse class="p-stroke-soft" cx="150" cy="75" rx="60" ry="26"/>
+<ellipse class="p-stroke" cx="150" cy="75" rx="30" ry="13"/>
+<path class="p-accent" d="M60 130 Q150 20 240 130" fill="none"/>
+<circle class="p-dot" cx="150" cy="40" r="4.5"/>
+<path class="p-stroke" d="M150 40 L150 15" marker-end="none"/>
+<path class="p-stroke" d="M150 40 L165 20"/>
+</svg>
+                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">λ</div>
                         <div>
@@ -523,6 +580,28 @@
 
                 <!-- Simulador de Sumas de Riemann -->
                 <div class="digital-card" id="card-riemann">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke" d="M20 120 Q100 10 280 60"/>
+<g class="p-fill">
+<rect x="30" y="95" width="34" height="30"/>
+<rect x="70" y="65" width="34" height="60"/>
+<rect x="110" y="45" width="34" height="80"/>
+<rect x="150" y="40" width="34" height="85"/>
+<rect x="190" y="48" width="34" height="77"/>
+<rect x="230" y="58" width="34" height="67"/>
+</g>
+<g class="p-stroke-soft">
+<rect x="30" y="95" width="34" height="30"/>
+<rect x="70" y="65" width="34" height="60"/>
+<rect x="110" y="45" width="34" height="80"/>
+<rect x="150" y="40" width="34" height="85"/>
+<rect x="190" y="48" width="34" height="77"/>
+<rect x="230" y="58" width="34" height="67"/>
+</g>
+<path class="p-stroke-soft" d="M20 125 L280 125"/>
+</svg>
+                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">∑</div>
                         <div>
@@ -547,6 +626,16 @@
 
                 <!-- Simulador Sistema Masa-Resorte -->
                 <div class="digital-card" id="card-masa">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke-soft" d="M40 15 L110 15"/>
+<path class="p-stroke" d="M40 15 L48 25 L58 5 L68 25 L78 5 L88 25 L98 5 L108 15 L110 15 L110 60"/>
+<rect class="p-fill" x="80" y="60" width="60" height="40" rx="4"/>
+<rect class="p-stroke" x="80" y="60" width="60" height="40" rx="4"/>
+<path class="p-accent" d="M20 130 Q60 90 100 130 Q140 170 180 130 Q220 90 260 130" transform="translate(0,-35)"/>
+<path class="p-stroke-soft" d="M20 145 L280 145"/>
+</svg>
+                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">∂²</div>
                         <div>
@@ -571,6 +660,21 @@
 
                 <!-- Simulador Circuito RLC -->
                 <div class="digital-card" id="card-rlc">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke" d="M30 40 L70 40"/>
+<path class="p-stroke" d="M70 40 L78 25 L88 55 L98 25 L108 55 L118 25 L128 40"/>
+<path class="p-stroke" d="M128 40 L160 40"/>
+<path class="p-stroke" d="M160 30 Q170 20 160 40 Q170 60 160 50 Q170 40 160 30" fill="none"/>
+<path class="p-stroke" d="M160 40 L200 40"/>
+<path class="p-stroke" d="M210 20 L210 60 M225 20 L225 60"/>
+<path class="p-stroke" d="M200 40 L210 40 M225 40 L235 40"/>
+<path class="p-stroke" d="M235 40 L235 110 L30 110 L30 40"/>
+<circle class="p-dot" cx="90" cy="110" r="3.5"/>
+<circle class="p-dot" cx="150" cy="110" r="3.5"/>
+<circle class="p-dot" cx="200" cy="40" r="3.5"/>
+</svg>
+                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">⚡</div>
                         <div>
@@ -595,6 +699,17 @@
 
                 <!-- Simulador Péndulo Simple -->
                 <div class="digital-card" id="card-pendulo">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<circle class="p-stroke" cx="150" cy="15" r="4"/>
+<path class="p-stroke" d="M150 15 L195 110"/>
+<circle class="p-fill" cx="195" cy="115" r="16"/>
+<circle class="p-stroke" cx="195" cy="115" r="16"/>
+<path class="p-stroke-soft" d="M150 15 L105 110" stroke-dasharray="4 4"/>
+<circle class="p-stroke-soft" cx="105" cy="115" r="16" stroke-dasharray="4 4"/>
+<path class="p-stroke-soft" d="M75 30 A90 90 0 0 1 225 30" stroke-dasharray="3 5"/>
+</svg>
+                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">θ″</div>
                         <div>
@@ -619,6 +734,16 @@
 
                 <!-- Simulador de Campo de Direcciones -->
                 <div class="digital-card" id="card-campo">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<g class="p-stroke-soft">
+<path d="M30 30 l16 8"/><path d="M75 30 l16 4"/><path d="M120 30 l16 -2"/><path d="M165 30 l16 -6"/><path d="M210 30 l16 -10"/><path d="M255 30 l16 -12"/>
+<path d="M30 70 l16 6"/><path d="M75 70 l16 2"/><path d="M120 70 l16 -3"/><path d="M165 70 l16 -7"/><path d="M210 70 l16 -9"/><path d="M255 70 l16 -11"/>
+<path d="M30 110 l16 4"/><path d="M75 110 l16 0"/><path d="M120 110 l16 -4"/><path d="M165 110 l16 -6"/><path d="M210 110 l16 -8"/><path d="M255 110 l16 -10"/>
+</g>
+<path class="p-accent" d="M30 120 Q100 60 180 55 Q240 50 275 20"/>
+</svg>
+                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">∂y/∂x</div>
                         <div>
@@ -644,6 +769,18 @@
 
                 <!-- Simulador de Transformaciones Lineales -->
                 <div class="digital-card" id="card-tl">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<g class="p-stroke-soft">
+<path d="M20 30 L280 30 M20 55 L280 55 M20 80 L280 80 M20 105 L280 105 M20 130 L280 130"/>
+<path d="M60 10 L60 140 M110 10 L110 140 M160 10 L160 140 M210 10 L210 140 M260 10 L260 140"/>
+</g>
+<polygon class="p-fill" points="60,130 220,110 260,30 100,50"/>
+<polygon class="p-stroke" points="60,130 220,110 260,30 100,50"/>
+<path class="p-accent" d="M60 130 L220 110"/>
+<path class="p-accent" d="M60 130 L100 50"/>
+</svg>
+                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">T</div>
                         <div>
@@ -669,6 +806,14 @@
 
                 <!-- Simulador de Series de Taylor -->
                 <div class="digital-card" id="card-taylor">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke" d="M15 90 Q80 10 150 90 Q220 170 285 90"/>
+<path class="p-accent" d="M60 125 Q150 15 240 125" stroke-dasharray="6 5"/>
+<circle class="p-dot" cx="150" cy="90" r="4"/>
+<path class="p-stroke-soft" d="M15 90 L285 90" stroke-dasharray="3 4"/>
+</svg>
+                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">Σ</div>
                         <div>
@@ -692,11 +837,15 @@
                 </div>
 
                 <!-- Simulador de Integrales Dobles -->
-                
-
-
-                <!-- Simulador de Integrales Dobles -->
                 <div class="digital-card" id="card-integrales">
+                    <div class="digital-preview">
+<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+<path class="p-stroke" d="M30 110 Q90 30 150 55 Q210 78 270 25"/>
+<path class="p-stroke-soft" d="M30 130 Q90 100 150 108 Q210 114 270 95"/>
+<path class="p-fill" d="M30 110 Q90 30 150 55 Q210 78 270 25 L270 95 Q210 114 150 108 Q90 100 30 130 Z"/>
+<path class="p-stroke-soft" d="M60 60 L60 118 M100 45 L100 112 M140 55 L140 110 M180 62 L180 110 M220 45 L220 100 M260 30 L260 97" stroke-dasharray="2 4"/>
+</svg>
+                    </div>
                     <div class="digital-card-header">
                         <div class="digital-icon">∬</div>
                         <div>
