@@ -96,6 +96,20 @@
         }
         .open-full{ font-size: 0.75rem; }
 
+        /* Cuando se abre una visualización, la tarjeta ocupa todo el ancho de la fila */
+        .digital-card.expanded{
+            grid-column: 1 / -1;
+        }
+        .digital-card.expanded .resource-frame{
+            margin: 0 auto 1.3rem;
+            max-width: 1100px;
+        }
+        .digital-card.expanded .resource-frame iframe{
+            height: 82vh;
+            min-height: 640px;
+            max-height: 900px;
+        }
+
         @media (max-width: 640px){
             .digital-grid{ grid-template-columns: 1fr; }
         }
@@ -969,13 +983,16 @@
     <script>
     function toggleResource(id) {
         const frame = document.getElementById('frame-' + id);
+        const card = document.getElementById('card-' + id);
         const btn = document.querySelector('#card-' + id + ' .digital-btn');
         if (frame.style.display === 'none') {
             frame.style.display = 'block';
+            if (card) card.classList.add('expanded');
             btn.textContent = '▼ Cerrar visualización';
             setTimeout(() => frame.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
         } else {
             frame.style.display = 'none';
+            if (card) card.classList.remove('expanded');
             btn.textContent = '▶ Abrir Visualización';
         }
     }
