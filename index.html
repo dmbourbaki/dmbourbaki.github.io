@@ -100,6 +100,9 @@
         .digital-card.expanded{
             grid-column: 1 / -1;
         }
+        .digital-card.expanded .digital-preview{
+            display: none;
+        }
         .digital-card.expanded .resource-frame{
             margin: 0 auto 1.3rem;
             max-width: 1500px;
@@ -108,6 +111,24 @@
             height: 82vh;
             min-height: 640px;
             max-height: 900px;
+        }
+        .digital-card.expanded .open-full{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.9rem;
+            padding: 0.85rem 1.2rem;
+            background: var(--primary-color, #1e293b);
+            color: #fff;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity .15s;
+        }
+        .digital-card.expanded .open-full:hover{
+            opacity: 0.85;
         }
 
         @media (max-width: 640px){
