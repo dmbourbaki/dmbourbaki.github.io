@@ -567,7 +567,12 @@
                 <div class="conference-year-group"><h3 class="year-title">2020</h3>
                     <div class="conference-item"><div class="conference-date">Septiembre 2020</div><div class="conference-content"><h4>Historia del Número y Magnitud en los Elementos de Euclides</h4><p class="conference-event">Seminario Historia del Número y Magnitud</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad del Valle, Colombia</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
                 </div>
+                <div class="conference-year-group"><h3 class="year-title">2017</h3>
+                    <div class="conference-item"><div class="conference-date">Octubre 2017</div><div class="conference-content"><h4>Las ideas de variación y acumulación detrás de los conceptos de derivada e integral</h4><p class="conference-event">Coloquio del Posgrado en Ciencias Matemáticas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Autónoma de Guerrero, Acapulco, México</p><span class="conference-badge ponente">Ponente</span></div></div>
+                </div>
                 <div class="conference-year-group"><h3 class="year-title">2014</h3>
+                    <div class="conference-item"><div class="conference-date">Octubre 2014</div><div class="conference-content"><h4>Una aproximación a π con el método de Montecarlo mediante el software R: una propuesta para ser llevada al aula de clase</h4><p class="conference-event">15º Encuentro Colombiano de Matemática Educativa</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Industrial de Santander, Bucaramanga, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Septiembre 2014</div><div class="conference-content"><h4>Algunos aspectos cronológicos de la Combinatoria</h4><p class="conference-event">Primer Encuentro Colombiano de Educación Estocástica</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Pedagógica Nacional, Bogotá, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
                     <div class="conference-item"><div class="conference-date">Julio 2014</div><div class="conference-content"><h4>Usando las TICs en la Educación Matemática: El teorema de Pitágoras Generalizado</h4><p class="conference-event">I Congreso Argentino de Integración de GeoGebra en la Matemática</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Argentina</p><span class="conference-badge organizador">Organizador y Ponente Magistral</span></div></div>
                     <div class="conference-item"><div class="conference-date">Julio 2014</div><div class="conference-content"><h4>Los invariantes del área desde un ambiente dinámico usando GeoGebra</h4><p class="conference-event">I Congreso Argentino de Integración de GeoGebra en la Matemática</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Argentina</p><span class="conference-badge organizador">Organizador y Ponente Magistral</span></div></div>
                 </div>
@@ -691,6 +696,87 @@
                         <div class="resource-frame" id="frame-campo" style="display:none">
                             <iframe src="recursos/campo_direcciones/" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Campo de Direcciones"></iframe>
                             <a href="recursos/campo_direcciones/" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador Sistema Masa-Resorte -->
+                    <div class="digital-card" id="card-masa">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∂²</div>
+                            <div>
+                                <h3>Simulador Sistema Masa-Resorte</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Simulación en tiempo real de my″ + by′ + ky = f(t). Observa el resorte y el amortiguador animados, clasifica el movimiento (no amortiguado, subamortiguado, críticamente amortiguado o sobreamortiguado), compara la solución numérica RK4 con la analítica exacta, y visualiza posición y(t), velocidad y′(t) y aceleración y″(t) simultáneamente.</p>
+                        <div class="digital-tags">
+                            <span>No amort. · Sub · Crítico · Sobre</span>
+                            <span>Fuerza externa f(t) libre</span>
+                            <span>RK4 + Solución analítica</span>
+                            <span>Retrato de fase</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/masa_resorte/masa_resorte.html" loading="lazy" title="Vista previa Masa-Resorte" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('masa')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-masa" style="display:none">
+                            <iframe src="recursos/masa_resorte/masa_resorte.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Sistema Masa-Resorte"></iframe>
+                            <a href="recursos/masa_resorte/masa_resorte.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador Circuito RLC -->
+                    <div class="digital-card" id="card-rlc">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">⚡</div>
+                            <div>
+                                <h3>Simulador Circuito RLC</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Circuito RLC serie animado: Lq″ + Rq′ + q/C = V(t). Visualiza el esquemático con resistor, inductor y condensador; observa los puntos de corriente circulando en tiempo real; analiza carga q(t), corriente i(t) y voltajes V_R, V_L, V_C. Incluye la analogía completa con el sistema masa-resorte.</p>
+                        <div class="digital-tags">
+                            <span>Circuito animado (puntos de corriente)</span>
+                            <span>V_C · V_R · V_L en tiempo real</span>
+                            <span>Factor Q · Ancho de banda</span>
+                            <span>Fuente V(t) libre</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/circuito_rlc/circuito_rlc.html" loading="lazy" title="Vista previa RLC" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('rlc')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-rlc" style="display:none">
+                            <iframe src="recursos/circuito_rlc/circuito_rlc.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Circuito RLC"></iframe>
+                            <a href="recursos/circuito_rlc/circuito_rlc.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador Péndulo Simple -->
+                    <div class="digital-card" id="card-pendulo">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">θ″</div>
+                            <div>
+                                <h3>Simulador Péndulo Simple</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Péndulo simple con la ecuación completa θ″ + γθ′ + ω₀²sin(θ) = 0. Compara en tiempo real la solución no lineal (RK4) con la linealización pequeños ángulos. Cambia la gravedad entre Tierra, Luna, Marte y Júpiter; observa el retrato de fase y cómo el período real difiere del período lineal T₀ = 2π√(L/g) para ángulos grandes.</p>
+                        <div class="digital-tags">
+                            <span>No lineal vs Linealizado</span>
+                            <span>Cuatro gravedades planetarias</span>
+                            <span>Trail de trayectoria</span>
+                            <span>Retrato de fase</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/pendulo/pendulo.html" loading="lazy" title="Vista previa Péndulo" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('pendulo')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-pendulo" style="display:none">
+                            <iframe src="recursos/pendulo/pendulo.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Péndulo Simple"></iframe>
+                            <a href="recursos/pendulo/pendulo.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
                         </div>
                     </div>
 
