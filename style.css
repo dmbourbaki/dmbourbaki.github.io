@@ -2,16 +2,18 @@
     --primary-color: #1e3a8a;
     --secondary-color: #3b82f6;
     --accent-color: #60a5fa;
+    --gold: #d4a84b;
+    --gold-bright: #e8c97a;
     --text-dark: #1f2937;
     --text-light: #6b7280;
     --bg-light: #f9fafb;
     --bg-white: #ffffff;
     --border-color: #e5e7eb;
     --success-color: #10b981;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 1px 3px 0 rgba(30, 58, 138, 0.06);
+    --shadow-md: 0 6px 16px -4px rgba(30, 58, 138, 0.12);
+    --shadow-lg: 0 16px 32px -8px rgba(30, 58, 138, 0.16);
+    --shadow-xl: 0 24px 48px -12px rgba(30, 58, 138, 0.2);
 }
 
 * {
@@ -32,7 +34,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: min(94vw, 1400px);
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -123,7 +125,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, #16265e 0%, #1e3a8a 45%, #3b82f6 100%);
     color: white;
     text-align: center;
     overflow: hidden;
@@ -147,7 +149,8 @@ body {
     right: 0;
     bottom: 0;
     background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.2), transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(96, 165, 250, 0.2), transparent 50%);
+                radial-gradient(circle at 80% 80%, rgba(96, 165, 250, 0.2), transparent 50%),
+                radial-gradient(circle at 88% 12%, rgba(212, 168, 75, 0.14), transparent 40%);
 }
 
 .hero-content {
@@ -304,7 +307,7 @@ body {
 
 /* About Section */
 .about-content {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
 }
 
@@ -341,7 +344,7 @@ body {
 .expertise-item {
     background: white;
     padding: 2rem;
-    border-radius: 10px;
+    border-radius: 14px;
     box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
 }
@@ -391,7 +394,7 @@ body {
 .research-card {
     background: var(--bg-light);
     padding: 2.5rem;
-    border-radius: 10px;
+    border-radius: 14px;
     border-left: 4px solid var(--secondary-color);
     transition: all 0.3s ease;
 }
@@ -489,7 +492,7 @@ body {
 }
 
 .publications-list {
-    max-width: 900px;
+    max-width: 980px;
     margin: 0 auto;
 }
 
@@ -497,7 +500,7 @@ body {
     background: white;
     padding: 2rem;
     margin-bottom: 2rem;
-    border-radius: 10px;
+    border-radius: 14px;
     box-shadow: var(--shadow-md);
     display: flex;
     gap: 2rem;
@@ -583,7 +586,7 @@ body {
 .course-card {
     background: var(--bg-light);
     padding: 2rem;
-    border-radius: 10px;
+    border-radius: 14px;
     transition: all 0.3s ease;
     border-top: 4px solid var(--secondary-color);
 }
@@ -641,7 +644,7 @@ body {
     margin-top: 4rem;
     background: var(--bg-light);
     padding: 3rem;
-    border-radius: 10px;
+    border-radius: 14px;
 }
 
 .teaching-philosophy h3 {
@@ -703,7 +706,7 @@ body {
     margin-bottom: 2rem;
     padding: 1.5rem;
     background: white;
-    border-radius: 10px;
+    border-radius: 14px;
     box-shadow: var(--shadow-sm);
 }
 
@@ -760,7 +763,7 @@ body {
 .contact-form {
     background: white;
     padding: 2rem;
-    border-radius: 10px;
+    border-radius: 14px;
     box-shadow: var(--shadow-md);
 }
 
@@ -881,7 +884,7 @@ body {
 
 .timeline {
     position: relative;
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 2rem 0;
 }
@@ -920,7 +923,7 @@ body {
     width: 45%;
     background: var(--bg-light);
     padding: 2rem;
-    border-radius: 10px;
+    border-radius: 14px;
     box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
 }
@@ -954,7 +957,7 @@ body {
 .stay-card {
     background: var(--bg-light);
     padding: 2rem;
-    border-radius: 10px;
+    border-radius: 14px;
     border-left: 4px solid var(--secondary-color);
     box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
@@ -1010,14 +1013,14 @@ body {
 .complementary-item {
     background: white;
     padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
     border-left: 4px solid var(--primary-color);
     display: flex;
     flex-direction: column;
 }
-.complementary-item:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,.15); border-left-width: 6px; }
+.complementary-item:hover { transform: translateY(-5px); box-shadow: var(--shadow-xl); border-left-width: 6px; }
 .item-icon { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem; }
 .item-icon i { display: block; }
 .complementary-item h5 { font-size: 1.1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.75rem; line-height: 1.4; flex-grow: 1; }
@@ -1087,7 +1090,7 @@ body {
     font-size: 1.1rem;
     color: var(--text-light);
 }
-.conferences-timeline { max-width: 1000px; margin: 0 auto; }
+.conferences-timeline { max-width: 1100px; margin: 0 auto; }
 .conference-year-group { margin-bottom: 3rem; }
 .year-title {
     font-size: 2rem;
@@ -1113,7 +1116,7 @@ body {
     margin-bottom: 2rem;
     background: white;
     padding: 1.5rem;
-    border-radius: 10px;
+    border-radius: 14px;
     border-left: 4px solid var(--secondary-color);
     box-shadow: var(--shadow-sm);
     transition: all 0.3s ease;
@@ -1158,7 +1161,7 @@ body {
     margin-bottom: 4rem;
     background: var(--bg-light);
     padding: 3rem;
-    border-radius: 10px;
+    border-radius: 14px;
 }
 .resource-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
 .resource-header i  { font-size: 2.5rem; color: var(--secondary-color); }
@@ -1171,7 +1174,7 @@ body {
     gap: 2rem;
     margin-top: 2rem;
 }
-.video-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.3s ease; }
+.video-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.3s ease; }
 .video-card:hover { box-shadow: var(--shadow-xl); transform: translateY(-5px); }
 .video-thumbnail { width: 100%; height: 200px; overflow: hidden; }
 .video-thumbnail iframe { width: 100%; height: 100%; }
@@ -1200,14 +1203,14 @@ body {
     gap: 2rem;
     margin-top: 2rem;
 }
-.guide-card { background: white; padding: 2rem; border-radius: 10px; text-align: center; box-shadow: var(--shadow-md); transition: all 0.3s ease; }
+.guide-card { background: white; padding: 2rem; border-radius: 14px; text-align: center; box-shadow: var(--shadow-md); transition: all 0.3s ease; }
 .guide-card:hover { box-shadow: var(--shadow-xl); transform: translateY(-5px); }
 .guide-card i  { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem; }
 .guide-card h4 { font-size: 1.1rem; color: var(--primary-color); margin-bottom: 0.8rem; }
 .guide-card p  { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem; }
 .coming-soon { display: inline-block; background: #fef3c7; color: #92400e; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
 
-.github-repo-cta { text-align: center; margin-top: 2rem; padding: 2rem; background: white; border-radius: 10px; border: 2px dashed var(--border-color); }
+.github-repo-cta { text-align: center; margin-top: 2rem; padding: 2rem; background: white; border-radius: 14px; border: 2px dashed var(--border-color); }
 .github-repo-cta p { margin-bottom: 1rem; color: var(--text-light); }
 .github-repo-cta i { color: var(--secondary-color); margin-right: 0.5rem; }
 
@@ -1217,7 +1220,7 @@ body {
     gap: 2rem;
     margin-top: 2rem;
 }
-.tool-card { background: white; padding: 2rem; border-radius: 10px; box-shadow: var(--shadow-md); transition: all 0.3s ease; text-align: center; }
+.tool-card { background: white; padding: 2rem; border-radius: 14px; box-shadow: var(--shadow-md); transition: all 0.3s ease; text-align: center; }
 .tool-card:hover { box-shadow: var(--shadow-xl); transform: translateY(-5px); }
 .tool-card i  { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem; }
 .tool-card h4 { font-size: 1.2rem; color: var(--primary-color); margin-bottom: 0.8rem; }
@@ -1267,7 +1270,7 @@ body {
 .digital-icon {
     width: 52px;
     height: 52px;
-    border-radius: 12px;
+    border-radius: 16px;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
     display: flex;
@@ -1290,9 +1293,9 @@ body {
 
 .new-badge {
     margin-left: auto;
-    background: #dcfce7;
-    color: #166534;
-    border: 1px solid #86efac;
+    background: #fdf3df;
+    color: #92700f;
+    border: 1px solid var(--gold);
     font-size: 0.72rem;
     font-weight: 700;
     padding: 3px 10px;
@@ -1328,7 +1331,7 @@ body {
 
 .resource-frame {
     margin-top: 1.5rem;
-    border-radius: 10px;
+    border-radius: 14px;
     overflow: hidden;
     border: 1px solid var(--border-color);
     animation: slideDown 0.25s ease;
@@ -1360,5 +1363,3 @@ body {
     .digital-card-header h3 { font-size: 1.05rem; }
     .resource-frame iframe { height: 420px; }
 }
-
-
