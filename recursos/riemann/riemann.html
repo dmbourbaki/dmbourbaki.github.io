@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<!--
+  © 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.
+  Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI)
+  https://dmbourbaki.github.io/
+
+  Queda prohibida la reproducción, distribución o modificación total
+  o parcial de este código sin autorización previa y por escrito del
+  autor. Contacto: dmbourbaki@gmail.com
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Daniel Steven Moran Pizarro — Observatorio de Matemáticas Avanzadas para Ingeniería">
+<meta name="copyright" content="© 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.">
+<title>Simulador de Sumas de Riemann · Observatorio de Matemáticas Avanzadas para Ingeniería</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjs@12/lib/browser/math.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Oswald:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #07090f;
+  --panel:  #0d1220;
+  --card:   #111828;
+  --border: #1c2640;
+  --gold:   #d4a84b;
+  --goldlt: #e8c97a;
+  --cyan:   #3ac2f0;
+  --red:    #f07070;
+  --green:  #50dd90;
+  --orange: #f59a4a;
+  --violet: #a88cff;
+  --pink:   #ff9ef5;
+  --text:   #dce4f0;
+  --muted:  #64768a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Pro', Georgia, serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ─── HEADER ─── */
+header {
+  flex-shrink: 0;
+  background: linear-gradient(90deg, #050810 0%, #0d1626 60%, #07090f 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 0.9rem 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+.header-logo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-transform: uppercase;
+  border: 1px solid var(--gold);
+  padding: 0.25rem 0.55rem;
+  opacity: 0.85;
+}
+.titles-omai { display: flex; flex-direction: column; gap: 0.15rem; }
+.omai-eyebrow { font-family: 'Oswald', sans-serif; font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); opacity: 0.85; }
+header h1 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 300;
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+}
+header h1 em { color: var(--gold); font-style: normal; }
+.header-hint {
+  margin-left: auto;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ─── LAYOUT ─── */
+.main { flex: 1; display: flex; min-height: 0; }
+
+/* ─── TRES COLUMNAS: controles · resultados · gráfica ─── */
+.col-controls {
+  width: 20%; min-width: 210px; flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  overflow-y: auto; padding: 1.1rem 1.1rem 1.4rem;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.col-controls::-webkit-scrollbar { width: 4px; }
+.col-controls::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.col-results {
+  width: 20%; min-width: 200px; flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.col-results::-webkit-scrollbar { width: 4px; }
+.col-results::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.col-results-header {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.67rem; letter-spacing: 0.22em;
+  color: var(--gold); text-transform: uppercase;
+}
+.col-results-header::before {
+  content: ''; display: inline-block;
+  width: 3px; height: 10px;
+  background: var(--gold); border-radius: 1px;
+}
+
+/* ─── SECTION LABEL ─── */
+.stitle {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+  font-size: 0.67rem;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+.stitle::before {
+  content: ''; display: inline-block;
+  width: 3px; height: 10px;
+  background: var(--gold); border-radius: 1px;
+}
+
+/* ─── FIELDS ─── */
+.field { margin-bottom: 0.65rem; }
+.field label {
+  display: block;
+  font-size: 0.8rem; color: var(--muted);
+  margin-bottom: 0.28rem; letter-spacing: 0.03em;
+}
+.field label .math { color: var(--text); font-style: italic; font-size: 1rem; }
+
+input[type=text], input[type=number], select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text);
+  padding: 0.5rem 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.87rem;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+input:focus, select:focus { border-color: var(--gold); }
+select { cursor: pointer; }
+select option { background: var(--card); }
+
+.ab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.ab-grid label { font-size: 0.73rem; }
+
+/* ─── SLIDER ─── */
+.slider-wrap { margin-bottom: 0.7rem; }
+.slider-row {
+  display: flex; align-items: center;
+  gap: 0.6rem; margin-bottom: 0.35rem;
+}
+.slider-row .slabel { font-size: 0.8rem; color: var(--muted); flex: 1; }
+.n-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.05rem; color: var(--gold);
+  min-width: 38px; text-align: right;
+}
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%; height: 4px;
+  background: var(--border); border-radius: 2px;
+  outline: none; padding: 0; border: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--gold); cursor: pointer;
+  transition: background 0.2s;
+}
+input[type=range]::-webkit-slider-thumb:hover { background: var(--goldlt); }
+input[type=range]::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--gold); cursor: pointer; border: none;
+}
+.slider-bounds {
+  display: flex; justify-content: space-between;
+  font-size: 0.68rem; color: var(--muted);
+  margin-top: 0.15rem; font-family: 'JetBrains Mono', monospace;
+}
+
+/* ─── METHOD BUTTONS ─── */
+.stitle-row {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.method-group {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3px; margin-bottom: 0.8rem;
+}
+.method-btn {
+  padding: 0.42rem 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--muted);
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.6rem; letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.18s; text-align: center;
+}
+.method-btn:hover { color: var(--text); border-color: var(--gold); }
+.method-btn.active {
+  background: rgba(212,168,75,0.12);
+  border-color: var(--gold); color: var(--gold);
+}
+
+/* ─── BUTTONS ─── */
+.btn-row { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+.btn-calc {
+  flex: 1; padding: 0.68rem;
+  background: var(--gold); color: var(--bg);
+  border: none; border-radius: 3px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500; font-size: 0.82rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; transition: background 0.18s, transform 0.08s;
+}
+.btn-calc:hover { background: var(--goldlt); }
+.btn-calc:active { transform: scale(0.99); }
+.btn-anim {
+  padding: 0.68rem 0.85rem;
+  background: transparent; color: var(--cyan);
+  border: 1px solid var(--cyan); border-radius: 3px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.82rem; letter-spacing: 0.07em;
+  text-transform: uppercase; cursor: pointer;
+  transition: all 0.18s; white-space: nowrap;
+}
+.btn-anim:hover { background: rgba(58,194,240,0.1); }
+.btn-anim.playing { color: var(--orange); border-color: var(--orange); }
+.btn-anim.playing:hover { background: rgba(245,154,74,0.1); }
+
+/* ─── RESULTS ─── */
+.empty-state {
+  padding: 2.5rem 1.4rem;
+  color: var(--muted); font-style: italic;
+  font-size: 0.95rem; text-align: center; line-height: 1.8;
+}
+.results-inner { padding: 0.85rem 1rem; }
+
+.sum-display {
+  text-align: center;
+  padding: 0.9rem 0 0.8rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.9rem;
+}
+.sum-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.63rem; letter-spacing: 0.2em;
+  color: var(--muted); text-transform: uppercase;
+  margin-bottom: 0.28rem;
+}
+.sum-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.75rem; color: var(--gold);
+  letter-spacing: -0.02em;
+}
+.sum-sub {
+  font-size: 0.77rem; color: var(--cyan);
+  margin-top: 0.2rem; font-style: italic;
+}
+
+/* ─── STAT GRID ─── */
+.stat-grid {
+  display: grid; grid-template-columns: 1fr;
+  gap: 0.45rem; margin-bottom: 0.85rem;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px; padding: 0.55rem 0.75rem;
+}
+.sc-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.58rem; letter-spacing: 0.15em;
+  color: var(--muted); text-transform: uppercase;
+  margin-bottom: 0.18rem;
+}
+.sc-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem; color: var(--text);
+}
+.sc-val.good { color: var(--green); }
+.sc-val.warn { color: var(--orange); }
+.sc-val.bad  { color: var(--red); }
+.sc-val.blue { color: var(--violet); }
+
+/* ─── PRECISION BAR ─── */
+.prec-wrap { margin-bottom: 0.9rem; }
+.prec-header {
+  display: flex; justify-content: space-between;
+  font-size: 0.73rem; color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+.prec-header span:last-child {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+}
+.prec-track {
+  height: 5px; background: var(--border);
+  border-radius: 3px; overflow: hidden;
+}
+.prec-fill {
+  height: 100%; border-radius: 3px;
+  transition: width 0.45s ease, background 0.3s;
+}
+
+/* ─── FORMULA BOX ─── */
+.formula-box {
+  background: rgba(212,168,75,0.04);
+  border: 1px solid rgba(212,168,75,0.18);
+  border-radius: 4px;
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 0.9rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.77rem; color: var(--muted);
+  line-height: 1.75;
+}
+.formula-box .fk { color: var(--gold); }
+.formula-box .fv { color: var(--text); }
+.formula-box .fn { color: var(--cyan); }
+
+/* ─── CONV INFO ─── */
+.conv-info {
+  font-size: 0.82rem; color: var(--muted);
+  line-height: 1.75;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border);
+}
+.conv-info strong { color: var(--text); }
+.order-badge {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem; color: var(--violet);
+  background: rgba(168,140,255,0.1);
+  border: 1px solid rgba(168,140,255,0.25);
+  border-radius: 3px; padding: 0 0.4rem;
+  margin: 0 0.15rem;
+}
+
+/* ─── VIS PANEL ─── */
+.vis-panel {
+  flex: 1; display: flex; flex-direction: column;
+  min-width: 0; overflow: hidden;
+}
+.tabs {
+  flex-shrink: 0; display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel); padding: 0 1rem;
+}
+.tab {
+  padding: 0.75rem 1.1rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.72rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+  cursor: pointer; border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s; user-select: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+.tab-pane { flex: 1; display: none; flex-direction: column; min-height: 0; }
+.tab-pane.active { display: flex; }
+.plot-container { flex: 1; min-height: 0; position: relative; }
+.plot-container > div { width: 100%; height: 100%; }
+
+.vis-legend {
+  flex-shrink: 0;
+  padding: 0.38rem 1rem;
+  display: flex; gap: 1.1rem; flex-wrap: wrap;
+  background: var(--panel); border-top: 1px solid var(--border);
+}
+.leg-item { display: flex; align-items: center; gap: 0.32rem; font-size: 0.73rem; color: var(--muted); }
+.leg-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.leg-line { width: 18px; height: 2.5px; flex-shrink: 0; border-radius: 2px; }
+.leg-rect { width: 12px; height: 10px; flex-shrink: 0; border-radius: 1px; }
+
+/* ─── LOADER ─── */
+#loader {
+  position: fixed; inset: 0;
+  background: rgba(7,9,15,0.78);
+  display: none; align-items: center; justify-content: center;
+  z-index: 999;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.85rem; letter-spacing: 0.15em;
+  color: var(--gold); text-transform: uppercase;
+}
+#loader.show { display: flex; }
+
+.error-msg {
+  padding: 1rem 1.4rem;
+  color: var(--red); font-style: italic; font-size: 0.9rem;
+}
+
+/* ─── MOBILE ─── */
+@media (max-width: 768px) {
+  body { height: auto; min-height: 100vh; overflow-y: auto; overflow-x: hidden; }
+  header { padding: 0.65rem 1rem; flex-wrap: wrap; }
+  header h1 { font-size: 1.05rem; }
+  .header-hint { display: none; }
+  .main { flex-direction: column; }
+  .col-controls {
+    width: 100%; min-width: 0;
+    border-right: none; border-bottom: 1px solid var(--border);
+    padding: 1rem;
+  }
+  .col-results {
+    width: 100%; min-width: 0;
+    border-right: none; border-bottom: 1px solid var(--border);
+    max-height: 55vh; overflow-y: auto;
+  }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .vis-panel { flex: none; height: 430px; min-height: 380px; }
+  .tab-pane.active { height: 100%; }
+  .plot-container { height: calc(430px - 40px - 42px); }
+  .vis-legend { gap: 0.55rem; padding: 0.3rem 0.75rem; font-size: 0.68rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="loader">Calculando&hellip;</div>
+
+<header>
+  <span class="header-logo">∑</span>
+  <div class="titles-omai">
+    <div class="omai-eyebrow">Observatorio de Matemáticas Avanzadas para Ingeniería</div>
+    <h1>Simulador de Sumas de <em>Riemann</em></h1>
+  </div>
+  <span class="header-hint">Notación: x^2 · sin(x) · exp(x) · sqrt(x) · log(x) · abs(x) &nbsp;·&nbsp; Variable: x</span>
+</header>
+
+<div class="main">
+
+  <!-- ════ COL 1: CONTROLES ════ -->
+  <div class="col-controls">
+
+      <div class="stitle">Función e Intervalo</div>
+
+      <div class="field">
+        <label>Función <span class="math">f (x)</span></label>
+        <input type="text" id="inp-f" value="x^2" spellcheck="false" oninput="markDirty()" onkeydown="if(event.key==='Enter')solveAll(false)">
+      </div>
+
+      <div class="field">
+        <label>Ejemplo rápido</label>
+        <select id="presets" onchange="applyPreset()">
+          <option value="">— seleccionar —</option>
+          <option value="x^2|0|1">x² en [0, 1]</option>
+          <option value="sin(x)|0|3.14159265">sin(x) en [0, π]</option>
+          <option value="exp(-x^2)|(-2)|2">e^(−x²) en [−2, 2]</option>
+          <option value="1/x|1|3">1/x en [1, 3]</option>
+          <option value="sqrt(1-x^2)|(-1)|1">√(1−x²) en [−1, 1] ≈ π/2</option>
+          <option value="x^3 - 3*x + 1|(-2)|2">x³ − 3x + 1 en [−2, 2]</option>
+          <option value="abs(sin(x))|0|6.28318530">|sin(x)| en [0, 2π]</option>
+          <option value="log(x)|1|4">ln(x) en [1, 4]</option>
+          <option value="x*sin(x)|0|3.14159265">x·sin(x) en [0, π]</option>
+          <option value="1/(1+x^2)|(-3)|3">1/(1+x²) en [−3, 3]</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Intervalo <span class="math">[a, b]</span></label>
+        <div class="ab-grid">
+          <div><label>a</label><input type="number" id="inp-a" value="0" step="0.5" oninput="markDirty()" onkeydown="if(event.key==='Enter')solveAll(false)"></div>
+          <div><label>b</label><input type="number" id="inp-b" value="1" step="0.5" oninput="markDirty()" onkeydown="if(event.key==='Enter')solveAll(false)"></div>
+        </div>
+      </div>
+
+      <div class="slider-wrap">
+        <div class="slider-row">
+          <span class="slabel">Subintervalos <span style="font-style:italic;color:var(--text)">n</span></span>
+          <span class="n-display" id="n-display">4</span>
+        </div>
+        <input type="range" id="n-slider" min="1" max="300" value="4" oninput="onSlider()">
+        <div class="slider-bounds"><span>1</span><span>50</span><span>150</span><span>300</span></div>
+      </div>
+
+      <div class="stitle" style="margin-top:0.55rem">Método</div>
+      <div class="method-group">
+        <button class="method-btn active" data-m="left"    onclick="setMethod('left')">Izq</button>
+        <button class="method-btn"        data-m="right"   onclick="setMethod('right')">Der</button>
+        <button class="method-btn"        data-m="mid"     onclick="setMethod('mid')">Medio</button>
+        <button class="method-btn"        data-m="trap"    onclick="setMethod('trap')">Trap</button>
+        <button class="method-btn"        data-m="simpson" onclick="setMethod('simpson')">Simp</button>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-calc" onclick="solveAll()">⟨ Calcular ⟩</button>
+        <button class="btn-anim" id="btn-anim" onclick="toggleAnim()">▶ Animar</button>
+      </div>
+
+      <!-- Velocidad de animación -->
+      <div class="slider-wrap" style="margin-top:0.55rem;margin-bottom:0">
+        <div class="slider-row">
+          <span class="slabel" style="font-size:0.75rem">Velocidad</span>
+          <span class="n-display" id="speed-label" style="font-size:0.82rem;min-width:52px">Normal</span>
+        </div>
+        <input type="range" id="speed-slider" min="0" max="3" value="1" step="1" oninput="onSpeedSlider()">
+        <div class="slider-bounds"><span>Lento</span><span>Normal</span><span>Rápido</span><span>Ultra</span></div>
+      </div>
+
+      <!-- Límite de la animación -->
+      <div style="display:flex;align-items:center;gap:0.6rem;margin-top:0.6rem">
+        <span style="font-size:0.78rem;color:var(--muted);flex:1;letter-spacing:0.02em">
+          Animar hasta <span style="color:var(--text);font-style:italic">n</span> =
+        </span>
+        <input type="number" id="anim-max-n" value="300" min="2" max="2000" step="1"
+          style="width:70px;padding:0.38rem 0.45rem;font-size:0.85rem;
+                 text-align:right;border-color:var(--border)"
+          title="La animación se detiene en este valor de n">
+      </div>
+
+  </div><!-- /col-controls -->
+
+  <!-- ════ COL 2: RESULTADOS ════ -->
+  <div class="col-results">
+    <div class="col-results-header">Resultados</div>
+    <div id="results">
+      <div class="empty-state">
+        Ingrese <em>f</em>(x) y el intervalo [<em>a</em>, <em>b</em>],<br>
+        ajuste <em>n</em> con el slider<br>
+        y presione <strong>Calcular</strong>.
+      </div>
+    </div>
+  </div><!-- /col-results -->
+
+  <!-- ════ VIS PANEL ════ -->
+  <div class="vis-panel">
+    <div class="tabs">
+      <div class="tab active" id="tab-rect" onclick="switchTab('rect')">Rectángulos</div>
+      <div class="tab"        id="tab-conv" onclick="switchTab('conv')">Convergencia</div>
+    </div>
+
+    <!-- Rectangles -->
+    <div class="tab-pane active" id="pane-rect">
+      <div class="plot-container"><div id="plot-rect"></div></div>
+      <div class="vis-legend">
+        <span class="leg-item"><span class="leg-line" style="background:#d4a84b;height:3px"></span>f(x) en [a,b]</span>
+        <span class="leg-item"><span class="leg-line" style="background:rgba(212,168,75,0.28);height:1.5px"></span>f(x) dominio completo</span>
+        <span class="leg-item"><span class="leg-rect" style="background:rgba(58,194,240,0.3);border:1px solid rgba(58,194,240,0.6)"></span>Área +</span>
+        <span class="leg-item"><span class="leg-rect" style="background:rgba(240,112,112,0.3);border:1px solid rgba(240,112,112,0.6)"></span>Área −</span>
+        <span class="leg-item"><span class="leg-line" style="background:#50dd90;opacity:0.7"></span>Integral exacta</span>
+        <span class="leg-item" id="leg-parab" style="display:none"><span class="leg-line" style="background:var(--pink)"></span>Arco parabólico</span>
+      </div>
+    </div>
+
+    <!-- Convergence -->
+    <div class="tab-pane" id="pane-conv">
+      <div class="plot-container"><div id="plot-conv"></div></div>
+      <div class="vis-legend">
+        <span class="leg-item"><span class="leg-line" style="background:var(--cyan)"></span>Izquierda</span>
+        <span class="leg-item"><span class="leg-line" style="background:var(--orange)"></span>Derecha</span>
+        <span class="leg-item"><span class="leg-line" style="background:var(--violet)"></span>Punto Medio</span>
+        <span class="leg-item"><span class="leg-line" style="background:var(--green)"></span>Trapecio</span>
+        <span class="leg-item"><span class="leg-line" style="background:var(--pink)"></span>Simpson</span>
+        <span class="leg-item"><span class="leg-line" style="background:#d4a84b;border-top:2px dashed #d4a84b;background:transparent"></span>Valor exacto</span>
+      </div>
+    </div>
+
+  </div><!-- /vis-panel -->
+
+</div><!-- /main -->
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let fExpr      = null;
+let curMethod  = 'left';
+let animTimer  = null;
+let debTimer   = null;
+let cachedExact = null; // { a, b, val }
+let dirty      = true;
+
+// Ejes estables (se calculan una vez en solveAll, no cambian con n)
+let stableXRange = null;
+let stableYRange = null;
+let uiRev = 'init';  // cambia solo cuando f/a/b cambian → resetea zoom
+
+// ═══════════════════════════════════════════════════════
+//  MATH CORE
+// ═══════════════════════════════════════════════════════
+const safe = fn => { try { const v = fn(); return isFinite(v) ? v : NaN; } catch { return NaN; } };
+const evalF = x => safe(() => fExpr.evaluate({ x }));
+
+function getExact(a, b) {
+  if (cachedExact && cachedExact.a === a && cachedExact.b === b && !dirty) {
+    return cachedExact.val;
+  }
+  // Composite Simpson with N = 2000 subintervals
+  const N = 2000;
+  const h = (b - a) / N;
+  let s = evalF(a) + evalF(b);
+  for (let i = 1; i < N; i++) {
+    s += (i % 2 === 0 ? 2 : 4) * evalF(a + i * h);
+  }
+  const val = s * h / 3;
+  cachedExact = { a, b, val };
+  return val;
+}
+
+// Tabla de convergencia del valor exacto
+function getExactDevelopment(a, b) {
+  const Ns   = [2, 4, 10, 50, 100, 500, 1000, 2000];
+  const rows = [];
+  for (const N of Ns) {
+    const h = (b - a) / N;
+    let s = evalF(a) + evalF(b);
+    for (let i = 1; i < N; i++) {
+      s += (i % 2 === 0 ? 2 : 4) * evalF(a + i * h);
+    }
+    rows.push({ N, val: s * h / 3 });
+  }
+  return rows;
+}
+
+// Rangos del plano cartesiano: se fijan una sola vez
+function computeStableRanges(a, b) {
+  const N = 300;
+  const ys = [];
+  for (let i = 0; i <= N; i++) {
+    const y = evalF(a + (b - a) * i / N);
+    if (isFinite(y)) ys.push(y);
+  }
+  const yMin = ys.length ? Math.min(0, ...ys) : -1;
+  const yMax = ys.length ? Math.max(0, ...ys) :  1;
+  const xPad = (b - a) * 0.06;
+  const yPad = (yMax - yMin) * 0.18 || 0.5;
+  stableXRange = [a - xPad, b + xPad];
+  stableYRange = [yMin - yPad, yMax + yPad];
+}
+
+// Etiquetas legibles para valores matemáticos comunes
+function niceLabel(v) {
+  const P = Math.PI, tol = 2e-3;
+  if (Math.abs(v)          < tol)  return '0';
+  if (Math.abs(v -   P/6)  < tol)  return 'π/6';
+  if (Math.abs(v -   P/4)  < tol)  return 'π/4';
+  if (Math.abs(v -   P/3)  < tol)  return 'π/3';
+  if (Math.abs(v -   P/2)  < tol)  return 'π/2';
+  if (Math.abs(v -   P)    < tol)  return 'π';
+  if (Math.abs(v - 3*P/2)  < tol)  return '3π/2';
+  if (Math.abs(v - 2*P)    < tol)  return '2π';
+  if (Math.abs(v +   P/2)  < tol)  return '-π/2';
+  if (Math.abs(v +   P)    < tol)  return '-π';
+  // e
+  if (Math.abs(v - Math.E) < tol)  return 'e';
+  // número simple
+  const r = parseFloat(v.toPrecision(5));
+  return r % 1 === 0 ? String(r) : String(r);
+}
+
+// Máximo n para la animación
+function getNMax() {
+  const v = +document.getElementById('anim-max-n').value;
+  if (!isFinite(v) || v < 2) return 300;
+  return Math.min(Math.round(v), 2000);
+}
+
+function riemannSum(method, a, b, n) {
+  const dx = (b - a) / n;
+  let s = 0;
+  if (method === 'simpson') {
+    const nn = n % 2 === 0 ? n : n + 1;
+    const dxs = (b - a) / nn;
+    s = evalF(a) + evalF(b);
+    for (let i = 1; i < nn; i++) {
+      s += (i % 2 === 0 ? 2 : 4) * evalF(a + i * dxs);
+    }
+    return s * dxs / 3;
+  }
+  for (let i = 0; i < n; i++) {
+    const xi = a + i * dx;
+    if (method === 'trap') {
+      s += (evalF(xi) + evalF(xi + dx)) * 0.5 * dx;
+    } else {
+      const xp = method === 'left'  ? xi :
+                 method === 'right' ? xi + dx :
+                                      xi + dx * 0.5; // mid
+      s += evalF(xp) * dx;
+    }
+  }
+  return s;
+}
+
+// ═══════════════════════════════════════════════════════
+//  BUILD CURVE
+// ═══════════════════════════════════════════════════════
+function buildCurve(x0, x1, N = 500) {
+  const xs = [], ys = [];
+  for (let i = 0; i <= N; i++) {
+    const x = x0 + (x1 - x0) * i / N;
+    const y = evalF(x);
+    xs.push(x);
+    ys.push(isFinite(y) ? y : null);
+  }
+  return { xs, ys };
+}
+
+// ═══════════════════════════════════════════════════════
+//  BUILD RECTANGLE / AREA TRACES
+// ═══════════════════════════════════════════════════════
+function buildAreaTraces(a, b, n) {
+  const dx = (b - a) / n;
+  const posX = [], posY = [], negX = [], negY = [];
+
+  const nn = (curMethod === 'simpson' && n % 2 !== 0) ? n + 1 : n;
+  const dxs = (b - a) / nn;
+
+  for (let i = 0; i < nn; i++) {
+    const xi = a + i * dxs;
+    const xr = xi + dxs;
+
+    let yL, yR;
+    if (curMethod === 'trap' || curMethod === 'simpson') {
+      yL = evalF(xi); yR = evalF(xr);
+    } else {
+      const xp = curMethod === 'left'  ? xi :
+                 curMethod === 'right' ? xr :
+                                         xi + dxs * 0.5;
+      yL = yR = evalF(xp);
+    }
+
+    const avgY = (yL + yR) / 2;
+    const arr  = avgY >= 0 ? [posX, posY] : [negX, negY];
+    // Closed polygon: bottom-left → top-left → top-right → bottom-right → close → NaN
+    arr[0].push(xi, xi, xr, xr, xi, NaN);
+    arr[1].push(0,  yL, yR,  0,  0, NaN);
+  }
+
+  const traces = [];
+  if (posX.length > 0) traces.push({
+    type: 'scatter', mode: 'lines', fill: 'toself',
+    x: posX, y: posY,
+    fillcolor: 'rgba(58,194,240,0.20)',
+    line: { color: 'rgba(58,194,240,0.50)', width: 1 },
+    name: 'Área +', hoverinfo: 'skip', showlegend: false
+  });
+  if (negX.length > 0) traces.push({
+    type: 'scatter', mode: 'lines', fill: 'toself',
+    x: negX, y: negY,
+    fillcolor: 'rgba(240,112,112,0.20)',
+    line: { color: 'rgba(240,112,112,0.50)', width: 1 },
+    name: 'Área −', hoverinfo: 'skip', showlegend: false
+  });
+
+  // Simpson: overlay parabolic arcs
+  if (curMethod === 'simpson') {
+    const arcX = [], arcY = [];
+    for (let i = 0; i < nn; i += 2) {
+      const x0 = a + i * dxs, x1 = x0 + dxs, x2 = x1 + dxs;
+      const f0 = evalF(x0), f1 = evalF(x1), f2 = evalF(x2);
+      for (let k = 0; k <= 24; k++) {
+        const t = k / 24;   // 0..1
+        const u = t * 2;    // 0..2
+        // Lagrange basis at nodes 0,1,2
+        const fp = f0*(u-1)*(u-2)/2 - f1*u*(u-2) + f2*u*(u-1)/2;
+        arcX.push(x0 + t * 2 * dxs);
+        arcY.push(fp);
+      }
+      arcX.push(NaN); arcY.push(NaN);
+    }
+    traces.push({
+      type: 'scatter', mode: 'lines',
+      x: arcX, y: arcY,
+      line: { color: '#ff9ef5', width: 2.2 },
+      name: 'Arco parabólico', hoverinfo: 'skip', showlegend: false
+    });
+  }
+
+  return traces;
+}
+
+// ═══════════════════════════════════════════════════════
+//  DRAW RECTANGLES TAB
+// ═══════════════════════════════════════════════════════
+function drawRect(a, b, n, exactVal) {
+  const areaTraces = buildAreaTraces(a, b, n);
+
+  // Rangos estables (calculados en solveAll)
+  const xRange = stableXRange || [a - (b-a)*0.06, b + (b-a)*0.06];
+  const yRange = stableYRange || (() => {
+    const tmp = buildCurve(a, b);
+    const finY = tmp.ys.filter(v => v !== null && isFinite(v));
+    const yMin = Math.min(0, ...finY), yMax = Math.max(0, ...finY);
+    return [yMin - (yMax-yMin)*0.18 - 0.5, yMax + (yMax-yMin)*0.18 + 0.5];
+  })();
+
+  // ── 1. Curva en TODO el dominio visible (difuminada, fuera del intervalo) ──
+  const fullCurve = buildCurve(xRange[0], xRange[1], 600);
+  const fadedTrace = {
+    type: 'scatter', mode: 'lines',
+    x: fullCurve.xs, y: fullCurve.ys,
+    line: { color: 'rgba(212,168,75,0.18)', width: 1.2 },
+    name: 'f(x) (dominio)', hoverinfo: 'skip', showlegend: false
+  };
+
+  // ── 2. Curva enfatizada solo en [a, b] ──
+  const intCurve = buildCurve(a, b, 500);
+
+  // Relleno del área exacta (muy sutil, solo en [a,b])
+  const exactFill = {
+    type: 'scatter', mode: 'none',
+    x: intCurve.xs, y: intCurve.ys,
+    fill: 'tozeroy',
+    fillcolor: 'rgba(80,221,144,0.07)',
+    line: { color: 'transparent' },
+    name: 'Área exacta', hoverinfo: 'skip', showlegend: false
+  };
+
+  // Curva brillante en el intervalo
+  const curve = {
+    type: 'scatter', mode: 'lines',
+    x: intCurve.xs, y: intCurve.ys,
+    line: { color: '#d4a84b', width: 3 },
+    name: 'f(x) en [a,b]',
+    hovertemplate: 'x = %{x:.4f}<br>f(x) = %{y:.4f}<extra>f(x)</extra>'
+  };
+
+  // Orden: dominio difuminado → rectángulos → relleno exacto → curva enfatizada
+  const allTraces = [fadedTrace, ...areaTraces, exactFill, curve];
+
+  // Líneas verticales en los límites de integración
+  const yLo = yRange[0], yHi = yRange[1];
+  const boundLineStyle = { color: 'rgba(212,168,75,0.65)', width: 1.8, dash: 'dash' };
+
+  // Etiqueta del método actual (abreviada)
+  const methodShort = { left:'Izquierda', right:'Derecha', mid:'Punto Medio',
+                        trap:'Trapecio', simpson:'Simpson' };
+
+  const layout = {
+    paper_bgcolor: '#07090f', plot_bgcolor: '#0b1018',
+
+    // Preserva zoom/pan del usuario; cambia solo cuando f/a/b cambian
+    uirevision: uiRev,
+
+    xaxis: {
+      title: { text: 'x', font: { color: '#8aa0bb' } },
+      color: '#8aa0bb',
+      gridcolor: '#1e3050',      // cuadrícula más visible
+      gridwidth: 1,
+      zerolinecolor: '#4a6685', // eje y=0 / x=0 bien visible
+      zerolinewidth: 2,
+      showgrid: true,
+      showline: true, linecolor: '#2a3e58', linewidth: 1,
+      range: xRange, autorange: false
+    },
+    yaxis: {
+      title: { text: 'f(x)', font: { color: '#8aa0bb' } },
+      color: '#8aa0bb',
+      gridcolor: '#1e3050',
+      gridwidth: 1,
+      zerolinecolor: '#4a6685',
+      zerolinewidth: 2,
+      showgrid: true,
+      showline: true, linecolor: '#2a3e58', linewidth: 1,
+      range: yRange, autorange: false
+    },
+    shapes: [
+      // Límite inferior a
+      { type:'line', x0:a, x1:a, y0:yLo, y1:yHi, line: boundLineStyle },
+      // Límite superior b
+      { type:'line', x0:b, x1:b, y0:yLo, y1:yHi, line: boundLineStyle }
+    ],
+    annotations: [
+      // Valor integral (esquina sup-izq)
+      { xref:'paper', yref:'paper', x:0.01, y:0.995,
+        text:`∫f dx ≈ ${exactVal.toFixed(6)}`,
+        font:{ family:"'Crimson Pro',serif", color:'#50dd90', size:12.5 },
+        showarrow:false, align:'left', xanchor:'left', yanchor:'top',
+        bgcolor:'rgba(7,9,15,0.6)', borderpad:3 },
+      // ── CONTADOR n (esquina sup-der, grande y visible) ──
+      { xref:'paper', yref:'paper', x:0.99, y:0.995,
+        text:`<b>n = ${n}</b>`,
+        font:{ family:"'Oswald',sans-serif", color:'#d4a84b', size:20 },
+        showarrow:false, align:'right', xanchor:'right', yanchor:'top',
+        bgcolor:'rgba(7,9,15,0.65)', borderpad:4 },
+      // Método activo (bajo el contador n)
+      { xref:'paper', yref:'paper', x:0.99, y:0.915,
+        text:methodShort[curMethod],
+        font:{ family:"'Oswald',sans-serif", color:'#64768a', size:10 },
+        showarrow:false, align:'right', xanchor:'right', yanchor:'top' },
+      // Etiqueta límite a
+      { xref:'x', yref:'paper', x:a, y:-0.02,
+        text:`<b>${niceLabel(a)}</b>`,
+        font:{ family:"'Oswald',sans-serif", color:'#d4a84b', size:11 },
+        showarrow:false, xanchor:'center', yanchor:'top',
+        bgcolor:'rgba(7,9,15,0.7)', borderpad:2 },
+      // Etiqueta límite b
+      { xref:'x', yref:'paper', x:b, y:-0.02,
+        text:`<b>${niceLabel(b)}</b>`,
+        font:{ family:"'Oswald',sans-serif", color:'#d4a84b', size:11 },
+        showarrow:false, xanchor:'center', yanchor:'top',
+        bgcolor:'rgba(7,9,15,0.7)', borderpad:2 }
+    ],
+    legend: {
+      bgcolor:'rgba(11,16,24,0.85)', font:{ color:'#dce4f0', size:10 },
+      bordercolor:'#2a3e58', borderwidth:1, x:0.01, y:0.88
+    },
+    margin: { l:55, r:25, t:18, b:55 },
+    font: { family:"'Crimson Pro',serif", color:'#dce4f0' },
+    hovermode: 'x unified',
+    dragmode: 'zoom'
+  };
+
+  Plotly.react('plot-rect', allTraces, layout, {
+    responsive: true,
+    displayModeBar: true, displaylogo: false,
+    modeBarButtonsToRemove: ['sendDataToCloud','lasso2d','select2d'],
+    scrollZoom: true
+  });
+
+  // Show/hide parabolic arc legend item
+  document.getElementById('leg-parab').style.display =
+    curMethod === 'simpson' ? 'flex' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════
+//  DRAW CONVERGENCE TAB
+// ═══════════════════════════════════════════════════════
+function drawConv(a, b, curN, exactVal) {
+  const maxN = 100;
+  const ns   = Array.from({length: maxN}, (_, i) => i + 1);
+
+  const methods = ['left','right','mid','trap','simpson'];
+  const colors  = ['#3ac2f0','#f59a4a','#a88cff','#50dd90','#ff9ef5'];
+  const labels  = ['Izquierda','Derecha','Punto Medio','Trapecio','Simpson'];
+
+  const traces = methods.map((m, idx) => {
+    const vals = ns.map(n => {
+      const v = riemannSum(m, a, b, n);
+      return isFinite(v) ? v : null;
+    });
+    return {
+      type:'scatter', mode:'lines',
+      x: ns, y: vals,
+      name: labels[idx],
+      line:{ color:colors[idx], width: idx >= 3 ? 2 : 1.5 },
+      hovertemplate: `<b>${labels[idx]}</b><br>n=%{x}<br>S=%{y:.7f}<extra></extra>`
+    };
+  });
+
+  // Exact value dashed line
+  traces.push({
+    type:'scatter', mode:'lines',
+    x:[1, maxN], y:[exactVal, exactVal],
+    line:{ color:'#d4a84b', width:2, dash:'dash' },
+    name:`Exacto = ${exactVal.toFixed(6)}`,
+    hovertemplate:`Valor exacto: ${exactVal.toFixed(8)}<extra></extra>`
+  });
+
+  // Current n marker (for active method)
+  const curVal = riemannSum(curMethod, a, b, curN);
+  if (curN <= maxN) {
+    traces.push({
+      type:'scatter', mode:'markers',
+      x:[curN], y:[isFinite(curVal) ? curVal : null],
+      marker:{ color:'#d4a84b', size:11, symbol:'circle',
+               line:{ color:'#fff', width:2 } },
+      name:`n = ${curN}`,
+      hovertemplate:`Método actual: n=${curN}<br>S=${curVal.toFixed(7)}<extra>Actual</extra>`,
+      showlegend: true
+    });
+  }
+
+  const allVals = methods.flatMap((m) =>
+    ns.map(n => riemannSum(m, a, b, n)).filter(isFinite)
+  ).concat([exactVal]);
+  const yMin = Math.min(...allVals);
+  const yMax = Math.max(...allVals);
+  const yPad = (yMax - yMin) * 0.1 || 0.1;
+
+  const layout = {
+    paper_bgcolor:'#07090f', plot_bgcolor:'#0b1018',
+    xaxis:{
+      title:{ text:'n  (número de subintervalos)', font:{color:'#8aa0bb'} },
+      color:'#8aa0bb',
+      gridcolor:'#1e3050', gridwidth:1,
+      zerolinecolor:'#4a6685', zerolinewidth:2,
+      showgrid:true, showline:true, linecolor:'#2a3e58',
+      range:[0, maxN + 2]
+    },
+    yaxis:{
+      title:{ text:'Valor de la suma', font:{color:'#8aa0bb'} },
+      color:'#8aa0bb',
+      gridcolor:'#1e3050', gridwidth:1,
+      zerolinecolor:'#4a6685', zerolinewidth:2,
+      showgrid:true, showline:true, linecolor:'#2a3e58',
+      range:[yMin - yPad, yMax + yPad]
+    },
+    legend:{
+      bgcolor:'rgba(11,16,24,0.85)', font:{color:'#dce4f0',size:10},
+      bordercolor:'#2a3e58', borderwidth:1
+    },
+    margin:{ l:65, r:20, t:18, b:55 },
+    font:{ family:"'Crimson Pro',serif", color:'#dce4f0' },
+    hovermode:'closest'
+  };
+
+  Plotly.react('plot-conv', traces, layout, {
+    responsive:true, displayModeBar:false
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  RENDER RESULTS PANEL
+// ═══════════════════════════════════════════════════════
+const METHOD_NAMES = {
+  left:    'Suma Izquierda',
+  right:   'Suma Derecha',
+  mid:     'Punto Medio',
+  trap:    'Regla del Trapecio',
+  simpson: 'Regla de Simpson 1/3'
+};
+const METHOD_ORDER = {
+  left:'O(1/n)', right:'O(1/n)', mid:'O(1/n²)', trap:'O(1/n²)', simpson:'O(1/n⁴)'
+};
+const METHOD_DESC = {
+  left:    'Método de orden 1: duplicar n reduce el error a la mitad.',
+  right:   'Método de orden 1: duplicar n reduce el error a la mitad.',
+  mid:     'Método de orden 2: duplicar n reduce el error en un factor de 4.',
+  trap:    'Método de orden 2: combina los extremos de cada subintervalo. Error ≈ −(b−a)³f″/(12n²).',
+  simpson: 'Método de orden 4: usa arcos parabólicos. Exacto para polinomios de grado ≤ 3.'
+};
+const METHOD_FORMULA = {
+  left:    'S<sub>n</sub> = Δx · [ f(x₀) + f(x₁) + ··· + f(x<sub>n−1</sub>) ]',
+  right:   'S<sub>n</sub> = Δx · [ f(x₁) + f(x₂) + ··· + f(x<sub>n</sub>) ]',
+  mid:     'S<sub>n</sub> = Δx · [ f(m₀) + f(m₁) + ··· + f(m<sub>n−1</sub>) ],  m<sub>i</sub> = x<sub>i</sub> + Δx/2',
+  trap:    'S<sub>n</sub> = (Δx/2) · [ f(x₀) + 2f(x₁) + ··· + 2f(x<sub>n−1</sub>) + f(x<sub>n</sub>) ]',
+  simpson: 'S<sub>n</sub> = (Δx/3) · [ f(x₀) + 4f(x₁) + 2f(x₂) + 4f(x₃) + ··· + f(x<sub>n</sub>) ]'
+};
+
+function renderResults(a, b, n, sumVal, exactVal, devData) {
+  const absErr = Math.abs(exactVal - sumVal);
+  const relErr = exactVal !== 0 ? absErr / Math.abs(exactVal) * 100 : 0;
+  const dx = (b - a) / n;
+  const precPct = Math.max(0, 100 - Math.min(relErr, 100));
+
+  const errClass = relErr < 0.5 ? 'good' : relErr < 5 ? 'warn' : 'bad';
+  const barColor = relErr < 0.5 ? '#50dd90' : relErr < 5 ? '#f59a4a' : '#f07070';
+
+  const effN = curMethod === 'simpson' ? (n % 2 === 0 ? n : n + 1) : n;
+
+  document.getElementById('results').innerHTML = `
+<div class="results-inner">
+
+  <div class="sum-display">
+    <div class="sum-label">Suma de Riemann</div>
+    <div class="sum-value">${sumVal.toFixed(8)}</div>
+    <div class="sum-sub">${METHOD_NAMES[curMethod]} &nbsp;·&nbsp; n = ${effN} &nbsp;·&nbsp; Δx = ${dx.toFixed(5)}</div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="sc-label">Integral Exacta</div>
+      <div class="sc-val">${exactVal.toFixed(8)}</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Error Absoluto</div>
+      <div class="sc-val ${errClass}">${absErr < 1e-10 ? '≈ 0' : absErr.toExponential(3)}</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Error Relativo</div>
+      <div class="sc-val ${errClass}">${relErr < 1e-6 ? '< 0.0001 %' : relErr.toFixed(4) + ' %'}</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Convergencia</div>
+      <div class="sc-val blue">${METHOD_ORDER[curMethod]}</div>
+    </div>
+  </div>
+
+  <div class="prec-wrap">
+    <div class="prec-header">
+      <span>Precisión</span>
+      <span>${precPct.toFixed(3)} %</span>
+    </div>
+    <div class="prec-track">
+      <div class="prec-fill" style="width:${precPct.toFixed(2)}%;background:${barColor}"></div>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div><span class="fk">Método: </span><span class="fv">${METHOD_NAMES[curMethod]}</span></div>
+    <div style="margin:0.4rem 0 0.35rem">${METHOD_FORMULA[curMethod]}</div>
+    <div><span class="fk">Δx = </span><span class="fn">(${b} − ${a}) / ${effN} = ${dx.toFixed(6)}</span></div>
+    <div><span class="fk">∫<sub>${a}</sub><sup>${b}</sup> f dx ≈ </span><span class="fn">${sumVal.toFixed(8)}</span></div>
+  </div>
+
+  <div class="conv-info">
+    <strong>Análisis de convergencia:</strong><br>
+    ${METHOD_DESC[curMethod]}<br>
+    Orden: <span class="order-badge">${METHOD_ORDER[curMethod]}</span>
+    ${curMethod === 'simpson' ? '&nbsp;<span class="order-badge" style="color:var(--green);border-color:rgba(80,221,144,0.3);background:rgba(80,221,144,0.08)">↑ Alta precisión</span>' : ''}
+  </div>
+
+  ${devData ? `
+  <!-- ── DESARROLLO DEL VALOR EXACTO ── -->
+  <div style="margin-top:0.9rem;padding-top:0.7rem;border-top:1px solid var(--border)">
+    <div class="stitle" style="font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:0.4rem;margin-bottom:0.6rem">
+      <span style="display:inline-block;width:3px;height:9px;background:var(--gold);border-radius:1px"></span>
+      Desarrollo — Integral exacta
+    </div>
+    <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.55rem;line-height:1.6">
+      Método de referencia: Simpson compuesto, N subin.
+      <span style="font-family:'JetBrains Mono',monospace;color:var(--cyan);font-size:0.72rem">
+        S = (h/3)·[f(x₀) + 4f(x₁) + 2f(x₂) + ··· + f(x<sub>N</sub>)]
+      </span>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:0.73rem">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border)">
+          <th style="text-align:right;padding:0.2rem 0.5rem;color:var(--muted);font-weight:400">N</th>
+          <th style="text-align:right;padding:0.2rem 0.5rem;color:var(--muted);font-weight:400">Estimación</th>
+          <th style="text-align:right;padding:0.2rem 0.5rem;color:var(--muted);font-weight:400">|Δ|</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${devData.map((row, idx) => {
+          const prev = idx > 0 ? devData[idx - 1].val : null;
+          const delta = prev !== null ? Math.abs(row.val - prev) : null;
+          const isLast = idx === devData.length - 1;
+          const rowStyle = isLast
+            ? 'background:rgba(212,168,75,0.07);color:var(--gold)'
+            : 'color:var(--text)';
+          const deltaStr = delta === null ? '—'
+            : delta < 1e-10 ? '< 1e-10'
+            : delta.toExponential(2);
+          return `<tr style="border-bottom:1px solid rgba(28,38,64,0.5);${rowStyle}">
+            <td style="text-align:right;padding:0.22rem 0.5rem">${row.N}</td>
+            <td style="text-align:right;padding:0.22rem 0.5rem">${row.val.toFixed(10)}</td>
+            <td style="text-align:right;padding:0.22rem 0.5rem;color:${delta===null?'var(--muted)':delta<1e-8?'var(--green)':'var(--orange)'}">${deltaStr}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+    <div style="font-size:0.7rem;color:var(--muted);margin-top:0.4rem;font-style:italic">
+      ↑ Valor N = 2000 usado como referencia exacta en este simulador
+    </div>
+  </div>` : ''}
+
+</div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  MAIN SOLVE
+// ═══════════════════════════════════════════════════════
+async function solveAll(skipLoader) {
+  const fStr = document.getElementById('inp-f').value.trim();
+  const a    = +document.getElementById('inp-a').value;
+  const b    = +document.getElementById('inp-b').value;
+  const n    = +document.getElementById('n-slider').value;
+
+  if (!isFinite(a) || !isFinite(b) || a >= b) {
+    document.getElementById('results').innerHTML =
+      `<div class="error-msg">Error: se necesita a &lt; b finitos.</div>`;
+    return;
+  }
+
+  if (!skipLoader) document.getElementById('loader').classList.add('show');
+  await new Promise(r => setTimeout(r, 25));
+
+  try {
+    fExpr = math.compile(fStr);
+    evalF((a + b) / 2); // quick parse check
+  } catch(e) {
+    document.getElementById('results').innerHTML =
+      `<div class="error-msg">Error al parsear f(x):<br><em>${e.message}</em></div>`;
+    document.getElementById('loader').classList.remove('show');
+    return;
+  }
+
+  try {
+    dirty = true;
+    // Fijar los rangos del plano y resetear zoom solo cuando cambia f/a/b
+    computeStableRanges(a, b);
+    uiRev = `${fStr}|${a}|${b}`;      // nuevo valor → Plotly resetea zoom
+    const exactVal = getExact(a, b);
+    const devData  = getExactDevelopment(a, b);
+    dirty = false;
+    const sumVal   = riemannSum(curMethod, a, b, n);
+
+    renderResults(a, b, n, sumVal, exactVal, devData);
+    drawRect(a, b, n, exactVal);
+
+    if (document.getElementById('pane-conv').classList.contains('active')) {
+      drawConv(a, b, n, exactVal);
+    }
+  } catch(e) {
+    document.getElementById('results').innerHTML =
+      `<div class="error-msg">Error en el cálculo:<br><em>${e.message}</em></div>`;
+    console.error(e);
+  }
+
+  if (!skipLoader) document.getElementById('loader').classList.remove('show');
+
+  if (window.innerWidth <= 768) {
+    setTimeout(() => document.querySelector('.vis-panel')
+      .scrollIntoView({ behavior:'smooth', block:'start' }), 350);
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  FAST UPDATE (slider / method change, no loader)
+// ═══════════════════════════════════════════════════════
+function fastUpdate() {
+  if (!fExpr) return;
+  const a = +document.getElementById('inp-a').value;
+  const b = +document.getElementById('inp-b').value;
+  const n = +document.getElementById('n-slider').value;
+  if (!isFinite(a) || !isFinite(b) || a >= b) return;
+
+  try {
+    const exactVal = getExact(a, b);
+    const sumVal   = riemannSum(curMethod, a, b, n);
+    renderResults(a, b, n, sumVal, exactVal);
+    drawRect(a, b, n, exactVal);
+    if (document.getElementById('pane-conv').classList.contains('active')) {
+      drawConv(a, b, n, exactVal);
+    }
+  } catch(e) { console.error(e); }
+}
+
+// ═══════════════════════════════════════════════════════
+//  SLIDER
+// ═══════════════════════════════════════════════════════
+function onSlider() {
+  const n = document.getElementById('n-slider').value;
+  document.getElementById('n-display').textContent = n;
+  clearTimeout(debTimer);
+  debTimer = setTimeout(fastUpdate, 35);
+}
+
+// ═══════════════════════════════════════════════════════
+//  METHOD SELECTOR
+// ═══════════════════════════════════════════════════════
+function setMethod(m) {
+  curMethod = m;
+  document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-m="${m}"]`).classList.add('active');
+  fastUpdate();
+}
+
+// ═══════════════════════════════════════════════════════
+//  ANIMATION
+// ═══════════════════════════════════════════════════════
+const SPEED_MS    = [280, 100, 38, 12];  // Lento / Normal / Rápido / Ultra
+const SPEED_LABEL = ['Lento', 'Normal', 'Rápido', 'Ultra'];
+
+function getSpeedMs() {
+  return SPEED_MS[+document.getElementById('speed-slider').value];
+}
+
+function onSpeedSlider() {
+  const idx = +document.getElementById('speed-slider').value;
+  document.getElementById('speed-label').textContent = SPEED_LABEL[idx];
+  // Si la animación está corriendo, reiniciarla con nueva velocidad
+  if (animTimer) {
+    clearInterval(animTimer);
+    animTimer = null;
+    startAnimLoop();
+  }
+}
+
+function startAnimLoop() {
+  const btn    = document.getElementById('btn-anim');
+  const slider = document.getElementById('n-slider');
+  const nMax   = getNMax();
+
+  // Expandir el rango del slider si el usuario puso un nMax mayor
+  if (nMax > +slider.max) slider.max = nMax;
+
+  animTimer = setInterval(() => {
+    const cur = +slider.value;
+    if (cur >= nMax) {
+      clearInterval(animTimer); animTimer = null;
+      btn.textContent = '▶ Animar';
+      btn.classList.remove('playing');
+      return;
+    }
+    const step = cur < 15 ? 1 : cur < 40 ? 2 : cur < 100 ? 4 : cur < 300 ? 8 : 15;
+    slider.value = Math.min(cur + step, nMax);
+    document.getElementById('n-display').textContent = slider.value;
+    fastUpdate();
+  }, getSpeedMs());
+}
+
+function toggleAnim() {
+  const btn    = document.getElementById('btn-anim');
+  const slider = document.getElementById('n-slider');
+
+  if (animTimer) {
+    clearInterval(animTimer); animTimer = null;
+    btn.textContent = '▶ Animar';
+    btn.classList.remove('playing');
+    return;
+  }
+
+  if (!fExpr) { solveAll(false); return; }
+
+  slider.value = 1;
+  document.getElementById('n-display').textContent = 1;
+  btn.textContent = '⏸ Pausa';
+  btn.classList.add('playing');
+  fastUpdate();
+  startAnimLoop();
+}
+
+// ═══════════════════════════════════════════════════════
+//  TAB SWITCHING
+// ═══════════════════════════════════════════════════════
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.getElementById('pane-' + id).classList.add('active');
+  setTimeout(() => {
+    try { Plotly.relayout('plot-' + id, { autosize:true }); } catch{}
+    if (id === 'conv' && fExpr) {
+      const a = +document.getElementById('inp-a').value;
+      const b = +document.getElementById('inp-b').value;
+      const n = +document.getElementById('n-slider').value;
+      if (isFinite(a) && isFinite(b) && a < b) {
+        drawConv(a, b, n, getExact(a, b));
+      }
+    }
+  }, 55);
+}
+
+// ═══════════════════════════════════════════════════════
+//  PRESETS
+// ═══════════════════════════════════════════════════════
+function applyPreset() {
+  const val = document.getElementById('presets').value;
+  if (!val) return;
+  const [f, a, b] = val.split('|');
+  document.getElementById('inp-f').value = f;
+  document.getElementById('inp-a').value = a;
+  document.getElementById('inp-b').value = b;
+  document.getElementById('presets').value = '';
+  cachedExact = null;
+  dirty = true;
+  solveAll(false);
+}
+
+// ═══════════════════════════════════════════════════════
+//  DIRTY FLAG
+// ═══════════════════════════════════════════════════════
+function markDirty() {
+  dirty = true;
+  cachedExact = null;
+}
+
+// ═══════════════════════════════════════════════════════
+//  AUTO-RUN ON LOAD
+// ═══════════════════════════════════════════════════════
+window.addEventListener('load', () => {
+  const check = (k = 0) => {
+    if (typeof math !== 'undefined' && typeof Plotly !== 'undefined') {
+      setTimeout(() => solveAll(false), 350);
+    } else if (k < 40) {
+      setTimeout(() => check(k + 1), 150);
+    } else {
+      document.getElementById('results').innerHTML =
+        '<div class="error-msg">No se pudieron cargar las librerías. Verifique su conexión.</div>';
+      document.getElementById('loader').classList.remove('show');
+    }
+  };
+  check();
+});
+</script>
+</body>
+</html>
