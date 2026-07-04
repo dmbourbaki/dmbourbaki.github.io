@@ -704,7 +704,62 @@
 
             <div class="category-group" id="cat-calculo-multivariable">
                 <h4>Cálculo Multivariable</h4>
-                <p style="font-size:0.85rem; color:#888; margin-top:-0.4rem;">Próximamente bajo la marca OMAI.</p>
+                <div class="digital-grid">
+
+                    <!-- Simulador de Multiplicadores de Lagrange -->
+                    <div class="digital-card" id="card-lagrange">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">λ</div>
+                            <div>
+                                <h3>Simulador de Multiplicadores de Lagrange</h3>
+                                <span class="topic-tag">Cálculo Multivariable · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Interpretación geométrica de ∇f = λ·∇g. Mueve el punto sobre la restricción y observa cuándo los gradientes se vuelven paralelos. Incluye mapa de calor de f(x,y) y medidor de paralelismo en tiempo real.</p>
+                        <div class="digital-tags">
+                            <span>Optimización Restringida</span>
+                            <span>Gradientes</span>
+                            <span>Curvas de Nivel</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/lagrange/lagrange.html" loading="lazy" title="Vista previa Lagrange" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('lagrange')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-lagrange" style="display:none">
+                            <iframe src="recursos/lagrange/lagrange.html" width="100%" height="640" frameborder="0" loading="lazy" title="Simulador de Multiplicadores de Lagrange"></iframe>
+                            <a href="recursos/lagrange/lagrange.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador de Integrales Dobles -->
+                    <div class="digital-card" id="card-integrales">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∬</div>
+                            <div>
+                                <h3>Simulador de Integrales Dobles</h3>
+                                <span class="topic-tag">Cálculo Multivariable · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualiza y calcula integrales dobles. Soporta Tipo I (dy dx), Tipo II (dx dy) y Polares (dr dθ). Ingresa los 4 límites: a, b, f₁(x) y f₂(x). La región se dibuja en 2D con aspecto 1:1 real, zoom con scroll y pan con arrastre; la función aparece difuminada fuera de la región. En 3D muestra el volumen como sólido paramétrico con colorscale cool-warm. Incluye botón para invertir el orden (Teorema de Fubini) y rotación animada del volumen.</p>
+                        <div class="digital-tags">
+                            <span>Tipo I · Tipo II · Polares</span>
+                            <span>Región 2D con aspecto 1:1</span>
+                            <span>Volumen 3D paramétrico</span>
+                            <span>Invertir orden · Rotación 3D</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/integrales_dobles/integrales_dobles.html" loading="lazy" title="Vista previa Integrales Dobles" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('integrales')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-integrales" style="display:none">
+                            <iframe src="recursos/integrales_dobles/integrales_dobles.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Integrales Dobles"></iframe>
+                            <a href="recursos/integrales_dobles/integrales_dobles.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
             <div class="category-group" id="cat-matematicas-especiales">
