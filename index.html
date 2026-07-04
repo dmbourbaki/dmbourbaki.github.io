@@ -785,7 +785,90 @@
 
             <div class="category-group" id="cat-calculo-integral">
                 <h4>Cálculo Integral</h4>
-                <p style="font-size:0.85rem; color:#888; margin-top:-0.4rem;">Próximamente bajo la marca OMAI.</p>
+                <div class="digital-grid">
+
+                    <!-- Simulador de Sólidos de Revolución -->
+                    <div class="digital-card" id="card-solidos">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∮</div>
+                            <div>
+                                <h3>Simulador de Sólidos de Revolución</h3>
+                                <span class="topic-tag">Cálculo Integral · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualización 3D interactiva de sólidos de revolución. Escoge entre los métodos del Disco, Cascarón cilíndrico y Arandela; ajusta el eje de revolución (X o Y); anima el barrido de 0° a 360°; y mueve la sección transversal para ver el área de cada corte. Calcula el volumen exacto y la superficie lateral.</p>
+                        <div class="digital-tags">
+                            <span>Disco · Cascarón · Arandela</span>
+                            <span>Eje X / Eje Y</span>
+                            <span>Animación de Barrido</span>
+                            <span>Sección Transversal</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/solidos_revolucion/solidos_revolucion.html" loading="lazy" title="Vista previa Sólidos de Revolución" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('solidos')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-solidos" style="display:none">
+                            <iframe src="recursos/solidos_revolucion/solidos_revolucion.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sólidos de Revolución"></iframe>
+                            <a href="recursos/solidos_revolucion/solidos_revolucion.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador de Sumas de Riemann -->
+                    <div class="digital-card" id="card-riemann">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∑</div>
+                            <div>
+                                <h3>Simulador de Sumas de Riemann</h3>
+                                <span class="topic-tag">Cálculo Integral · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Explora los cinco métodos de aproximación de la integral definida: Izquierda, Derecha, Punto Medio, Trapecio y Simpson 1/3. Anima la convergencia en tiempo real, compara el error con la integral exacta y observa la tabla de convergencia del valor exacto.</p>
+                        <div class="digital-tags">
+                            <span>Izquierda · Derecha · Medio</span>
+                            <span>Trapecio · Simpson 1/3</span>
+                            <span>Convergencia y Error</span>
+                            <span>Animación con velocidad ajustable</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/riemann/riemann.html" loading="lazy" title="Vista previa Riemann" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('riemann')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-riemann" style="display:none">
+                            <iframe src="recursos/riemann/riemann.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sumas de Riemann"></iframe>
+                            <a href="recursos/riemann/riemann.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador de Series de Taylor -->
+                    <div class="digital-card" id="card-taylor">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">Σ</div>
+                            <div>
+                                <h3>Simulador de Series de Taylor</h3>
+                                <span class="topic-tag">Cálculo · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualiza cómo un polinomio de grado n se "pega" a cualquier función al agregar términos. Escribe f(x), elige el centro a y anima la convergencia grado a grado. Muestra la fórmula con los coeficientes exactos f⁽ᵏ⁾(a)/k!, la tabla de coeficientes, el error |f − Tₙ| en escala logarítmica y el espectro de coeficientes. Diferenciación simbólica con mathjs.</p>
+                        <div class="digital-tags">
+                            <span>Diferenciación simbólica</span>
+                            <span>Animación grado a grado</span>
+                            <span>Error |f − Tₙ| en log</span>
+                            <span>14 presets (sin, cos, eˣ, ln, arctan…)</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/series_taylor/series_taylor.html" loading="lazy" title="Vista previa Series de Taylor" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('taylor')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-taylor" style="display:none">
+                            <iframe src="recursos/series_taylor/series_taylor.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Series de Taylor"></iframe>
+                            <a href="recursos/series_taylor/series_taylor.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
             <div class="category-group" id="cat-calculo-multivariable">
@@ -850,7 +933,36 @@
 
             <div class="category-group" id="cat-matematicas-especiales">
                 <h4>Matemáticas Especiales</h4>
-                <p style="font-size:0.85rem; color:#888; margin-top:-0.4rem;">Próximamente bajo la marca OMAI.</p>
+                <div class="digital-grid">
+
+                    <!-- Simulador de Transformaciones Lineales -->
+                    <div class="digital-card" id="card-tl">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">T</div>
+                            <div>
+                                <h3>Simulador de Transformaciones Lineales</h3>
+                                <span class="topic-tag">Álgebra Lineal · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualiza cómo una matriz transforma el plano y el espacio. En ℝ² deforma un oso con el grid, el paralelogramo del determinante y los eigenvectores. En ℝ³ transforma el oso 3D y muestra el paralelepípedo cuyo volumen es |det(T)|. Anima la transformación de t=0 a t=1, cambia presets, y lee el análisis completo: det, traza, eigenvalores y clasificación automática.</p>
+                        <div class="digital-tags">
+                            <span>ℝ² y ℝ³ interactivos</span>
+                            <span>Determinante como área/volumen</span>
+                            <span>Eigenvectores y clasificación</span>
+                            <span>14 presets ℝ² · 10 presets ℝ³</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/transformaciones_lineales/transformaciones_lineales.html" loading="lazy" title="Vista previa Transformaciones Lineales" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('tl')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-tl" style="display:none">
+                            <iframe src="recursos/transformaciones_lineales/transformaciones_lineales.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Transformaciones Lineales"></iframe>
+                            <a href="recursos/transformaciones_lineales/transformaciones_lineales.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
             <div class="category-group" id="cat-calculo-diferencial">
