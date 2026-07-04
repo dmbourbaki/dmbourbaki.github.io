@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<!--
+  © 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.
+  Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI)
+  https://dmbourbaki.github.io/
+
+  Queda prohibida la reproducción, distribución o modificación total
+  o parcial de este código sin autorización previa y por escrito del
+  autor. Contacto: dmbourbaki@gmail.com
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Respuesta de Segundo Orden · Observatorio de Matemáticas Avanzadas para Ingeniería</title>
+<meta name="description" content="Simulador interactivo de ecuaciones diferenciales de segundo orden con coeficientes constantes. Explora comportamientos sobreamortiguado, crítico, subamortiguado y sin amortiguamiento.">
+<meta name="author" content="Daniel Steven Moran Pizarro — Observatorio de Matemáticas Avanzadas para Ingeniería">
+<meta name="copyright" content="© 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  /* Observatorio nocturno: azul profundo + ámbar institucional */
+  --void:#070b16;
+  --abyss:#0a1020;
+  --deep:#0e1628;
+  --panel:#111c33;
+  --panel-2:#152138;
+  --line:#1f2e4a;
+  --line-soft:#1a2740;
+  --ink:#eaf0ff;
+  --ink-soft:#9fb0d0;
+  --ink-faint:#5f7193;
+  --ink-ghost:#3a4866;
+
+  /* Acentos: ámbar/dorado + cian estabilizador */
+  --gold:#f2b417;
+  --gold-bright:#ffd24a;
+  --gold-deep:#c8901a;
+  --amber:#ff9a3c;
+  --cyan:#34d6e8;
+  --rose:#ff5d8f;
+  --grass:#4fd98a;
+  --violet:#9b7dff;
+
+  --good:#4fd98a;
+  --bad:#ff5d8f;
+
+  /* Colores de régimen (comportamiento) */
+  --reg-over:#34d6e8;     /* sobreamortiguado: cian */
+  --reg-crit:#f2b417;     /* crítico: ámbar */
+  --reg-under:#ff5d8f;    /* subamortiguado: rosa */
+  --reg-undamped:#9b7dff; /* sin amortiguamiento: violeta */
+
+  --r-lg:18px;
+  --r-md:12px;
+  --r-sm:8px;
+  --shadow:0 24px 60px -22px rgba(0,0,0,.85);
+  --glow-gold:0 0 0 1px rgba(242,180,23,.18), 0 8px 30px -8px rgba(242,180,23,.25);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(1200px 700px at 78% -8%, rgba(242,180,23,.10), transparent 55%),
+    radial-gradient(900px 600px at 8% 110%, rgba(52,214,232,.07), transparent 55%),
+    linear-gradient(180deg,var(--void),var(--abyss));
+  color:var(--ink);
+  font-family:'Inter Tight',system-ui,sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.katex{font-size:1.04em}
+
+/* ============ HEADER ============ */
+header{
+  position:relative;z-index:3;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;
+  padding:20px clamp(18px,3.5vw,46px);
+  border-bottom:1px solid var(--line-soft);
+  background:linear-gradient(180deg, rgba(14,22,40,.65), rgba(14,22,40,0));
+  backdrop-filter:blur(8px);
+}
+.brand{display:flex;align-items:center;gap:18px;min-width:0}
+.brand .logo{
+  height:54px;width:auto;display:block;
+  background:#fff;border-radius:10px;padding:6px 9px;
+  box-shadow:0 6px 18px -8px rgba(0,0,0,.6);
+  flex:0 0 auto;
+}
+.brand .titles{min-width:0}
+.eyebrow{
+  font-family:'Spline Sans Mono',monospace;
+  font-size:11px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--gold);font-weight:600;margin-bottom:3px;
+}
+.brand h1{
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:clamp(20px,2.4vw,30px);line-height:1.04;
+  letter-spacing:-.01em;
+}
+.brand h1 em{font-style:italic;color:var(--gold-bright)}
+.brand .sub{font-size:12.5px;color:var(--ink-faint);margin-top:4px}
+
+.header-meta{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  font-family:'Spline Sans Mono',monospace;font-size:11px;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 13px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(17,28,51,.6);
+  color:var(--ink-soft);letter-spacing:.04em;
+}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 10px var(--good)}
+
+/* ============ EQUATION BAR ============ */
+.eqbar{
+  position:relative;z-index:3;
+  display:flex;align-items:stretch;gap:14px;flex-wrap:wrap;
+  padding:18px clamp(18px,3.5vw,46px);
+  border-bottom:1px solid var(--line-soft);
+}
+.eq-render-main{
+  flex:1 1 360px;min-width:280px;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:14px 22px;
+  border:1px solid var(--line-soft);border-radius:var(--r-md);
+  background:rgba(10,16,32,.5);
+  overflow-x:auto;
+  transition:border-color .25s, box-shadow .25s;
+}
+.eq-render-main .rl{
+  font-family:'Spline Sans Mono',monospace;font-size:9.5px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px;
+  display:flex;align-items:center;gap:8px;
+}
+.eq-render-main .rl .dotc{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.eq-render-main #eqLatexA, .eq-render-main #eqLatexB{min-height:34px;color:var(--ink);font-size:1.18em}
+.eq-ref{border-color:var(--line-soft)}
+.eq-var{box-shadow:var(--glow-gold)}
+
+/* ============ LAYOUT ============ */
+.workspace{
+  position:relative;z-index:2;
+  display:grid;
+  grid-template-columns:300px minmax(0,1fr) 296px;
+  gap:0;
+  min-height:60vh;
+}
+.rail{
+  border-right:1px solid var(--line-soft);
+  padding:22px clamp(14px,1.4vw,22px) 40px;
+  display:flex;flex-direction:column;gap:26px;
+}
+.rail.right{border-right:none;border-left:1px solid var(--line-soft)}
+
+.section-h{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Spline Sans Mono',monospace;
+  font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:2px;
+}
+.section-h::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--gold);box-shadow:0 0 10px rgba(242,180,23,.6)}
+
+/* Presets */
+.presets{display:flex;flex-direction:column;gap:8px}
+
+/* Selector de variable (b / k / F) */
+.var-select{display:flex;gap:8px}
+.var-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:12px 8px;cursor:pointer;
+  border:1px solid var(--line-soft);border-radius:var(--r-sm);
+  background:rgba(17,28,51,.4);color:var(--ink-soft);
+  transition:all .18s;
+}
+.var-btn .vsym{font-family:'Fraunces',serif;font-style:italic;font-size:20px;color:var(--ink)}
+.var-btn .vname{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-family:'Spline Sans Mono',monospace}
+.var-btn:hover{border-color:var(--gold-deep);background:rgba(242,180,23,.06)}
+.var-btn.active{border-color:var(--gold);background:rgba(242,180,23,.12);box-shadow:inset 0 0 0 1px var(--gold)}
+.var-btn.active .vsym{color:var(--gold-bright)}
+.var-hint{margin-top:10px;font-size:11.5px;line-height:1.5;color:var(--ink-faint)}
+.preset{
+  display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+  padding:11px 13px;cursor:pointer;text-align:left;
+  border:1px solid var(--line-soft);border-radius:var(--r-sm);
+  background:rgba(17,28,51,.4);color:var(--ink-soft);
+  transition:all .18s;width:100%;
+}
+.preset:hover{border-color:var(--gold-deep);background:rgba(242,180,23,.06);color:var(--ink);transform:translateX(3px)}
+.preset.active{border-color:var(--gold);background:rgba(242,180,23,.1);color:var(--ink);box-shadow:inset 3px 0 0 var(--gold)}
+.preset .pname{font-size:12.5px;font-weight:600}
+.preset .ploc{font-size:10.5px;opacity:.75;font-family:'Spline Sans Mono',monospace;letter-spacing:.03em}
+.preset .pmath{font-size:11px;opacity:.9;margin-top:2px}
+
+/* Parameter fields */
+.param-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1 / -1}
+.field label{
+  font-family:'Spline Sans Mono',monospace;font-size:10px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.field label .lk{color:var(--gold-bright);font-style:italic;font-family:'Fraunces',serif;font-size:12px}
+.field input[type=number]{
+  background:var(--deep);border:1px solid var(--line);
+  border-radius:var(--r-sm);color:var(--ink);
+  padding:9px 11px;font-family:'Spline Sans Mono',monospace;font-size:13px;
+  outline:none;transition:border-color .2s;width:100%;
+}
+.field input[type=number]:focus{border-color:var(--gold)}
+
+.btn-ghost{
+  width:100%;padding:10px;cursor:pointer;
+  border:1px solid var(--line);border-radius:var(--r-sm);
+  background:transparent;color:var(--ink-soft);
+  font-family:'Spline Sans Mono',monospace;font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;
+  transition:all .18s;
+}
+.btn-ghost:hover{border-color:var(--gold-deep);color:var(--ink);background:rgba(242,180,23,.05)}
+
+.btn-sync{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:11px;cursor:pointer;
+  border:1px solid var(--cyan);border-radius:var(--r-sm);
+  background:rgba(52,214,232,.08);color:var(--cyan);
+  font-family:'Spline Sans Mono',monospace;font-size:11px;
+  letter-spacing:.08em;text-transform:uppercase;
+  transition:all .18s;
+}
+.btn-sync:hover{background:rgba(52,214,232,.16)}
+.btn-sync svg{width:14px;height:14px}
+
+/* Toggles */
+.toggles{display:flex;flex-direction:column;gap:3px}
+.toggle{
+  display:flex;align-items:center;gap:11px;
+  padding:9px 8px;cursor:pointer;border-radius:var(--r-sm);
+  transition:background .15s;
+}
+.toggle:hover{background:rgba(255,255,255,.025)}
+.toggle .box{
+  width:18px;height:18px;flex:0 0 auto;border-radius:5px;
+  border:1.5px solid var(--line);background:var(--deep);
+  display:grid;place-items:center;transition:all .18s;
+}
+.toggle input{display:none}
+.toggle input:checked + .box{
+  background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));
+  border-color:var(--gold-bright);
+}
+.toggle .box svg{width:11px;height:11px;opacity:0;transform:scale(.4);transition:all .18s;color:#1a1300}
+.toggle input:checked + .box svg{opacity:1;transform:scale(1)}
+.toggle .tlab{font-size:12.5px;color:var(--ink-soft)}
+.toggle:hover .tlab{color:var(--ink)}
+
+/* ============ STAGE: dos paneles paralelos ============ */
+.stage{position:relative;display:flex;flex-direction:column;background:var(--void)}
+.stage-toolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 18px;border-bottom:1px solid var(--line-soft);
+  background:rgba(10,16,32,.4);
+}
+.stage-toolbar .hint{
+  font-size:12px;color:var(--ink-faint);
+  display:flex;align-items:center;gap:8px;
+}
+.stage-toolbar .hint svg{width:15px;height:15px;color:var(--gold)}
+
+.dual-grid{
+  flex:1;display:grid;grid-template-columns:1fr 1fr;
+  min-height:520px;
+}
+.panel-col{
+  position:relative;display:flex;flex-direction:column;
+  border-right:1px solid var(--line-soft);
+}
+.panel-col:last-child{border-right:none}
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 16px;border-bottom:1px solid var(--line-soft);
+  background:rgba(10,16,32,.55);
+}
+.panel-tag{
+  display:flex;align-items:center;gap:9px;
+  font-family:'Spline Sans Mono',monospace;font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;
+}
+.panel-tag .dotc{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.panel-regime{
+  font-family:'Spline Sans Mono',monospace;font-size:10.5px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.05em;
+  border:1px solid currentColor;
+}
+.panel-canvas-host{position:relative;flex:1;min-height:420px}
+.panel-canvas-host canvas{display:block;width:100%;height:100%}
+.panel-bcoef{
+  position:absolute;top:10px;right:14px;z-index:4;
+  font-family:'Spline Sans Mono',monospace;font-size:11px;
+  color:var(--ink-faint);background:rgba(7,11,22,.7);
+  padding:4px 10px;border-radius:999px;border:1px solid var(--line-soft);
+}
+.panel-bcoef b{color:var(--gold-bright)}
+
+/* ============ RIGHT RAIL: ANÁLISIS ============ */
+.analysis-card{
+  border:1px solid var(--line-soft);border-radius:var(--r-md);
+  background:linear-gradient(180deg,var(--panel),var(--deep));
+  padding:16px;
+}
+.analysis-card + .analysis-card{margin-top:10px}
+.ac-title{
+  font-family:'Spline Sans Mono',monospace;font-size:10px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);
+  margin-bottom:10px;display:flex;align-items:center;gap:8px;
+}
+.ac-title .dotc{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+
+.readout-grid{display:flex;flex-direction:column;gap:10px}
+.readout-grid .row{
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  padding-bottom:9px;border-bottom:1px dashed var(--line-soft);
+}
+.readout-grid .row:last-child{border-bottom:none;padding-bottom:0}
+.readout-grid .rk{font-size:11.5px;color:var(--ink-faint);white-space:nowrap}
+.readout-grid .rv{font-family:'Spline Sans Mono',monospace;font-size:13px;color:var(--gold-bright);font-weight:600;text-align:right}
+
+.sol-latex{font-size:13px;color:var(--ink-soft)}
+.sol-latex .katex{font-size:1em}
+
+.regime-badge{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 13px;border-radius:var(--r-sm);
+  border:1px solid var(--line-soft);background:rgba(7,11,22,.4);
+  margin-bottom:12px;
+}
+.regime-badge .ricon{
+  width:32px;height:32px;flex:0 0 auto;border-radius:8px;
+  display:grid;place-items:center;
+}
+.regime-badge .rtext{min-width:0}
+.regime-badge .rname{font-size:13px;font-weight:600;color:var(--ink)}
+.regime-badge .rdesc{font-size:10.5px;color:var(--ink-faint);margin-top:1px;line-height:1.3}
+
+.legend{display:flex;flex-direction:column;gap:9px;font-size:11.5px;color:var(--ink-soft)}
+.legend .lrow{display:flex;align-items:center;gap:10px}
+.legend .swatch{width:14px;height:14px;border-radius:4px;flex:0 0 auto}
+
+/* ============ FOOTER ============ */
+footer{
+  position:relative;z-index:2;
+  padding:26px clamp(18px,3.5vw,46px);
+  border-top:1px solid var(--line-soft);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  color:var(--ink-faint);font-size:12px;
+}
+footer .fbrand{display:flex;align-items:center;gap:12px}
+footer .fbrand img{height:34px;background:#fff;border-radius:7px;padding:4px 6px}
+footer a{color:var(--gold);text-decoration:none}
+footer a:hover{text-decoration:underline}
+footer .math-note{font-family:'Spline Sans Mono',monospace;font-size:11px}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1100px){
+  .workspace{grid-template-columns:1fr;}
+  .rail{border-right:none;border-bottom:1px solid var(--line-soft)}
+  .rail.right{border-left:none;border-top:1px solid var(--line-soft)}
+  .stage{order:-1}
+}
+@media (max-width:780px){
+  .dual-grid{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  .panel-col{border-right:none;border-bottom:1px solid var(--line-soft)}
+  .panel-col:last-child{border-bottom:none}
+  .panel-canvas-host{min-height:280px}
+}
+@media (max-width:560px){
+  .param-grid{grid-template-columns:1fr 1fr}
+  header{gap:14px}
+  .brand .logo{height:46px}
+  .brand h1{font-size:22px}
+  #eqLatexA, #eqLatexB{font-size:.92em}
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--abyss)}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;border:2px solid var(--abyss)}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-deep)}
+
+.fade-in{animation:fadeUp .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="fade-in">
+  <div class="brand">
+    <div class="titles">
+      <div class="eyebrow">Observatorio de Matemáticas Avanzadas para Ingeniería</div>
+      <h1>Simulador de Respuesta de <em>Segundo Orden</em></h1>
+      <div class="sub">Sobreamortiguado · crítico · subamortiguado · sin amortiguamiento — comparación paramétrica en vivo</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <span class="chip"><span class="dot"></span> Solución analítica exacta</span>
+    <span class="chip" id="chipRegimeCount">2 paneles activos</span>
+  </div>
+</header>
+
+<div class="eqbar fade-in" style="animation-delay:.06s">
+  <div class="eq-render-main eq-ref">
+    <div class="rl"><span class="dotc" id="eqDotA" style="background:var(--reg-over)"></span> Sistema de referencia &nbsp;·&nbsp; Panel A (constante)</div>
+    <div id="eqLatexA"></div>
+  </div>
+  <div class="eq-render-main eq-var">
+    <div class="rl"><span class="dotc" id="eqDotB" style="background:var(--reg-under)"></span> Sistema variable &nbsp;·&nbsp; Panel B</div>
+    <div id="eqLatexB"></div>
+  </div>
+</div>
+
+<main class="workspace">
+  <!-- ====== LEFT RAIL ====== -->
+  <aside class="rail left fade-in" style="animation-delay:.1s">
+    <div>
+      <div class="section-h">¿Qué parámetro varía?</div>
+      <div class="var-select" id="varSelect" style="margin-top:12px"></div>
+      <div class="var-hint" id="varHint"></div>
+    </div>
+
+    <div>
+      <div class="section-h">Parámetros constantes</div>
+      <div class="param-grid" style="margin-top:12px" id="fixedParams"></div>
+    </div>
+
+    <div>
+      <div class="section-h">Condiciones iniciales</div>
+      <div class="param-grid" style="margin-top:12px">
+        <div class="field"><label>y(0)</label><input id="y0Val" type="number" value="0" step="0.5"></div>
+        <div class="field"><label>y′(0)</label><input id="v0Val" type="number" value="0" step="0.5"></div>
+        <div class="field full"><label>Ventana de tiempo (t máx)</label><input id="tmaxVal" type="number" value="8" step="0.5"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-h">Valor de referencia (Panel A)</div>
+      <div class="param-grid" style="margin-top:12px">
+        <div class="field full">
+          <label><span id="refLabel">Coeficiente</span> <span class="lk" id="refSym">b</span></label>
+          <input id="refVal" type="number" value="5" step="0.1">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-h" id="sliderSectionTitleB">Variable — Panel B</div>
+      <div class="param-grid" style="margin-top:12px">
+        <div class="field full">
+          <label><span id="varLabelB">Coeficiente</span><span id="varBReadout" style="color:var(--reg-under)"></span></label>
+          <input id="varB" type="range" min="0" max="14" step="0.1" value="2">
+        </div>
+      </div>
+      <button class="btn-sync" id="btnSync" style="margin-top:12px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        Igualar B a la referencia
+      </button>
+    </div>
+
+    <div>
+      <div class="section-h">Rango del deslizador</div>
+      <div class="param-grid" style="margin-top:12px">
+        <div class="field"><label>Mínimo</label><input id="varMin" type="number" value="0" step="0.5"></div>
+        <div class="field"><label>Máximo</label><input id="varMax" type="number" value="14" step="0.5"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-h">Visualización</div>
+      <div class="toggles" style="margin-top:8px" id="toggles"></div>
+    </div>
+
+    <button class="btn-ghost" id="btnReset">↺ Restaurar valores por defecto</button>
+  </aside>
+
+  <!-- ====== STAGE: dos paneles ====== -->
+  <section class="stage fade-in" style="animation-delay:.14s">
+    <div class="stage-toolbar">
+      <div class="hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 14l4-5 4 3 5-7"/></svg>
+        <span id="hintFixed">Mismo sistema, dos valores distintos del parámetro elegido</span>
+      </div>
+    </div>
+    <div class="dual-grid">
+      <div class="panel-col">
+        <div class="panel-head">
+          <div class="panel-tag"><span class="dotc" id="dotA" style="background:var(--reg-over)"></span> Panel A · Referencia</div>
+          <div class="panel-regime" id="regimeTagA" style="color:var(--reg-over)">—</div>
+        </div>
+        <div class="panel-canvas-host" id="hostA">
+          <canvas id="canvasA"></canvas>
+          <div class="panel-bcoef" id="tagA">b = <b id="bAtag">5</b></div>
+        </div>
+      </div>
+      <div class="panel-col">
+        <div class="panel-head">
+          <div class="panel-tag"><span class="dotc" id="dotB" style="background:var(--reg-under)"></span> Panel B</div>
+          <div class="panel-regime" id="regimeTagB" style="color:var(--reg-under)">—</div>
+        </div>
+        <div class="panel-canvas-host" id="hostB">
+          <canvas id="canvasB"></canvas>
+          <div class="panel-bcoef" id="tagB">b = <b id="bBtag">2</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== RIGHT RAIL ====== -->
+  <aside class="rail right fade-in" style="animation-delay:.18s">
+    <div>
+      <div class="section-h">Análisis — Panel A</div>
+      <div class="analysis-card" id="analysisA" style="margin-top:12px"></div>
+    </div>
+
+    <div>
+      <div class="section-h">Análisis — Panel B</div>
+      <div class="analysis-card" id="analysisB" style="margin-top:12px"></div>
+    </div>
+
+    <div>
+      <div class="section-h">Clasificación según b² − 4k</div>
+
+      <div class="legend" style="margin-top:12px">
+        <div class="lrow"><span class="swatch" style="background:var(--reg-over)"></span> Sobreamortiguado — raíces reales distintas</div>
+        <div class="lrow"><span class="swatch" style="background:var(--reg-crit)"></span> Crítico — raíz real doble</div>
+        <div class="lrow"><span class="swatch" style="background:var(--reg-under)"></span> Subamortiguado — raíces complejas conjugadas</div>
+        <div class="lrow"><span class="swatch" style="background:var(--reg-undamped)"></span> Sin amortiguamiento — raíces imaginarias puras (b = 0)</div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer class="fade-in" style="animation-delay:.22s">
+  <div class="fbrand">
+    <div>
+      <div style="color:var(--ink-soft);font-weight:500">Observatorio de Matemáticas Avanzadas para Ingeniería</div>
+      <div>Recurso educativo abierto · Ecuaciones Diferenciales</div>
+    </div>
+  </div>
+  <div class="math-note">
+    Solución analítica exacta (coeficientes constantes) &nbsp;·&nbsp; y′′ + by′ + ky = F
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
