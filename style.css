@@ -482,7 +482,7 @@ body {
 }
 
 .tag {
-    background: var(--secondary-color);
+    background: linear-gradient(120deg, var(--primary-color), var(--secondary-color));
     color: white;
     padding: 0.5rem 1.5rem;
     border-radius: 50px;
@@ -491,8 +491,9 @@ body {
 }
 
 .tag:hover {
-    background: var(--primary-color);
-    transform: scale(1.05);
+    background: linear-gradient(120deg, var(--secondary-color), var(--gold));
+    transform: scale(1.06) translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 /* Publications Section */
@@ -593,7 +594,7 @@ body {
 }
 
 .pub-link:hover {
-    background: var(--secondary-color);
+    background: linear-gradient(120deg, var(--primary-color), var(--secondary-color));
     color: white;
 }
 
@@ -622,7 +623,8 @@ body {
     padding: 2rem;
     border-radius: 14px;
     transition: all 0.3s ease;
-    border-top: 4px solid var(--secondary-color);
+    border-top: 4px solid transparent;
+    border-image: linear-gradient(90deg, var(--primary-color), var(--gold)) 1;
 }
 
 .course-card:hover {
@@ -929,7 +931,7 @@ body {
     transform: translateX(-50%);
     width: 4px;
     height: 100%;
-    background: linear-gradient(180deg, var(--secondary-color), var(--accent-color));
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color), var(--gold));
     border-radius: 2px;
 }
 .timeline-item {
@@ -950,7 +952,7 @@ body {
     background: var(--secondary-color);
     border: 4px solid white;
     border-radius: 50%;
-    box-shadow: 0 0 0 4px var(--accent-color);
+    box-shadow: 0 0 0 4px var(--gold);
     z-index: 10;
 }
 .timeline-content {
@@ -1228,7 +1230,7 @@ body {
 .video-cta h4 { font-size: 1.2rem; color: var(--primary-color); margin-bottom: 0.5rem; }
 .video-cta p  { color: var(--text-light); margin-bottom: 1.5rem; }
 .video-link { display: inline-block; margin-top: 0.5rem; color: var(--primary-color); text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; }
-.video-link:hover { color: var(--accent-color); }
+.video-link:hover { color: var(--gold); }
 .video-link i { font-size: 0.8rem; margin-left: 0.25rem; }
 
 .guides-grid {
@@ -1260,7 +1262,7 @@ body {
 .tool-card h4 { font-size: 1.2rem; color: var(--primary-color); margin-bottom: 0.8rem; }
 .tool-card p  { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem; }
 .tool-link { display: inline-block; color: var(--secondary-color); text-decoration: none; font-weight: 600; transition: all 0.3s ease; }
-.tool-link:hover { color: var(--primary-color); }
+.tool-link:hover { color: var(--gold); }
 .tool-link i { margin-left: 0.3rem; font-size: 0.9rem; }
 
 @media (max-width: 768px) {
@@ -1397,5 +1399,3 @@ body {
     .digital-card-header h3 { font-size: 1.05rem; }
     .resource-frame iframe { height: 420px; }
 }
-
-
