@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<!--
+  © 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.
+  Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI)
+  https://dmbourbaki.github.io/
+
+  Queda prohibida la reproducción, distribución o modificación total
+  o parcial de este código sin autorización previa y por escrito del
+  autor. Contacto: dmbourbaki@gmail.com
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Series de Fourier · Observatorio de Matemáticas Avanzadas para Ingeniería</title>
+<meta name="description" content="Simulador interactivo de Series de Fourier: observa cómo la suma parcial de senos y cosenos converge a una función periódica f(t)=f(t+T). Galería de funciones clásicas, función personalizada, descomposición en armónicos, y el fenómeno de Gibbs.">
+<meta name="author" content="Daniel Steven Moran Pizarro — Observatorio de Matemáticas Avanzadas para Ingeniería">
+<meta name="copyright" content="© 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --void:#070b16; --abyss:#0a1020; --deep:#0e1628; --panel:#111c33; --panel-2:#152138;
+  --line:#1f2e4a; --line-soft:#1a2740;
+  --ink:#eaf0ff; --ink-soft:#9fb0d0; --ink-faint:#5f7193; --ink-ghost:#3a4866;
+
+  --gold:#f2b417; --gold-bright:#ffd24a; --gold-deep:#c8901a;
+  --amber:#ff9a3c; --cyan:#34d6e8; --rose:#ff5d8f; --grass:#4fd98a; --violet:#9b7dff;
+  --good:#4fd98a; --bad:#ff5d8f;
+
+  --target:#5f7193; --partial:#34d6e8; --gibbs:#ff5d8f;
+
+  --r-lg:18px; --r-md:12px; --r-sm:8px;
+  --shadow:0 24px 60px -22px rgba(0,0,0,.85);
+  --glow-gold:0 0 0 1px rgba(242,180,23,.18), 0 8px 30px -8px rgba(242,180,23,.25);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(1200px 700px at 78% -8%, rgba(242,180,23,.10), transparent 55%),
+    radial-gradient(900px 600px at 8% 110%, rgba(52,214,232,.07), transparent 55%),
+    linear-gradient(180deg,var(--void),var(--abyss));
+  color:var(--ink);
+  font-family:'Inter Tight',system-ui,sans-serif;
+  min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.katex{font-size:1.04em}
+
+/* ============ HEADER ============ */
+header{
+  position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;padding:20px clamp(18px,3.5vw,46px);
+  border-bottom:1px solid var(--line-soft);
+  background:linear-gradient(180deg, rgba(14,22,40,.65), rgba(14,22,40,0));
+  backdrop-filter:blur(8px);
+}
+.brand{display:flex;align-items:center;gap:18px;min-width:0}
+.brand .titles{min-width:0}
+.eyebrow{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:3px}
+.brand h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(20px,2.4vw,30px);line-height:1.04;letter-spacing:-.01em}
+.brand h1 em{font-style:italic;color:var(--gold-bright)}
+.brand .sub{font-size:12.5px;color:var(--ink-faint);margin-top:4px}
+.header-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:'Spline Sans Mono',monospace;font-size:11px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:rgba(17,28,51,.6);color:var(--ink-soft);letter-spacing:.04em}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 10px var(--good)}
+
+/* ============ EQUATION BAR ============ */
+.eqbar{position:relative;z-index:3;display:flex;align-items:stretch;gap:14px;flex-wrap:wrap;padding:18px clamp(18px,3.5vw,46px);border-bottom:1px solid var(--line-soft)}
+.eq-render-main{flex:1 1 320px;min-width:260px;display:flex;flex-direction:column;justify-content:center;padding:14px 22px;border:1px solid var(--line-soft);border-radius:var(--r-md);background:rgba(10,16,32,.5);overflow:hidden}
+.eq-expanded{flex:1 1 100%;max-height:280px;overflow-y:auto}
+.eq-expanded .mb-content{overflow-x:auto;text-align:left}
+.eq-expanded .katex-display{text-align:left;margin:4px 0}
+.expanded-sub{margin-bottom:4px}
+.expanded-sub:last-child{margin-bottom:0}
+.expanded-sublabel{font-family:'Spline Sans Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);margin:8px 0 2px}
+.expanded-sub:first-child .expanded-sublabel{margin-top:0}
+.term-flow{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px 0;line-height:2.1}
+.term-flow .term-piece{display:inline-flex;align-items:baseline;white-space:nowrap;margin-right:7px}
+.term-flow .term-piece .katex{font-size:1.05em}
+.trig-where{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line-soft);display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.trig-where .where-item{display:flex;align-items:flex-start;gap:6px;font-size:.92em}
+.trig-where .where-item .katex{font-size:1em}
+.expanded-note{font-size:11px;color:var(--ink-faint);line-height:1.5;margin-top:6px;font-style:italic}
+.eq-render-main .rl{font-family:'Spline Sans Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.eq-render-main .mb-content{overflow-x:auto;padding-bottom:2px;font-size:1.1em;color:var(--ink)}
+
+/* ============ LAYOUT ============ */
+.workspace{position:relative;z-index:2;display:grid;grid-template-columns:300px minmax(0,1fr) 300px;gap:0;min-height:60vh}
+.rail{border-right:1px solid var(--line-soft);padding:22px clamp(14px,1.4vw,22px) 40px;display:flex;flex-direction:column;gap:24px}
+.rail.right{border-right:none;border-left:1px solid var(--line-soft)}
+
+.section-h{display:flex;align-items:center;gap:10px;font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.section-h::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--gold);box-shadow:0 0 10px rgba(242,180,23,.6)}
+
+/* galería de funciones */
+.func-gallery{display:flex;flex-direction:column;gap:8px}
+.func-card{
+  display:flex;align-items:center;gap:10px;padding:9px 11px;cursor:pointer;
+  border:1px solid var(--line-soft);border-radius:var(--r-sm);
+  background:rgba(17,28,51,.4);color:var(--ink-soft);transition:all .18s;
+}
+.func-card:hover{border-color:var(--gold-deep);background:rgba(242,180,23,.06);color:var(--ink)}
+.func-card.active{border-color:var(--gold);background:rgba(242,180,23,.12);color:var(--ink);box-shadow:inset 3px 0 0 var(--gold)}
+.func-card svg{width:28px;height:20px;flex:0 0 auto;color:currentColor}
+.func-card .fname{font-size:12.5px;font-weight:600}
+
+/* función personalizada */
+.custom-box{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.custom-box textarea{
+  background:var(--deep);border:1px solid var(--line);border-radius:var(--r-sm);
+  color:var(--ink);padding:10px 11px;font-family:'Spline Sans Mono',monospace;font-size:12.5px;
+  resize:vertical;min-height:64px;outline:none;
+}
+.custom-box textarea:focus{border-color:var(--gold)}
+.custom-hint{font-size:10.5px;color:var(--ink-faint);line-height:1.5}
+.custom-error{font-size:11px;color:var(--bad);min-height:14px}
+
+/* Param grid */
+.param-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1 / -1}
+.field label{font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);display:flex;align-items:center;gap:5px}
+.field label .lk{color:var(--gold-bright);font-style:italic;font-family:'Fraunces',serif;font-size:12px}
+.field input[type=number]{background:var(--deep);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--ink);padding:9px 11px;font-family:'Spline Sans Mono',monospace;font-size:13px;outline:none;transition:border-color .2s;width:100%}
+.field input[type=number]:focus{border-color:var(--gold)}
+
+/* deslizador N + reproducción */
+.n-control{display:flex;flex-direction:column;gap:10px}
+.n-readout{display:flex;align-items:baseline;justify-content:space-between}
+.n-readout .nlabel{font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
+.n-readout .nval{font-family:'Fraunces',serif;font-style:italic;font-size:22px;color:var(--gold-bright)}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.play-row{display:flex;gap:8px}
+.btn-play{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px;cursor:pointer;border:1px solid var(--gold-deep);border-radius:var(--r-sm);
+  background:rgba(242,180,23,.1);color:var(--gold-bright);
+  font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  transition:all .18s;
+}
+.btn-play:hover{background:rgba(242,180,23,.18)}
+.btn-play svg{width:14px;height:14px}
+.speed-select{display:flex;gap:6px}
+.speed-btn{
+  flex:1;padding:7px 4px;cursor:pointer;text-align:center;
+  border:1px solid var(--line-soft);border-radius:var(--r-sm);
+  background:rgba(17,28,51,.4);color:var(--ink-soft);
+  font-family:'Spline Sans Mono',monospace;font-size:10.5px;transition:all .15s;
+}
+.speed-btn.active{border-color:var(--gold);color:var(--gold-bright);background:rgba(242,180,23,.1)}
+
+.btn-ghost{width:100%;padding:10px;cursor:pointer;border:1px solid var(--line);border-radius:var(--r-sm);background:transparent;color:var(--ink-soft);font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;transition:all .18s}
+.btn-ghost:hover{border-color:var(--gold-deep);color:var(--ink);background:rgba(242,180,23,.05)}
+
+/* Toggles */
+.toggles{display:flex;flex-direction:column;gap:3px}
+.toggle{display:flex;align-items:center;gap:11px;padding:9px 8px;cursor:pointer;border-radius:var(--r-sm);transition:background .15s}
+.toggle:hover{background:rgba(255,255,255,.025)}
+.toggle .box{width:18px;height:18px;flex:0 0 auto;border-radius:5px;border:1.5px solid var(--line);background:var(--deep);display:grid;place-items:center;transition:all .18s}
+.toggle input{display:none}
+.toggle input:checked + .box{background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));border-color:var(--gold-bright)}
+.toggle .box svg{width:11px;height:11px;opacity:0;transform:scale(.4);transition:all .18s;color:#1a1300}
+.toggle input:checked + .box svg{opacity:1;transform:scale(1)}
+.toggle .tlab{font-size:12.5px;color:var(--ink-soft)}
+.toggle:hover .tlab{color:var(--ink)}
+
+/* ============ STAGE ============ */
+.stage{position:relative;display:flex;flex-direction:column;background:var(--void)}
+.domain-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 18px;border-bottom:1px solid var(--line-soft);background:rgba(10,16,32,.55)}
+.domain-tag{display:flex;align-items:center;gap:9px;font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.domain-tag .dotc{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+
+.viewer-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line-soft);background:rgba(10,16,32,.4)}
+.viewer-toolbar .hint{font-size:11.5px;color:var(--ink-faint);display:flex;align-items:center;gap:7px}
+.viewer-toolbar .hint svg{width:14px;height:14px;color:var(--gold);flex:0 0 auto}
+.zoom-group{display:flex;gap:6px;flex:0 0 auto}
+.icon-btn{width:30px;height:30px;display:grid;place-items:center;cursor:pointer;border:1px solid var(--line);border-radius:var(--r-sm);background:rgba(17,28,51,.6);color:var(--ink-soft);transition:all .15s;font-family:'Spline Sans Mono',monospace;font-size:14px;user-select:none}
+.icon-btn:hover{border-color:var(--gold-deep);color:var(--gold-bright);background:rgba(242,180,23,.08)}
+.icon-btn:active{transform:scale(.93)}
+
+.canvas-host{position:relative;flex:1;min-height:300px;cursor:grab;touch-action:none}
+.canvas-host.grabbing{cursor:grabbing}
+.canvas-host canvas{display:block;width:100%;height:100%}
+.legend-overlay{position:absolute;top:10px;right:14px;z-index:4;display:flex;flex-direction:column;gap:5px;font-family:'Spline Sans Mono',monospace;font-size:10.5px;background:rgba(7,11,22,.75);padding:8px 11px;border-radius:var(--r-sm);border:1px solid var(--line-soft);pointer-events:none}
+.legend-overlay .lrow{display:flex;align-items:center;gap:7px;color:var(--ink-soft)}
+.legend-overlay .sw{width:16px;height:3px;border-radius:2px;flex:0 0 auto}
+
+.harmonics-host{position:relative;flex:1;min-height:220px}
+.harmonics-host canvas{display:block;width:100%;height:100%}
+
+/* ============ RIGHT RAIL: ANÁLISIS ============ */
+.analysis-card{border:1px solid var(--line-soft);border-radius:var(--r-md);background:linear-gradient(180deg,var(--panel),var(--deep));padding:16px}
+.analysis-card + .analysis-card{margin-top:10px}
+.readout-grid{display:flex;flex-direction:column;gap:10px}
+.readout-grid .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-bottom:9px;border-bottom:1px dashed var(--line-soft)}
+.readout-grid .row:last-child{border-bottom:none;padding-bottom:0}
+.readout-grid .rk{font-size:11.5px;color:var(--ink-faint);white-space:nowrap}
+.readout-grid .rv{font-family:'Spline Sans Mono',monospace;font-size:13px;color:var(--gold-bright);font-weight:600;text-align:right}
+
+.gibbs-badge{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:var(--r-sm);border:1px solid var(--rose);background:rgba(255,93,143,.08);margin-bottom:12px}
+.gibbs-badge .ricon{width:32px;height:32px;flex:0 0 auto;border-radius:8px;display:grid;place-items:center;background:rgba(255,93,143,.18);color:var(--rose)}
+.gibbs-badge .rname{font-size:13px;font-weight:600;color:var(--rose)}
+.gibbs-badge .rdesc{font-size:10.5px;color:var(--ink-faint);margin-top:1px;line-height:1.3}
+
+.coeff-table{font-family:'Spline Sans Mono',monospace;font-size:11px;width:100%;border-collapse:collapse}
+.coeff-table th{text-align:right;color:var(--ink-faint);font-weight:500;padding:4px 6px;border-bottom:1px solid var(--line-soft)}
+.coeff-table td{text-align:right;color:var(--ink);padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.04)}
+.coeff-table th:first-child, .coeff-table td:first-child{text-align:left;color:var(--ink-soft)}
+.coeff-scroll{max-height:220px;overflow-y:auto}
+
+/* ============ FOOTER ============ */
+footer{position:relative;z-index:2;padding:26px clamp(18px,3.5vw,46px);border-top:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--ink-faint);font-size:12px}
+footer .fbrand{display:flex;align-items:center;gap:12px}
+footer .math-note{font-family:'Spline Sans Mono',monospace;font-size:11px}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1100px){
+  .workspace{grid-template-columns:1fr}
+  .rail{border-right:none;border-bottom:1px solid var(--line-soft)}
+  .rail.right{border-left:none;border-top:1px solid var(--line-soft)}
+  .stage{order:-1}
+}
+@media (max-width:780px){
+  .canvas-host{min-height:260px}
+  .harmonics-host{min-height:180px}
+}
+@media (max-width:560px){
+  .param-grid{grid-template-columns:1fr 1fr}
+  header{gap:14px}
+  .brand h1{font-size:22px}
+  .viewer-toolbar .hint{display:none}
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--abyss)}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;border:2px solid var(--abyss)}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-deep)}
+
+.fade-in{animation:fadeUp .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="fade-in">
+  <div class="brand">
+    <div class="titles">
+      <div class="eyebrow">Observatorio de Matemáticas Avanzadas para Ingeniería</div>
+      <h1>Simulador de <em>Series de Fourier</em></h1>
+      <div class="sub">Convergencia de sumas parciales · armónicos individuales · fenómeno de Gibbs</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <span class="chip"><span class="dot"></span> Integración exacta y numérica</span>
+    <span class="chip" id="chipN">N = 5</span>
+  </div>
+</header>
+
+<div class="eqbar fade-in" style="animation-delay:.06s">
+  <div class="eq-render-main eq-expanded">
+    <div class="rl">Todos los términos</div>
+    <div class="mb-content" id="eqExpanded"></div>
+  </div>
+</div>
+<div class="eqbar fade-in" style="animation-delay:.08s; border-top:none">
+  <div class="eq-render-main">
+    <div class="rl">Forma compacta · trigonométrica</div>
+    <div class="mb-content" id="eqTrig"></div>
+    <div class="trig-where" id="eqTrigWhere"></div>
+  </div>
+  <div class="eq-render-main">
+    <div class="rl">Forma compacta · compleja (equivalente)</div>
+    <div class="mb-content" id="eqComplex"></div>
+  </div>
+</div>
+
+<main class="workspace">
+  <!-- ====== LEFT RAIL ====== -->
+  <aside class="rail left fade-in" style="animation-delay:.1s">
+    <div>
+      <div class="section-h">Función periódica f(t)</div>
+      <div class="func-gallery" id="funcGallery"></div>
+    </div>
+
+    <div id="customSection" style="display:none">
+      <div class="section-h">Definir f(t) en un periodo</div>
+      <div class="custom-box">
+        <textarea id="customExpr" placeholder="Ej: t es importante, ejemplo: t^2 - 1, o: abs(sin(t))">t</textarea>
+        <div class="custom-hint">Se evalúa para 0 ≤ t &lt; T. Operadores: + − * / ^, funciones: sin, cos, abs, sqrt, exp.</div>
+        <div class="custom-error" id="customError"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-h">Parámetros del periodo</div>
+      <div class="param-grid" style="margin-top:12px">
+        <div class="field full"><label>Periodo <span class="lk">T</span></label><input id="periodVal" type="number" value="6.2832" step="0.1" min="0.1"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-h">Términos de la serie</div>
+      <div class="n-control" style="margin-top:10px">
+        <div class="n-readout">
+          <span class="nlabel">N armónicos</span>
+          <span class="nval" id="nReadout">5</span>
+        </div>
+        <input id="nSlider" type="range" min="0" max="40" step="1" value="5">
+        <div class="play-row">
+          <button class="btn-play" id="btnPlay">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+            Reproducir convergencia
+          </button>
+        </div>
+        <div class="speed-select" id="speedSelect">
+          <button class="speed-btn" data-speed="slow">Lento</button>
+          <button class="speed-btn active" data-speed="normal">Normal</button>
+          <button class="speed-btn" data-speed="fast">Rápido</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-h">Visualización</div>
+      <div class="toggles" style="margin-top:8px" id="toggles"></div>
+    </div>
+
+    <button class="btn-ghost" id="btnReset">↺ Restaurar valores por defecto</button>
+  </aside>
+
+  <!-- ====== STAGE ====== -->
+  <section class="stage fade-in" style="animation-delay:.14s">
+    <div class="domain-head">
+      <div class="domain-tag"><span class="dotc" style="background:var(--target)"></span> f(t) objetivo vs. suma parcial S<sub>N</sub>(t)</div>
+      <div class="domain-tag" id="convergeTag" style="color:var(--ink-faint)">—</div>
+    </div>
+    <div class="viewer-toolbar">
+      <div class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg> Scroll para zoom · arrastra para mover</div>
+      <div class="zoom-group">
+        <button class="icon-btn" data-zoom="m-in" title="Acercar">+</button>
+        <button class="icon-btn" data-zoom="m-out" title="Alejar">−</button>
+        <button class="icon-btn" data-zoom="m-reset" title="Restablecer vista">⟲</button>
+      </div>
+    </div>
+    <div class="canvas-host" id="hostMain">
+      <canvas id="canvasMain"></canvas>
+      <div class="legend-overlay">
+        <div class="lrow"><span class="sw" style="background:var(--target)"></span> f(t) objetivo</div>
+        <div class="lrow"><span class="sw" style="background:var(--partial)"></span> S<sub>N</sub>(t) suma parcial</div>
+      </div>
+    </div>
+
+    <div class="domain-head" style="border-top:1px solid var(--line-soft)">
+      <div class="domain-tag"><span class="dotc" style="background:var(--gold)"></span> Armónicos individuales</div>
+      <div class="domain-tag" id="harmonicCountTag" style="color:var(--ink-faint)">—</div>
+    </div>
+    <div class="harmonics-host" id="hostHarm">
+      <canvas id="canvasHarm"></canvas>
+    </div>
+  </section>
+
+  <!-- ====== RIGHT RAIL ====== -->
+  <aside class="rail right fade-in" style="animation-delay:.18s">
+    <div>
+      <div class="section-h">Convergencia</div>
+      <div class="analysis-card" id="analysisMain" style="margin-top:12px"></div>
+    </div>
+
+    <div>
+      <div class="section-h">Coeficientes (a<sub>n</sub>, b<sub>n</sub>)</div>
+      <div class="analysis-card" id="coeffPanel" style="margin-top:12px"></div>
+    </div>
+  </aside>
+</main>
+
+<footer class="fade-in" style="animation-delay:.22s">
+  <div class="fbrand">
+    <div>
+      <div style="color:var(--ink-soft);font-weight:500">Simulador de Series de Fourier</div>
+      <div>Recurso educativo abierto · Matemáticas Avanzadas para Ingeniería</div>
+    </div>
+  </div>
+  <div class="math-note">f(t) = f(t+T) &nbsp;·&nbsp; convergencia en el sentido de Fourier</div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
