@@ -98,17 +98,21 @@
 
         /* Cuando se abre una visualización, la tarjeta ocupa todo el ancho de la fila */
         .digital-card.expanded{
-            grid-column: 1 / -1;
+            grid-column: 1 / -1 !important;
+            max-width: none !important;
+            width: 100% !important;
         }
         .digital-card.expanded .digital-preview{
             display: none;
         }
         .digital-card.expanded .resource-frame{
-            margin: 0 auto 1.3rem;
-            max-width: 1500px;
+            margin: 0 auto 1.3rem !important;
+            max-width: 1500px !important;
+            width: calc(100% - 2.6rem) !important;
         }
         .digital-card.expanded .resource-frame iframe{
-            height: 82vh;
+            width: 100% !important;
+            height: 82vh !important;
             min-height: 640px;
             max-height: 900px;
         }
