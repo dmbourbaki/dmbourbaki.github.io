@@ -1017,7 +1017,62 @@
                         </div>
                     </div>
 
+                    <!-- Simulador de Raíces de Polinomios -->
+                    <div class="digital-card" id="card-raices">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">ℂ</div>
+                            <div>
+                                <h3>Simulador de Raíces de Polinomios</h3>
+                                <span class="topic-tag">Números Complejos · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Explora el Teorema Fundamental del Álgebra de forma visual en el plano complejo. Mueve los coeficientes del polinomio y observa cómo las raíces se desplazan, colisionan en el eje real y se separan de nuevo en pares complejos conjugados — o arrastra las raíces directamente para reconstruir el polinomio a partir de ellas.</p>
+                        <div class="digital-tags">
+                            <span>Coeficientes ↔ Raíces (bidireccional)</span>
+                            <span>Plano complejo interactivo</span>
+                            <span>Pares complejos conjugados</span>
+                            <span>Teorema Fundamental del Álgebra</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/raices/index.html" loading="lazy" title="Vista previa Raíces de Polinomios" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('raices')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-raices" style="display:none">
+                            <iframe src="recursos/raices/index.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Raíces de Polinomios"></iframe>
+                            <a href="recursos/raices/index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <!-- Simulador de Series de Fourier -->
+                    <div class="digital-card" id="card-fourier">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∿</div>
+                            <div>
+                                <h3>Simulador de Series de Fourier</h3>
+                                <span class="topic-tag">Análisis de Fourier · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Observa cómo la suma parcial de senos y cosenos converge a una función periódica f(t) = f(t+T). Incluye galería de funciones clásicas, la opción de definir tu propia función personalizada, descomposición en armónicos individuales, y una visualización clara del fenómeno de Gibbs cerca de las discontinuidades.</p>
+                        <div class="digital-tags">
+                            <span>Sumas parciales Sₙ(t)</span>
+                            <span>Galería de funciones clásicas</span>
+                            <span>Función personalizada</span>
+                            <span>Fenómeno de Gibbs</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/fourier/index.html" loading="lazy" title="Vista previa Series de Fourier" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('fourier')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-fourier" style="display:none">
+                            <iframe src="recursos/fourier/index.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Series de Fourier"></iframe>
+                            <a href="recursos/fourier/index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
 
             <div class="category-group" id="cat-calculo-diferencial">
