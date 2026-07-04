@@ -1,20 +1,20 @@
 :root {
-    --primary-color: #1e3a8a;
-    --secondary-color: #3b82f6;
-    --accent-color: #60a5fa;
-    --gold: #d4a84b;
+    --primary-color: #14213d;
+    --secondary-color: #b8862f;
+    --accent-color: #e8c97a;
+    --gold: #b8862f;
     --gold-bright: #e8c97a;
-    --text-dark: #1f2937;
-    --text-light: #6b7280;
-    --bg-light: #f9fafb;
-    --bg-white: #ffffff;
-    --border-color: #e5e7eb;
-    --success-color: #10b981;
-    --shadow-sm: 0 1px 3px 0 rgba(30, 58, 138, 0.06);
-    --shadow-md: 0 6px 16px -4px rgba(30, 58, 138, 0.12);
-    --shadow-lg: 0 16px 32px -8px rgba(30, 58, 138, 0.16);
-    --shadow-xl: 0 24px 48px -12px rgba(30, 58, 138, 0.2);
-    --shadow-glow: 0 20px 45px -10px rgba(59, 130, 246, 0.35), 0 0 0 1px rgba(212, 168, 75, 0.15);
+    --text-dark: #241f14;
+    --text-light: #6b6259;
+    --bg-light: #faf6ef;
+    --bg-white: #fffdf9;
+    --border-color: #e8e0d3;
+    --success-color: #3f7d58;
+    --shadow-sm: 0 1px 3px 0 rgba(20, 33, 61, 0.07);
+    --shadow-md: 0 6px 16px -4px rgba(20, 33, 61, 0.14);
+    --shadow-lg: 0 16px 32px -8px rgba(20, 33, 61, 0.18);
+    --shadow-xl: 0 24px 48px -12px rgba(20, 33, 61, 0.22);
+    --shadow-glow: 0 20px 45px -10px rgba(184, 134, 47, 0.4), 0 0 0 1px rgba(20, 33, 61, 0.12);
 }
 
 * {
@@ -133,7 +133,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(120deg, #0c1638 0%, #16265e 25%, #1e3a8a 55%, #3b82f6 85%, #60a5fa 100%);
+    background: linear-gradient(120deg, #070b16 0%, #0f1730 25%, #14213d 55%, #1c2c52 85%, #2a3f6e 100%);
     background-size: 200% 200%;
     animation: heroShift 18s ease infinite;
     color: white;
@@ -166,7 +166,7 @@ body {
     bottom: 0;
     background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.2), transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(96, 165, 250, 0.2), transparent 50%),
-                radial-gradient(circle at 88% 12%, rgba(212, 168, 75, 0.14), transparent 40%);
+                radial-gradient(circle at 88% 12%, rgba(184, 134, 47, 0.14), transparent 40%);
 }
 
 .hero-content {
@@ -179,8 +179,8 @@ body {
     display: inline-block;
     padding: 0.5rem 1.3rem;
     margin-bottom: 1.5rem;
-    background: rgba(212, 168, 75, 0.14);
-    border: 1px solid rgba(212, 168, 75, 0.5);
+    background: rgba(184, 134, 47, 0.14);
+    border: 1px solid rgba(184, 134, 47, 0.5);
     color: var(--gold-bright);
     font-size: 0.85rem;
     font-weight: 600;
