@@ -168,6 +168,21 @@ body {
 
 /* Fondo limpio: solo el degradado grafito+vino y la cuña diagonal, sin líneas superpuestas */
 
+/* Motivo matemático real: familia de curvas (parábolas/senoidales, como
+   curvas de nivel) más algunos símbolos propios de tu trabajo — no un
+   patrón genérico, sino algo que remite a lo que estudias. */
+.hero-math {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.5;
+    pointer-events: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900"><g fill="none" stroke-width="1.4"><path d="M -50 700 Q 400 300 850 700 T 1700 700" stroke="rgba(200,164,99,0.35)"/><path d="M -50 620 Q 400 220 850 620 T 1700 620" stroke="rgba(200,164,99,0.22)"/><path d="M -50 780 Q 400 450 850 780 T 1700 780" stroke="rgba(200,164,99,0.16)"/><path d="M 100 -50 C 300 250, 300 650, 100 950" stroke="rgba(168,81,95,0.4)"/><path d="M 220 -50 C 420 250, 420 650, 220 950" stroke="rgba(168,81,95,0.25)"/><path d="M 1500 -50 C 1300 250, 1300 650, 1500 950" stroke="rgba(168,81,95,0.3)"/></g><text x="120" y="140" font-family="Georgia, serif" font-style="italic" font-size="64" fill="rgba(200,164,99,0.28)">&#8747;</text><text x="1420" y="200" font-family="Georgia, serif" font-style="italic" font-size="70" fill="rgba(200,164,99,0.24)">&#955;</text><text x="1380" y="780" font-family="Georgia, serif" font-style="italic" font-size="58" fill="rgba(200,164,99,0.22)">&#8706;</text><text x="90" y="820" font-family="Georgia, serif" font-style="italic" font-size="62" fill="rgba(200,164,99,0.2)">&#8721;</text></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
 .hero-overlay {
     position: absolute;
     top: 0;
@@ -657,17 +672,19 @@ body {
 }
 
 .course-card {
-    background: var(--bg-light);
+    background: var(--bg-white);
     padding: 2rem;
     border-radius: 14px;
     transition: all 0.3s ease;
-    border-top: 4px solid transparent;
-    border-image: linear-gradient(90deg, var(--primary-color), var(--secondary-color)) 1;
+    border-top: 3px solid var(--wine);
+    box-shadow: var(--shadow-sm);
+    position: relative;
 }
 
 .course-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     box-shadow: var(--shadow-lg);
+    border-top-color: var(--gold);
 }
 
 .course-header {
@@ -678,8 +695,16 @@ body {
 }
 
 .course-header i {
-    font-size: 2rem;
-    color: var(--secondary-color);
+    font-size: 1.3rem;
+    color: white;
+    background: linear-gradient(135deg, var(--primary-color), var(--wine));
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .course-header h3 {
@@ -1283,7 +1308,7 @@ body {
 }
 .guide-card { background: white; padding: 2rem; border-radius: 14px; text-align: center; box-shadow: var(--shadow-md); transition: all 0.3s ease; }
 .guide-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-.guide-card i  { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem; }
+.guide-card i  { font-size: 1.6rem; color: white; background: linear-gradient(135deg, var(--primary-color), var(--wine)); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
 .guide-card h4 { font-size: 1.1rem; color: var(--primary-color); margin-bottom: 0.8rem; }
 .guide-card p  { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem; }
 .coming-soon { display: inline-block; background: #fef3c7; color: #92400e; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
@@ -1300,7 +1325,7 @@ body {
 }
 .tool-card { background: white; padding: 2rem; border-radius: 14px; box-shadow: var(--shadow-md); transition: all 0.3s ease; text-align: center; }
 .tool-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-.tool-card i  { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem; }
+.tool-card i  { font-size: 1.6rem; color: white; background: linear-gradient(135deg, var(--primary-color), var(--wine)); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
 .tool-card h4 { font-size: 1.2rem; color: var(--primary-color); margin-bottom: 0.8rem; }
 .tool-card p  { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem; }
 .tool-link { display: inline-block; color: var(--secondary-color); text-decoration: none; font-weight: 600; transition: all 0.3s ease; }
