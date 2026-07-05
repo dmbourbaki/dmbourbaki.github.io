@@ -1,1586 +1,1009 @@
-:root {
-    /* Nueva paleta: grafito profundo + vinotinto — cambio de fondo, no de matiz */
-    --primary-color: #1c2430;       /* grafito / azul-carbón, reemplaza al navy */
-    --primary-deep: #10151d;        /* aún más oscuro, para el hero */
-    --wine: #6e1f2f;                /* vinotinto — nuevo acento principal */
-    --wine-deep: #4a1420;
-    --wine-light: #a8515f;
-    --secondary-color: #6e1f2f;     /* donde antes había verde/dorado, ahora vino */
-    --accent-color: #d8c3c6;        /* vino muy claro, fondos suaves */
-    --gold: #9c7a3f;                /* se desatura, queda como "sello" raro */
-    --gold-bright: #c9a463;
-    --text-dark: #201b1d;
-    --text-light: #6b6469;
-    --bg-light: #f4f0ee;
-    --bg-white: #fdfbfa;
-    --border-color: #e2dcda;
-    --success-color: #3f7d58;
-    --shadow-sm: 0 1px 3px 0 rgba(28, 36, 48, 0.07);
-    --shadow-md: 0 6px 16px -4px rgba(28, 36, 48, 0.14);
-    --shadow-lg: 0 16px 32px -8px rgba(28, 36, 48, 0.18);
-    --shadow-xl: 0 24px 48px -12px rgba(28, 36, 48, 0.22);
-    --shadow-glow: 0 16px 36px -10px rgba(110, 31, 47, 0.35), 0 0 0 1px rgba(28, 36, 48, 0.1);
-    --font-display: 'Fraunces', 'Playfair Display', serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: var(--font-body);
-    color: var(--text-dark);
-    line-height: 1.6;
-    overflow-x: hidden;
-}
-
-.container {
-    max-width: min(96vw, 1600px);
-    margin: 0 auto;
-    padding: 0 24px;
-}
-
-/* Navigation */
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: rgba(16, 21, 29, 0.9);
-    backdrop-filter: blur(16px) saturate(160%);
-    -webkit-backdrop-filter: blur(16px) saturate(160%);
-    border-bottom: 1px solid rgba(110, 31, 47, 0.45);
-    box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.25);
-    z-index: 1000;
-    transition: all 0.3s ease;
-}
-
-.navbar.scrolled {
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: var(--shadow-md);
-}
-
-.navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 20px;
-}
-
-.nav-brand {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--gold-bright);
-    letter-spacing: 0.01em;
-}
-
-.nav-menu {
-    display: flex;
-    list-style: none;
-    gap: 2rem;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0.88);
-    font-weight: 500;
-    padding: 0.4rem 0.9rem;
-    border-radius: 999px;
-    transition: color 0.25s ease, background 0.25s ease;
-    position: relative;
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0.9rem;
-    width: 0;
-    height: 2px;
-    background: var(--secondary-color);
-    transition: width 0.3s ease;
-}
-
-.nav-link:hover {
-    color: var(--gold-bright);
-    background: rgba(110, 31, 47, 0.3);
-}
-
-.nav-link:hover::after {
-    width: 100%;
-}
-
-.nav-toggle {
-    display: none;
-    flex-direction: column;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
-.nav-toggle span {
-    width: 25px;
-    height: 3px;
-    background: var(--gold-bright);
-    margin: 3px 0;
-    transition: 0.3s;
-}
-
-/* Hero Section */
-.hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(125deg, #0a0d12 0%, #10151d 30%, #1c2430 55%, #2a1620 82%, #3a1b28 100%);
-    background-size: 200% 200%;
-    animation: heroShift 22s ease infinite;
-    color: white;
-    text-align: center;
-    overflow: hidden;
-}
-
-/* Cuña diagonal de vinotinto — el cambio de composición que le da otra
-   presencia al hero, no solo otro color */
-.hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(105deg, transparent 55%, rgba(110, 31, 47, 0.55) 78%, rgba(110, 31, 47, 0.85) 100%);
-    pointer-events: none;
-}
-
-@keyframes heroShift {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* Motivo de fondo: un abanico de Gröbner — rayos con distintas pendientes
-   racionales saliendo de un punto. Es el objeto real de tu tesis de
-   maestría, no un grid decorativo genérico. Animación casi imperceptible. */
-.hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0.4;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><g stroke="rgba(200,164,99,0.4)" stroke-width="1" fill="none"><line x1="400" y1="400" x2="800" y2="400"/><line x1="400" y1="400" x2="800" y2="200"/><line x1="400" y1="400" x2="800" y2="80"/><line x1="400" y1="400" x2="640" y2="0"/><line x1="400" y1="400" x2="400" y2="0"/><line x1="400" y1="400" x2="160" y2="0"/><line x1="400" y1="400" x2="0" y2="80"/><line x1="400" y1="400" x2="0" y2="200"/><line x1="400" y1="400" x2="0" y2="400"/></g><circle cx="400" cy="400" r="3" fill="rgba(200,164,99,0.7)"/></svg>');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 120% 120%;
-    animation: fanRotate 40s linear infinite;
-    transform-origin: center;
-    z-index: 0;
-}
-
-@keyframes fanRotate {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(0.6deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .hero::before { animation: none; }
-}
-
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
-    background: radial-gradient(circle at 20% 45%, rgba(90, 110, 140, 0.22), transparent 50%),
-                radial-gradient(circle at 85% 85%, rgba(110, 31, 47, 0.35), transparent 55%),
-                radial-gradient(circle at 88% 12%, rgba(200, 164, 99, 0.12), transparent 40%);
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-    animation: fadeInUp 1s ease;
-    padding-top: 90px; /* espacio para que el navbar fijo no tape el badge */
-}
-
-.hero-badge {
-    display: inline-block;
-    padding: 0.5rem 1.3rem;
-    margin-bottom: 1.5rem;
-    background: rgba(110, 31, 47, 0.25);
-    border: 1px solid rgba(200, 164, 99, 0.5);
-    color: var(--gold-bright);
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    border-radius: 999px;
-    animation: fadeInUp 1s ease 0.1s both;
-}
-
-@media (max-width: 768px) {
-    .hero-content { padding-top: 70px; }
-}
-
-.hero-title {
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 6vw, 5.2rem);
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
-    animation: fadeInUp 1s ease 0.2s both;
-}
-
-.hero-subtitle {
-    font-size: 1.5rem;
-    font-weight: 300;
-    letter-spacing: 0.02em;
-    color: var(--gold-bright);
-    margin-bottom: 1rem;
-    animation: fadeInUp 1s ease 0.4s both;
-}
-
-.hero-description {
-    font-size: 1.1rem;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    opacity: 0.9;
-    animation: fadeInUp 1s ease 0.6s both;
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 3rem;
-    animation: fadeInUp 1s ease 0.8s both;
-}
-
-.btn {
-    display: inline-block;
-    padding: 0.75rem 2rem;
-    text-decoration: none;
-    font-weight: 600;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.btn-primary {
-    background: white;
-    color: var(--primary-color);
-}
-
-.btn-primary:hover {
-    background: transparent;
-    border-color: white;
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px -6px rgba(255, 255, 255, 0.35), var(--shadow-lg);
-}
-
-.btn-secondary {
-    background: transparent;
-    border-color: white;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: white;
-    color: var(--primary-color);
-    transform: translateY(-2px);
-}
-
-.social-links {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    animation: fadeInUp 1s ease 1s both;
-}
-
-.social-links a {
-    color: white;
-    font-size: 1.5rem;
-    transition: all 0.3s ease;
-}
-
-.social-links a:hover {
-    color: var(--accent-color);
-    transform: translateY(-3px);
-}
-
-.scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: bounce 2s infinite;
-}
-
-.scroll-indicator span {
-    display: block;
-    width: 30px;
-    height: 50px;
-    border: 2px solid white;
-    border-radius: 50px;
-    position: relative;
-}
-
-.scroll-indicator span::before {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 6px;
-    background: white;
-    border-radius: 50%;
-    animation: scroll 2s infinite;
-}
-
-/* Sections */
-.section {
-    padding: 5rem 0;
-}
-
-.section:nth-child(even) {
-    background: var(--bg-light);
-}
-
-.section-title {
-    font-family: var(--font-display);
-    font-size: 2.5rem;
-    text-align: center;
-    margin-bottom: 3rem;
-    background: linear-gradient(100deg, var(--primary-color) 30%, var(--wine) 65%, var(--gold) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: var(--primary-color);
-    position: relative;
-    display: inline-block;
-    width: 100%;
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 4px;
-    background: var(--secondary-color);
-    border-radius: 2px;
-}
-
-/* About Section */
-.about-content {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.about-text p {
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: var(--text-dark);
-}
-
-.lead {
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: var(--primary-color);
-}
-
-.expertise {
-    margin-top: 3rem;
-}
-
-.expertise h3 {
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
-    color: var(--primary-color);
-}
-
-.expertise-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.expertise-item {
-    background: white;
-    padding: 2rem;
-    border-radius: 14px;
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s ease;
-}
-
-.expertise-item:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-}
-
-.expertise-item i {
-    font-size: 2.5rem;
-    color: var(--secondary-color);
-    margin-bottom: 1rem;
-}
-
-.expertise-item h4 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
-}
-
-.expertise-item p {
-    color: var(--text-light);
-    font-size: 0.95rem;
-}
-
-/* Research Section */
-.research {
-    background: linear-gradient(160deg, #10151d 0%, #1c2430 55%, #3a1b28 100%) !important;
-    position: relative;
-}
-
-.research .section-title {
-    background: linear-gradient(100deg, var(--gold-bright) 20%, #fff 55%, var(--gold-bright) 90%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.research .research-intro {
-    color: rgba(255, 255, 255, 0.72);
-}
-
-.research .research-interests h3 {
-    color: var(--gold-bright);
-}
-
-.research-intro {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 3rem;
-    font-size: 1.1rem;
-    color: var(--text-light);
-}
-
-.research-areas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-
-.research-card {
-    background: var(--bg-light);
-    padding: 2.5rem;
-    border-radius: 14px;
-    border-left: 4px solid var(--secondary-color);
-    transition: all 0.3s ease;
-}
-
-.research-card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-4px);
-}
-
-.research-icon {
-    font-size: 3rem;
-    color: var(--secondary-color);
-    margin-bottom: 1rem;
-}
-
-.research-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: var(--primary-color);
-}
-
-.research-card p {
-    color: var(--text-dark);
-    line-height: 1.7;
-}
-
-.research-math {
-    font-family: var(--font-mono);
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background: white;
-    border-radius: 5px;
-    text-align: center;
-}
-
-.research-interests {
-    margin-top: 3rem;
-    text-align: center;
-}
-
-.research-interests h3 {
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
-    color: var(--primary-color);
-}
-
-.interests-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-}
-
-.tag {
-    background: linear-gradient(120deg, var(--primary-color), var(--wine));
-    color: white;
-    padding: 0.5rem 1.5rem;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-}
-
-.tag:hover {
-    background: linear-gradient(120deg, var(--wine), var(--primary-color));
-    transform: scale(1.06) translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-/* Publications Section */
-.publications {
-    background: var(--bg-light);
-}
-
-.publication-filters {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-}
-
-.filter-btn {
-    background: white;
-    border: 2px solid var(--border-color);
-    padding: 0.5rem 1.5rem;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-}
-
-.filter-btn:hover,
-.filter-btn.active {
-    background: var(--secondary-color);
-    color: white;
-    border-color: var(--secondary-color);
-}
-
-.publications-list {
-    max-width: 980px;
-    margin: 0 auto;
-}
-
-.publication-item {
-    background: white;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    border-radius: 14px;
-    box-shadow: var(--shadow-md);
-    display: flex;
-    gap: 2rem;
-    transition: all 0.3s ease;
-}
-
-.publication-item:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-4px);
-}
-
-.pub-year {
-    font-family: var(--font-mono);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--secondary-color);
-    min-width: 60px;
-}
-
-.pub-content {
-    flex: 1;
-}
-
-.pub-title {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
-}
-
-.pub-authors {
-    margin-bottom: 0.5rem;
-    color: var(--text-dark);
-}
-
-.pub-venue {
-    margin-bottom: 1rem;
-    color: var(--text-light);
-}
-
-.pub-links {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.pub-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.3rem 1rem;
-    background: var(--bg-light);
-    border-radius: 5px;
-    text-decoration: none;
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-}
-
-.pub-link:hover {
-    background: linear-gradient(120deg, var(--primary-color), var(--secondary-color));
-    color: white;
-}
-
-/* Teaching Section */
-.teaching {
-    background: var(--bg-white);
-}
-
-.teaching-intro {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 3rem;
-    font-size: 1.1rem;
-    color: var(--text-light);
-}
-
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 4rem;
-}
-
-.course-card {
-    background: var(--bg-light);
-    padding: 2rem;
-    border-radius: 14px;
-    transition: all 0.3s ease;
-    border-top: 4px solid transparent;
-    border-image: linear-gradient(90deg, var(--primary-color), var(--secondary-color)) 1;
-}
-
-.course-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-}
-
-.course-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.course-header i {
-    font-size: 2rem;
-    color: var(--secondary-color);
-}
-
-.course-header h3 {
-    font-family: var(--font-display);
-    font-size: 1.3rem;
-    color: var(--primary-color);
-}
-
-.course-topic {
-    font-weight: 600;
-    color: var(--secondary-color);
-    margin-bottom: 0.5rem;
-}
-
-.course-description {
-    color: var(--text-dark);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-}
-
-.course-programs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.program-tag {
-    background: white;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    color: var(--secondary-color);
-    border: 1px solid var(--border-color);
-}
-
-.teaching-philosophy {
-    margin-top: 4rem;
-    background: var(--bg-light);
-    padding: 3rem;
-    border-radius: 14px;
-}
-
-.teaching-philosophy h3 {
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
-    color: var(--primary-color);
-    text-align: center;
-}
-
-.philosophy-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-}
-
-.philosophy-item {
-    text-align: center;
-}
-
-.philosophy-item i {
-    font-size: 2.5rem;
-    color: var(--secondary-color);
-    margin-bottom: 1rem;
-}
-
-.philosophy-item h4 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
-}
-
-.philosophy-item p {
-    color: var(--text-light);
-    font-size: 0.95rem;
-}
-
-/* Contact Section */
-.contact {
-    background: var(--bg-light);
-}
-
-.contact-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 3rem;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.contact-info h3 {
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
-    color: var(--primary-color);
-}
-
-.contact-item {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: white;
-    border-radius: 14px;
-    box-shadow: var(--shadow-sm);
-}
-
-.contact-item i {
-    font-size: 1.5rem;
-    color: var(--secondary-color);
-    margin-top: 0.2rem;
-}
-
-.contact-item h4 {
-    margin-bottom: 0.3rem;
-    color: var(--primary-color);
-}
-
-.contact-item p,
-.contact-item a {
-    color: var(--text-light);
-    text-decoration: none;
-}
-
-.contact-item a:hover {
-    color: var(--secondary-color);
-}
-
-.social-links-contact {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-.social-links-contact a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: var(--secondary-color);
-    color: white;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.social-links-contact a:hover {
-    background: var(--primary-color);
-    transform: translateY(-3px);
-}
-
-.contact-form-container h3 {
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
-    color: var(--primary-color);
-}
-
-.contact-form {
-    background: white;
-    padding: 2rem;
-    border-radius: 14px;
-    box-shadow: var(--shadow-md);
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--text-dark);
-    font-weight: 500;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid var(--border-color);
-    border-radius: 5px;
-    font-family: inherit;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--secondary-color);
-}
-
-.form-group textarea {
-    resize: vertical;
-}
-
-.contact-form button {
-    width: 100%;
-}
-
-.form-note {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: #fef3c7;
-    border-left: 4px solid #f59e0b;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    color: #92400e;
-}
-
-/* Footer */
-.footer {
-    background: var(--primary-color);
-    color: white;
-    text-align: center;
-    padding: 2rem 0;
-}
-
-.footer-content p {
-    margin: 0.5rem 0;
-}
-
-.footer i {
-    color: #ef4444;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-    40% { transform: translateX(-50%) translateY(-10px); }
-    60% { transform: translateX(-50%) translateY(-5px); }
-}
-
-@keyframes scroll {
-    0%   { opacity: 1; transform: translateX(-50%) translateY(0); }
-    100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .nav-menu {
-        position: fixed;
-        left: -100%;
-        top: 70px;
-        flex-direction: column;
-        background-color: var(--primary-color);
-        width: 100%;
-        text-align: center;
-        transition: 0.3s;
-        box-shadow: var(--shadow-lg);
-        padding: 2rem 0;
+<!DOCTYPE html>
+<!--
+  © 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.
+  Incluye el Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI),
+  proyecto original del autor.
+  https://dmbourbaki.github.io/
+
+  Queda prohibida la reproducción, distribución o modificación total
+  o parcial de este sitio o de sus recursos sin autorización previa
+  y por escrito del autor. Contacto: dmbourbaki@gmail.com
+-->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Daniel Steven Moran Pizarro - PhD en Matemáticas. Áreas de interés: Álgebra Conmutativa, Combinatoria Algebraica, Álgebra Computacional, Objetos Virtuales de Aprendizaje e Historia de las Matemáticas">
+    <meta name="keywords" content="matemáticas, álgebra conmutativa, geometría algebraica, bases de Gröbner, ideales monomiales, historia de las matemáticas, UNAD, CINVESTAV, Manim, GeoGebra">
+    <meta name="copyright" content="© 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.">
+    <title>Daniel Steven Moran Pizarro - PhD en Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand"><span class="brand-name">Daniel S. Moran P.</span></div>
+            <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                <li><a href="#sobre-mi" class="nav-link">Sobre Mí</a></li>
+                <li><a href="#formacion" class="nav-link">Formación</a></li>
+                <li><a href="#investigacion" class="nav-link">Investigación</a></li>
+                <li><a href="#publicaciones" class="nav-link">Publicaciones</a></li>
+                <li><a href="#conferencias" class="nav-link">Conferencias</a></li>
+                <li><a href="#docencia" class="nav-link">Docencia</a></li>
+                <li><a href="#recursos" class="nav-link">Recursos</a></li>
+                <li><a href="#recursos-digitales" class="nav-link">Recursos Digitales</a></li>
+                <li><a href="#contacto" class="nav-link">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="inicio" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="hero-badge">🔭 Observatorio de Matemáticas Avanzadas para Ingeniería · OMAI</div>
+            <h1 class="hero-title">Daniel Steven Moran Pizarro</h1>
+            <p class="hero-subtitle">PhD en Matemáticas | Investigador y Docente</p>
+            <p class="hero-description">Áreas de interés en Álgebra Conmutativa, Combinatoria Algebraica, Álgebra Computacional, Objetos Virtuales de Aprendizaje e Historia de las Matemáticas</p>
+            <div class="hero-buttons">
+                <a href="#sobre-mi" class="btn btn-primary">Conóceme</a>
+                <a href="#publicaciones" class="btn btn-secondary">Publicaciones</a>
+                <a href="CV_Daniel_Moran__Spanish_version_.pdf" download class="btn btn-secondary"><i class="fas fa-download"></i> Descargar CV</a>
+            </div>
+            <div class="social-links">
+                <a href="https://scholar.google.es/citations?user=CLZKj3YAAAAJ" target="_blank" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+                <a href="https://orcid.org/0000-0003-1791-2818" target="_blank" aria-label="ORCID"><i class="fab fa-orcid"></i></a>
+                <a href="https://www.researchgate.net/profile/Daniel-Moran-Pizarro" target="_blank" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
+                <a href="https://co.linkedin.com/in/daniel-steven-moran-6b5490331" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/dmbourbaki" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.youtube.com/@dmbourbaki" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001560327" target="_blank" aria-label="CvLAC MinCiencias"><i class="fas fa-id-card"></i></a>
+            </div>
+        </div>
+        <div class="scroll-indicator"><span></span></div>
+    </section>
+
+    <section id="sobre-mi" class="section about">
+        <div class="container">
+            <h2 class="section-title">Sobre Mí</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="lead">Doctor en Ciencias Matemáticas con especialización en Álgebra Conmutativa y Combinatoria Algebraica Computacional.</p>
+                    <div style="text-align: center; margin: 2rem 0;">
+                        <img src="DanielCV.jpg" alt="Daniel Steven Moran Pizarro" style="max-width: 300px; border-radius: 50%; padding: 6px; background: linear-gradient(135deg, var(--primary-color), var(--gold), var(--gold-bright)); box-shadow: 0 16px 40px -8px rgba(20,33,61,0.35);">
+                    </div>
+                    <p>Actualmente me desempeño como <strong>Docente Tiempo Completo</strong> en la <strong>Universidad Nacional Abierta y a Distancia (UNAD)</strong>, donde lidero múltiples iniciativas académicas y de investigación. Soy Director Nacional del curso de Ecuaciones Diferenciales, Líder de la Red Curricular de Lógica, Álgebra y Cálculo, y Líder del Semillero de Investigación MATHINNOVA.</p>
+                    <p>Mi formación doctoral fue realizada en el prestigioso <strong>Centro de Investigación y de Estudios Avanzados del IPN (CINVESTAV)</strong> en Ciudad de México, donde desarrollé la investigación sobre la signatura de ideales monomiales bajo la dirección del Dr. Carlos E. Valencia Oleta. Previamente obtuve una Maestría en Ciencias Matemáticas en la Universidad Autónoma de Guerrero, trabajando en abanicos de Gröbner y fracciones continuas de Hirzebruch-Jung.</p>
+                    <p>Mi trayectoria académica comenzó en la <strong>Universidad del Valle</strong> (Cali, Colombia), donde obtuve mi Licenciatura en Matemáticas y Física con Tesis Laureada, explorando la constitución histórica y epistemológica de la integral desde las cuadraturas hasta la integral de Cauchy, bajo la dirección del matemático e historiador colombiano Luis Cornelio Recalde Caicedo.</p>
+                    <div class="expertise">
+                        <h3>Áreas de Interés</h3>
+                        <div class="expertise-grid">
+                            <div class="expertise-item"><i class="fas fa-project-diagram"></i><h4>Álgebra Conmutativa</h4><p>Bases de Gröbner, ideales monomiales, abanicos de Gröbner</p></div>
+                            <div class="expertise-item"><i class="fas fa-shapes"></i><h4>Geometría Algebraica</h4><p>Geometría poliedral, geometría tórica</p></div>
+                            <div class="expertise-item"><i class="fas fa-book-open"></i><h4>Historia de las Matemáticas</h4><p>Desarrollo histórico de conceptos matemáticos</p></div>
+                            <div class="expertise-item"><i class="fas fa-chalkboard-teacher"></i><h4>Didáctica de las Matemáticas</h4><p>Ambientes virtuales de aprendizaje, GeoGebra, Manim CE</p></div>
+                            <div class="expertise-item"><i class="fas fa-chart-bar"></i><h4>Ciencia de Datos</h4><p>Analítica de datos aplicada a la educación</p></div>
+                            <div class="expertise-item"><i class="fas fa-laptop-code"></i><h4>Matemática Computacional</h4><p>Python, Manim, algoritmos matemáticos</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="formacion" class="section formation">
+        <div class="container">
+            <h2 class="section-title">Formación Académica</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2020 - 2025</div>
+                        <h3>Doctor en Ciencias Matemáticas</h3>
+                        <h4>Centro de Investigación y de Estudios Avanzados del IPN (CINVESTAV)</h4>
+                        <p class="location"><i class="fas fa-map-marker-alt"></i> Ciudad de México, México</p>
+                        <p class="distinction"><i class="fas fa-award"></i> Becario CONACYT</p>
+                        <p class="thesis"><strong>Tesis:</strong> <em>The signature of a monomial ideal</em></p>
+                        <p class="advisor"><strong>Director:</strong> Dr. Carlos E. Valencia Oleta</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2015 - 2017</div>
+                        <h3>Maestría en Ciencias Matemáticas</h3>
+                        <h4>Universidad Autónoma de Guerrero</h4>
+                        <p class="location"><i class="fas fa-map-marker-alt"></i> Acapulco, México</p>
+                        <p class="distinction"><i class="fas fa-award"></i> Becario CONACYT</p>
+                        <p class="thesis"><strong>Tesis:</strong> <em>Gröbner fan through Hirzebruch-Jung continued fractions</em></p>
+                        <p class="advisor"><strong>Directores:</strong> Dr. Jesús Romero y Dr. David A. Cox</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2009 - 2014</div>
+                        <h3>Licenciatura en Matemáticas y Física</h3>
+                        <h4>Universidad del Valle</h4>
+                        <p class="location"><i class="fas fa-map-marker-alt"></i> Cali, Colombia</p>
+                        <p class="distinction"><i class="fas fa-trophy"></i> Tesis Laureada | Estudiante Distinguido (Mejor Promedio Académico)</p>
+                        <p class="thesis"><strong>Tesis:</strong> <em>De la integral como herramienta a la integral como noción formal: de las cuadraturas a la integral de Cauchy</em></p>
+                        <p class="advisor"><strong>Director:</strong> Dr. Luis C. Recalde</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="research-stays">
+                <h3 style="text-align: center; margin-top: 3rem; margin-bottom: 2rem; color: var(--primary-color);">Estancias de Investigación</h3>
+                <div class="stays-grid">
+                    <div class="stay-card">
+                        <div class="stay-date">Jun - Jul 2017</div>
+                        <h4>Universidad de Antioquia</h4>
+                        <p class="stay-location">Medellín, Colombia</p>
+                        <p class="stay-advisor">Dr. Carlos Mario Jaramillo</p>
+                        <ul class="stay-activities"><li>Historia de las matemáticas</li><li>Artículo: "Superestructural stage of integral"</li></ul>
+                    </div>
+                    <div class="stay-card">
+                        <div class="stay-date">May - Jun 2017</div>
+                        <h4>CINVESTAV</h4>
+                        <p class="stay-location">Ciudad de México, México</p>
+                        <p class="stay-advisor">Dr. Carlos E. Valencia</p>
+                        <ul class="stay-activities"><li>Álgebra Conmutativa y Geometría Poliedral</li><li>Abanicos de Gröbner para ideales \(\langle x^d-1, y-x^k \rangle\)</li></ul>
+                    </div>
+                    <div class="stay-card">
+                        <div class="stay-date">Oct - Nov 2016</div>
+                        <h4>Amherst College &amp; UMass</h4>
+                        <p class="stay-location">Massachusetts, EE.UU.</p>
+                        <p class="stay-advisor">Dr. David A. Cox y Dr. Gabriel Sosa</p>
+                        <ul class="stay-activities"><li>Bases y abanicos de Gröbner</li><li>Libros: <em>Ideals, Varieties and Algorithms</em> y <em>Using Algebraic Geometry</em></li></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="complementary-formation">
+                <h3 style="text-align: center; margin-top: 3rem; margin-bottom: 1rem; color: var(--primary-color);">Formación Complementaria y Certificaciones</h3>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto; color: #666;">Actualización continua en tecnologías emergentes, programación, ciberseguridad, ciencia de datos y pedagogía digital</p>
+
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-code"></i><h4>Programación y Desarrollo</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fab fa-python"></i></div><h5>Variables y Estructuras de Control en Python</h5><p class="institution">SENA Colombia</p><p class="date">Diciembre 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-code"></i></div><h5>Conceptualización del Lenguaje C++</h5><p class="institution">SENA Colombia</p><p class="date">Noviembre 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fab fa-python"></i></div><h5>Fundamentos de Python 2</h5><p class="institution">Cisco Networking Academy</p><p class="date">Abril - Mayo 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fab fa-python"></i></div><h5>Fundamentos de Python 1</h5><p class="institution">Cisco Networking Academy</p><p class="date">Abril - Mayo 2025</p></div>
+                    </div>
+                </div>
+
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-shield-alt"></i><h4>Ciberseguridad y Redes</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-user-shield"></i></div><h5>CyberOps Associate</h5><p class="institution">Cisco Networking Academy</p><p class="date">Agosto - Septiembre 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-lock"></i></div><h5>Fundamentos de Ciberseguridad</h5><p class="institution">Cisco Networking Academy</p><p class="date">Mayo - Junio 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-shield-virus"></i></div><h5>Introduction to Cybersecurity</h5><p class="institution">Cisco Networking Academy</p><p class="date">Mayo - Junio 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-network-wired"></i></div><h5>Conceptos Básicos de Redes</h5><p class="institution">Cisco Networking Academy</p><p class="date">Junio - Julio 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-fingerprint"></i></div><h5>Conciencia Digital</h5><p class="institution">Cisco Networking Academy</p><p class="date">Abril - Mayo 2025</p></div>
+                    </div>
+                </div>
+
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-chart-line"></i><h4>Ciencia de Datos, IA y Analítica</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-robot"></i></div><h5>Gestión de Datos en Modelos de Inteligencia Artificial</h5><p class="institution">SENA Colombia</p><p class="date">Abril 2026</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-chart-bar"></i></div><h5>Data Analyst in Python</h5><p class="institution">DataCamp Inc.</p><p class="date">Julio - Agosto 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fab fa-python"></i></div><h5>Análisis Exploratorio de Datos en Python</h5><p class="institution">SENA Colombia</p><p class="date">Noviembre 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-chart-pie"></i></div><h5>Visualización de Datos usando Power BI</h5><p class="institution">SENA Colombia</p><p class="date">Noviembre 2024 - Febrero 2025</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-database"></i></div><h5>Analítica de Datos y Big Data aplicada en AVA</h5><p class="institution">UNAD</p><p class="date">Junio - Agosto 2024</p></div>
+                    </div>
+                </div>
+
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-language"></i><h4>Inglés</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-globe-americas"></i></div><h5>English Does Work – Level 2</h5><p class="institution">SENA Colombia</p><p class="date">Febrero - Marzo 2026</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-globe-americas"></i></div><h5>English Does Work – Level 1</h5><p class="institution">SENA Colombia</p><p class="date">Noviembre - Diciembre 2025</p></div>
+                    </div>
+                </div>
+
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-laptop"></i><h4>Educación Virtual y Pedagogía Digital</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-search"></i></div><h5>Diplomatura e-Investigador en AVA</h5><p class="institution">UNAD</p><p class="date">Agosto - Octubre 2023</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-cogs"></i></div><h5>Diplomatura e-Gestor de Cursos en AVA</h5><p class="institution">UNAD</p><p class="date">Abril - Junio 2023</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-chalkboard-teacher"></i></div><h5>El Docente/Tutor como Gestor de Cursos en AVA</h5><p class="institution">UNAD</p><p class="date">Enero 2023</p></div>
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-user-graduate"></i></div><h5>Diplomatura e-Mediador en AVA</h5><p class="institution">UNAD</p><p class="date">Noviembre 2022 - Enero 2023</p></div>
+                    </div>
+                </div>
+
+                <div class="complementary-category">
+                    <div class="category-header"><i class="fas fa-users"></i><h4>Liderazgo y Gestión</h4></div>
+                    <div class="complementary-grid">
+                        <div class="complementary-item"><div class="item-icon"><i class="fas fa-crown"></i></div><h5>Diplomatura en Liderazgo Transformacional</h5><p class="institution">UNAD</p><p class="date">Octubre - Diciembre 2025</p></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="investigacion" class="section research">
+        <div class="container">
+            <h2 class="section-title">Investigación</h2>
+            <div class="research-intro"><p>Mi investigación se centra en el álgebra conmutativa y la geometría algebraica, con especial énfasis en bases de Gröbner, ideales monomiales y sus aplicaciones. También desarrollo trabajo interdisciplinario en historia de las matemáticas y didáctica.</p></div>
+            <div class="research-areas">
+                <div class="research-card">
+                    <div class="research-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Álgebra Conmutativa y Geometría Algebraica</h3>
+                    <p>Investigación doctoral sobre la signatura de ideales monomiales. Estudio de bases y abanicos de Gröbner, geometría poliedral y geometría tórica. Aplicaciones del álgebra conmutativa en problemas de geometría algebraica computacional.</p>
+                    <div class="research-math">\[ \text{signature}(I) = \text{dim}_k \frac{S}{I + I^{\perp}} \]</div>
+                </div>
+                <div class="research-card">
+                    <div class="research-icon"><i class="fas fa-book-open"></i></div>
+                    <h3>Historia de las Matemáticas</h3>
+                    <p>Análisis histórico y epistemológico del desarrollo de conceptos matemáticos fundamentales. Estudio del tránsito de la integral desde las cuadraturas griegas hasta la formalización del siglo XIX. Investigación sobre el papel del álgebra en el desarrollo de la computación cuántica.</p>
+                </div>
+                <div class="research-card">
+                    <div class="research-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h3>Didáctica de las Matemáticas</h3>
+                    <p>Desarrollo e implementación de ambientes virtuales de aprendizaje. Uso de GeoGebra y herramientas computacionales en la enseñanza de las matemáticas. Aplicación de ciencia de datos y analítica en contextos educativos.</p>
+                </div>
+            </div>
+            <div class="research-interests">
+                <h3>Intereses de Investigación Actuales</h3>
+                <div class="interests-tags">
+                    <span class="tag">Ideales Monomiales</span><span class="tag">Bases de Gröbner</span><span class="tag">Abanicos de Gröbner</span><span class="tag">Geometría Tórica</span><span class="tag">Geometría Poliedral</span><span class="tag">Historia de las Matemáticas</span><span class="tag">Didáctica de las Matemáticas</span><span class="tag">Ciencia de Datos Educativa</span><span class="tag">Inteligencia Artificial</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="publicaciones" class="section publications">
+        <div class="container">
+            <h2 class="section-title">Publicaciones</h2>
+            <div class="publication-filters">
+                <button class="filter-btn active" data-filter="all">Todas</button>
+                <button class="filter-btn" data-filter="journal">Artículos de Revista</button>
+                <button class="filter-btn" data-filter="book">Capítulos de Libro</button>
+            </div>
+            <div class="publications-list">
+
+                <!-- 2026 -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2026</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Implementing TinyML in Internet of Things devices: A systematic literature review</h3>
+                        <p class="pub-authors">Solis Pino, A.F., <strong>Moran, D.</strong>, Ruiz Melenje, P.H., Agredo Delgado, V., Collazos Ordóñez, C.A.</p>
+                        <p class="pub-venue"><em>Journal of Industrial Information Integration</em>, Vol. 50, p. 101065. Elsevier</p>
+                        <div class="pub-links"><a href="https://doi.org/10.1016/j.jii.2026.101065" class="pub-link" target="_blank"><i class="fas fa-link"></i> DOI</a></div>
+                    </div>
+                </div>
+
+                <!-- 2024 -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2024</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">The signature of a monomial ideal</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Valencia, C., Villareal, R., Ibarguen, J.</p>
+                        <p class="pub-venue"><em>AIMS Mathematics</em>, Vol. 9(10), pp. 27955-27978</p>
+                        <div class="pub-links"><a href="https://doi.org/10.3934/math.20241357" class="pub-link" target="_blank"><i class="fas fa-link"></i> DOI</a></div>
+                    </div>
+                </div>
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2024</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Innovación social y colaboración multisectorial: impulsando el bienestar y la participación a través de modelos integrados</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Polo, M.</p>
+                        <p class="pub-venue"><em>Publicaciones E Investigación</em>, Vol. 18(3), pp. 1-5</p>
+                        <div class="pub-links"><a href="https://doi.org/10.22490/25394088.8295" class="pub-link" target="_blank"><i class="fas fa-link"></i> DOI</a></div>
+                    </div>
+                </div>
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2024</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Notas sobre el tránsito epistemológico de la inteligencia artificial (IA)</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Dominguez, S., Castaño, C.</p>
+                        <p class="pub-venue"><em>Publicaciones E Investigación</em>, Vol. 18(3), pp. 5-10</p>
+                        <div class="pub-links"><a href="https://doi.org/10.22490/25394088.8480" class="pub-link" target="_blank"><i class="fas fa-link"></i> DOI</a></div>
+                    </div>
+                </div>
+
+                <!-- 2023 -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2023</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">De Hilbert a los algoritmos cuánticos: el rol del álgebra en el desarrollo de la computación</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Dominguez, S., Castaño, C., Martinez, C.</p>
+                        <p class="pub-venue"><em>Publicaciones E Investigación</em>, Vol. 17(4), pp. 17-24</p>
+                        <div class="pub-links"><a href="https://doi.org/10.22490/25394088.7503" class="pub-link" target="_blank"><i class="fas fa-link"></i> DOI</a></div>
+                    </div>
+                </div>
+                <div class="publication-item" data-category="book">
+                    <div class="pub-year">2023</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Automated computer-aided diagnosis of COVID-19 and pneumonia based on chest X-ray images using deep learning</h3>
+                        <p class="pub-authors">Moreno, M., Suárez, O., <strong>Moran, D.</strong>, Sarmiento, B.</p>
+                        <p class="pub-venue">En: <em>Modern Computational Techniques for Engineering Applications</em>, CRC Press, pp. 51-67</p>
+                        <div class="pub-links"><a href="https://doi.org/10.1201/9781003407409" class="pub-link" target="_blank"><i class="fas fa-book"></i> Capítulo</a></div>
+                    </div>
+                </div>
+
+                <!-- 2019 -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2019</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Una introducción a las Bases de Gröbner</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong></p>
+                        <p class="pub-venue"><em>Boletín De Matemáticas</em>, Vol. 26(2), pp. 71-86</p>
+                        <div class="pub-links"><a href="https://dialnet.unirioja.es/servlet/articulo?codigo=7528018" class="pub-link" target="_blank"><i class="fas fa-link"></i> Enlace</a></div>
+                    </div>
+                </div>
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2019</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Algunas reflexiones en torno al concepto de acumulación en la enseñanza del Cálculo Integral</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Santaella Forero, R.</p>
+                        <p class="pub-venue"><em>Revista Electrónica de divulgación de STEM</em>, Vol. 1(1), pp. 104-116</p>
+                        <div class="pub-links"><a href="https://www.revistas.unp.edu.ar/index.php/rediunp/article/view/98" class="pub-link" target="_blank"><i class="fas fa-link"></i> Enlace</a></div>
+                    </div>
+                </div>
+
+                <!-- 2018 -->
+                <div class="publication-item" data-category="journal">
+                    <div class="pub-year">2018</div>
+                    <div class="pub-content">
+                        <h3 class="pub-title">Etapa superestructural de la integral</h3>
+                        <p class="pub-authors"><strong>Moran, D.</strong>, Jaramillo, C., Sigarreta, J.</p>
+                        <p class="pub-venue"><em>LOGOS Ciencia y Tecnología</em>, Vol. 10(2), pp. 135-152</p>
+                        <div class="pub-links"><a href="https://revistalogos.policia.edu.co:8443/index.php/rlct/article/view/576" class="pub-link" target="_blank"><i class="fas fa-link"></i> Enlace</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="conferencias" class="section conferences">
+        <div class="container">
+            <h2 class="section-title">Conferencias y Presentaciones</h2>
+            <div class="conferences-intro"><p>He participado como ponente y organizador en numerosos eventos académicos nacionales e internacionales, presentando investigación en álgebra, historia de las matemáticas y didáctica.</p></div>
+            <div class="conferences-timeline">
+                <div class="conference-year-group"><h3 class="year-title">2025</h3>
+                    <div class="conference-item"><div class="conference-date">Octubre 2025</div><div class="conference-content"><h4>GeoGebra a través del código</h4><p class="conference-event">VI Congreso Internacional de GeoGebra</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Sahagún, Colombia</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Septiembre 2025</div><div class="conference-content"><h4>Descubriendo la simetría: un viaje lúdico por la lógica matemática con GeoGebra</h4><p class="conference-event">5to Workshop de Ciencias Básicas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</p><span class="conference-badge organizador">Organizador y Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Mayo 2025</div><div class="conference-content"><h4>Development and Implementation of an Intelligent System for Prediction and Prevention of Academic Failure</h4><p class="conference-event">EXPOTECH 2025</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2024</h3>
+                    <div class="conference-item"><div class="conference-date">Octubre 2024</div><div class="conference-content"><h4>V Congreso Internacional de GeoGebra</h4><p class="conference-event">Congreso Internacional de GeoGebra</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</p><span class="conference-badge asistente">Asistente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Septiembre 2024</div><div class="conference-content"><h4>Applets de GeoGebra en la resolución de problemas de cálculo</h4><p class="conference-event">4to Workshop de Ciencias Básicas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Colombia (Virtual)</p><span class="conference-badge ponente">Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Mayo 2024</div><div class="conference-content"><h4>Apuntes sobre el tránsito epistemológico de la IA</h4><p class="conference-event">EXPOTECH 2024</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Ibagué, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Mayo 2024</div><div class="conference-content"><h4>Innovación social y colaboración multisectorial</h4><p class="conference-event">EXPOTECH 2024</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Ibagué, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2023</h3>
+                    <div class="conference-item"><div class="conference-date">Octubre 2023</div><div class="conference-content"><h4>De Hilbert a los algoritmos cuánticos: el rol del álgebra en el desarrollo de la computación</h4><p class="conference-event">EXPOTECH 2023</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Barranquilla, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2021</h3>
+                    <div class="conference-item"><div class="conference-date">Sep - Dic 2021</div><div class="conference-content"><h4>Algunas ideas heurísticas en Arquímedes</h4><p class="conference-event">Seminario de Matemáticas, Universidad de Pamplona</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Colombia</p><span class="conference-badge organizador">Organizador y Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Agosto 2021</div><div class="conference-content"><h4>Del problema de las cuadraturas a las extensiones algebraicas</h4><p class="conference-event">Thursday Science Seminars</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad de la Costa, Barranquilla</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Abril 2021</div><div class="conference-content"><h4>Del problema de las cuadraturas a las extensiones algebraicas</h4><p class="conference-event">Seminario de Matemáticas, Universidad de Pamplona</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Colombia</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Febrero 2021</div><div class="conference-content"><h4>Una lectura a los Elementos de Euclides</h4><p class="conference-event">Seminario de Historia de las Matemáticas Griegas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad del Valle, Colombia</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2020</h3>
+                    <div class="conference-item"><div class="conference-date">Septiembre 2020</div><div class="conference-content"><h4>Historia del Número y Magnitud en los Elementos de Euclides</h4><p class="conference-event">Seminario Historia del Número y Magnitud</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad del Valle, Colombia</p><span class="conference-badge ponente-magistral">Ponente Magistral</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2017</h3>
+                    <div class="conference-item"><div class="conference-date">Octubre 2017</div><div class="conference-content"><h4>Las ideas de variación y acumulación detrás de los conceptos de derivada e integral</h4><p class="conference-event">Coloquio del Posgrado en Ciencias Matemáticas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Autónoma de Guerrero, Acapulco, México</p><span class="conference-badge ponente">Ponente</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2014</h3>
+                    <div class="conference-item"><div class="conference-date">Octubre 2014</div><div class="conference-content"><h4>Una aproximación a π con el método de Montecarlo mediante el software R: una propuesta para ser llevada al aula de clase</h4><p class="conference-event">15º Encuentro Colombiano de Matemática Educativa</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Industrial de Santander, Bucaramanga, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Septiembre 2014</div><div class="conference-content"><h4>Algunos aspectos cronológicos de la Combinatoria</h4><p class="conference-event">Primer Encuentro Colombiano de Educación Estocástica</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Pedagógica Nacional, Bogotá, Colombia</p><span class="conference-badge ponente">Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Julio 2014</div><div class="conference-content"><h4>Usando las TICs en la Educación Matemática: El teorema de Pitágoras Generalizado</h4><p class="conference-event">I Congreso Argentino de Integración de GeoGebra en la Matemática</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Argentina</p><span class="conference-badge organizador">Organizador y Ponente Magistral</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Julio 2014</div><div class="conference-content"><h4>Los invariantes del área desde un ambiente dinámico usando GeoGebra</h4><p class="conference-event">I Congreso Argentino de Integración de GeoGebra en la Matemática</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Argentina</p><span class="conference-badge organizador">Organizador y Ponente Magistral</span></div></div>
+                </div>
+                <div class="conference-year-group"><h3 class="year-title">2013</h3>
+                    <div class="conference-item"><div class="conference-date">Diciembre 2013</div><div class="conference-content"><h4>La armonía entre las estructuras topológicas y algebraicas: La construcción de ℝ</h4><p class="conference-event">VIII Simposio Nororiental de Matemáticas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Industrial de Santander, Colombia</p><span class="conference-badge organizador">Organizador y Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Diciembre 2013</div><div class="conference-content"><h4>El razonamiento cognitivo en Euclides</h4><p class="conference-event">VIII Simposio Nororiental de Matemáticas</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Industrial de Santander, Colombia</p><span class="conference-badge organizador">Organizador y Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Noviembre 2013</div><div class="conference-content"><h4>La respuesta al problema de la medida de figuras planas en los antiguos griegos</h4><p class="conference-event">I Congreso de Educación Matemática de América Central y el Caribe</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> República Dominicana</p><span class="conference-badge organizador">Organizador y Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Octubre 2013</div><div class="conference-content"><h4>De las cuadraturas a la integral de Cauchy</h4><p class="conference-event">4ta Escuela Nacional de Historia y Educación Matemática (ENHEM4)</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad del Valle, Colombia</p><span class="conference-badge organizador">Organizador y Ponente</span></div></div>
+                    <div class="conference-item"><div class="conference-date">Junio 2013</div><div class="conference-content"><h4>La respuesta de Euclides al problema del área: La cuadratura de figuras rectilíneas</h4><p class="conference-event">21 Encuentro Nacional de Geometría y sus Aplicaciones</p><p class="conference-location"><i class="fas fa-map-marker-alt"></i> Universidad Pedagógica Nacional, Colombia</p><span class="conference-badge organizador">Organizador y Ponente</span></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="docencia" class="section teaching">
+        <div class="container">
+            <h2 class="section-title">Docencia</h2>
+            <div class="teaching-intro"><p>Mi enfoque pedagógico integra el rigor matemático con metodologías innovadoras en ambientes virtuales de aprendizaje, promoviendo el desarrollo del pensamiento lógico-matemático y la aplicación de tecnología educativa.</p></div>
+            <div class="courses-grid">
+                <div class="course-card"><div class="course-header"><i class="fas fa-wave-square"></i><h3>Ecuaciones Diferenciales</h3></div><p class="course-topic">Análisis de Sistemas Dinámicos</p><p class="course-description">Director Nacional del curso en UNAD. Métodos de solución de ecuaciones diferenciales ordinarias y sistemas dinámicos con aplicaciones en ingeniería y ciencias.</p><div class="course-programs"><span class="program-tag">UNAD - Pregrado</span></div></div>
+                <div class="course-card"><div class="course-header"><i class="fas fa-infinity"></i><h3>Cálculo Diferencial e Integral</h3></div><p class="course-topic">Fundamentos del Análisis</p><p class="course-description">Enseñanza de los conceptos fundamentales del cálculo con énfasis en aplicaciones y uso de herramientas tecnológicas como GeoGebra.</p><div class="course-programs"><span class="program-tag">Universidad de Pamplona</span></div></div>
+                <div class="course-card"><div class="course-header"><i class="fas fa-calculator"></i><h3>Cálculo Multivariable</h3></div><p class="course-topic">Análisis Vectorial</p><p class="course-description">Funciones de varias variables, integrales múltiples, campos vectoriales y teoremas fundamentales del cálculo vectorial.</p><div class="course-programs"><span class="program-tag">Universidad de Pamplona</span></div></div>
+                <div class="course-card"><div class="course-header"><i class="fas fa-project-diagram"></i><h3>Álgebra Lineal</h3></div><p class="course-topic">Espacios Vectoriales</p><p class="course-description">Teoría de espacios vectoriales, transformaciones lineales, valores y vectores propios con aplicaciones computacionales.</p><div class="course-programs"><span class="program-tag">Universidad de Pamplona</span></div></div>
+                <div class="course-card"><div class="course-header"><i class="fas fa-network-wired"></i><h3>Matemáticas Discretas</h3></div><p class="course-topic">Estructuras Discretas</p><p class="course-description">Teoría de conjuntos, relaciones, funciones, grafos y estructuras algebraicas con aplicaciones en ciencias de la computación.</p><div class="course-programs"><span class="program-tag">Universidad de Pamplona</span></div></div>
+                <div class="course-card"><div class="course-header"><i class="fas fa-brain"></i><h3>Pensamiento Lógico y Matemático</h3></div><p class="course-topic">Razonamiento Matemático</p><p class="course-description">Desarrollo de habilidades de razonamiento lógico-matemático y pensamiento crítico aplicado a la resolución de problemas.</p><div class="course-programs"><span class="program-tag">UNAD - Pregrado</span></div></div>
+            </div>
+            <div class="teaching-philosophy">
+                <h3>Liderazgo Académico en UNAD</h3>
+                <div class="philosophy-grid">
+                    <div class="philosophy-item"><i class="fas fa-chalkboard-teacher"></i><h4>Director Nacional de Curso</h4><p>Ecuaciones Diferenciales - Coordinación de contenidos y estrategias pedagógicas</p></div>
+                    <div class="philosophy-item"><i class="fas fa-network-wired"></i><h4>Líder Red Curricular</h4><p>Lógica, Álgebra y Cálculo - Articulación curricular transversal</p></div>
+                    <div class="philosophy-item"><i class="fas fa-seedling"></i><h4>Líder Semillero MATHINNOVA</h4><p>Formación de jóvenes investigadores en matemáticas aplicadas</p></div>
+                    <div class="philosophy-item"><i class="fas fa-laptop-code"></i><h4>e-Mediador AVA</h4><p>Especialización en diseño y gestión de ambientes virtuales de aprendizaje</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="recursos" class="section resources">
+        <div class="container">
+            <h2 class="section-title">Recursos Educativos</h2>
+            <div class="resources-intro"><p>Comparto recursos educativos abiertos para estudiantes y profesores: videos animados con Manim, guías de estudio, código y herramientas interactivas.</p></div>
+            <div class="resource-section">
+                <div class="resource-header"><i class="fab fa-youtube"></i><h3>Videos Educativos con Manim</h3></div>
+                <p class="resource-description">Animaciones matemáticas creadas con Manim (Mathematical Animation Engine) para visualizar conceptos de cálculo, álgebra y análisis.</p>
+                <div class="videos-grid">
+                    <div class="video-card"><div class="video-thumbnail"><iframe width="100%" height="200" src="https://www.youtube.com/embed/UcPDnWzBoHk" title="Ecuaciones cuadráticas" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="video-info"><h4>📘 Ecuaciones cuadráticas: soluciones y gráficas</h4><p>Exploramos las ecuaciones cuadráticas desde su interpretación algebraica y su representación gráfica.</p><a href="https://youtu.be/UcPDnWzBoHk" target="_blank" class="video-link">Ver en YouTube <i class="fas fa-external-link-alt"></i></a></div></div>
+                    <div class="video-card"><div class="video-thumbnail"><iframe width="100%" height="200" src="https://www.youtube.com/embed/ys261yAYZ3E" title="Ranking de Curvas Polares" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="video-info"><h4>🎥 Ranking de Curvas Polares</h4><p>Exploramos con Manim las formas más bellas en coordenadas polares: rosas, espirales y otras curvas fascinantes.</p><a href="https://youtu.be/ys261yAYZ3E" target="_blank" class="video-link">Ver en YouTube <i class="fas fa-external-link-alt"></i></a></div></div>
+                    <div class="video-card"><div class="video-thumbnail"><iframe width="100%" height="200" src="https://www.youtube.com/embed/-VfFuNPnU0w" title="Paraboloide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="video-info"><h4>🎓 ¿Qué es un paraboloide? | Superficie Cuádrica</h4><p>Visualización 3D completa con propiedades fundamentales, curvas de nivel y aplicaciones en física e ingeniería.</p><a href="https://youtu.be/-VfFuNPnU0w" target="_blank" class="video-link">Ver en YouTube <i class="fas fa-external-link-alt"></i></a></div></div>
+                    <div class="video-card"><div class="video-thumbnail"><iframe width="100%" height="200" src="https://www.youtube.com/embed/videoseries?list=PLzsXwfh2vZnVGv6SD5aG0-wN7TOiND8oG" title="Campeones Mundiales de Ajedrez" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="video-info"><h4>♟️ PODCAST: Campeones Mundiales de Ajedrez</h4><p>Desde Steinitz hasta los campeones actuales: biografías fascinantes, legado ajedrecístico y anécdotas imperdibles.</p><a href="https://www.youtube.com/playlist?list=PLzsXwfh2vZnVGv6SD5aG0-wN7TOiND8oG" target="_blank" class="video-link">Ver Playlist Completa <i class="fas fa-external-link-alt"></i></a></div></div>
+                    <div class="video-card"><div class="video-cta"><i class="fab fa-youtube" style="font-size: 3rem; color: #ff0000; margin-bottom: 1rem;"></i><h4>Más Videos Disponibles</h4><p>Visita mi canal de YouTube para ver todos mis videos educativos</p><a href="https://www.youtube.com/@dmbourbaki" target="_blank" class="btn btn-primary"><i class="fab fa-youtube"></i> Ver Canal de YouTube</a></div></div>
+                </div>
+            </div>
+            <div class="resource-section">
+                <div class="resource-header"><i class="fas fa-book"></i><h3>Guías y Material Didáctico</h3></div>
+                <p class="resource-description">Guías de estudio, talleres y material complementario organizados por tema para estudiantes de pregrado.</p>
+                <div class="guides-grid">
+                    <div class="guide-card"><i class="fas fa-infinity"></i><h4>Cálculo Diferencial e Integral</h4><p>Guías con ejercicios resueltos y problemas propuestos</p><span class="coming-soon">Próximamente en GitHub</span></div>
+                    <div class="guide-card"><i class="fas fa-wave-square"></i><h4>Ecuaciones Diferenciales</h4><p>Material complementario con métodos de solución</p><span class="coming-soon">Próximamente en GitHub</span></div>
+                    <div class="guide-card"><i class="fas fa-project-diagram"></i><h4>Álgebra Lineal</h4><p>Ejercicios y aplicaciones computacionales</p><span class="coming-soon">Próximamente en GitHub</span></div>
+                    <div class="guide-card"><i class="fas fa-shapes"></i><h4>Geometría Analítica</h4><p>Talleres con GeoGebra y visualizaciones</p><span class="coming-soon">Próximamente en GitHub</span></div>
+                </div>
+                <div class="github-repo-cta"><p><i class="fas fa-info-circle"></i> Las guías estarán disponibles próximamente en mi repositorio de GitHub</p><a href="https://github.com/dmbourbaki" target="_blank" class="btn btn-secondary"><i class="fab fa-github"></i> Visitar GitHub</a></div>
+            </div>
+            <div class="resource-section">
+                <div class="resource-header"><i class="fas fa-code"></i><h3>Código y Herramientas</h3></div>
+                <p class="resource-description">Scripts de Manim, notebooks de Python y applets de GeoGebra para enseñanza de matemáticas.</p>
+                <div class="tools-grid">
+                    <div class="tool-card"><i class="fas fa-film"></i><h4>Scripts de Manim</h4><p>Código fuente de animaciones matemáticas</p><a href="https://github.com/dmbourbaki" target="_blank" class="tool-link">Ver en GitHub <i class="fas fa-external-link-alt"></i></a></div>
+                    <div class="tool-card"><i class="fab fa-python"></i><h4>Notebooks de Python</h4><p>Jupyter notebooks con ejemplos interactivos</p><a href="https://github.com/dmbourbaki" target="_blank" class="tool-link">Ver en GitHub <i class="fas fa-external-link-alt"></i></a></div>
+                    <div class="tool-card"><i class="fas fa-compass-drafting"></i><h4>Applets de GeoGebra</h4><p>Construcciones interactivas para visualización</p><a href="#" class="tool-link">Próximamente <i class="fas fa-clock"></i></a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         RECURSOS EDUCATIVOS DIGITALES
+    ══════════════════════════════════════════════ -->
+    <section id="recursos-digitales" class="section digital-resources">
+        <div class="container">
+            <h2 class="section-title">Recursos Educativos Digitales</h2>
+            <div class="resources-intro">
+                <p>Visualizaciones interactivas para el aprendizaje de matemáticas, desarrolladas bajo el <strong>Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI)</strong> — un proyecto propio de Daniel Steven Moran Pizarro. Funcionan directamente en el navegador, sin instalación.</p>
+            </div>
+
+            <div class="observatorio-header">
+                <div class="obs-icon">🔭</div>
+                <div>
+                    <h3>Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI)</h3>
+                    <p>Proyecto propio en desarrollo. Los simuladores se irán publicando progresivamente bajo la marca OMAI, organizados por área temática: Cálculo Diferencial, Cálculo Integral, Cálculo Multivariable, Ecuaciones Diferenciales y Matemáticas Especiales.</p>
+                </div>
+            </div>
+
+            <div class="category-group" id="cat-ecuaciones-diferenciales">
+                <h4>Ecuaciones Diferenciales</h4>
+                <div class="digital-grid">
+
+                    <div class="digital-card" id="card-campo">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∂y/∂x</div>
+                            <div>
+                                <h3>Simulador de Campo de Direcciones</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · Análisis Cualitativo</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualización interactiva del campo de direcciones de y′ = f(x, y). Escribe cualquier expresión, haz clic o arrastra para trazar curvas solución (RK4), acércate con la rueda del mouse, desplaza la vista con clic derecho, observa nullclines, detecta equilibrios estables e inestables automáticamente y analiza el comportamiento cualitativo en cualquier punto al pasar el cursor.</p>
+                        <div class="digital-tags">
+                            <span>16 presets (autónomas y no autónomas)</span>
+                            <span>Nullclines y equilibrios</span>
+                            <span>Curvas solución RK4 · Arrastre múltiple</span>
+                            <span>Zoom con rueda · Pan · Análisis en cursor</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/campo_direcciones/" loading="lazy" title="Vista previa Campo de Direcciones" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('campo')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-campo" style="display:none">
+                            <iframe src="recursos/campo_direcciones/" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Campo de Direcciones"></iframe>
+                            <a href="recursos/campo_direcciones/" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-masa">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∂²</div>
+                            <div>
+                                <h3>Simulador Sistema Masa-Resorte</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Simulación en tiempo real de my″ + by′ + ky = f(t). Observa el resorte y el amortiguador animados, clasifica el movimiento (no amortiguado, subamortiguado, críticamente amortiguado o sobreamortiguado), compara la solución numérica RK4 con la analítica exacta, y visualiza posición y(t), velocidad y′(t) y aceleración y″(t) simultáneamente.</p>
+                        <div class="digital-tags">
+                            <span>No amort. · Sub · Crítico · Sobre</span>
+                            <span>Fuerza externa f(t) libre</span>
+                            <span>RK4 + Solución analítica</span>
+                            <span>Retrato de fase</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/masa_resorte/masa_resorte.html" loading="lazy" title="Vista previa Masa-Resorte" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('masa')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-masa" style="display:none">
+                            <iframe src="recursos/masa_resorte/masa_resorte.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Sistema Masa-Resorte"></iframe>
+                            <a href="recursos/masa_resorte/masa_resorte.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-rlc">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">⚡</div>
+                            <div>
+                                <h3>Simulador Circuito RLC</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Circuito RLC serie animado: Lq″ + Rq′ + q/C = V(t). Visualiza el esquemático con resistor, inductor y condensador; observa los puntos de corriente circulando en tiempo real; analiza carga q(t), corriente i(t) y voltajes V_R, V_L, V_C. Incluye la analogía completa con el sistema masa-resorte.</p>
+                        <div class="digital-tags">
+                            <span>Circuito animado (puntos de corriente)</span>
+                            <span>V_C · V_R · V_L en tiempo real</span>
+                            <span>Factor Q · Ancho de banda</span>
+                            <span>Fuente V(t) libre</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/circuito_rlc/circuito_rlc.html" loading="lazy" title="Vista previa RLC" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('rlc')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-rlc" style="display:none">
+                            <iframe src="recursos/circuito_rlc/circuito_rlc.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Circuito RLC"></iframe>
+                            <a href="recursos/circuito_rlc/circuito_rlc.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-pendulo">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">θ″</div>
+                            <div>
+                                <h3>Simulador Péndulo Simple</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Péndulo simple con la ecuación completa θ″ + γθ′ + ω₀²sin(θ) = 0. Compara en tiempo real la solución no lineal (RK4) con la linealización pequeños ángulos. Cambia la gravedad entre Tierra, Luna, Marte y Júpiter; observa el retrato de fase y cómo el período real difiere del período lineal T₀ = 2π√(L/g) para ángulos grandes.</p>
+                        <div class="digital-tags">
+                            <span>No lineal vs Linealizado</span>
+                            <span>Cuatro gravedades planetarias</span>
+                            <span>Trail de trayectoria</span>
+                            <span>Retrato de fase</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/pendulo/pendulo.html" loading="lazy" title="Vista previa Péndulo" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('pendulo')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-pendulo" style="display:none">
+                            <iframe src="recursos/pendulo/pendulo.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador Péndulo Simple"></iframe>
+                            <a href="recursos/pendulo/pendulo.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-edo2">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">y″</div>
+                            <div>
+                                <h3>Simulador de Respuesta de Segundo Orden</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Compara en vivo dos sistemas de segundo orden: y″ + by′ + ky = F. Un panel de referencia fijo y un panel variable con deslizador en el parámetro que elijas (b o k), con solución analítica exacta por régimen. Clasificación automática según el discriminante b² − 4k (sobreamortiguado, crítico, subamortiguado o sin amortiguamiento), raíces características, período, frecuencia angular, tiempo de asentamiento y envolvente exponencial.</p>
+                        <div class="digital-tags">
+                            <span>Comparación paramétrica en vivo</span>
+                            <span>Sobre · Crítico · Sub · Sin amortiguamiento</span>
+                            <span>Solución analítica exacta</span>
+                            <span>Ecuaciones dinámicas en LaTeX</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/edo2/edo2-index.html" loading="lazy" title="Vista previa Respuesta de Segundo Orden" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('edo2')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-edo2" style="display:none">
+                            <iframe src="recursos/edo2/edo2-index.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Respuesta de Segundo Orden"></iframe>
+                            <a href="recursos/edo2/edo2-index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="category-group" id="cat-calculo-integral">
+                <h4>Cálculo Integral</h4>
+                <div class="digital-grid">
+
+                    <div class="digital-card" id="card-solidos">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∮</div>
+                            <div>
+                                <h3>Simulador de Sólidos de Revolución</h3>
+                                <span class="topic-tag">Cálculo Integral · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualización 3D interactiva de sólidos de revolución. Escoge entre los métodos del Disco, Cascarón cilíndrico y Arandela; ajusta el eje de revolución (X o Y); anima el barrido de 0° a 360°; y mueve la sección transversal para ver el área de cada corte. Calcula el volumen exacto y la superficie lateral.</p>
+                        <div class="digital-tags">
+                            <span>Disco · Cascarón · Arandela</span>
+                            <span>Eje X / Eje Y</span>
+                            <span>Animación de Barrido</span>
+                            <span>Sección Transversal</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/solidos_revolucion/solidos_revolucion.html" loading="lazy" title="Vista previa Sólidos de Revolución" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('solidos')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-solidos" style="display:none">
+                            <iframe src="recursos/solidos_revolucion/solidos_revolucion.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sólidos de Revolución"></iframe>
+                            <a href="recursos/solidos_revolucion/solidos_revolucion.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-riemann">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∑</div>
+                            <div>
+                                <h3>Simulador de Sumas de Riemann</h3>
+                                <span class="topic-tag">Cálculo Integral · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Explora los cinco métodos de aproximación de la integral definida: Izquierda, Derecha, Punto Medio, Trapecio y Simpson 1/3. Anima la convergencia en tiempo real, compara el error con la integral exacta y observa la tabla de convergencia del valor exacto.</p>
+                        <div class="digital-tags">
+                            <span>Izquierda · Derecha · Medio</span>
+                            <span>Trapecio · Simpson 1/3</span>
+                            <span>Convergencia y Error</span>
+                            <span>Animación con velocidad ajustable</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/riemann/riemann.html" loading="lazy" title="Vista previa Riemann" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('riemann')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-riemann" style="display:none">
+                            <iframe src="recursos/riemann/riemann.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Sumas de Riemann"></iframe>
+                            <a href="recursos/riemann/riemann.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-taylor">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">Σ</div>
+                            <div>
+                                <h3>Simulador de Series de Taylor</h3>
+                                <span class="topic-tag">Cálculo · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualiza cómo un polinomio de grado n se "pega" a cualquier función al agregar términos. Escribe f(x), elige el centro a y anima la convergencia grado a grado. Muestra la fórmula con los coeficientes exactos f⁽ᵏ⁾(a)/k!, la tabla de coeficientes, el error |f − Tₙ| en escala logarítmica y el espectro de coeficientes. Diferenciación simbólica con mathjs.</p>
+                        <div class="digital-tags">
+                            <span>Diferenciación simbólica</span>
+                            <span>Animación grado a grado</span>
+                            <span>Error |f − Tₙ| en log</span>
+                            <span>14 presets (sin, cos, eˣ, ln, arctan…)</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/taylor/taylor.html" loading="lazy" title="Vista previa Series de Taylor" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('taylor')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-taylor" style="display:none">
+                            <iframe src="recursos/taylor/taylor.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Series de Taylor"></iframe>
+                            <a href="recursos/taylor/taylor.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="category-group" id="cat-calculo-multivariable">
+                <h4>Cálculo Multivariable</h4>
+                <div class="digital-grid">
+
+                    <div class="digital-card" id="card-lagrange">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">λ</div>
+                            <div>
+                                <h3>Simulador de Multiplicadores de Lagrange</h3>
+                                <span class="topic-tag">Cálculo Multivariable · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Interpretación geométrica de ∇f = λ·∇g. Mueve el punto sobre la restricción y observa cuándo los gradientes se vuelven paralelos. Incluye mapa de calor de f(x,y) y medidor de paralelismo en tiempo real.</p>
+                        <div class="digital-tags">
+                            <span>Optimización Restringida</span>
+                            <span>Gradientes</span>
+                            <span>Curvas de Nivel</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/lagrange/lagrange.html" loading="lazy" title="Vista previa Lagrange" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('lagrange')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-lagrange" style="display:none">
+                            <iframe src="recursos/lagrange/lagrange.html" width="100%" height="640" frameborder="0" loading="lazy" title="Simulador de Multiplicadores de Lagrange"></iframe>
+                            <a href="recursos/lagrange/lagrange.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-integrales">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∬</div>
+                            <div>
+                                <h3>Simulador de Integrales Dobles</h3>
+                                <span class="topic-tag">Cálculo Multivariable · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualiza y calcula integrales dobles. Soporta Tipo I (dy dx), Tipo II (dx dy) y Polares (dr dθ). Ingresa los 4 límites: a, b, f₁(x) y f₂(x). La región se dibuja en 2D con aspecto 1:1 real, zoom con scroll y pan con arrastre; la función aparece difuminada fuera de la región. En 3D muestra el volumen como sólido paramétrico con colorscale cool-warm. Incluye botón para invertir el orden (Teorema de Fubini) y rotación animada del volumen.</p>
+                        <div class="digital-tags">
+                            <span>Tipo I · Tipo II · Polares</span>
+                            <span>Región 2D con aspecto 1:1</span>
+                            <span>Volumen 3D paramétrico</span>
+                            <span>Invertir orden · Rotación 3D</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/integrales_dobles/integrales_dobles.html" loading="lazy" title="Vista previa Integrales Dobles" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('integrales')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-integrales" style="display:none">
+                            <iframe src="recursos/integrales_dobles/integrales_dobles.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Integrales Dobles"></iframe>
+                            <a href="recursos/integrales_dobles/integrales_dobles.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="category-group" id="cat-matematicas-especiales">
+                <h4>Matemáticas Especiales</h4>
+                <div class="digital-grid">
+
+                    <div class="digital-card" id="card-tl">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">T</div>
+                            <div>
+                                <h3>Simulador de Transformaciones Lineales</h3>
+                                <span class="topic-tag">Álgebra Lineal · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Visualiza cómo una matriz transforma el plano y el espacio. En ℝ² deforma un oso con el grid, el paralelogramo del determinante y los eigenvectores. En ℝ³ transforma el oso 3D y muestra el paralelepípedo cuyo volumen es |det(T)|. Anima la transformación de t=0 a t=1, cambia presets, y lee el análisis completo: det, traza, eigenvalores y clasificación automática.</p>
+                        <div class="digital-tags">
+                            <span>ℝ² y ℝ³ interactivos</span>
+                            <span>Determinante como área/volumen</span>
+                            <span>Eigenvectores y clasificación</span>
+                            <span>14 presets ℝ² · 10 presets ℝ³</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/transformaciones_lineales/transformaciones_lineales.html" loading="lazy" title="Vista previa Transformaciones Lineales" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('tl')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-tl" style="display:none">
+                            <iframe src="recursos/transformaciones_lineales/transformaciones_lineales.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Transformaciones Lineales"></iframe>
+                            <a href="recursos/transformaciones_lineales/transformaciones_lineales.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-simetria">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">🔷</div>
+                            <div>
+                                <h3>Simulador de Grupos de Simetría</h3>
+                                <span class="topic-tag">Álgebra Abstracta · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Simulador interactivo de los grupos diédricos Dₙ y el grupo de Klein V₄. Arrastra el polígono directamente con el mouse para aplicar rotaciones y reflexiones, observa la tabla de Cayley iluminarse en vivo, navega el historial de composición, y descubre el diagrama reticular de subgrupos — la estructura algebraica detrás de la simetría geométrica, con notación de Fraleigh en toda la interfaz.</p>
+                        <div class="digital-tags">
+                            <span>Grupos diédricos D₃ a D₈ · Klein V₄</span>
+                            <span>Arrastre directo con el mouse</span>
+                            <span>Tabla de Cayley · Reticulado de subgrupos</span>
+                            <span>Notación de permutación y ciclos</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/simetria/simetria-index.html" loading="lazy" title="Vista previa Grupos de Simetría" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('simetria')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-simetria" style="display:none">
+                            <iframe src="recursos/simetria/simetria-index.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Grupos de Simetría"></iframe>
+                            <a href="recursos/simetria/simetria-index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-raices">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">ℂ</div>
+                            <div>
+                                <h3>Simulador de Raíces de Polinomios</h3>
+                                <span class="topic-tag">Números Complejos · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Explora el Teorema Fundamental del Álgebra de forma visual en el plano complejo. Mueve los coeficientes del polinomio y observa cómo las raíces se desplazan, colisionan en el eje real y se separan de nuevo en pares complejos conjugados — o arrastra las raíces directamente para reconstruir el polinomio a partir de ellas.</p>
+                        <div class="digital-tags">
+                            <span>Coeficientes ↔ Raíces (bidireccional)</span>
+                            <span>Plano complejo interactivo</span>
+                            <span>Pares complejos conjugados</span>
+                            <span>Teorema Fundamental del Álgebra</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/raices/raices-index.html" loading="lazy" title="Vista previa Raíces de Polinomios" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('raices')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-raices" style="display:none">
+                            <iframe src="recursos/raices/raices-index.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Raíces de Polinomios"></iframe>
+                            <a href="recursos/raices/raices-index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-fourier">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">∿</div>
+                            <div>
+                                <h3>Simulador de Series de Fourier</h3>
+                                <span class="topic-tag">Análisis de Fourier · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Observa cómo la suma parcial de senos y cosenos converge a una función periódica f(t) = f(t+T). Incluye galería de funciones clásicas, la opción de definir tu propia función personalizada, descomposición en armónicos individuales, y una visualización clara del fenómeno de Gibbs cerca de las discontinuidades.</p>
+                        <div class="digital-tags">
+                            <span>Sumas parciales Sₙ(t)</span>
+                            <span>Galería de funciones clásicas</span>
+                            <span>Función personalizada</span>
+                            <span>Fenómeno de Gibbs</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/fourier/fourier-index.html" loading="lazy" title="Vista previa Series de Fourier" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('fourier')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-fourier" style="display:none">
+                            <iframe src="recursos/fourier/fourier-index.html" width="100%" height="680" frameborder="0" loading="lazy" title="Simulador de Series de Fourier"></iframe>
+                            <a href="recursos/fourier/fourier-index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="category-group" id="cat-calculo-diferencial">
+                <h4>Cálculo Diferencial</h4>
+                <p style="font-size:0.85rem; color:#888; margin-top:-0.4rem;">Próximamente bajo la marca OMAI.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="otros-simuladores" class="section digital-resources">
+        <div class="container">
+            <h2 class="section-title">Otros Simuladores</h2>
+            <div class="resources-intro">
+                <p>Proyectos interactivos independientes de la marca OMAI, ligados a mi línea de investigación en <strong>Historia de las Matemáticas</strong>. Nombre de colección propio pendiente de definir.</p>
+            </div>
+
+            <div class="category-group" id="cat-otros-simuladores">
+                <div class="digital-grid">
+
+                    <div class="digital-card" id="card-euclides">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">📐</div>
+                            <div>
+                                <h3>Elementos de Euclides — Libro I</h3>
+                                <span class="topic-tag">Historia de las Matemáticas · Adelanto</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Motor interactivo de construcción con regla y compás para las proposiciones I.1 a I.10 de los Elementos de Euclides, con prosa basada en la edición Gredos (trad. Vara Donado, 1991). Ejecuta cada construcción paso a paso, sigue la demostración fragmentada con resaltado geométrico sincronizado, y consulta el glosario de definiciones, postulados y nociones comunes.</p>
+                        <div class="digital-tags">
+                            <span>Construcción con regla y compás</span>
+                            <span>Proposiciones I.1 – I.10</span>
+                            <span>Demostración fragmentada</span>
+                            <span>Glosario interactivo</span>
+                            <span>3 velocidades de automatización</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/euclides/euclides-index.html" loading="lazy" title="Vista previa Elementos de Euclides" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('euclides')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-euclides" style="display:none">
+                            <iframe src="recursos/euclides/euclides-index.html" width="100%" height="720" frameborder="0" loading="lazy" title="Elementos de Euclides — Libro I"></iframe>
+                            <a href="recursos/euclides/euclides-index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="contacto" class="section contact">
+        <div class="container">
+            <h2 class="section-title">Contacto</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Información de Contacto</h3>
+                    <div class="contact-item"><i class="fas fa-university"></i><div><h4>Universidad Nacional Abierta y a Distancia (UNAD)</h4><p>Docente Tiempo Completo - Investigador</p></div></div>
+                    <div class="contact-item"><i class="fas fa-envelope"></i><div><h4>Email Personal</h4><p><a href="mailto:dmbourbaki@gmail.com">dmbourbaki@gmail.com</a></p></div></div>
+                    <div class="contact-item"><i class="fas fa-envelope-open"></i><div><h4>Email Institucional</h4><p><a href="mailto:daniel.moran@unad.edu.co">daniel.moran@unad.edu.co</a></p></div></div>
+                    <div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><h4>Ubicación</h4><p>Cali, Colombia</p></div></div>
+                    <div class="social-links-contact">
+                        <a href="https://scholar.google.es/citations?user=CLZKj3YAAAAJ" target="_blank" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+                        <a href="https://orcid.org/0000-0003-1791-2818" target="_blank" aria-label="ORCID"><i class="fab fa-orcid"></i></a>
+                        <a href="https://www.researchgate.net/profile/Daniel-Moran-Pizarro" target="_blank" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
+                        <a href="https://co.linkedin.com/in/daniel-steven-moran-6b5490331" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/dmbourbaki" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.youtube.com/@dmbourbaki" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001560327" target="_blank" aria-label="CvLAC MinCiencias"><i class="fas fa-id-card"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form-container">
+                    <h3>Envíame un Mensaje</h3>
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group"><label for="name">Nombre</label><input type="text" id="name" name="name" required></div>
+                        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" required></div>
+                        <div class="form-group"><label for="subject">Asunto</label><input type="text" id="subject" name="subject" required></div>
+                        <div class="form-group"><label for="message">Mensaje</label><textarea id="message" name="message" rows="5" required></textarea></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar Mensaje</button>
+                    </form>
+                    <p class="form-note"><i class="fas fa-info-circle"></i> Nota: Este formulario requiere configuración con un servicio backend como Formspree o EmailJS.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Daniel Steven Moran Pizarro · <a href="LICENSE.md" style="color:inherit;text-decoration:underline;">Términos de uso</a></p>
+                <p>Hecho con <i class="fas fa-heart"></i> para la comunidad académica</p>
+                <p id="contador-visitas" style="font-size:0.75rem; opacity:0.6; margin-top:0.4rem;"></p>
+            </div>
+        </div>
+    </footer>
+
+    <script data-goatcounter="https://TUCODIGO.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script>
+      fetch('https://TUCODIGO.goatcounter.com/counter/TOTAL.json')
+        .then(r => r.json())
+        .then(d => { const el = document.getElementById('contador-visitas'); if (el) el.textContent = 'Visitas: ' + d.count; })
+        .catch(() => {});
+    </script>
+    <script src="script.js"></script>
+    <script>
+    function toggleObservatorioResource(id) {
+        const frame = document.getElementById('frame-' + id);
+        const card = document.getElementById('card-' + id);
+        const btn = document.querySelector('#card-' + id + ' .digital-btn');
+        if (frame.style.display === 'none') {
+            frame.style.display = 'block';
+            if (card) card.classList.add('expanded');
+            btn.textContent = '▼ Cerrar visualización';
+            setTimeout(() => frame.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+        } else {
+            frame.style.display = 'none';
+            if (card) card.classList.remove('expanded');
+            btn.textContent = '▶ Abrir Visualización';
+        }
     }
-    .nav-menu.active { left: 0; }
-    .nav-toggle { display: flex; }
-    .hero-title { font-size: 2.5rem; }
-    .hero-subtitle { font-size: 1.2rem; }
-    .hero-buttons { flex-direction: column; align-items: center; }
-    .section-title { font-size: 2rem; }
-    .expertise-grid, .research-areas, .courses-grid, .philosophy-grid { grid-template-columns: 1fr; }
-    .publication-item { flex-direction: column; gap: 1rem; }
-    .contact-content { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 480px) {
-    .hero-title { font-size: 2rem; }
-    .hero-subtitle { font-size: 1rem; }
-    .btn { padding: 0.6rem 1.5rem; font-size: 0.9rem; }
-}
-
-/* ============================================
-   FORMATION SECTION
-   ============================================ */
-.formation { background: var(--bg-white); }
-
-.timeline {
-    position: relative;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 2rem 0;
-}
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color), var(--gold));
-    border-radius: 2px;
-}
-.timeline-item {
-    position: relative;
-    margin-bottom: 3rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-.timeline-item:nth-child(odd)  { flex-direction: row; }
-.timeline-item:nth-child(even) { flex-direction: row-reverse; }
-.timeline-marker {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 20px;
-    background: var(--secondary-color);
-    border: 4px solid white;
-    border-radius: 50%;
-    box-shadow: 0 0 0 4px var(--accent-color);
-    z-index: 10;
-}
-.timeline-content {
-    width: 45%;
-    background: var(--bg-light);
-    padding: 2rem;
-    border-radius: 14px;
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s ease;
-}
-.timeline-content:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-.timeline-date {
-    font-family: var(--font-mono);
-    display: inline-block;
-    background: var(--secondary-color);
-    color: white;
-    padding: 0.3rem 1rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-.timeline-content h3 { font-family: var(--font-display); font-size: 1.4rem; color: var(--primary-color); margin-bottom: 0.5rem; }
-.timeline-content h4 { font-size: 1.1rem; color: var(--text-dark); margin-bottom: 0.5rem; font-weight: 500; }
-.timeline-content p  { margin: 0.5rem 0; color: var(--text-light); }
-.location, .distinction, .thesis, .advisor { font-size: 0.95rem; line-height: 1.6; }
-.location i, .distinction i { margin-right: 0.5rem; color: var(--secondary-color); }
-.distinction { color: var(--success-color); font-weight: 500; }
-.thesis { margin-top: 1rem; font-style: italic; }
-.thesis strong, .advisor strong { color: var(--primary-color); }
-
-.research-stays { margin-top: 4rem; }
-.stays-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-.stay-card {
-    background: var(--bg-light);
-    padding: 2rem;
-    border-radius: 14px;
-    border-left: 4px solid var(--secondary-color);
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s ease;
-}
-.stay-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-.stay-date {
-    font-family: var(--font-mono);
-    display: inline-block;
-    background: var(--accent-color);
-    color: var(--primary-color);
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-.stay-card h4     { font-family: var(--font-display); font-size: 1.2rem; color: var(--primary-color); margin-bottom: 0.5rem; }
-.stay-location    { color: var(--text-light); font-size: 0.9rem; margin-bottom: 0.5rem; }
-.stay-advisor     { color: var(--text-dark); font-weight: 500; margin-bottom: 1rem; }
-.stay-activities  { list-style: none; padding-left: 0; }
-.stay-activities li {
-    padding-left: 1.5rem;
-    position: relative;
-    margin: 0.5rem 0;
-    color: var(--text-light);
-}
-.stay-activities li::before {
-    content: '▸';
-    position: absolute;
-    left: 0;
-    color: var(--secondary-color);
-    font-weight: bold;
-}
-
-.complementary-formation { margin-top: 4rem; }
-.complementary-category   { margin-bottom: 4rem; }
-.category-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 3px solid var(--primary-color);
-}
-.category-header i  { font-size: 2rem; color: var(--primary-color); }
-.category-header h4 { font-size: 1.5rem; font-weight: 600; color: var(--text-dark); margin: 0; }
-
-.complementary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-.complementary-item {
-    background: white;
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s ease;
-    border-left: 4px solid var(--primary-color);
-    display: flex;
-    flex-direction: column;
-}
-.complementary-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-left-width: 6px; }
-.item-icon { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem; }
-.item-icon i { display: block; }
-.complementary-item h5 { font-size: 1.1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.75rem; line-height: 1.4; flex-grow: 1; }
-.complementary-item .institution { font-size: 0.95rem; color: #666; margin-bottom: 0.25rem; font-weight: 500; }
-.complementary-item .date        { font-family: var(--font-mono); font-size: 0.85rem; color: #999; font-style: normal; }
-
-.complementary-stats {
-    display: flex;
-    justify-content: center;
-    gap: 4rem;
-    margin-top: 4rem;
-    padding: 3rem 2rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.15);
-}
-.stat-item   { text-align: center; color: white; }
-.stat-number { font-family: var(--font-mono); font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,.2); }
-.stat-label  { font-size: 1rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; opacity: 0.95; }
-
-/* Category color overrides */
-.complementary-category:nth-child(2) .category-header  { border-bottom-color: #2980b9; }
-.complementary-category:nth-child(2) .complementary-item { border-left-color: #2980b9; }
-.complementary-category:nth-child(2) .item-icon          { color: #2980b9; }
-.complementary-category:nth-child(3) .category-header  { border-bottom-color: #e74c3c; }
-.complementary-category:nth-child(3) .complementary-item { border-left-color: #e74c3c; }
-.complementary-category:nth-child(3) .item-icon          { color: #e74c3c; }
-.complementary-category:nth-child(4) .category-header  { border-bottom-color: #27ae60; }
-.complementary-category:nth-child(4) .complementary-item { border-left-color: #27ae60; }
-.complementary-category:nth-child(4) .item-icon          { color: #27ae60; }
-.complementary-category:nth-child(5) .category-header  { border-bottom-color: #9b59b6; }
-.complementary-category:nth-child(5) .complementary-item { border-left-color: #9b59b6; }
-.complementary-category:nth-child(5) .item-icon          { color: #9b59b6; }
-.complementary-category:nth-child(6) .category-header  { border-bottom-color: #f39c12; }
-.complementary-category:nth-child(6) .complementary-item { border-left-color: #f39c12; }
-.complementary-category:nth-child(6) .item-icon          { color: #f39c12; }
-
-@media (max-width: 968px) {
-    .complementary-grid { grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 1.5rem; }
-    .category-header h4 { font-size: 1.3rem; }
-    .complementary-stats { gap: 2rem; flex-wrap: wrap; }
-    .stat-number { font-size: 2.5rem; }
-}
-@media (max-width: 768px) {
-    .timeline::before  { left: 20px; }
-    .timeline-marker   { left: 20px; }
-    .timeline-item     { flex-direction: column; align-items: flex-start; padding-left: 50px; }
-    .timeline-item:nth-child(even) { flex-direction: column; }
-    .timeline-content  { width: 100%; }
-    .stays-grid        { grid-template-columns: 1fr; }
-    .complementary-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-    .category-header   { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-    .category-header i { font-size: 1.5rem; }
-    .complementary-stats { gap: 2rem; padding: 2rem 1rem; }
-    .stat-number { font-size: 2rem; }
-    .stat-label  { font-size: 0.85rem; }
-}
-
-/* ============================================
-   CONFERENCES SECTION
-   ============================================ */
-.conferences { background: var(--bg-light); }
-.conferences-intro {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 3rem;
-    font-size: 1.1rem;
-    color: var(--text-light);
-}
-.conferences-timeline { max-width: 1100px; margin: 0 auto; }
-.conference-year-group { margin-bottom: 3rem; }
-.year-title {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    color: var(--primary-color);
-    text-align: center;
-    margin-bottom: 2rem;
-    position: relative;
-    padding-bottom: 1rem;
-}
-.year-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 3px;
-    background: var(--secondary-color);
-}
-.conference-item {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    background: white;
-    padding: 1.5rem;
-    border-radius: 14px;
-    border-left: 4px solid var(--secondary-color);
-    box-shadow: var(--shadow-sm);
-    transition: all 0.3s ease;
-}
-.conference-item:hover { box-shadow: var(--shadow-md); transform: translateX(5px); }
-.conference-date    { font-family: var(--font-mono); min-width: 150px; font-weight: 600; color: var(--secondary-color); font-size: 0.95rem; }
-.conference-content { flex: 1; }
-.conference-content h4 { font-size: 1.2rem; color: var(--primary-color); margin-bottom: 0.5rem; }
-.conference-event   { font-style: italic; color: var(--text-dark); margin-bottom: 0.3rem; }
-.conference-location { color: var(--text-light); font-size: 0.9rem; margin-bottom: 0.8rem; }
-.conference-location i { margin-right: 0.3rem; }
-.conference-badge {
-    display: inline-block;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-top: 0.5rem;
-}
-.conference-badge.ponente-magistral { background: #fdf3df; color: #8a6a10; border: 1px solid var(--gold); }
-.conference-badge.ponente           { background: #dbeafe; color: #1e40af; border: 1px solid #3b82f6; }
-.conference-badge.organizador       { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
-.conference-badge.asistente         { background: #f3e8ff; color: #6b21a8; border: 1px solid #a855f7; }
-
-@media (max-width: 768px) {
-    .conference-item { flex-direction: column; gap: 1rem; }
-    .conference-date { min-width: auto; }
-}
-
-/* ============================================
-   EDUCATIONAL RESOURCES SECTION
-   ============================================ */
-.resources { background: var(--bg-white); }
-.resources-intro {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 3rem;
-    font-size: 1.1rem;
-    color: var(--text-light);
-}
-.resource-section {
-    margin-bottom: 4rem;
-    background: var(--bg-light);
-    padding: 3rem;
-    border-radius: 14px;
-}
-.resource-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-.resource-header i  { font-size: 2.5rem; color: var(--secondary-color); }
-.resource-header h3 { font-family: var(--font-display); font-size: 1.8rem; color: var(--primary-color); margin: 0; }
-.resource-description { color: var(--text-light); margin-bottom: 2rem; line-height: 1.7; }
-
-.videos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-.video-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.3s ease; }
-.video-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-.video-thumbnail { width: 100%; height: 200px; overflow: hidden; }
-.video-thumbnail iframe { width: 100%; height: 100%; }
-.video-info { padding: 1.5rem; }
-.video-info h4 { font-size: 1.1rem; color: var(--primary-color); margin-bottom: 0.5rem; }
-.video-info p  { color: var(--text-light); font-size: 0.9rem; }
-.video-cta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    text-align: center;
-    height: 100%;
-    background: white;
-}
-.video-cta h4 { font-size: 1.2rem; color: var(--primary-color); margin-bottom: 0.5rem; }
-.video-cta p  { color: var(--text-light); margin-bottom: 1.5rem; }
-.video-link { display: inline-block; margin-top: 0.5rem; color: var(--primary-color); text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; }
-.video-link:hover { color: var(--secondary-color); }
-.video-link i { font-size: 0.8rem; margin-left: 0.25rem; }
-
-.guides-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-.guide-card { background: white; padding: 2rem; border-radius: 14px; text-align: center; box-shadow: var(--shadow-md); transition: all 0.3s ease; }
-.guide-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-.guide-card i  { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem; }
-.guide-card h4 { font-size: 1.1rem; color: var(--primary-color); margin-bottom: 0.8rem; }
-.guide-card p  { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem; }
-.coming-soon { display: inline-block; background: #fef3c7; color: #92400e; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
-
-.github-repo-cta { text-align: center; margin-top: 2rem; padding: 2rem; background: white; border-radius: 14px; border: 2px dashed var(--border-color); }
-.github-repo-cta p { margin-bottom: 1rem; color: var(--text-light); }
-.github-repo-cta i { color: var(--secondary-color); margin-right: 0.5rem; }
-
-.tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-.tool-card { background: white; padding: 2rem; border-radius: 14px; box-shadow: var(--shadow-md); transition: all 0.3s ease; text-align: center; }
-.tool-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-.tool-card i  { font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem; }
-.tool-card h4 { font-size: 1.2rem; color: var(--primary-color); margin-bottom: 0.8rem; }
-.tool-card p  { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem; }
-.tool-link { display: inline-block; color: var(--secondary-color); text-decoration: none; font-weight: 600; transition: all 0.3s ease; }
-.tool-link:hover { color: var(--primary-color); }
-.tool-link i { margin-left: 0.3rem; font-size: 0.9rem; }
-
-@media (max-width: 768px) {
-    .videos-grid, .guides-grid, .tools-grid { grid-template-columns: 1fr; }
-    .resource-section { padding: 2rem 1rem; }
-}
-@media (max-width: 480px) {
-    .resource-header { flex-direction: column; text-align: center; }
-    .resource-header h3 { font-size: 1.5rem; }
-}
-
-/* ============================================
-   RECURSOS EDUCATIVOS DIGITALES
-   ============================================ */
-.digital-resources { background: var(--bg-light); }
-
-.digital-grid{
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.6rem;
-    flex-direction: unset;
-    max-width: none;
-}
-.digital-card{
-    background: var(--bg-white);
-    border: 1.5px solid var(--border-color);
-    border-radius: 14px;
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    overflow: hidden;
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-/* El glow real se reserva para OMAI: tu contenido más fuerte */
-.digital-card:hover { box-shadow: var(--shadow-glow); transform: translateY(-6px); }
-
-.digital-card-header{
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    padding: 1.1rem 1.3rem 0.9rem;
-    margin-bottom: 0;
-    border-bottom: 1px solid var(--border-color);
-}
-.digital-icon{
-    width: 44px;
-    height: 44px;
-    font-size: 1.3rem;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--primary-color), var(--wine));
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-.digital-card-header h3 { font-family: var(--font-display); font-size: 1rem; color: var(--primary-color); margin-bottom: 4px; }
-
-.topic-tag {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--secondary-color);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
-.new-badge{
-    align-self: center;
-    margin-left: auto;
-    background: #fdf3df;
-    color: #8a6a10;
-    border: 1px solid var(--gold);
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 20px;
-    flex-shrink: 0;
-}
-
-.digital-desc{
-    padding: 0 1.3rem;
-    margin-top: 0.9rem;
-    margin-bottom: 0;
-    font-size: 0.85rem;
-    color: var(--text-dark);
-    line-height: 1.7;
-}
-.digital-tags{
-    display: flex; flex-wrap: wrap; gap: 0.5rem;
-    padding: 0 1.3rem;
-    margin-top: 0.7rem;
-    margin-bottom: 1.2rem;
-}
-.digital-tags span{
-    font-size: 0.7rem;
-    background: var(--bg-light);
-    border: 1px solid var(--border-color);
-    color: var(--text-light);
-    padding: 3px 10px;
-    border-radius: 20px;
-}
-
-.digital-preview{
-    width: calc(100% - 2.6rem);
-    margin: 1rem 1.3rem 0;
-    height: 158px;
-    overflow: hidden;
-    border-radius: 10px;
-    position: relative;
-    background: #0f172a;
-    border: 1px solid rgba(255,255,255,0.08);
-}
-.digital-preview iframe{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1200px;
-    height: 640px;
-    transform: scale(0.283);
-    transform-origin: top left;
-    border: none;
-    pointer-events: none;
-}
-.digital-preview::after{
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 65%, rgba(15,23,42,0.55));
-    pointer-events: none;
-    border-radius: 10px;
-}
-.digital-card:hover .digital-preview{
-    border-color: rgba(255,255,255,0.16);
-}
-
-.digital-btn{
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.6rem 1.4rem;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 0.88rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-    margin: 1.1rem 1.3rem 1.3rem;
-    width: calc(100% - 2.6rem);
-}
-.digital-btn:hover { background: var(--secondary-color); transform: translateY(-1px); }
-
-.resource-frame{
-    margin: 0 1.3rem 1.3rem;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    animation: slideDown 0.25s ease;
-}
-
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.resource-frame iframe { display: block; width: 100%; }
-
-.open-full {
-    font-size: 0.75rem;
-    display: block;
-    text-align: right;
-    padding: 6px 14px;
-    color: var(--secondary-color);
-    text-decoration: none;
-    background: var(--bg-light);
-    border-top: 1px solid var(--border-color);
-    transition: background 0.2s;
-}
-.open-full:hover { background: var(--accent-color); }
-
-.digital-card.expanded{
-    grid-column: 1 / -1 !important;
-    max-width: none !important;
-    width: 100% !important;
-}
-.digital-card.expanded .digital-preview{ display: none; }
-.digital-card.expanded .resource-frame{
-    margin: 0 auto 1.3rem !important;
-    max-width: 1500px !important;
-    width: calc(100% - 2.6rem) !important;
-}
-.digital-card.expanded .resource-frame iframe{
-    width: 100% !important;
-    height: 82vh !important;
-    min-height: 640px;
-    max-height: 900px;
-}
-.digital-card.expanded .open-full{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 0.9rem;
-    padding: 0.85rem 1.2rem;
-    background: var(--primary-color);
-    color: #fff;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: opacity .15s;
-}
-.digital-card.expanded .open-full:hover{ opacity: 0.85; }
-
-@media (max-width: 640px){
-    .digital-grid{ grid-template-columns: 1fr; }
-}
-
-.observatorio-header{
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
-    margin: 2.4rem 0 0.6rem;
-    padding-top: 1.6rem;
-    border-top: 1px solid var(--border-color);
-}
-.observatorio-header .obs-icon{
-    width: 48px; height: 48px;
-    flex: 0 0 auto;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 12px;
-    font-size: 1.4rem;
-    background: linear-gradient(135deg, #1e293b, #0f172a);
-    color: var(--gold-bright);
-}
-.observatorio-header h3{ font-family: var(--font-display); font-size: 1.35rem; margin: 0 0 0.2rem; }
-.observatorio-header p{ margin: 0; font-size: 0.9rem; color: var(--text-light); }
-.category-group{ margin-top: 1.8rem; }
-.category-group h4{
-    font-size: 0.78rem;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin: 0 0 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--primary-color);
-    display: inline-block;
-}
-
-@media (max-width: 640px) {
-    .digital-card { padding: 1.4rem; }
-    .digital-icon { width: 42px; height: 42px; font-size: 1.4rem; }
-    .digital-card-header h3 { font-size: 1.05rem; }
-    .resource-frame iframe { height: 420px; }
-}
+    </script>
+</body>
+</html>
