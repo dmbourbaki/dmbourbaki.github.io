@@ -21,177 +21,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* ===== Recursos Educativos Digitales — grid estilo Red LAC ===== */
-        .digital-grid{
-            display: grid !important;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1.6rem;
-            flex-direction: unset;
-            max-width: none;
-        }
-        .digital-card{
-            display: flex;
-            flex-direction: column;
-            padding: 0;
-            overflow: hidden;
-        }
-        .digital-card-header{
-            padding: 1.1rem 1.3rem 0.9rem;
-            margin-bottom: 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .digital-icon{
-            width: 44px;
-            height: 44px;
-            font-size: 1.3rem;
-            border-radius: 10px;
-        }
-        .digital-card-header h3{ font-size: 1rem; }
-        .new-badge{ align-self: center; }
-
-        .digital-desc{
-            padding: 0 1.3rem;
-            margin-top: 0.9rem;
-            margin-bottom: 0;
-            font-size: 0.85rem;
-        }
-        .digital-tags{
-            padding: 0 1.3rem;
-            margin-top: 0.7rem;
-            margin-bottom: 0;
-        }
-        .digital-tags span{ font-size: 0.7rem; }
-
-        /* Miniatura en vivo, tamaño compacto tipo tarjeta de cuadrícula */
-        .digital-preview{
-            width: calc(100% - 2.6rem);
-            margin: 1rem 1.3rem 0;
-            height: 158px;
-            overflow: hidden;
-            border-radius: 10px;
-            position: relative;
-            background: #0f172a;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .digital-preview iframe{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 1200px;
-            height: 640px;
-            transform: scale(0.283);
-            transform-origin: top left;
-            border: none;
-            pointer-events: none;
-        }
-        .digital-preview::after{
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, transparent 65%, rgba(15,23,42,0.55));
-            pointer-events: none;
-            border-radius: 10px;
-        }
-        .digital-card:hover .digital-preview{
-            border-color: rgba(255,255,255,0.16);
-        }
-
-        .digital-btn{
-            margin: 1.1rem 1.3rem 1.3rem;
-            width: calc(100% - 2.6rem);
-        }
-        .resource-frame{
-            margin: 0 1.3rem 1.3rem;
-            border-radius: 10px;
-        }
-        .open-full{ font-size: 0.75rem; }
-
-        /* Cuando se abre una visualización, la tarjeta ocupa todo el ancho de la fila */
-        .digital-card.expanded{
-            grid-column: 1 / -1 !important;
-            max-width: none !important;
-            width: 100% !important;
-        }
-        .digital-card.expanded .digital-preview{
-            display: none;
-        }
-        .digital-card.expanded .resource-frame{
-            margin: 0 auto 1.3rem !important;
-            max-width: 1500px !important;
-            width: calc(100% - 2.6rem) !important;
-        }
-        .digital-card.expanded .resource-frame iframe{
-            width: 100% !important;
-            height: 82vh !important;
-            min-height: 640px;
-            max-height: 900px;
-        }
-        .digital-card.expanded .open-full{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 0.9rem;
-            padding: 0.85rem 1.2rem;
-            background: var(--primary-color, #1e293b);
-            color: #fff;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: opacity .15s;
-        }
-        .digital-card.expanded .open-full:hover{
-            opacity: 0.85;
-        }
-
-        @media (max-width: 640px){
-            .digital-grid{ grid-template-columns: 1fr; }
-        }
-
-        /* ===== Subcolección: Observatorio de Matemáticas Avanzadas para Ingeniería ===== */
-        .observatorio-header{
-            display: flex;
-            align-items: center;
-            gap: 0.9rem;
-            margin: 2.4rem 0 0.6rem;
-            padding-top: 1.6rem;
-            border-top: 1px solid var(--border-color);
-        }
-        .observatorio-header .obs-icon{
-            width: 48px; height: 48px;
-            flex: 0 0 auto;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 12px;
-            font-size: 1.4rem;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: #f2b417;
-        }
-        .observatorio-header h3{
-            font-size: 1.35rem;
-            margin: 0 0 0.2rem;
-        }
-        .observatorio-header p{
-            margin: 0;
-            font-size: 0.9rem;
-            color: var(--text-light, #666);
-        }
-        .category-group{
-            margin-top: 1.8rem;
-        }
-        .category-group h4{
-            font-size: 0.78rem;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            font-weight: 600;
-            color: var(--primary-color, #1e293b);
-            margin: 0 0 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--primary-color, #1e293b);
-            display: inline-block;
-        }
-</style>
 </head>
 <body>
     <nav class="navbar" id="navbar">
@@ -655,7 +484,6 @@
                 <p>Visualizaciones interactivas para el aprendizaje de matemáticas, desarrolladas bajo el <strong>Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI)</strong> — un proyecto propio de Daniel Steven Moran Pizarro. Funcionan directamente en el navegador, sin instalación.</p>
             </div>
 
-            <!-- ---- Subcolección: Observatorio de Matemáticas Avanzadas para Ingeniería ---- -->
             <div class="observatorio-header">
                 <div class="obs-icon">🔭</div>
                 <div>
@@ -668,7 +496,6 @@
                 <h4>Ecuaciones Diferenciales</h4>
                 <div class="digital-grid">
 
-                    <!-- Simulador de Campo de Direcciones -->
                     <div class="digital-card" id="card-campo">
                         <div class="digital-card-header">
                             <div class="digital-icon">∂y/∂x</div>
@@ -695,7 +522,6 @@
                         </div>
                     </div>
 
-                    <!-- Simulador Sistema Masa-Resorte -->
                     <div class="digital-card" id="card-masa">
                         <div class="digital-card-header">
                             <div class="digital-icon">∂²</div>
@@ -722,7 +548,6 @@
                         </div>
                     </div>
 
-                    <!-- Simulador Circuito RLC -->
                     <div class="digital-card" id="card-rlc">
                         <div class="digital-card-header">
                             <div class="digital-icon">⚡</div>
@@ -749,7 +574,6 @@
                         </div>
                     </div>
 
-                    <!-- Simulador Péndulo Simple -->
                     <div class="digital-card" id="card-pendulo">
                         <div class="digital-card-header">
                             <div class="digital-icon">θ″</div>
@@ -776,7 +600,6 @@
                         </div>
                     </div>
 
-                    <!-- Simulador de Respuesta de Segundo Orden -->
                     <div class="digital-card" id="card-edo2">
                         <div class="digital-card-header">
                             <div class="digital-icon">y″</div>
@@ -810,7 +633,6 @@
                 <h4>Cálculo Integral</h4>
                 <div class="digital-grid">
 
-                    <!-- Simulador de Sólidos de Revolución -->
                     <div class="digital-card" id="card-solidos">
                         <div class="digital-card-header">
                             <div class="digital-icon">∮</div>
@@ -837,7 +659,6 @@
                         </div>
                     </div>
 
-                    <!-- Simulador de Sumas de Riemann -->
                     <div class="digital-card" id="card-riemann">
                         <div class="digital-card-header">
                             <div class="digital-icon">∑</div>
@@ -864,7 +685,6 @@
                         </div>
                     </div>
 
-                    <!-- Simulador de Series de Taylor -->
                     <div class="digital-card" id="card-taylor">
                         <div class="digital-card-header">
                             <div class="digital-icon">Σ</div>
@@ -898,7 +718,6 @@
                 <h4>Cálculo Multivariable</h4>
                 <div class="digital-grid">
 
-                    <!-- Simulador de Multiplicadores de Lagrange -->
                     <div class="digital-card" id="card-lagrange">
                         <div class="digital-card-header">
                             <div class="digital-icon">λ</div>
@@ -924,7 +743,6 @@
                         </div>
                     </div>
 
-                    <!-- Simulador de Integrales Dobles -->
                     <div class="digital-card" id="card-integrales">
                         <div class="digital-card-header">
                             <div class="digital-icon">∬</div>
@@ -958,7 +776,6 @@
                 <h4>Matemáticas Especiales</h4>
                 <div class="digital-grid">
 
-                    <!-- Simulador de Transformaciones Lineales -->
                     <div class="digital-card" id="card-tl">
                         <div class="digital-card-header">
                             <div class="digital-icon">T</div>
@@ -985,7 +802,6 @@
                         </div>
                     </div>
 
-                    <!-- Simulador de Grupos de Simetría -->
                     <div class="digital-card" id="card-simetria">
                         <div class="digital-card-header">
                             <div class="digital-icon">🔷</div>
@@ -1012,7 +828,6 @@
                         </div>
                     </div>
 
-                    <!-- Simulador de Raíces de Polinomios -->
                     <div class="digital-card" id="card-raices">
                         <div class="digital-card-header">
                             <div class="digital-icon">ℂ</div>
@@ -1039,7 +854,6 @@
                         </div>
                     </div>
 
-                    <!-- Simulador de Series de Fourier -->
                     <div class="digital-card" id="card-fourier">
                         <div class="digital-card-header">
                             <div class="digital-icon">∿</div>
@@ -1077,13 +891,7 @@
 
         </div>
     </section>
-    <!-- ══════════════════════════════════════════════
-         FIN RECURSOS EDUCATIVOS DIGITALES (OMAI)
-    ══════════════════════════════════════════════ -->
 
-    <!-- ══════════════════════════════════════════════
-         OTROS SIMULADORES (fuera de la marca OMAI)
-    ══════════════════════════════════════════════ -->
     <section id="otros-simuladores" class="section digital-resources">
         <div class="container">
             <h2 class="section-title">Otros Simuladores</h2>
@@ -1094,7 +902,6 @@
             <div class="category-group" id="cat-otros-simuladores">
                 <div class="digital-grid">
 
-                    <!-- Elementos de Euclides — Libro I -->
                     <div class="digital-card" id="card-euclides">
                         <div class="digital-card-header">
                             <div class="digital-icon">📐</div>
@@ -1127,9 +934,6 @@
 
         </div>
     </section>
-    <!-- ══════════════════════════════════════════════
-         FIN OTROS SIMULADORES
-    ══════════════════════════════════════════════ -->
 
     <section id="contacto" class="section contact">
         <div class="container">
@@ -1169,13 +973,20 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.</p>
-                <p style="font-size:0.8rem; opacity:0.75; margin-top:0.3rem;">Incluye el Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI), proyecto original del autor. Prohibida su reproducción o redistribución sin autorización.</p>
+                <p>&copy; 2026 Daniel Steven Moran Pizarro · <a href="LICENSE.md" style="color:inherit;text-decoration:underline;">Términos de uso</a></p>
                 <p>Hecho con <i class="fas fa-heart"></i> para la comunidad académica</p>
+                <p id="contador-visitas" style="font-size:0.75rem; opacity:0.6; margin-top:0.4rem;"></p>
             </div>
         </div>
     </footer>
 
+    <script data-goatcounter="https://TUCODIGO.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script>
+      fetch('https://TUCODIGO.goatcounter.com/counter/TOTAL.json')
+        .then(r => r.json())
+        .then(d => { const el = document.getElementById('contador-visitas'); if (el) el.textContent = 'Visitas: ' + d.count; })
+        .catch(() => {});
+    </script>
     <script src="script.js"></script>
     <script>
     function toggleObservatorioResource(id) {
