@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  © 2026 Daniel Steven Moran Pizarro Todos los derechos reservados.
+  © 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.
   Incluye el Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI),
   proyecto original del autor.
   https://dmbourbaki.github.io/
@@ -976,6 +976,7 @@
                 <p>&copy; 2026 Daniel Steven Moran Pizarro · <a href="LICENSE.md" style="color:inherit;text-decoration:underline;">Términos de uso</a></p>
                 <p>Hecho con <i class="fas fa-heart"></i> para la comunidad académica</p>
                 <p id="contador-visitas" style="font-size:0.75rem; opacity:0.6; margin-top:0.4rem;"></p>
+                <p id="ultima-actualizacion" style="font-size:0.75rem; opacity:0.6; margin-top:0.2rem;">Verificando última actualización…</p>
             </div>
         </div>
     </footer>
@@ -986,6 +987,22 @@
         .then(r => r.json())
         .then(d => { const el = document.getElementById('contador-visitas'); if (el) el.textContent = 'Visitas: ' + d.count; })
         .catch(() => {});
+    </script>
+    <script>
+      fetch('https://api.github.com/repos/dmbourbaki/dmbourbaki.github.io/commits?per_page=1')
+        .then(r => r.json())
+        .then(data => {
+          const el = document.getElementById('ultima-actualizacion');
+          if (!el) return;
+          if (Array.isArray(data) && data[0] && data[0].commit) {
+            const fecha = new Date(data[0].commit.author.date);
+            const texto = fecha.toLocaleString('es-CO', { dateStyle: 'medium', timeStyle: 'short' });
+            el.textContent = 'Última actualización: ' + texto;
+          } else {
+            el.textContent = '';
+          }
+        })
+        .catch(() => { const el = document.getElementById('ultima-actualizacion'); if (el) el.textContent = ''; });
     </script>
     <script src="script.js"></script>
     <script>
