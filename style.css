@@ -978,9 +978,65 @@ body {
 }
 
 /* ============================================
-   FORMATION SECTION
+   IDENTIDAD POR SECCIÓN — cada sección tiene su
+   propio acento, no es la misma tarjeta repetida
    ============================================ */
+.section-kicker {
+    display: block;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--wine);
+    margin-bottom: 0.6rem;
+}
+.section-kicker--light { color: var(--gold-bright); }
+
+.section-glyph {
+    display: block;
+    width: 140px;
+    height: auto;
+    margin: 0.5rem auto 1.8rem;
+    opacity: 0.85;
+}
+
+/* Formación: papel cálido con línea de tiempo vino (ya definida abajo) */
 .formation { background: var(--bg-white); }
+
+/* Publicaciones: fondo gris cálido, tarjetas más "de archivo" */
+.publications { background: var(--bg-light); }
+.publication-item { border-left: 3px solid var(--wine); }
+
+/* Conferencias: banda distinta, cálida, con acentos dorados */
+.conferences { background: linear-gradient(180deg, var(--bg-white) 0%, var(--bg-light) 100%); }
+
+/* Docencia: fondo blanco puro, cursos con acento vino (ya aplicado) */
+.teaching { background: var(--bg-white); }
+
+/* Recursos (videos/guías/código): banda gris oscura tipo "laboratorio" */
+.resources {
+    background: var(--primary-deep);
+    color: rgba(255,255,255,0.92);
+}
+.resources .section-title {
+    background: linear-gradient(100deg, var(--gold-bright) 20%, #fff 55%, var(--gold-bright) 90%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.resources .resources-intro, .resources .resource-description { color: rgba(255,255,255,0.65); }
+.resources .resource-section { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+.resources .video-card, .resources .guide-card, .resources .tool-card, .resources .video-cta { background: var(--bg-white); }
+.resources .github-repo-cta { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.15); }
+.resources .github-repo-cta p { color: rgba(255,255,255,0.7); }
+
+/* Contacto: vuelve al papel cálido, con el sobre dibujado arriba */
+.contact { background: var(--bg-light); }
+
+@media (max-width: 640px) {
+    .section-glyph { width: 110px; }
+}
+
 
 .timeline {
     position: relative;
