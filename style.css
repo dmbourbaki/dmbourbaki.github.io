@@ -433,35 +433,6 @@ body {
     color: var(--heading-color);
 }
 
-.profile-metrics {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-    margin: 2.5rem 0;
-    padding: 2rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-deep));
-    border-radius: 16px;
-}
-.metric { text-align: center; color: white; }
-.metric-number {
-    display: block;
-    font-family: var(--font-display);
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: var(--gold-bright);
-}
-.metric-label {
-    display: block;
-    font-size: 0.78rem;
-    color: rgba(255,255,255,0.7);
-    margin-top: 0.3rem;
-    letter-spacing: 0.02em;
-}
-@media (max-width: 640px) {
-    .profile-metrics { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; padding: 1.5rem; }
-    .metric-number { font-size: 1.7rem; }
-}
-
 .expertise {
     margin-top: 3rem;
 }
@@ -1073,19 +1044,6 @@ body {
    IDENTIDAD POR SECCIÓN — cada sección tiene su
    propio acento, no es la misma tarjeta repetida
    ============================================ */
-.section-kicker {
-    display: block;
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--wine);
-    margin-bottom: 0.9rem;
-    opacity: 0.85;
-}
-.section-kicker--light { color: var(--gold-bright); }
 
 /* Formación: papel cálido con línea de tiempo vino (ya definida abajo) */
 #formacion.formation {
