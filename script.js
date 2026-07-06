@@ -68,6 +68,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.addEventListener('scroll', highlightNavigation);
     highlightNavigation();
+
+    // Barra de progreso de lectura
+    const progressBar = document.getElementById('reading-progress');
+    if (progressBar) {
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            progressBar.style.width = pct + '%';
+        });
+    }
 });
 
 // Publication filters
@@ -153,33 +164,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Intersection Observer for animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe elements for animation
+// Aparición suave de secciones al hacer scroll (equivalente ligero a
+// AOS.js, sin dependencia externa — un <script src=cdn> menos que pueda
+// fallar en GitHub Pages)
 document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll(
-        '.expertise-item, .research-card, .course-card, .publication-item, .contact-item'
+    const revealables = document.querySelectorAll(
+        '.expertise-item, .research-card, .course-card, .publication-item, .contact-item, .digital-card, .conference-item, .timeline-content, .stay-card'
     );
+    revealables.forEach(el => el.classList.add('reveal'));
 
-    animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('reveal-visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealables.forEach(el => revealObserver.observe(el));
 });
 
 // Add loading animation for page
@@ -211,5 +214,5 @@ if ('loading' in HTMLImageElement.prototype) {
 }
 
 // Console message
-console.log('%c¡Bienvenido a mi sitio web académico! 🎓', 'color: #3b82f6; font-size: 20px; font-weight: bold;');
+console.log('%c¡Bienvenido al Observatorio de Matemáticas Avanzadas para Ingeniería! 🎓', 'color: #6e1f2f; font-size: 20px; font-weight: bold;');
 console.log('%cDesarrollado con ❤️ para la comunidad académica', 'color: #6b7280; font-size: 14px;');
