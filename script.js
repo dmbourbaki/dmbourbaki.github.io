@@ -164,33 +164,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Contadores animados en "Sobre Mí" — se activan al entrar en pantalla
-document.addEventListener('DOMContentLoaded', () => {
-    const counters = document.querySelectorAll('.metric-number');
-    if (!counters.length) return;
-    const animateCount = (el) => {
-        const target = parseInt(el.getAttribute('data-count'), 10) || 0;
-        const duration = 1200;
-        const start = performance.now();
-        function step(now) {
-            const progress = Math.min((now - start) / duration, 1);
-            el.textContent = Math.floor(progress * target);
-            if (progress < 1) requestAnimationFrame(step);
-            else el.textContent = target;
-        }
-        requestAnimationFrame(step);
-    };
-    const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateCount(entry.target);
-                counterObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-    counters.forEach(c => counterObserver.observe(c));
-});
-
 // Aparición suave de secciones al hacer scroll (equivalente ligero a
 // AOS.js, sin dependencia externa — un <script src=cdn> menos que pueda
 // fallar en GitHub Pages)
