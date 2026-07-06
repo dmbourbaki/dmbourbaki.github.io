@@ -306,8 +306,8 @@ body {
 }
 
 .btn-primary {
-    background: var(--bg-white);
-    color: var(--heading-color);
+    background: #fff;
+    color: var(--primary-deep);
 }
 
 .btn-primary:hover {
@@ -325,8 +325,8 @@ body {
 }
 
 .btn-secondary:hover {
-    background: var(--bg-white);
-    color: var(--heading-color);
+    background: #fff;
+    color: var(--primary-deep);
     transform: translateY(-2px);
 }
 
