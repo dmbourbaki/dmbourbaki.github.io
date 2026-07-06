@@ -1086,7 +1086,14 @@ body {
 .section-kicker--light { color: var(--gold-bright); }
 
 /* Formación: papel cálido con línea de tiempo vino (ya definida abajo) */
-.formation { background: var(--bg-white); }
+.formation {
+    background:
+        radial-gradient(circle at 15% 20%, rgba(110, 31, 47, 0.05), transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(28, 36, 48, 0.05), transparent 45%),
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(28,36,48,0.035) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(28,36,48,0.035) 40px),
+        var(--bg-white);
+}
 
 /* Publicaciones: fondo gris cálido, tarjetas más "de archivo" */
 .publications { background: var(--bg-light); }
@@ -1157,15 +1164,37 @@ body {
     box-shadow: 0 0 0 4px var(--accent-color);
     z-index: 10;
 }
+.timeline-marker::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(200, 164, 99, 0.5);
+    animation: nodePulse 3s ease-out infinite;
+}
+@keyframes nodePulse {
+    0%   { transform: scale(0.8); opacity: 0.7; }
+    100% { transform: scale(1.7); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .timeline-marker::after { animation: none; display: none; }
+}
 .timeline-content {
     width: 45%;
-    background: var(--bg-light);
+    background: rgba(255, 253, 250, 0.65);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
     padding: 2rem;
-    border-radius: 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(200, 164, 99, 0.25);
     box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
 }
-.timeline-content:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.timeline-content:hover {
+    box-shadow: 0 16px 36px -10px rgba(110, 31, 47, 0.25), 0 0 0 1px rgba(200, 164, 99, 0.4);
+    transform: translateY(-4px);
+    border-color: rgba(200, 164, 99, 0.5);
+}
 .timeline-date {
     font-family: var(--font-mono);
     display: inline-block;
@@ -1194,14 +1223,20 @@ body {
     margin-top: 2rem;
 }
 .stay-card {
-    background: var(--bg-light);
+    background: rgba(255, 253, 250, 0.65);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
     padding: 2rem;
-    border-radius: 14px;
-    border-left: 4px solid var(--secondary-color);
+    border-radius: 16px;
+    border: 1px solid rgba(200, 164, 99, 0.25);
+    border-left: 3px solid var(--wine);
     box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
 }
-.stay-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.stay-card:hover {
+    box-shadow: 0 16px 36px -10px rgba(110, 31, 47, 0.25), 0 0 0 1px rgba(200, 164, 99, 0.4);
+    transform: translateY(-4px);
+}
 .stay-date {
     font-family: var(--font-mono);
     display: inline-block;
