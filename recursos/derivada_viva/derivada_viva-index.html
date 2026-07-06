@@ -1,149 +1,314 @@
 <!DOCTYPE html>
+<!--
+  © 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.
+  Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI)
+  https://dmbourbaki.github.io/
+
+  Queda prohibida la reproducción, distribución o modificación total
+  o parcial de este código sin autorización previa y por escrito del
+  autor. Contacto: dmbourbaki@gmail.com
+-->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Derivada Viva · OMAI</title>
-<meta name="description" content="Simulador interactivo OMAI: dibuja una función, su derivada o su segunda derivada con el trazo del mouse y observa cómo se reconstruyen las otras dos en tiempo real.">
+<title>Simulador Derivada Viva · Observatorio de Matemáticas Avanzadas para Ingeniería</title>
+<meta name="description" content="Simulador interactivo de cálculo diferencial: construye f(x) con figuras elementales (rectas, parábolas, arcos) o trazo libre, y observa f'(x) y f''(x) reconstruidas en vivo, con ecuaciones en LaTeX.">
+<meta name="author" content="Daniel Steven Moran Pizarro — Observatorio de Matemáticas Avanzadas para Ingeniería">
+<meta name="copyright" content="© 2026 Daniel Steven Moran Pizarro. Todos los derechos reservados.">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --navy:#14213d;
-    --bg:#0d1526;
-    --bg-radial:#1a2847;
-    --gold:#b8862f;
-    --gold-light:#d9a94f;
-    --cream:#f3d896;
-    --accent-blue:#7fb0e6;
-    --text:#eef1f7;
-    --muted:#9aa5bd;
-    --panel-bg:rgba(255,255,255,0.03);
-    --border:rgba(184,134,47,0.35);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    min-height:100vh;
-    background:radial-gradient(circle at 20% -10%, var(--bg-radial) 0%, var(--bg) 55%);
-    color:var(--text);
-    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
-    display:flex;flex-direction:column;align-items:center;
-    padding:32px 18px 22px;
-  }
-  header{text-align:center;max-width:840px;margin-bottom:26px;}
-  .eyebrow{
-    display:inline-block;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--gold-light);border:1px solid var(--border);padding:4px 14px;border-radius:999px;
-    margin-bottom:14px;background:rgba(184,134,47,0.08);
-  }
-  h1{
-    font-size:2.15rem;margin:0 0 10px;font-weight:700;
-    background:linear-gradient(90deg, var(--gold-light), var(--cream) 45%, var(--gold-light));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .subtitle{color:var(--muted);line-height:1.6;font-size:0.95rem;margin:0 auto;max-width:640px;}
-  .subtitle strong{color:var(--text);}
+:root{
+  --void:#070b16; --abyss:#0a1020; --deep:#0e1628; --panel:#111c33; --panel-2:#152138;
+  --line:#1f2e4a; --line-soft:#1a2740;
+  --ink:#eaf0ff; --ink-soft:#9fb0d0; --ink-faint:#5f7193; --ink-ghost:#3a4866;
 
-  main{width:100%;max-width:1180px;display:flex;flex-direction:column;align-items:center;}
+  --gold:#f2b417; --gold-bright:#ffd24a; --gold-deep:#c8901a;
+  --amber:#ff9a3c; --cyan:#34d6e8; --rose:#ff5d8f; --grass:#4fd98a; --violet:#9b7dff;
+  --good:#4fd98a; --bad:#ff5d8f;
 
-  .panels{display:flex;gap:18px;width:100%;flex-wrap:wrap;justify-content:center;}
-  .panel{
-    flex:1 1 320px;max-width:380px;
-    background:var(--panel-bg);border:1px solid var(--border);border-radius:14px;
-    padding:14px;position:relative;backdrop-filter:blur(6px);
-    transition:border-color .25s, box-shadow .25s;
-  }
-  .panel.is-master{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold), 0 10px 26px rgba(184,134,47,0.18);}
-  .panel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
-  .badge{font-weight:700;color:var(--gold-light);font-size:1.15rem;font-family:Georgia, 'Times New Roman', serif;}
-  .panel-status{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
-  canvas{
-    width:100%;height:250px;display:block;border-radius:8px;cursor:crosshair;
-    touch-action:none;background:rgba(0,0,0,0.2);
-  }
-  .hint{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-38%);
-    color:var(--muted);font-size:0.85rem;pointer-events:none;text-align:center;
-  }
-  .hint.hidden{display:none;}
+  --r-lg:18px; --r-md:12px; --r-sm:8px;
+  --shadow:0 24px 60px -22px rgba(0,0,0,.85);
+}
 
-  .controls{margin-top:22px;display:flex;gap:22px;align-items:center;flex-wrap:wrap;justify-content:center;}
-  button{
-    background:linear-gradient(135deg, var(--gold), #8f6a22);color:#1a1204;border:none;font-weight:600;
-    padding:10px 20px;border-radius:10px;cursor:pointer;letter-spacing:.02em;font-size:0.88rem;
-  }
-  button:hover{filter:brightness(1.1);}
-  button:active{filter:brightness(0.95);}
-  .toggle{font-size:0.85rem;color:var(--muted);display:flex;gap:7px;align-items:center;}
-  .toggle input{accent-color:var(--gold);}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(1200px 700px at 78% -8%, rgba(242,180,23,.10), transparent 55%),
+    radial-gradient(900px 600px at 8% 110%, rgba(52,214,232,.07), transparent 55%),
+    linear-gradient(180deg,var(--void),var(--abyss));
+  color:var(--ink);
+  font-family:'Inter Tight',system-ui,sans-serif;
+  min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.katex{font-size:1.02em}
 
-  .const-controls{display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:center;}
-  .const-controls > div{display:flex;flex-direction:column;align-items:center;gap:3px;}
-  .const-controls span{font-size:0.72rem;color:var(--muted);white-space:nowrap;}
-  .const-controls input[type=range]{accent-color:var(--gold);width:130px;}
+header{
+  position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;padding:20px clamp(18px,3.5vw,46px);
+  border-bottom:1px solid var(--line-soft);
+  background:linear-gradient(180deg, rgba(14,22,40,.65), rgba(14,22,40,0));
+  backdrop-filter:blur(8px);
+}
+.brand .titles{min-width:0}
+.eyebrow{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:3px}
+.brand h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(20px,2.4vw,30px);line-height:1.04;letter-spacing:-.01em}
+.brand h1 em{font-style:italic;color:var(--gold-bright)}
+.brand .sub{font-size:12.5px;color:var(--ink-faint);margin-top:4px}
+.header-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:'Spline Sans Mono',monospace;font-size:11px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:rgba(17,28,51,.6);color:var(--ink-soft);letter-spacing:.04em}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 10px var(--good)}
 
-  .note{
-    max-width:760px;text-align:center;color:var(--muted);font-size:0.82rem;margin-top:18px;
-    line-height:1.55;border-top:1px dashed var(--border);padding-top:14px;
-  }
-  .note.hidden{display:none;}
+.eqbar{position:relative;z-index:3;display:flex;align-items:stretch;gap:14px;flex-wrap:wrap;padding:16px clamp(18px,3.5vw,46px);border-bottom:1px solid var(--line-soft)}
+.eq-render-main{flex:1 1 320px;min-width:260px;display:flex;flex-direction:column;justify-content:center;padding:14px 22px;border:1px solid var(--line-soft);border-radius:var(--r-md);background:rgba(10,16,32,.5);overflow:hidden}
+.eq-render-main .rl{font-family:'Spline Sans Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
+.eq-render-main .mb-content{overflow-x:auto;padding-bottom:2px;font-size:1.05em;color:var(--ink)}
+.eq-render-main .mb-note{font-size:11px;color:var(--ink-faint);font-style:italic;line-height:1.5}
+.eq-full{flex:1 1 100%}
 
-  footer{margin-top:32px;color:var(--muted);font-size:0.74rem;text-align:center;}
+.workspace{position:relative;z-index:2;display:grid;grid-template-columns:290px minmax(0,1fr) 290px;gap:0;min-height:60vh}
+.rail{border-right:1px solid var(--line-soft);padding:22px clamp(14px,1.4vw,20px) 40px;display:flex;flex-direction:column;gap:22px}
+.rail.right{border-right:none;border-left:1px solid var(--line-soft)}
 
-  @media (max-width:720px){
-    h1{font-size:1.7rem;}
-    canvas{height:210px;}
-  }
+.section-h{display:flex;align-items:center;gap:10px;font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.section-h::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--gold);box-shadow:0 0 10px rgba(242,180,23,.6)}
+
+.tool-select{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.tool-btn{
+  display:flex;align-items:center;gap:10px;padding:9px 11px;cursor:pointer;text-align:left;
+  border:1px solid var(--line-soft);border-radius:var(--r-sm);background:rgba(17,28,51,.4);
+  color:var(--ink-soft);font-family:'Inter Tight';font-size:12.5px;font-weight:600;transition:all .15s;
+}
+.tool-btn svg{width:18px;height:18px;flex:0 0 auto;color:currentColor}
+.tool-btn:hover{border-color:var(--gold-deep);color:var(--ink);background:rgba(242,180,23,.06)}
+.tool-btn.active{border-color:var(--gold);color:var(--ink);background:rgba(242,180,23,.12);box-shadow:inset 3px 0 0 var(--gold)}
+
+.piece-list{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.piece-empty{font-size:11.5px;color:var(--ink-faint);font-style:italic;padding:6px 2px}
+.piece-item{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:8px 10px;border:1px solid var(--line-soft);border-radius:var(--r-sm);
+  background:rgba(17,28,51,.4);
+}
+.piece-item .pinfo{min-width:0;flex:1}
+.piece-item .ptype{font-family:'Spline Sans Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-deep)}
+.piece-item .pformula{font-size:12px;color:var(--ink-soft);overflow-x:auto}
+.piece-item .pformula .katex{font-size:.95em}
+.piece-del{
+  flex:0 0 auto;width:24px;height:24px;display:grid;place-items:center;cursor:pointer;
+  border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink-faint);
+  font-size:14px;line-height:1;transition:all .15s;
+}
+.piece-del:hover{border-color:var(--rose);color:var(--rose);background:rgba(255,93,143,.08)}
+
+.const-controls{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.const-controls .cfield{display:flex;flex-direction:column;gap:5px}
+.const-controls span{font-size:11.5px;color:var(--ink-soft)}
+.const-controls input[type=range]{width:100%;accent-color:var(--gold)}
+.const-empty{font-size:11.5px;color:var(--ink-faint);font-style:italic}
+
+.toggles{display:flex;flex-direction:column;gap:3px;margin-top:8px}
+.toggle{display:flex;align-items:center;gap:11px;padding:9px 8px;cursor:pointer;border-radius:var(--r-sm);transition:background .15s}
+.toggle:hover{background:rgba(255,255,255,.025)}
+.toggle .box{width:18px;height:18px;flex:0 0 auto;border-radius:5px;border:1.5px solid var(--line);background:var(--deep);display:grid;place-items:center;transition:all .18s}
+.toggle input{display:none}
+.toggle input:checked + .box{background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));border-color:var(--gold-bright)}
+.toggle .box svg{width:11px;height:11px;opacity:0;transform:scale(.4);transition:all .18s;color:#1a1300}
+.toggle input:checked + .box svg{opacity:1;transform:scale(1)}
+.toggle .tlab{font-size:12.5px;color:var(--ink-soft)}
+.toggle:hover .tlab{color:var(--ink)}
+
+.btn-ghost{width:100%;padding:10px;cursor:pointer;border:1px solid var(--line);border-radius:var(--r-sm);background:transparent;color:var(--ink-soft);font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;transition:all .18s}
+.btn-ghost:hover{border-color:var(--gold-deep);color:var(--ink);background:rgba(242,180,23,.05)}
+
+.stage{position:relative;display:flex;flex-direction:column;background:var(--void)}
+.panels3{display:flex;flex-direction:row;flex:1;min-height:520px}
+.subpanel{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--line-soft);min-width:0}
+.subpanel:last-child{border-right:none}
+.domain-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 14px;border-bottom:1px solid var(--line-soft);background:rgba(10,16,32,.55)}
+.domain-tag{display:flex;align-items:center;gap:8px;font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.1em}
+.domain-tag .dotc{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.domain-status{font-family:'Spline Sans Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+.tool-row{display:flex;gap:6px;padding:9px 14px;border-bottom:1px solid var(--line-soft);background:rgba(10,16,32,.35);flex-wrap:wrap}
+.tool-row .tbtn{
+  padding:6px 10px;font-size:10.5px;font-family:'Spline Sans Mono',monospace;letter-spacing:.05em;
+  border:1px solid var(--line-soft);border-radius:6px;background:rgba(17,28,51,.5);color:var(--ink-soft);
+  cursor:pointer;transition:all .15s;
+}
+.tool-row .tbtn:hover{border-color:var(--gold-deep);color:var(--ink)}
+.tool-row .tbtn.active{border-color:var(--gold);color:var(--gold-bright);background:rgba(242,180,23,.1)}
+.canvas-host{position:relative;flex:1;min-height:220px;cursor:crosshair;touch-action:none}
+.canvas-host canvas{display:block;width:100%;height:100%}
+.hint-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--ink-faint);font-size:12.5px;pointer-events:none;text-align:center}
+.hint-overlay.hidden{display:none}
+
+.analysis-card{border:1px solid var(--line-soft);border-radius:var(--r-md);background:linear-gradient(180deg,var(--panel),var(--deep));padding:16px;margin-top:12px}
+.readout-grid{display:flex;flex-direction:column;gap:10px}
+.readout-grid .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-bottom:9px;border-bottom:1px dashed var(--line-soft)}
+.readout-grid .row:last-child{border-bottom:none;padding-bottom:0}
+.readout-grid .rk{font-size:11.5px;color:var(--ink-faint);white-space:nowrap}
+.readout-grid .rv{font-family:'Spline Sans Mono',monospace;font-size:13px;color:var(--gold-bright);font-weight:600;text-align:right}
+
+footer{position:relative;z-index:2;padding:24px clamp(18px,3.5vw,46px);border-top:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--ink-faint);font-size:12px}
+footer .math-note{font-family:'Spline Sans Mono',monospace;font-size:11px}
+
+@media (max-width:1100px){
+  .workspace{grid-template-columns:1fr}
+  .rail{border-right:none;border-bottom:1px solid var(--line-soft)}
+  .rail.right{border-left:none;border-top:1px solid var(--line-soft)}
+  .stage{order:-1}
+}
+@media (max-width:900px){
+  .panels3{flex-direction:column}
+  .subpanel{border-right:none;border-bottom:1px solid var(--line-soft)}
+  .subpanel:last-child{border-bottom:none}
+  .canvas-host{min-height:200px}
+}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--abyss)}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;border:2px solid var(--abyss)}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-deep)}
+
+.fade-in{animation:fadeUp .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 
-<header>
-  <span class="eyebrow">OMAI · Observatorio de Matemáticas Avanzadas para Ingeniería</span>
-  <h1>Derivada Viva</h1>
-  <p class="subtitle">Dibuja con el trazo del mouse (o el dedo) en <strong>cualquiera</strong> de los tres planos. Los otros dos se reconstruyen en vivo: <strong>f(x)</strong>, <strong>f&#8242;(x)</strong> y <strong>f&#8243;(x)</strong> están unidos por el Teorema Fundamental del Cálculo.</p>
+<header class="fade-in">
+  <div class="brand">
+    <div class="titles">
+      <div class="eyebrow">Observatorio de Matemáticas Avanzadas para Ingeniería</div>
+      <h1>Simulador <em>Derivada Viva</em></h1>
+      <div class="sub">Construye f(x) con figuras elementales o trazo libre · f&#8242;(x) y f&#8243;(x) se reconstruyen en vivo</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <span class="chip"><span class="dot"></span> Derivadas analíticas exactas por pieza</span>
+  </div>
 </header>
 
-<main>
-  <div class="panels">
-    <section class="panel" id="panel-0">
-      <div class="panel-head">
-        <span class="badge">f(x)</span>
-        <span class="panel-status" id="status-0">función</span>
-      </div>
-      <canvas id="canvas-0"></canvas>
-      <div class="hint" id="hint-0">Dibuja aquí ✏️</div>
-    </section>
-
-    <section class="panel" id="panel-1">
-      <div class="panel-head">
-        <span class="badge">f&#8242;(x)</span>
-        <span class="panel-status" id="status-1">primera derivada</span>
-      </div>
-      <canvas id="canvas-1"></canvas>
-      <div class="hint" id="hint-1">Dibuja aquí ✏️</div>
-    </section>
-
-    <section class="panel" id="panel-2">
-      <div class="panel-head">
-        <span class="badge">f&#8243;(x)</span>
-        <span class="panel-status" id="status-2">segunda derivada</span>
-      </div>
-      <canvas id="canvas-2"></canvas>
-      <div class="hint" id="hint-2">Dibuja aquí ✏️</div>
-    </section>
+<div class="eqbar fade-in" style="animation-delay:.05s">
+  <div class="eq-render-main eq-full">
+    <div class="rl">Ecuación de f(x)</div>
+    <div class="mb-content" id="eqF"></div>
   </div>
-
-  <div class="controls">
-    <button id="btn-reset">↺ Reiniciar todo</button>
-    <div class="const-controls" id="const-controls" hidden></div>
-    <label class="toggle"><input type="checkbox" id="chk-grid" checked> Cuadrícula</label>
+</div>
+<div class="eqbar fade-in" style="animation-delay:.07s;border-top:none">
+  <div class="eq-render-main">
+    <div class="rl">f&#8242;(x)</div>
+    <div class="mb-content" id="eqF1"></div>
   </div>
+  <div class="eq-render-main">
+    <div class="rl">f&#8243;(x)</div>
+    <div class="mb-content" id="eqF2"></div>
+  </div>
+</div>
 
-  <p class="note hidden" id="ambiguity-note"></p>
+<main class="workspace">
+  <aside class="rail left fade-in" style="animation-delay:.1s">
+    <div>
+      <div class="section-h">Herramienta en f(x)</div>
+      <div class="tool-select" id="toolSelect">
+        <button class="tool-btn active" data-tool="freehand">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 17c3-6 5-9 8-9s3 6 6 6 3-5 4-8"/></svg>
+          Trazo libre
+        </button>
+        <button class="tool-btn" data-tool="line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20L20 4"/><circle cx="4" cy="20" r="1.8" fill="currentColor" stroke="none"/><circle cx="20" cy="4" r="1.8" fill="currentColor" stroke="none"/></svg>
+          Recta
+        </button>
+        <button class="tool-btn" data-tool="parabola">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6c4 10 12 10 16 0"/><circle cx="12" cy="15.3" r="1.8" fill="currentColor" stroke="none"/><circle cx="19.2" cy="4.6" r="1.8" fill="currentColor" stroke="none"/></svg>
+          Parábola
+        </button>
+        <button class="tool-btn" data-tool="arc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 16a9 9 0 0 1 18 0"/><circle cx="12" cy="16" r="1.8" fill="currentColor" stroke="none"/><circle cx="20" cy="16" r="1.8" fill="currentColor" stroke="none"/></svg>
+          Arco de circunferencia
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-h">Piezas de f(x)</div>
+      <div class="piece-list" id="pieceList"><div class="piece-empty">Aún no hay piezas. Elige una herramienta y haz clic en el panel f(x).</div></div>
+    </div>
+
+    <div>
+      <div class="section-h">Constante de integración</div>
+      <div class="const-controls" id="constControls"><div class="const-empty">Solo aparece al dibujar directamente en f&#8242;(x) o f&#8243;(x).</div></div>
+    </div>
+
+    <div>
+      <div class="section-h">Visualización</div>
+      <div class="toggles" id="toggles"></div>
+    </div>
+
+    <button class="btn-ghost" id="btnReset">↺ Reiniciar todo</button>
+  </aside>
+
+  <section class="stage fade-in" style="animation-delay:.14s">
+    <div class="panels3">
+      <div class="subpanel" id="subpanel-0">
+        <div class="domain-head">
+          <div class="domain-tag"><span class="dotc" style="background:var(--gold)"></span> f(x)</div>
+          <div class="domain-status" id="status-0">esperando</div>
+        </div>
+        <div class="canvas-host" id="host-0">
+          <canvas id="canvas-0"></canvas>
+          <div class="hint-overlay" id="hint-0">Elige herramienta y dibuja ✏️</div>
+        </div>
+      </div>
+      <div class="subpanel" id="subpanel-1">
+        <div class="domain-head">
+          <div class="domain-tag"><span class="dotc" style="background:var(--cyan)"></span> f&#8242;(x)</div>
+          <div class="domain-status" id="status-1">esperando</div>
+        </div>
+        <div class="canvas-host" id="host-1">
+          <canvas id="canvas-1"></canvas>
+          <div class="hint-overlay" id="hint-1">Trazo libre disponible aquí</div>
+        </div>
+      </div>
+      <div class="subpanel" id="subpanel-2">
+        <div class="domain-head">
+          <div class="domain-tag"><span class="dotc" style="background:var(--cyan)"></span> f&#8243;(x)</div>
+          <div class="domain-status" id="status-2">esperando</div>
+        </div>
+        <div class="canvas-host" id="host-2">
+          <canvas id="canvas-2"></canvas>
+          <div class="hint-overlay" id="hint-2">Trazo libre disponible aquí</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="rail right fade-in" style="animation-delay:.18s">
+    <div>
+      <div class="section-h">Análisis</div>
+      <div class="analysis-card" id="analysisMain"></div>
+    </div>
+  </aside>
 </main>
 
-<footer>
-  © 2026 Daniel Steven Moran Pizarro · Todos los derechos reservados · OMAI
+<footer class="fade-in" style="animation-delay:.22s">
+  <div>
+    <div style="color:var(--ink-soft);font-weight:500">Simulador Derivada Viva</div>
+    <div>Recurso educativo abierto · Matemáticas Avanzadas para Ingeniería</div>
+  </div>
+  <div class="math-note">f, f&#8242; y f&#8243; unidas por el Teorema Fundamental del Cálculo</div>
 </footer>
 
 <script src="derivada_viva-app.js"></script>
