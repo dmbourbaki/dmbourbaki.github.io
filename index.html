@@ -32,15 +32,17 @@
             </ul>
         </div>
     </nav>
+    <div id="reading-progress" class="reading-progress"></div>
 
     <section id="inicio" class="hero">
+        <canvas id="omai-canvas" class="hero-canvas" aria-hidden="true"></canvas>
         <div class="hero-overlay"></div>
-        <div class="hero-math"></div>
         <div class="container hero-content">
-            <div class="hero-badge">Simuladores interactivos de matemáticas · OMAI</div>
-            <h1 class="hero-title">Daniel Steven Moran Pizarro</h1>
-            <p class="hero-subtitle">Matemático · Docente en la UNAD</p>
-            <p class="hero-description">Estudio ideales monomiales, bases de Gröbner y la historia de cómo llegamos a entender el cálculo. La mayoría de las veces eso termina en código: quiero ver las matemáticas moverse, no solo describirlas.</p>
+            <div class="hero-badge">Plataforma de investigación y simulación matemática</div>
+            <p class="hero-eyebrow">Observatorio de Matemáticas Avanzadas para Ingeniería</p>
+            <h1 class="hero-title">OMAI</h1>
+            <p class="hero-subtitle">Daniel Steven Moran Pizarro · Matemático, UNAD</p>
+            <p class="hero-description">Álgebra conmutativa, bases de Gröbner e ideales monomiales, con un puente constante hacia la historia de las matemáticas y la ciencia de datos aplicada a la educación. Lo que ves aquí — simuladores, publicaciones, cursos — es ese trabajo hecho visible.</p>
             <div class="hero-buttons">
                 <a href="#sobre-mi" class="btn btn-primary">Conóceme</a>
                 <a href="#publicaciones" class="btn btn-secondary">Publicaciones</a>
@@ -1005,6 +1007,7 @@
         })
         .catch(() => { const el = document.getElementById('ultima-actualizacion'); if (el) el.textContent = ''; });
     </script>
+    <script src="assets/js/math-background.js"></script>
     <script src="script.js"></script>
     <script>
     function toggleObservatorioResource(id) {
