@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derivada Viva · OMAI</title>
+<meta name="description" content="Simulador interactivo OMAI: dibuja una función, su derivada o su segunda derivada con el trazo del mouse y observa cómo se reconstruyen las otras dos en tiempo real.">
+<style>
+  :root{
+    --navy:#14213d;
+    --bg:#0d1526;
+    --bg-radial:#1a2847;
+    --gold:#b8862f;
+    --gold-light:#d9a94f;
+    --cream:#f3d896;
+    --accent-blue:#7fb0e6;
+    --text:#eef1f7;
+    --muted:#9aa5bd;
+    --panel-bg:rgba(255,255,255,0.03);
+    --border:rgba(184,134,47,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:radial-gradient(circle at 20% -10%, var(--bg-radial) 0%, var(--bg) 55%);
+    color:var(--text);
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    display:flex;flex-direction:column;align-items:center;
+    padding:32px 18px 22px;
+  }
+  header{text-align:center;max-width:840px;margin-bottom:26px;}
+  .eyebrow{
+    display:inline-block;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--gold-light);border:1px solid var(--border);padding:4px 14px;border-radius:999px;
+    margin-bottom:14px;background:rgba(184,134,47,0.08);
+  }
+  h1{
+    font-size:2.15rem;margin:0 0 10px;font-weight:700;
+    background:linear-gradient(90deg, var(--gold-light), var(--cream) 45%, var(--gold-light));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .subtitle{color:var(--muted);line-height:1.6;font-size:0.95rem;margin:0 auto;max-width:640px;}
+  .subtitle strong{color:var(--text);}
+
+  main{width:100%;max-width:1180px;display:flex;flex-direction:column;align-items:center;}
+
+  .panels{display:flex;gap:18px;width:100%;flex-wrap:wrap;justify-content:center;}
+  .panel{
+    flex:1 1 320px;max-width:380px;
+    background:var(--panel-bg);border:1px solid var(--border);border-radius:14px;
+    padding:14px;position:relative;backdrop-filter:blur(6px);
+    transition:border-color .25s, box-shadow .25s;
+  }
+  .panel.is-master{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold), 0 10px 26px rgba(184,134,47,0.18);}
+  .panel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+  .badge{font-weight:700;color:var(--gold-light);font-size:1.15rem;font-family:Georgia, 'Times New Roman', serif;}
+  .panel-status{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  canvas{
+    width:100%;height:250px;display:block;border-radius:8px;cursor:crosshair;
+    touch-action:none;background:rgba(0,0,0,0.2);
+  }
+  .hint{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-38%);
+    color:var(--muted);font-size:0.85rem;pointer-events:none;text-align:center;
+  }
+  .hint.hidden{display:none;}
+
+  .controls{margin-top:22px;display:flex;gap:22px;align-items:center;flex-wrap:wrap;justify-content:center;}
+  button{
+    background:linear-gradient(135deg, var(--gold), #8f6a22);color:#1a1204;border:none;font-weight:600;
+    padding:10px 20px;border-radius:10px;cursor:pointer;letter-spacing:.02em;font-size:0.88rem;
+  }
+  button:hover{filter:brightness(1.1);}
+  button:active{filter:brightness(0.95);}
+  .toggle{font-size:0.85rem;color:var(--muted);display:flex;gap:7px;align-items:center;}
+  .toggle input{accent-color:var(--gold);}
+
+  .const-controls{display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:center;}
+  .const-controls > div{display:flex;flex-direction:column;align-items:center;gap:3px;}
+  .const-controls span{font-size:0.72rem;color:var(--muted);white-space:nowrap;}
+  .const-controls input[type=range]{accent-color:var(--gold);width:130px;}
+
+  .note{
+    max-width:760px;text-align:center;color:var(--muted);font-size:0.82rem;margin-top:18px;
+    line-height:1.55;border-top:1px dashed var(--border);padding-top:14px;
+  }
+  .note.hidden{display:none;}
+
+  footer{margin-top:32px;color:var(--muted);font-size:0.74rem;text-align:center;}
+
+  @media (max-width:720px){
+    h1{font-size:1.7rem;}
+    canvas{height:210px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="eyebrow">OMAI · Observatorio de Matemáticas Avanzadas para Ingeniería</span>
+  <h1>Derivada Viva</h1>
+  <p class="subtitle">Dibuja con el trazo del mouse (o el dedo) en <strong>cualquiera</strong> de los tres planos. Los otros dos se reconstruyen en vivo: <strong>f(x)</strong>, <strong>f&#8242;(x)</strong> y <strong>f&#8243;(x)</strong> están unidos por el Teorema Fundamental del Cálculo.</p>
+</header>
+
+<main>
+  <div class="panels">
+    <section class="panel" id="panel-0">
+      <div class="panel-head">
+        <span class="badge">f(x)</span>
+        <span class="panel-status" id="status-0">función</span>
+      </div>
+      <canvas id="canvas-0"></canvas>
+      <div class="hint" id="hint-0">Dibuja aquí ✏️</div>
+    </section>
+
+    <section class="panel" id="panel-1">
+      <div class="panel-head">
+        <span class="badge">f&#8242;(x)</span>
+        <span class="panel-status" id="status-1">primera derivada</span>
+      </div>
+      <canvas id="canvas-1"></canvas>
+      <div class="hint" id="hint-1">Dibuja aquí ✏️</div>
+    </section>
+
+    <section class="panel" id="panel-2">
+      <div class="panel-head">
+        <span class="badge">f&#8243;(x)</span>
+        <span class="panel-status" id="status-2">segunda derivada</span>
+      </div>
+      <canvas id="canvas-2"></canvas>
+      <div class="hint" id="hint-2">Dibuja aquí ✏️</div>
+    </section>
+  </div>
+
+  <div class="controls">
+    <button id="btn-reset">↺ Reiniciar todo</button>
+    <div class="const-controls" id="const-controls" hidden></div>
+    <label class="toggle"><input type="checkbox" id="chk-grid" checked> Cuadrícula</label>
+  </div>
+
+  <p class="note hidden" id="ambiguity-note"></p>
+</main>
+
+<footer>
+  © 2026 Daniel Steven Moran Pizarro · Todos los derechos reservados · OMAI
+</footer>
+
+<script src="derivada_viva-app.js"></script>
+</body>
+</html>
