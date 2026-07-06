@@ -1,3 +1,29 @@
+/* Barra de progreso de lectura, fija arriba de todo */
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--wine, #6e1f2f), var(--gold-bright, #c9a463));
+    z-index: 1100;
+    transition: width 0.1s ease-out;
+}
+
+/* Aparición suave al hacer scroll — discreta, académica, no exagerada */
+.reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+}
+
 :root {
     /* Nueva paleta: grafito profundo + vinotinto — cambio de fondo, no de matiz */
     --primary-color: #1c2430;       /* grafito / azul-carbón, reemplaza al navy */
@@ -156,6 +182,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
+    z-index: 1;
     background: linear-gradient(105deg, transparent 55%, rgba(110, 31, 47, 0.55) 78%, rgba(110, 31, 47, 0.85) 100%);
     pointer-events: none;
 }
@@ -171,17 +198,7 @@ body {
 /* Motivo matemático real: familia de curvas (parábolas/senoidales, como
    curvas de nivel) más algunos símbolos propios de tu trabajo — no un
    patrón genérico, sino algo que remite a lo que estudias. */
-.hero-math {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    opacity: 0.5;
-    pointer-events: none;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900"><g fill="none" stroke-width="1.4"><path d="M -50 700 Q 400 300 850 700 T 1700 700" stroke="rgba(200,164,99,0.35)"/><path d="M -50 620 Q 400 220 850 620 T 1700 620" stroke="rgba(200,164,99,0.22)"/><path d="M -50 780 Q 400 450 850 780 T 1700 780" stroke="rgba(200,164,99,0.16)"/><path d="M 100 -50 C 300 250, 300 650, 100 950" stroke="rgba(168,81,95,0.4)"/><path d="M 220 -50 C 420 250, 420 650, 220 950" stroke="rgba(168,81,95,0.25)"/><path d="M 1500 -50 C 1300 250, 1300 650, 1500 950" stroke="rgba(168,81,95,0.3)"/></g><text x="120" y="140" font-family="Georgia, serif" font-style="italic" font-size="64" fill="rgba(200,164,99,0.28)">&#8747;</text><text x="1420" y="200" font-family="Georgia, serif" font-style="italic" font-size="70" fill="rgba(200,164,99,0.24)">&#955;</text><text x="1380" y="780" font-family="Georgia, serif" font-style="italic" font-size="58" fill="rgba(200,164,99,0.22)">&#8706;</text><text x="90" y="820" font-family="Georgia, serif" font-style="italic" font-size="62" fill="rgba(200,164,99,0.2)">&#8721;</text></svg>');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-}
+/* Motivo estático reemplazado por el canvas animado (.hero-canvas) */
 
 .hero-overlay {
     position: absolute;
@@ -193,6 +210,24 @@ body {
     background: radial-gradient(circle at 20% 45%, rgba(90, 110, 140, 0.22), transparent 50%),
                 radial-gradient(circle at 85% 85%, rgba(110, 31, 47, 0.35), transparent 55%),
                 radial-gradient(circle at 88% 12%, rgba(200, 164, 99, 0.12), transparent 40%);
+}
+
+.hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    display: block;
+}
+
+.hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 0.4rem;
+    animation: fadeInUp 1s ease 0.15s both;
 }
 
 .hero-content {
@@ -222,11 +257,15 @@ body {
 
 .hero-title {
     font-family: var(--font-display);
-    font-size: clamp(3rem, 6vw, 5.2rem);
+    font-size: clamp(4rem, 12vw, 8rem);
     font-weight: 700;
-    letter-spacing: -0.01em;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.7rem;
     text-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(100deg, #fff 30%, var(--gold-bright) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     animation: fadeInUp 1s ease 0.2s both;
 }
 
@@ -643,14 +682,17 @@ body {
 .pub-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    padding: 0.3rem 1rem;
-    background: var(--bg-light);
-    border-radius: 5px;
+    gap: 0.4rem;
+    padding: 0.35rem 1.1rem;
+    background: transparent;
+    border: 1.2px solid var(--wine);
+    border-radius: 999px;
     text-decoration: none;
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
+    color: var(--wine);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: all 0.25s ease;
 }
 
 .pub-link:hover {
@@ -1249,8 +1291,8 @@ body {
 
 /* ============================================
    CONFERENCES SECTION
+   (fondo en degradado definido arriba, en IDENTIDAD POR SECCIÓN)
    ============================================ */
-.conferences { background: var(--bg-light); }
 .conferences-intro {
     text-align: center;
     max-width: 800px;
@@ -1316,8 +1358,8 @@ body {
 
 /* ============================================
    EDUCATIONAL RESOURCES SECTION
+   (fondo oscuro definido arriba, en IDENTIDAD POR SECCIÓN)
    ============================================ */
-.resources { background: var(--bg-white); }
 .resources-intro {
     text-align: center;
     max-width: 800px;
