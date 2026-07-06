@@ -878,7 +878,35 @@
 
             <div class="category-group" id="cat-calculo-diferencial">
                 <h4>Cálculo Diferencial</h4>
-                <p style="font-size:0.85rem; color:#888; margin-top:-0.4rem;">Próximamente bajo la marca OMAI.</p>
+                <div class="digital-grid">
+
+                    <div class="digital-card" id="card-derivada-viva">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">f′</div>
+                            <div>
+                                <h3>Simulador Derivada Viva</h3>
+                                <span class="topic-tag">Cálculo Diferencial · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Tres planos cartesianos enlazados por el Teorema Fundamental del Cálculo: dibuja con el trazo del mouse (o el dedo) en cualquiera de los tres — f(x), f′(x) o f″(x) — y observa cómo las otras dos se reconstruyen en vivo. El trazo se suaviza antes de derivar para evitar ruido numérico, y al reconstruir por integración aparecen controles deslizantes para explorar la familia completa de antiderivadas: una constante que traslada f(x) y, al dibujar f″(x), una segunda que le agrega pendiente.</p>
+                        <div class="digital-tags">
+                            <span>Dibujo libre en los 3 paneles</span>
+                            <span>Derivación e integración numérica en vivo</span>
+                            <span>Familia de antiderivadas (constantes C)</span>
+                            <span>Suavizado gaussiano anti-ruido</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/derivada_viva/derivada_viva-index.html" loading="lazy" title="Vista previa Derivada Viva" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('derivada-viva')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-derivada-viva" style="display:none">
+                            <iframe src="recursos/derivada_viva/derivada_viva-index.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador Derivada Viva"></iframe>
+                            <a href="recursos/derivada_viva/derivada_viva-index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
         </div>
