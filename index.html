@@ -480,7 +480,7 @@
                 <div class="obs-icon">🔭</div>
                 <div>
                     <h3>Observatorio de Matemáticas Avanzadas para Ingeniería (OMAI)</h3>
-                    <p>Proyecto propio en desarrollo. Los simuladores se irán publicando progresivamente bajo la marca OMAI, organizados por área temática: Cálculo Diferencial, Cálculo Integral, Cálculo Multivariable, Ecuaciones Diferenciales y Matemáticas Especiales.</p>
+                    <p>Proyecto propio en desarrollo. Los simuladores se irán publicando progresivamente bajo la marca OMAI, organizados por área temática: Cálculo Diferencial, Cálculo Integral, Cálculo Multivariable, Ecuaciones Diferenciales, Matemáticas Especiales y Matemáticas Discretas.</p>
                 </div>
             </div>
 
@@ -862,6 +862,9 @@
                             <span>Función personalizada</span>
                             <span>Fenómeno de Gibbs</span>
                         </div>
+                        <div class="digital-video">
+                            <iframe width="100%" height="220" src="https://www.youtube.com/embed/grmJ-s8J9TQ" title="Video de presentación: Simulador de Series de Fourier" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                        </div>
                         <div class="digital-preview">
                             <iframe src="recursos/fourier/fourier-index.html" loading="lazy" title="Vista previa Series de Fourier" tabindex="-1" aria-hidden="true"></iframe>
                         </div>
@@ -909,6 +912,91 @@
                 </div>
             </div>
 
+            <div class="category-group" id="cat-matematicas-discretas">
+                <h4>Matemáticas Discretas</h4>
+                <div class="digital-grid">
+
+                    <div class="digital-card" id="card-grafos">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">⌗</div>
+                            <div>
+                                <h3>Simulador de Teoría de Grafos</h3>
+                                <span class="topic-tag">Matemáticas Discretas · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Constructor interactivo de grafos: añade vértices, traza aristas, mueve o elimina elementos directamente sobre el lienzo. Genera familias clásicas (Kₙ completo, Cₙ ciclo, Pₙ camino, entre otras) o parte de grafos de ejemplo predefinidos. Calcula en vivo las matrices de adyacencia, de grados, de incidencia y la laplaciana (L = D − A), junto con su espectro laplaciano, el número de clan, el número cromático y un coloreo visual del grafo.</p>
+                        <div class="digital-tags">
+                            <span>Modos: Vértice · Arista · Mover · Eliminar</span>
+                            <span>Generador de familias (Kₙ, Cₙ, Pₙ…)</span>
+                            <span>Adyacencia · Incidencia · Grados · Laplaciana</span>
+                            <span>Número cromático y coloreo</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/grafos/teoria_grafos-index.html" loading="lazy" title="Vista previa Teoría de Grafos" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('grafos')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-grafos" style="display:none">
+                            <iframe src="recursos/grafos/teoria_grafos-index.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Teoría de Grafos"></iframe>
+                            <a href="recursos/grafos/teoria_grafos-index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-logica">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">⊢</div>
+                            <div>
+                                <h3>Explorador de Lógica Proposicional</h3>
+                                <span class="topic-tag">Matemáticas Discretas · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Escribe cualquier fórmula proposicional con el teclado de símbolos (¬, ∧, ∨, →, ↔) y explórala desde cuatro vistas enlazadas: tabla de verdad completa, árbol sintáctico, comparación de equivalencia entre dos fórmulas, y su circuito lógico equivalente. Incluye una galería de fórmulas clásicas y clasificación automática (tautología, contradicción o contingencia).</p>
+                        <div class="digital-tags">
+                            <span>Tabla de verdad · Árbol sintáctico</span>
+                            <span>Comparador de equivalencias</span>
+                            <span>Circuito lógico generado</span>
+                            <span>Clasificación: tautología / contradicción / contingencia</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/logica/logica_proposicional-index" loading="lazy" title="Vista previa Lógica Proposicional" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('logica')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-logica" style="display:none">
+                            <iframe src="recursos/logica/logica_proposicional-index" width="100%" height="720" frameborder="0" loading="lazy" title="Explorador de Lógica Proposicional"></iframe>
+                            <a href="recursos/logica/logica_proposicional-index" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-venn">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">◐</div>
+                            <div>
+                                <h3>Simulador de Diagramas de Venn</h3>
+                                <span class="topic-tag">Matemáticas Discretas · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Explorador de teoría de conjuntos con diagramas de Venn de 2, 3 y 4 conjuntos. Escribe expresiones con el teclado de operadores (∪, ∩, complemento, diferencia, diferencia simétrica) y observa el sombreado correspondiente en vivo. Incluye galería de identidades conjuntistas clásicas, comparación lado a lado de dos expresiones equivalentes y clasificación automática del resultado.</p>
+                        <div class="digital-tags">
+                            <span>2, 3 y 4 conjuntos</span>
+                            <span>Sombreado en vivo</span>
+                            <span>Galería de identidades</span>
+                            <span>Comparador de equivalencias</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/venn/diagramas_venn-index" loading="lazy" title="Vista previa Diagramas de Venn" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('venn')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-venn" style="display:none">
+                            <iframe src="recursos/venn/diagramas_venn-index" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Diagramas de Venn"></iframe>
+                            <a href="recursos/venn/diagramas_venn-index" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -938,6 +1026,9 @@
                             <span>Demostración fragmentada</span>
                             <span>Glosario interactivo</span>
                             <span>3 velocidades de automatización</span>
+                        </div>
+                        <div class="digital-video">
+                            <iframe width="100%" height="220" src="https://www.youtube.com/embed/AQctJJU1hNA" title="Video de presentación: Elementos de Euclides — Libro I" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
                         </div>
                         <div class="digital-preview">
                             <iframe src="recursos/euclides/euclides-index.html" loading="lazy" title="Vista previa Elementos de Euclides" tabindex="-1" aria-hidden="true"></iframe>
