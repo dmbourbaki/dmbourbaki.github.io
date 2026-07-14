@@ -203,14 +203,14 @@ function nestedMaskGroup(assign, labels, innerSVG, prefix){
 function universeRectAndLabel(layout){
   const {W,H} = layout;
   const m = 8;
-  return `<rect x="${m}" y="${m}" width="${W-2*m}" height="${H-2*m}" fill="none" stroke="var(--line)" stroke-width="1.6" stroke-dasharray="5 4"/>
-    <text x="${m+10}" y="${m+22}" font-size="15" font-weight="700" fill="var(--ink-faint)" font-family="Fraunces, serif">U</text>`;
+  return `<rect x="${m}" y="${m}" width="${W-2*m}" height="${H-2*m}" fill="none" stroke="var(--ink-soft)" stroke-width="1.8" stroke-dasharray="5 4"/>
+    <text x="${m+10}" y="${m+22}" font-size="15" font-weight="700" fill="var(--ink-soft)" font-family="Fraunces, serif">U</text>`;
 }
 function circleOutlinesAndLabels(layout){
   let svg = universeRectAndLabel(layout);
   layout.circles.forEach(c => {
     const rot = c.rot ? ` transform="rotate(${c.rot} ${c.cx} ${c.cy})"` : '';
-    svg += `<ellipse cx="${c.cx}" cy="${c.cy}" rx="${c.rx}" ry="${c.ry}" fill="none" stroke="var(--line)" stroke-width="2"${rot}/>`;
+    svg += `<ellipse cx="${c.cx}" cy="${c.cy}" rx="${c.rx}" ry="${c.ry}" fill="none" stroke="var(--ink-soft)" stroke-width="2.2"${rot}/>`;
   });
   const positions = {
     1: {A:[150,20]},
@@ -247,7 +247,7 @@ function attachHoverFragment(svgEl, layout, labels, color, prefix){
   if(!hoverLayer) return;
   svgEl.addEventListener('mousemove', (evt) => {
     const assign = regionAtPoint(svgEl, layout, evt);
-    const rect = `<rect x="0" y="0" width="${layout.W}" height="${layout.H}" fill="${color}" fill-opacity="0.22"/>`;
+    const rect = `<rect x="0" y="0" width="${layout.W}" height="${layout.H}" fill="${color}" fill-opacity="0.16"/>`;
     hoverLayer.innerHTML = nestedMaskGroup(assign, labels, rect, prefix);
   });
   svgEl.addEventListener('mouseleave', () => { hoverLayer.innerHTML = ''; });
@@ -263,7 +263,7 @@ function renderStaticVenn(containerEl, nSets, node){
   regions.forEach(assign => {
     const included = evaluate(node, assign);
     if(!included) return;
-    const rect = `<rect x="0" y="0" width="${layout.W}" height="${layout.H}" fill="var(--gold)" fill-opacity="0.38"/>`;
+    const rect = `<rect x="0" y="0" width="${layout.W}" height="${layout.H}" fill="var(--gold)" fill-opacity="0.22"/>`;
     shaded += nestedMaskGroup(assign, labels, rect, prefix);
   });
   const svg = `<svg class="venn" viewBox="0 0 ${layout.W} ${layout.H}" width="${layout.W}" height="${layout.H}" xmlns="http://www.w3.org/2000/svg" style="cursor:crosshair;">
@@ -289,7 +289,7 @@ function renderInteractiveVenn(containerEl, nSets, onToggle){
     regions.forEach(assign => {
       const key = regionKey(assign, labels);
       if(!state[key]) return;
-      const rect = `<rect x="0" y="0" width="${layout.W}" height="${layout.H}" fill="var(--gold)" fill-opacity="0.38"/>`;
+      const rect = `<rect x="0" y="0" width="${layout.W}" height="${layout.H}" fill="var(--gold)" fill-opacity="0.22"/>`;
       shaded += nestedMaskGroup(assign, labels, rect, prefix);
     });
     return shaded;
@@ -475,9 +475,9 @@ function checkGame(){
     // se dejaron sin sombrear) — así no se pinta todo el diagrama de un solo color.
     let rect = '';
     if(!match){
-      rect = `<rect x="0" y="0" width="${layout.W}" height="${layout.H}" fill="var(--bad)" fill-opacity="0.38"/>`;
+      rect = `<rect x="0" y="0" width="${layout.W}" height="${layout.H}" fill="var(--bad)" fill-opacity="0.26"/>`;
     } else if(userShaded){
-      rect = `<rect x="0" y="0" width="${layout.W}" height="${layout.H}" fill="var(--gold)" fill-opacity="0.38"/>`;
+      rect = `<rect x="0" y="0" width="${layout.W}" height="${layout.H}" fill="var(--gold)" fill-opacity="0.22"/>`;
     }
     if(rect) overlay += nestedMaskGroup(assign, labels, rect, prefix);
   });
