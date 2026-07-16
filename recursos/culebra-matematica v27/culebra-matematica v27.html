@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Culebra Numérica</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --jungle-deep:#0b2a1f;
+    --jungle-mid:#123a2a;
+    --leaf:#8bd450;
+    --leaf-bright:#b6f26a;
+    --mango:#ff9f43;
+    --mango-deep:#e8792a;
+    --berry:#ff5d73;
+    --sky:#67d8d1;
+    --ink:#eafbf0;
+    --ink-soft:#a9c9b8;
+    --wall:#2f5c42;
+    --panel:#0e3325;
+    --danger:#ff4d5e;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:
+      radial-gradient(ellipse at 20% -10%, #1a4a33 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 110%, #163d2c 0%, transparent 50%),
+      var(--jungle-deep);
+    color:var(--ink);
+    font-family:'Fredoka', sans-serif;
+    overflow-x:hidden;
+    min-height:100vh;
+  }
+  h1,h2,.display{ font-family:'Baloo 2', sans-serif; }
+
+  .wrap{
+    width:95vw; max-width:1900px; margin:0 auto; padding:18px 12px 30px;
+    display:flex; flex-direction:row; align-items:flex-start; justify-content:center;
+    gap:26px; min-height:100vh;
+  }
+  .left-panel{
+    flex:0 0 300px; width:300px;
+    display:flex; flex-direction:column; gap:10px;
+    position:sticky; top:14px;
+    max-height:calc(100vh - 28px);
+    overflow-y:auto;
+    padding-right:4px;
+  }
+  .right-panel{
+    flex:1 1 auto; display:flex; flex-direction:column; align-items:center;
+    min-width:0;
+  }
+  .toast-bar{
+    width:100%; max-width:900px;
+    min-height:44px;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:8px;
+  }
+  .deposit-banner{
+    width:100%; max-width:900px;
+    box-sizing:border-box;
+    min-height:40px; display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    font-family:'Baloo 2'; font-size:16px;
+    padding:8px 18px; border-radius:12px;
+    margin-bottom:8px;
+    box-shadow:0 3px 0 rgba(0,0,0,.25);
+    animation: bannerPulse 2.4s ease-in-out infinite;
+  }
+  .deposit-banner.waiting{ background:#8bd450; color:#0b2a1f; }
+  .deposit-banner.ready{ background:var(--mango); color:#fff; }
+  @keyframes bannerPulse{
+    0%,100%{ opacity:1; } 50%{ opacity:.82; }
+  }
+
+  @media (max-width:900px){
+    .wrap{ flex-direction:column; align-items:center; width:100%; }
+    .left-panel{ position:static; width:100%; max-width:640px; flex:none; max-height:none; overflow-y:visible; }
+    .right-panel{ width:100%; }
+  }
+
+  /* ---------- HEADER ---------- */
+  .brand{
+    display:flex; align-items:center; gap:12px;
+  }
+  .brand-badge{
+    width:44px; height:44px; border-radius:14px;
+    background:linear-gradient(145deg, var(--leaf), #5fae30);
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; box-shadow:0 4px 0 #4c8f24, 0 8px 16px rgba(0,0,0,.35);
+  }
+  .brand h1{
+    font-size:23px; margin:0; letter-spacing:.5px; color:var(--leaf-bright);
+    text-shadow:0 3px 0 rgba(0,0,0,.25);
+  }
+  .brand small{ display:block; color:var(--ink-soft); font-size:11px; font-weight:500; letter-spacing:1px; }
+  .author-tag{
+    margin-top:-4px; font-size:11px; color:var(--ink-soft); opacity:.75; letter-spacing:.5px;
+  }
+
+  /* ---------- HUD (panel vertical) ---------- */
+  .hud{
+    display:flex; flex-direction:column; gap:12px;
+    background:
+      linear-gradient(165deg, rgba(255,255,255,0.04), transparent 40%),
+      var(--panel);
+    border:2px solid var(--wall); border-radius:18px;
+    padding:16px; box-shadow:0 6px 0 rgba(0,0,0,.3), 0 14px 26px rgba(0,0,0,.25);
+  }
+  .stat-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  }
+  .stat-cell, .stat-block{
+    background:rgba(0,0,0,0.18);
+    border:1px solid var(--wall); border-radius:12px;
+    padding:8px 10px;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+  }
+  .stat-label{ font-size:10px; letter-spacing:1px; color:var(--ink-soft); text-transform:uppercase;}
+  .stat-value{ font-family:'Baloo 2'; font-size:19px; color:var(--leaf-bright); margin-top:2px;}
+  .deposit-bar{
+    display:flex; gap:2px; margin-top:6px; flex-wrap:wrap; justify-content:center;
+  }
+  .deposit-bar .pip{
+    width:14px; height:18px; border-radius:3px;
+    background:#1c4a33; border:1px solid var(--wall);
+    transition: transform .25s, background .25s;
+  }
+  .deposit-bar .pip.filled{
+    background:linear-gradient(160deg, #ffd76a, #e8a72a);
+    border-color:#c98a1c;
+    animation: pipPop .35s ease;
+  }
+  .trophy-icon{
+    font-size:18px; line-height:1;
+    animation: pipPop .4s ease;
+  }
+  .trophy-empty{
+    font-size:11px; color:var(--ink-soft); opacity:.7;
+  }
+  .world-name{
+    font-size:12px; color:var(--ink-soft); margin-top:4px; font-weight:600;
+  }
+  @keyframes pipPop{
+    0%{ transform:scale(1); }
+    45%{ transform:scale(1.5); }
+    100%{ transform:scale(1); }
+  }
+  .hearts span{ color:var(--berry); font-size:16px; }
+  .op-display{
+    font-family:'Baloo 2'; font-size:22px; color:#fff; text-align:center;
+    background:linear-gradient(160deg, var(--mango), var(--mango-deep));
+    padding:10px 14px; border-radius:14px; box-shadow:0 3px 0 #a25718, inset 0 1px 0 rgba(255,255,255,.25);
+    letter-spacing:1px;
+  }
+  .music-btn{ width:100%; font-size:14px; padding:9px; }
+
+  /* ---------- GAME STAGE ---------- */
+  .stage{
+    position:relative; border-radius:22px; overflow:hidden;
+    border:3px solid var(--wall);
+    box-shadow: 0 0 0 6px var(--jungle-mid), 0 10px 30px rgba(0,0,0,.5);
+  }
+  canvas{ display:block; background:#0d2f22; }
+
+  .overlay{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(6,20,14,.92); backdrop-filter: blur(2px);
+    flex-direction:column; text-align:center; padding:18px; gap:10px;
+    overflow-y:auto;
+  }
+  .overlay h2{ font-size:clamp(18px,3.2vw,28px); color:var(--leaf-bright); margin:0; }
+  .overlay p{ color:var(--ink-soft); margin:0; font-size:13px; max-width:380px; line-height:1.4;}
+
+  input[type=text]{
+    font-family:'Fredoka'; font-size:16px; padding:10px 14px; border-radius:10px;
+    border:2px solid var(--wall); background:#0c2a1e; color:var(--ink); outline:none;
+    width:220px; text-align:center;
+  }
+  input[type=text]:focus{ border-color:var(--leaf); }
+
+  .choice-row{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+  .pill-btn{
+    font-family:'Fredoka'; font-weight:600; font-size:14px; cursor:pointer;
+    padding:9px 16px; border-radius:999px; border:2px solid var(--wall);
+    background:#123a2a; color:var(--ink-soft); transition:.15s;
+  }
+  .pill-btn.selected{
+    background:var(--leaf); color:#0b2a1f; border-color:var(--leaf);
+  }
+  .pill-btn:hover{ border-color:var(--leaf); }
+
+  .go-btn{
+    font-family:'Baloo 2'; font-size:18px; font-weight:700; cursor:pointer;
+    padding:12px 34px; border:none; border-radius:14px;
+    background:linear-gradient(160deg, var(--leaf-bright), var(--leaf) 60%, #5fae30);
+    color:#0b2a1f; box-shadow:0 5px 0 #4c8f24;
+    transition:transform .08s;
+  }
+  .go-btn:active{ transform:translateY(3px); box-shadow:0 2px 0 #4c8f24; }
+  .go-btn:disabled{ opacity:.4; cursor:not-allowed; }
+
+  .small-note{ font-size:12px; color:var(--ink-soft); margin-top:-6px;}
+
+  .tips-box{
+    width:100%; max-width:380px;
+    background:rgba(0,0,0,0.22); border:1px solid var(--wall); border-radius:12px;
+    padding:10px 14px; text-align:center; min-height:64px;
+    display:flex; flex-direction:column; justify-content:center; gap:4px;
+  }
+  .tips-label{ font-size:10px; letter-spacing:1px; color:var(--leaf-bright); text-transform:uppercase; font-weight:600; }
+  .tips-text{
+    font-size:13px; color:var(--ink); line-height:1.4;
+    opacity:1; transition:opacity .25s;
+  }
+  .tips-text.fade{ opacity:0; }
+
+  .controls-hint{
+    margin-top:12px; color:var(--ink-soft); font-size:12px; text-align:center; line-height:1.6;
+  }
+  .key{
+    display:inline-block; background:#0c2a1e; border:1px solid var(--wall);
+    border-radius:6px; padding:1px 7px; font-family:monospace; color:var(--leaf-bright);
+  }
+
+  .toast{
+    font-family:'Baloo 2'; font-size:19px; padding:8px 22px; border-radius:12px;
+    opacity:0; pointer-events:none; transition:opacity .2s, transform .25s;
+    transform:translateY(-6px);
+    box-shadow:0 4px 0 rgba(0,0,0,.25);
+    text-align:center;
+  }
+  .toast.good{ background:rgba(139,212,80,.96); color:#0b2a1f; }
+  .toast.bad{ background:rgba(255,93,115,.96); color:#fff; }
+  .toast.show{ opacity:1; transform:translateY(0); }
+
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="left-panel">
+    <div class="brand">
+      <div class="brand-badge">🐍</div>
+      <div>
+        <h1>Culebra Numérica</h1>
+        <small>Aprende sumando y multiplicando</small>
+      </div>
+    </div>
+    <div class="author-tag">Un juego de Daniel Steven Moran Pizarro</div>
+
+    <div class="hud" id="hud" style="display:none;">
+      <div class="op-display" id="opDisplay">? + ?</div>
+
+      <div class="stat-grid">
+        <div class="stat-cell">
+          <div class="stat-label">Jugador</div>
+          <div class="stat-value" id="hudName">—</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Puntaje</div>
+          <div class="stat-value" id="hudScore">0</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Vidas</div>
+          <div class="stat-value hearts" id="hudLives">♥♥♥</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Longitud</div>
+          <div class="stat-value" id="hudLen">3</div>
+        </div>
+      </div>
+
+      <div class="stat-block deposit-item">
+        <div class="stat-label">Trofeos 🏆 (<span id="hudTrophies">0</span>)</div>
+        <div class="deposit-bar" id="trophyRow"></div>
+      </div>
+
+      <div class="stat-block deposit-item">
+        <div class="stat-label">Depósito 🍎</div>
+        <div class="deposit-bar" id="depositBar"></div>
+      </div>
+
+      <div class="stat-block speed-item">
+        <div class="stat-label">Velocidad</div>
+        <div class="stat-value" id="speedLevelLabel">L1</div>
+        <div class="world-name" id="worldName">🌿 Selva</div>
+      </div>
+
+      <button id="musicToggle" class="pill-btn music-btn">🔊 Música</button>
+    </div>
+
+    <div class="controls-hint">
+      Cambia el modo de operación en cualquier momento desde la pantalla de inicio: sirve tanto para practicar sumas como multiplicaciones.
+      <br><br>Presiona <span class="key">Espacio</span> para pausar o reanudar en cualquier momento.
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="toast-bar" id="toastBar">
+      <div class="toast" id="toast"></div>
+    </div>
+    <div class="deposit-banner" id="depositBanner" style="display:none;"></div>
+    <div class="stage" id="stage">
+      <canvas id="game" width="640" height="640"></canvas>
+
+      <!-- Pantalla de inicio -->
+      <div class="overlay" id="startScreen">
+        <h2>🌿 Bienvenido a la selva numérica 🌿</h2>
+        <p>Guía a la culebra hasta la manzana con la respuesta correcta. Cuidado con los bichos y las paredes.</p>
+        <input type="text" id="nameInput" placeholder="Escribe tu nombre" maxlength="16" autofocus>
+
+        <div>
+          <div class="small-note">Operación</div>
+          <div class="choice-row" id="modeRow">
+            <div class="pill-btn selected" data-mode="suma">➕ Suma</div>
+            <div class="pill-btn" data-mode="multi">✖️ Multiplicación</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="small-note">Dificultad</div>
+          <div class="choice-row" id="diffRow">
+            <div class="pill-btn" data-diff="facil">Fácil</div>
+            <div class="pill-btn selected" data-diff="normal">Normal</div>
+            <div class="pill-btn" data-diff="dificil">Difícil</div>
+          </div>
+        </div>
+
+        <div class="tips-box" id="tipsBox">
+          <div class="tips-label">💡 Cómo se juega</div>
+          <div class="tips-text" id="tipsText">Guía a la culebra hasta la manzana con la respuesta correcta.</div>
+        </div>
+
+        <button class="go-btn" id="startBtn">Jugar 🚀</button>
+        <div class="controls-hint">
+          Muévete con <span class="key">↑</span><span class="key">↓</span><span class="key">←</span><span class="key">→</span>
+          o <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span>
+        </div>
+      </div>
+
+      <!-- Pantalla de fin -->
+      <div class="overlay" id="endScreen" style="display:none;">
+        <h2 id="endTitle">¡Choque!</h2>
+        <p id="endMsg">Tu puntaje final fue...</p>
+        <div class="stat-value" style="font-size:32px;" id="endScore">0</div>
+        <button class="go-btn" id="retryBtn">Jugar de nuevo 🔁</button>
+      </div>
+
+      <!-- Pantalla de choque (con vidas restantes): espera confirmación del jugador -->
+      <div class="overlay" id="continueScreen" style="display:none;">
+        <h2 id="continueTitle">💥 ¡Choque!</h2>
+        <p id="continueMsg">Vidas restantes: 3</p>
+        <button class="go-btn" id="continueBtn">Continuar ▶️</button>
+      </div>
+
+      <!-- Pantalla de nivel superado (al entrar a la bodega) -->
+      <div class="overlay" id="levelCompleteScreen" style="display:none;">
+        <h2 id="levelCompleteTitle">🎉 ¡Nivel superado!</h2>
+        <p id="levelCompleteMsg">La culebra entregó sus manzanas en la bodega.</p>
+        <div class="stat-value" style="font-size:30px;" id="levelCompleteSpeed">Velocidad L2</div>
+        <p id="levelCompleteStats" style="margin-top:-6px;">Puntaje: 0 · Trofeos: 0</p>
+        <button class="go-btn" id="levelCompleteBtn">Siguiente nivel ▶️</button>
+      </div>
+
+      <!-- Pantalla de pausa -->
+      <div class="overlay" id="pauseScreen" style="display:none;">
+        <h2>⏸ Juego en pausa</h2>
+        <p>Presiona la barra espaciadora para continuar</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------------- CONFIG ----------------
+  const COLS = 20, ROWS = 20;
+  // Celda de la cuadrícula donde está la puerta de la bodega (esquina superior derecha).
+  // La culebra puede pasar por ahí libremente; solo dispara la entrega si el
+  // depósito ya está lleno.
+  // Zona de entrada a la bodega (varias casillas, cubriendo el área visual
+  // de la casa) para que sea fácil de alcanzar sin tener que acertar un
+  // único cuadro exacto. La culebra puede pasar por ahí libremente; solo
+  // dispara la entrega si el depósito ya está lleno.
+  const houseCell = { x: COLS-3, y: 1 }; // casilla "ancla" (usada para referencias puntuales)
+  const houseCells = [];
+  for(let hx=COLS-4; hx<=COLS-1; hx++){
+    for(let hy=0; hy<=2; hy++){
+      houseCells.push({x:hx, y:hy});
+    }
+  }
+  function isHouseCell(x,y){
+    for(const c of houseCells) if(c.x===x && c.y===y) return true;
+    return false;
+  }
+  let CELL = 32;
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const stageEl = document.getElementById('stage');
+
+  function resizeCanvas(){
+    const isWide = window.innerWidth >= 900;
+    let availW, availH;
+
+    // Altura que ocupan los elementos que quedan ARRIBA del canvas dentro
+    // del panel derecho (barra de avisos + banner del depósito), para que
+    // el tablero nunca desborde la ventana y obligue a hacer scroll.
+    let aboveCanvasH = 0;
+    const toastBarEl = document.getElementById('toastBar');
+    const depBannerEl = document.getElementById('depositBanner');
+    if(toastBarEl) aboveCanvasH += toastBarEl.getBoundingClientRect().height || 44;
+    if(depBannerEl && depBannerEl.style.display !== 'none') aboveCanvasH += (depBannerEl.getBoundingClientRect().height || 0) + 8;
+
+    if(isWide){
+      // Layout de dos columnas: el tablero usa todo el espacio horizontal
+      // libre a la derecha del panel, y casi toda la altura de la ventana.
+      const leftPanelEl = document.querySelector('.left-panel');
+      const leftW = leftPanelEl ? leftPanelEl.getBoundingClientRect().width : 300;
+      availW = Math.min(window.innerWidth - leftW - 80, 1500);
+      availH = Math.min(window.innerHeight - aboveCanvasH - 55, 1500);
+    } else {
+      // Layout apilado (pantallas angostas): medimos el alto real de
+      // header/HUD/pie para aprovechar el espacio vertical restante.
+      let usedH = 30 + aboveCanvasH;
+      const headerEl = document.querySelector('.brand');
+      const authorEl = document.querySelector('.author-tag');
+      if(headerEl) usedH += headerEl.getBoundingClientRect().height;
+      if(authorEl) usedH += authorEl.getBoundingClientRect().height;
+      const hudEl = document.getElementById('hud');
+      if(hudEl && hudEl.style.display !== 'none') usedH += hudEl.getBoundingClientRect().height + 14;
+      availW = Math.min(window.innerWidth - 20, 1100);
+      availH = Math.min(window.innerHeight - usedH, 1100);
+    }
+
+    const size = Math.max(320, Math.floor(Math.min(availW, availH) / COLS) * COLS);
+    CELL = size / COLS;
+    canvas.width = size;
+    canvas.height = size;
+    drawStatic();
+  }
+  function drawStatic(){
+    const g = ctx.createRadialGradient(
+      canvas.width*0.5, canvas.height*0.42, canvas.width*0.05,
+      canvas.width*0.5, canvas.height*0.5, canvas.width*0.75
+    );
+    g.addColorStop(0, '#123f2c');
+    g.addColorStop(1, '#081f16');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+  }
+  window.addEventListener('resize', ()=>{
+    // Evita que el tablero cambie de tamaño en pleno juego (por ejemplo,
+    // si aparece o desaparece la barra de scroll al mostrar un mensaje).
+    // Solo se reajusta libremente antes de empezar o cuando el juego termina.
+    if(!running) resizeCanvas();
+  });
+  resizeCanvas();
+  const startScreen = document.getElementById('startScreen');
+  const endScreen = document.getElementById('endScreen');
+  const toastEl = document.getElementById('toast');
+  const hud = document.getElementById('hud');
+
+  let mode = 'suma';
+  let diff = 'normal';
+  let playerName = 'Jugador';
+
+  document.querySelectorAll('#modeRow .pill-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('#modeRow .pill-btn').forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected'); mode = b.dataset.mode;
+    });
+  });
+  document.querySelectorAll('#diffRow .pill-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('#diffRow .pill-btn').forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected'); diff = b.dataset.diff;
+    });
+  });
+
+  // ---------------- SOUND (WebAudio, sin archivos externos) ----------------
+  let audioCtx = null;
+  function ac(){
+    try{
+      if(!audioCtx){
+        const Ctor = window.AudioContext || window.webkitAudioContext;
+        if(Ctor) audioCtx = new Ctor();
+      }
+      if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
+      return audioCtx;
+    } catch(e){
+      console.warn('Audio no disponible:', e);
+      return null;
+    }
+  }
+  function tone(freq, dur, type, gainVal, delay){
+    try{
+    delay = delay||0;
+    const c = ac();
+    const t0 = c.currentTime + delay;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = type||'sine';
+    osc.frequency.setValueAtTime(freq, t0);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(gainVal||0.35, t0+0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t0); osc.stop(t0+dur+0.02);
+    } catch(e){ console.warn('tone() falló:', e); }
+  }
+  function sndCorrect(){ try{ tone(523,0.12,'triangle',0.25,0); tone(659,0.12,'triangle',0.25,0.09); tone(784,0.18,'triangle',0.25,0.18); }catch(e){} }
+  function sndWrong(){ try{ tone(180,0.22,'sawtooth',0.2,0); tone(120,0.28,'sawtooth',0.2,0.1); }catch(e){} }
+  function sndCrash(){
+   try{
+    const c = ac(); if(!c) return;
+    const t0=c.currentTime;
+    const bufferSize = c.sampleRate*0.35;
+    const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++) data[i] = (Math.random()*2-1)*(1-i/bufferSize);
+    const noise = c.createBufferSource(); noise.buffer = buffer;
+    const gain = c.createGain(); gain.gain.setValueAtTime(0.35,t0);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.35);
+    noise.connect(gain).connect(c.destination); noise.start(t0);
+   } catch(e){ console.warn('sndCrash falló:', e); }
+  }
+  function sndBug(){ try{ tone(300,0.1,'square',0.15,0); tone(230,0.15,'square',0.15,0.07); }catch(e){} }
+  function sndTrophy(){
+    try{
+      tone(523,0.14,'triangle',0.3,0);
+      tone(659,0.14,'triangle',0.3,0.1);
+      tone(784,0.14,'triangle',0.3,0.2);
+      tone(1046,0.28,'triangle',0.32,0.3);
+    } catch(e){}
+  }
+  // Fanfarria más grande: suena cuando la culebra entrega en la bodega y sube de nivel
+  function sndLevelUp(){
+    try{
+      tone(392,0.12,'square',0.28,0);
+      tone(523,0.12,'square',0.28,0.1);
+      tone(659,0.12,'square',0.28,0.2);
+      tone(784,0.12,'square',0.28,0.3);
+      tone(1046,0.36,'triangle',0.34,0.4);
+      tone(1318,0.4,'triangle',0.3,0.46);
+    } catch(e){}
+  }
+  // Pequeño "clic" cuando la puerta de la bodega se habilita para entrar
+  function sndDoorOpen(){
+    try{
+      tone(660,0.09,'square',0.22,0);
+      tone(880,0.14,'square',0.22,0.08);
+    } catch(e){}
+  }
+  function sndStep(){
+    try{
+      const c = ac(); if(!c) return;
+      const t0 = c.currentTime;
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(220, t0);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(0.035, t0+0.005);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.05);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t0); osc.stop(t0+0.06);
+    } catch(e){}
+  }
+
+  // ---------- Música de fondo (composición propia, generada por código) ----------
+  // 5 variaciones (una por cada nivel de velocidad), todas originales,
+  // generadas con osciladores; ninguna usa melodías existentes.
+  const MUSIC_TRACKS = [
+    { scale:[220.00,246.94,261.63,329.63,392.00,440.00], bass:[110.00,130.81,98.00,87.31], tempo:300, wave:'triangle' },   // L1: La menor pentatónica, calmada
+    { scale:[293.66,329.63,349.23,440.00,523.25,587.33], bass:[146.83,164.81,130.81,110.00], tempo:270, wave:'triangle' }, // L2: Re menor, un poco más viva
+    { scale:[261.63,293.66,329.63,392.00,440.00,523.25], bass:[130.81,146.83,164.81,196.00], tempo:245, wave:'sine' },     // L3: Do mayor pentatónica, brillante
+    { scale:[329.63,369.99,415.30,493.88,587.33,659.25], bass:[164.81,185.00,146.83,220.00], tempo:220, wave:'triangle' }, // L4: Mi menor, más enérgica
+    { scale:[392.00,440.00,493.88,587.33,659.25,783.99], bass:[196.00,220.00,246.94,164.81], tempo:195, wave:'square' }    // L5: Sol mayor, chiptune veloz
+  ];
+  function currentTrack(){
+    return MUSIC_TRACKS[Math.min(Math.max(speedLevel,1),MUSIC_TRACKS.length)-1];
+  }
+
+  // "Mundos" visuales: la paleta de color del tablero cambia según el nivel.
+  const WORLD_THEMES = [
+    { name:'Selva', icon:'🌿',            bgInner:'#123f2c', bgOuter:'#081f16', vignette:'rgba(0,0,0,0.32)' },
+    { name:'Laguna', icon:'🌊',           bgInner:'#0d3f4a', bgOuter:'#04181e', vignette:'rgba(0,10,18,0.34)' },
+    { name:'Atardecer púrpura', icon:'🌆',bgInner:'#3a1f4d', bgOuter:'#160a24', vignette:'rgba(12,0,20,0.36)' },
+    { name:'Desierto', icon:'🏜️',         bgInner:'#5a3a1f', bgOuter:'#2a1608', vignette:'rgba(20,8,0,0.36)' },
+    { name:'Noche estrellada', icon:'🌌', bgInner:'#131a3a', bgOuter:'#02040f', vignette:'rgba(0,0,10,0.4)', stars:true }
+  ];
+  function currentWorldTheme(){
+    return WORLD_THEMES[Math.min(Math.max(speedLevel,1),WORLD_THEMES.length)-1];
+  }
+
+  let musicStep = 0;
+  function playMusicNote(){
+    try{
+      if(!musicOn) return;
+      const c = ac(); if(!c) return;
+      const t0 = c.currentTime;
+      const track = currentTrack();
+
+      // línea de bajo suave
+      if(musicStep % 4 === 0){
+        const bassFreq = track.bass[(musicStep/4) % track.bass.length];
+        const bosc = c.createOscillator(); const bgain = c.createGain();
+        bosc.type='triangle'; bosc.frequency.setValueAtTime(bassFreq, t0);
+        bgain.gain.setValueAtTime(0.0001,t0);
+        bgain.gain.exponentialRampToValueAtTime(0.14, t0+0.05);
+        bgain.gain.exponentialRampToValueAtTime(0.0001, t0+0.55);
+        bosc.connect(bgain).connect(c.destination);
+        bosc.start(t0); bosc.stop(t0+0.6);
+      }
+
+      // melodía ligera, semi-aleatoria dentro de la escala (siempre suena "bien")
+      const noteFreq = track.scale[Math.floor(Math.random()*track.scale.length)];
+      const osc = c.createOscillator(); const gain = c.createGain();
+      osc.type=track.wave; osc.frequency.setValueAtTime(noteFreq, t0+0.02);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(0.12, t0+0.06);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.34);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t0); osc.stop(t0+0.36);
+
+      musicStep++;
+    } catch(e){}
+  }
+  function startMusic(){
+    stopMusic();
+    musicOn = true;
+    document.getElementById('musicToggle').textContent = '🔊';
+    musicTimer = setInterval(playMusicNote, currentTrack().tempo);
+  }
+  function stopMusic(){
+    musicOn = false;
+    clearInterval(musicTimer);
+    const btn = document.getElementById('musicToggle');
+    if(btn) btn.textContent = '🔇';
+  }
+  // Reinicia la música con la pista del nivel actual (llamado al subir de nivel)
+  function refreshMusicForLevel(){
+    if(musicOn) startMusic();
+  }
+  document.getElementById('musicToggle').addEventListener('click', ()=>{
+    ac();
+    if(musicOn) stopMusic(); else startMusic();
+  });
+
+  // Música activa desde la pantalla de inicio: arranca en la primera
+  // interacción del usuario con la página (requisito de los navegadores
+  // para permitir audio).
+  function unlockAudioAndPresentMusic(){
+    ac();
+    if(!musicOn) startMusic();
+  }
+  window.addEventListener('pointerdown', unlockAudioAndPresentMusic, {once:true});
+  window.addEventListener('keydown', unlockAudioAndPresentMusic, {once:true});
+
+  // ---------------- STATE ----------------
+  var snake, dir, nextDir, food, bugs, obstacles, score, level, lives, deposit, trophies, tickMs, running, currentOp, minLen, timer, tickCounter, musicOn, musicTimer;
+  var flyingApples = [];
+  var paused = false;
+  var delivering = false;
+  var houseDoorOpen = 0; // 0 = cerrada, 1 = abierta (se anima suavemente)
+  var deliveryQueue = [];
+  var deliveryEndTime = 0;
+  var snakeVanishStart = 0;
+  var snakeHidden = false;
+
+  function rangeFor(diffLevel, isMulti){
+    if(isMulti){
+      if(diffLevel==='facil') return [1,5];
+      if(diffLevel==='dificil') return [3,12];
+      return [2,9];
+    } else {
+      if(diffLevel==='facil') return [1,6];
+      if(diffLevel==='dificil') return [5,25];
+      return [1,15];
+    }
+  }
+  function speedFor(diffLevel){
+    if(diffLevel==='facil') return 320;
+    if(diffLevel==='dificil') return 210;
+    return 260;
+  }
+  // Nivel de velocidad L1-L5: siempre empieza en L1, y solo sube cuando
+  // la culebra entrega manzanas en la bodega (no hay control manual).
+  const SPEED_LEVEL_MULT = {1:1.55, 2:1.22, 3:1.0, 4:0.82, 5:0.66};
+  var speedLevel = 1;
+
+  // Velocidad final: dificultad base * nivel de velocidad ganado,
+  // con una acelerada muy leve y continua según cuánto ha crecido la culebra.
+  function computeTickMs(){
+    const base = speedFor(diff);
+    const len = (snake && snake.length) ? snake.length : minLen;
+    const grown = Math.max(0, len - minLen);
+    const lengthDelta = grown * 1.1;
+    const raw = (base - lengthDelta) * SPEED_LEVEL_MULT[speedLevel];
+    return Math.max(base * 0.4, raw);
+  }
+
+  var boosting = false;
+  // Velocidad efectiva de la culebra: se acelera SOLO ella al mantener
+  // presionada una tecla de movimiento. Los bichos nunca se ven afectados.
+  function effectiveTickMs(){
+    return boosting ? Math.max(55, tickMs*0.55) : tickMs;
+  }
+  const BUG_TICK_MS = 480; // ritmo fijo de los bichos, independiente de la culebra
+  var snakeAcc = 0, bugAcc = 0, lastFrameTime = 0;
+
+  // Avanza la lógica del juego según el tiempo real transcurrido (no un
+  // intervalo fijo), para que culebra y bichos puedan ir a ritmos distintos.
+  function advanceGameClock(now){
+    if(!lastFrameTime) lastFrameTime = now;
+    let dt = now - lastFrameTime;
+    lastFrameTime = now;
+    if(dt > 250) dt = 250; // evita saltos grandes si la pestaña estuvo inactiva
+    if(!running || paused) return;
+
+    snakeAcc += dt;
+    const snakeTick = effectiveTickMs();
+    let guard = 0;
+    while(snakeAcc >= snakeTick && guard < 8){
+      try{ moveSnakeOnce(); } catch(e){ showFatalError(e); running=false; return; }
+      snakeAcc -= snakeTick;
+      guard++;
+    }
+
+    bugAcc += dt;
+    guard = 0;
+    while(bugAcc >= BUG_TICK_MS && guard < 8){
+      moveBugs();
+      bugAcc -= BUG_TICK_MS;
+      guard++;
+    }
+  }
+
+  function applySpeedIfChanged(){
+    const t = computeTickMs();
+    if(Math.abs(t - tickMs) >= 2){
+      tickMs = t;
+    }
+  }
+
+  function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+  function cellFree(x,y, exclude){
+    exclude = exclude || [];
+    if(x<0||y<0||x>=COLS||y>=ROWS) return false;
+    if(isHouseCell(x,y)) return false;
+    for(const s of (snake||[])) if(s.x===x && s.y===y) return false;
+    for(const o of (obstacles||[])) if(o.x===x && o.y===y) return false;
+    for(const b of (bugs||[])) if(b.x===x && b.y===y) return false;
+    for(const f of (food||[])) if(f.x===x && f.y===y) return false;
+    for(const e of exclude) if(e.x===x && e.y===y) return false;
+    return true;
+  }
+
+  function makeOperation(){
+    const isMulti = mode==='multi';
+    const [lo,hi] = rangeFor(diff, isMulti);
+    const a = randInt(lo,hi), b = randInt(lo,hi);
+    const result = isMulti ? a*b : a+b;
+    currentOp = { a, b, result, symbol: isMulti ? '×' : '+' };
+    document.getElementById('opDisplay').textContent = a + ' ' + currentOp.symbol + ' ' + b + ' = ?';
+  }
+
+  function spawnFood(){
+    food = [];
+    const correctIdx = randInt(0,3);
+    const usedVals = new Set([currentOp.result]);
+    for(let i=0;i<4;i++){
+      let val;
+      if(i===correctIdx){ val = currentOp.result; }
+      else {
+        let tries2 = 0, spread = 6;
+        do {
+          const delta = (randInt(-spread,spread) || 1);
+          val = Math.max(0, currentOp.result + delta);
+          tries2++;
+          if(tries2 % 15 === 0) spread += 6; // amplía el rango si no encuentra valor libre
+        } while(usedVals.has(val) && tries2 < 100);
+        usedVals.add(val);
+      }
+      let x,y, tries=0;
+      do { x = randInt(0,COLS-1); y = randInt(0,ROWS-1); tries++; }
+      while(!cellFree(x,y, food) && tries<200);
+      food.push({x,y,val,correct: val===currentOp.result});
+    }
+  }
+
+  function spawnBugs(n){
+    bugs = [];
+    for(let i=0;i<n;i++){
+      let x,y,tries=0;
+      do { x=randInt(0,COLS-1); y=randInt(0,ROWS-1); tries++; }
+      while(!cellFree(x,y) && tries<200);
+      bugs.push({x,y, dirx:0, diry:0});
+    }
+  }
+
+  function spawnObstacles(){
+    obstacles = [];
+    const count = diff==='dificil' ? 10 : diff==='normal' ? 6 : 3;
+    for(let i=0;i<count;i++){
+      let x,y,tries=0;
+      do { x=randInt(2,COLS-3); y=randInt(2,ROWS-3); tries++; }
+      while(!cellFree(x,y) && tries<200);
+      obstacles.push({x,y});
+    }
+  }
+
+  function resetGame(){
+    const cx = Math.floor(COLS/2), cy = Math.floor(ROWS/2);
+    snake = [{x:cx,y:cy},{x:cx-1,y:cy},{x:cx-2,y:cy}];
+    dir = {x:1,y:0}; nextDir = {x:1,y:0}; dirQueue = [];
+    score = 0; level = 1; minLen = 3; tickCounter = 0;
+    lives = 3; deposit = 0; trophies = 0; speedLevel = 1;
+    boosting = false; pressedMoveKeys.clear();
+    if(boostTimeoutId){ clearTimeout(boostTimeoutId); boostTimeoutId = null; }
+    snakeHidden = false; snakeVanishStart = 0;
+    document.getElementById('levelCompleteScreen').style.display = 'none';
+    paused = false; flyingApples = [];
+    delivering = false; houseDoorOpen = 0; deliveryQueue = []; deliveryEndTime = 0;
+    const pScreen = document.getElementById('pauseScreen'); if(pScreen) pScreen.style.display='none';
+    obstacles = []; bugs = []; food = [];
+    tickMs = speedFor(diff);
+    spawnObstacles();
+    makeOperation();
+    spawnFood();
+    spawnBugs(diff==='dificil'?3:diff==='normal'?2:1);
+    updateHud();
+  }
+
+  const LEVEL_STEP = 4; // cada 4 segmentos de crecimiento sube un nivel
+  const DEPOSIT_GOAL = 7; // cada 7 manzanas correctas llena el depósito
+  function levelForLength(len){
+    return 1 + Math.max(0, Math.floor((len - minLen) / LEVEL_STEP));
+  }
+
+  function updateHud(){
+    document.getElementById('hudName').textContent = playerName;
+    document.getElementById('hudScore').textContent = score;
+    document.getElementById('hudLen').textContent = snake.length;
+    document.getElementById('hudLives').textContent = '♥'.repeat(Math.max(lives,0)) + '♡'.repeat(Math.max(5-lives,0));
+    document.getElementById('hudTrophies').textContent = trophies;
+    const trophyRow = document.getElementById('trophyRow');
+    if(trophyRow){
+      let th = '';
+      for(let i=0;i<trophies;i++) th += '<div class="trophy-icon">🏆</div>';
+      trophyRow.innerHTML = th || '<span class="trophy-empty">Aún ninguno</span>';
+    }
+    const bar = document.getElementById('depositBar');
+    if(bar){
+      let html = '';
+      for(let i=0;i<DEPOSIT_GOAL;i++) html += '<div class="pip ' + (i<deposit?'filled':'') + '"></div>';
+      bar.innerHTML = html;
+    }
+    const depBanner = document.getElementById('depositBanner');
+    if(depBanner){
+      depBanner.style.display = 'flex'; // siempre ocupa su espacio; solo cambia visibilidad
+      if(delivering){
+        depBanner.style.visibility = 'hidden';
+      } else if(deposit >= DEPOSIT_GOAL){
+        depBanner.style.visibility = 'visible';
+        depBanner.className = 'deposit-banner ready';
+        depBanner.textContent = '🏚️ ¡Lleva la culebra a la bodega!';
+      } else {
+        depBanner.style.visibility = 'visible';
+        depBanner.className = 'deposit-banner waiting';
+        depBanner.textContent = '🍎 Recolecta manzanas correctas para abrir la bodega (' + deposit + '/' + DEPOSIT_GOAL + ')';
+      }
+    }
+    // El "Nivel" del marcador es el mismo nivel de velocidad: solo sube al
+    // entregar las manzanas en la bodega (nunca por simple crecimiento).
+    level = speedLevel;
+    document.getElementById('speedLevelLabel').textContent = 'L' + speedLevel;
+    const worldEl = document.getElementById('worldName');
+    if(worldEl){
+      const theme = currentWorldTheme();
+      worldEl.textContent = theme.icon + ' ' + theme.name;
+    }
+
+    // Aplica el modelo de velocidad (dificultad + crecimiento leve + nivel ganado en la bodega)
+    applySpeedIfChanged();
+  }
+
+  function showToast(msg, cls){
+    toastEl.textContent = msg;
+    toastEl.className = 'toast show ' + cls;
+    clearTimeout(toastEl._hideTimer);
+    toastEl._hideTimer = setTimeout(()=>{ toastEl.className = 'toast ' + cls; }, 2200);
+  }
+
+  // ---------------- INPUT ----------------
+  var pressedMoveKeys = new Set();
+  const MOVE_KEYS = ['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d'];
+
+  // Cola de hasta 2 direcciones pendientes: permite registrar giros rápidos
+  // y sucesivos (p.ej. "arriba" y luego "derecha" casi al mismo tiempo) sin
+  // que el segundo giro se pierda por compararse contra una dirección ya
+  // desactualizada.
+  var dirQueue = [];
+  function queueDirection(wanted){
+    const last = dirQueue.length ? dirQueue[dirQueue.length-1] : dir;
+    if(wanted.x === -last.x && wanted.y === -last.y) return; // no invertir sobre sí misma
+    if(wanted.x === last.x && wanted.y === last.y) return; // ya va en esa dirección
+    if(dirQueue.length < 2) dirQueue.push(wanted);
+  }
+
+  var boostTimeoutId = null;
+  const BOOST_HOLD_DELAY = 170; // ms que hay que mantener presionada la tecla para activar el impulso
+
+  window.addEventListener('keydown', (e)=>{
+    const k = e.key.toLowerCase();
+    let wanted = null;
+    if(['arrowup','w'].includes(k)) wanted = {x:0,y:-1};
+    else if(['arrowdown','s'].includes(k)) wanted = {x:0,y:1};
+    else if(['arrowleft','a'].includes(k)) wanted = {x:-1,y:0};
+    else if(['arrowright','d'].includes(k)) wanted = {x:1,y:0};
+    if(wanted) queueDirection(wanted);
+    if(['arrowup','arrowdown','arrowleft','arrowright'].includes(k)) e.preventDefault();
+
+    // el impulso solo se activa si la tecla se mantiene presionada de verdad;
+    // un toque rápido para girar no debe acelerar a la culebra
+    if(MOVE_KEYS.includes(k) && running && !paused){
+      if(!pressedMoveKeys.has(k)){
+        pressedMoveKeys.add(k);
+        if(boostTimeoutId) clearTimeout(boostTimeoutId);
+        boostTimeoutId = setTimeout(()=>{
+          if(pressedMoveKeys.size > 0) boosting = true;
+        }, BOOST_HOLD_DELAY);
+      }
+    }
+  }, {passive:false});
+
+  window.addEventListener('keyup', (e)=>{
+    const k = e.key.toLowerCase();
+    if(MOVE_KEYS.includes(k)){
+      pressedMoveKeys.delete(k);
+      if(pressedMoveKeys.size === 0){
+        if(boostTimeoutId){ clearTimeout(boostTimeoutId); boostTimeoutId = null; }
+        boosting = false;
+      }
+    }
+  });
+
+  // swipe support (móvil)
+  let touchStartX=0, touchStartY=0;
+  canvas.addEventListener('touchstart', (e)=>{
+    const t = e.changedTouches[0]; touchStartX=t.clientX; touchStartY=t.clientY;
+  }, {passive:true});
+  canvas.addEventListener('touchend', (e)=>{
+    const t = e.changedTouches[0];
+    const dx = t.clientX-touchStartX, dy = t.clientY-touchStartY;
+    if(Math.abs(dx) > Math.abs(dy)){
+      if(dx>20) queueDirection({x:1,y:0});
+      else if(dx<-20) queueDirection({x:-1,y:0});
+    } else {
+      if(dy>20) queueDirection({x:0,y:1});
+      else if(dy<-20) queueDirection({x:0,y:-1});
+    }
+  }, {passive:true});
+
+  // ---------------- GAME LOGIC ----------------
+  function moveSnakeOnce(){
+    if(delivering) return; // ya entró a la bodega: se queda quieta mientras se desvanece
+    if(dirQueue.length) dir = dirQueue.shift();
+    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+    // pared
+    if(head.x<0 || head.y<0 || head.x>=COLS || head.y>=ROWS){
+      return loseLife('¡Chocaste contra la pared!');
+    }
+    // sí mismo
+    for(const s of snake){ if(s.x===head.x && s.y===head.y) return loseLife('¡Te enredaste contigo mismo!'); }
+    // obstáculo
+    for(const o of obstacles){ if(o.x===head.x && o.y===head.y) return loseLife('¡Chocaste contra un obstáculo!'); }
+
+    let ateFood = null;
+    for(const f of food){ if(f.x===head.x && f.y===head.y){ ateFood = f; break; } }
+
+    let bugHit = false;
+    for(const b of bugs){ if(b.x===head.x && b.y===head.y){ bugHit = true; break; } }
+
+    snake.unshift(head);
+
+    if(bugHit){
+      sndBug();
+      const stoleApple = !delivering && deposit > 0;
+      if(stoleApple) deposit -= 1;
+      showToast(stoleApple ? '¡Un bicho te mordió y robó una manzana! 🐛🍎' : '¡Un bicho te mordió! 🐛 -1', 'bad');
+      // el bicho se reubica
+      spawnBugs(bugs.length);
+      // encoge un segmento, sin bajar del mínimo
+      snake.pop();
+      if(snake.length > minLen) snake.pop();
+    } else if(ateFood){
+      if(ateFood.correct){
+        sndCorrect();
+        score += 1;
+        const wasFull = deposit >= DEPOSIT_GOAL;
+        if(!delivering && !wasFull) deposit = Math.min(deposit+1, DEPOSIT_GOAL);
+        // la manzana recién comida "viaja" desde la cabeza hasta la cola,
+        // donde queda montada como carga sobre el cuerpo de la culebra
+        const tailSeg = snake[snake.length-1] || head;
+        flyingApples.push({
+          startX: head.x*CELL + CELL/2, startY: head.y*CELL + CELL/2,
+          toX: tailSeg.x*CELL + CELL/2, toY: tailSeg.y*CELL + CELL/2 - CELL*0.34,
+          start: performance.now(), duration: 380,
+          golden: false
+        });
+        if(!delivering && !wasFull && deposit >= DEPOSIT_GOAL){
+          sndDoorOpen();
+          showToast('📦 ¡Depósito lleno! Lleva la culebra a la bodega 🏚️', 'good');
+        } else if(deposit >= DEPOSIT_GOAL){
+          showToast('¡Correcto! Ya puedes entrar a la bodega 🏚️', 'good');
+        } else {
+          showToast('¡Correcto! +1 🍎', 'good');
+        }
+        // crece: no quitamos la cola
+        makeOperation();
+        spawnFood();
+      } else {
+        sndWrong();
+        const stoleApple = !delivering && deposit > 0;
+        if(stoleApple) deposit -= 1;
+        showToast(stoleApple ? 'Respuesta incorrecta -1 y se cae una manzana 🍎' : 'Respuesta incorrecta -1', 'bad');
+        // se acorta un segmento, sin bajar del mínimo
+        snake.pop();
+        if(snake.length > minLen) snake.pop();
+        spawnFood();
+      }
+    } else {
+      snake.pop();
+      sndStep();
+    }
+
+    // ¿La culebra acaba de entrar a la bodega con el depósito lleno?
+    if(!delivering && deposit >= DEPOSIT_GOAL && isHouseCell(head.x, head.y)){
+      triggerHouseDelivery();
+    }
+
+    updateHud();
+  }
+
+  function moveBugs(){
+    for(const b of bugs){
+      const head = snake[0];
+      const options = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}];
+      // 55% persigue, 45% aleatorio
+      let choice;
+      if(Math.random()<0.55){
+        options.sort((o1,o2)=>{
+          const d1 = Math.abs((b.x+o1.x)-head.x)+Math.abs((b.y+o1.y)-head.y);
+          const d2 = Math.abs((b.x+o2.x)-head.x)+Math.abs((b.y+o2.y)-head.y);
+          return d1-d2;
+        });
+        choice = options[0];
+      } else {
+        choice = options[randInt(0,3)];
+      }
+      const nx = b.x+choice.x, ny = b.y+choice.y;
+      const blocked = nx<0||ny<0||nx>=COLS||ny>=ROWS || obstacles.some(o=>o.x===nx&&o.y===ny);
+      if(!blocked){ b.x=nx; b.y=ny; }
+    }
+  }
+
+  function respawnSnake(fresh){
+    // respawnea la culebra en el centro. Tras un choque queda un poco más
+    // corta (penalización); al empezar un nuevo nivel arranca fresca.
+    const oldLen = snake.length;
+    const newLen = fresh ? minLen : Math.max(minLen, Math.floor(snake.length/2));
+    if(fresh){
+      deposit = 0; // nivel nuevo: depósito reiniciado (ya se entregó)
+    } else if(!delivering){
+      // si perdió segmentos, también pierde manzanas cargadas en proporción
+      const lost = Math.max(0, oldLen - newLen);
+      deposit = Math.max(0, deposit - lost);
+    }
+    const cx = Math.floor(COLS/2), cy = Math.floor(ROWS/2);
+    snake = [];
+    for(let i=0;i<newLen;i++) snake.push({x:cx-i, y:cy});
+    dir = {x:1,y:0}; nextDir = {x:1,y:0}; dirQueue = [];
+    updateHud();
+  }
+
+  function loseLife(msg){
+    lives -= 1;
+    sndCrash();
+    if(lives <= 0){
+      return gameOver(msg + ' Se acabaron las vidas.');
+    }
+    // pausa el juego y espera que el jugador dé la orden de continuar
+    running = false;
+    document.getElementById('continueTitle').textContent = '💥 ' + msg;
+    document.getElementById('continueMsg').textContent = 'Vidas restantes: ' + '♥'.repeat(lives) + ' · Puntaje: ' + score;
+    document.getElementById('continueScreen').style.display = 'flex';
+  }
+
+  function gameOver(msg){
+    running = false;
+    stopMusic();
+    sndCrash();
+    document.getElementById('endTitle').textContent = '💥 ' + msg;
+    document.getElementById('endMsg').textContent = playerName + ', tu recorrido terminó aquí.';
+    document.getElementById('endScore').textContent = 'Puntaje: ' + score;
+    endScreen.style.display = 'flex';
+  }
+
+  // ---------------- RENDER ----------------
+  function draw(){
+   try{
+    const frameNow = performance.now();
+    advanceGameClock(frameNow);
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // fondo con gradiente radial: la paleta cambia según el "mundo" del nivel actual
+    const theme = currentWorldTheme();
+    const bgGrad = ctx.createRadialGradient(
+      canvas.width*0.5, canvas.height*0.42, canvas.width*0.05,
+      canvas.width*0.5, canvas.height*0.5, canvas.width*0.75
+    );
+    bgGrad.addColorStop(0, theme.bgInner);
+    bgGrad.addColorStop(1, theme.bgOuter);
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // estrellas (solo en el "mundo" nocturno de nivel 5)
+    if(theme.stars){
+      for(let i=0;i<40;i++){
+        const sx = (i*97 % COLS) * CELL + CELL*0.5;
+        const sy = (i*53 % ROWS) * CELL + CELL*0.5;
+        const tw = 0.4 + 0.4*Math.abs(Math.sin(frameNow/500 + i));
+        ctx.fillStyle = 'rgba(255,255,255,' + tw + ')';
+        ctx.beginPath(); ctx.arc(sx, sy, 1.4, 0, Math.PI*2); ctx.fill();
+      }
+    }
+
+    // textura tipo tablero: casillas alternas con un tono apenas distinto
+    for(let gy=0; gy<ROWS; gy++){
+      for(let gx=0; gx<COLS; gx++){
+        if((gx+gy) % 2 === 0){
+          ctx.fillStyle = 'rgba(255,255,255,0.015)';
+          ctx.fillRect(gx*CELL, gy*CELL, CELL, CELL);
+        }
+      }
+    }
+
+    // líneas de cuadrícula sutiles
+    ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+    ctx.lineWidth = 1;
+    for(let i=0;i<=COLS;i++){
+      ctx.beginPath(); ctx.moveTo(i*CELL,0); ctx.lineTo(i*CELL,ROWS*CELL); ctx.stroke();
+    }
+    for(let j=0;j<=ROWS;j++){
+      ctx.beginPath(); ctx.moveTo(0,j*CELL); ctx.lineTo(COLS*CELL,j*CELL); ctx.stroke();
+    }
+
+
+
+    // obstáculos (con sombra propia y un pequeño resalte superior tipo "roca musgosa")
+    obstacles.forEach(o=>{
+      const ox=o.x*CELL, oy=o.y*CELL;
+      ctx.save();
+      ctx.shadowColor='rgba(0,0,0,0.4)'; ctx.shadowBlur=6; ctx.shadowOffsetY=3;
+      const rockGrad = ctx.createLinearGradient(ox,oy,ox,oy+CELL);
+      rockGrad.addColorStop(0,'#4a7d5a'); rockGrad.addColorStop(1,'#2f5c42');
+      ctx.fillStyle = rockGrad;
+      roundRect(ox+2,oy+2,CELL-4,CELL-4,6);
+      ctx.fill();
+      ctx.restore();
+      ctx.fillStyle='rgba(255,255,255,0.12)';
+      ctx.fillRect(ox+6,oy+6,CELL-12,3);
+    });
+
+    // comida
+    food.forEach(f=>{
+      const cx = f.x*CELL+CELL/2, cy=f.y*CELL+CELL/2;
+      ctx.save();
+      ctx.shadowColor='rgba(0,0,0,0.35)'; ctx.shadowBlur=5; ctx.shadowOffsetY=3;
+      const appleGrad = ctx.createRadialGradient(cx-CELL*0.12,cy-CELL*0.14,CELL*0.05, cx,cy,CELL*0.42);
+      appleGrad.addColorStop(0,'#ff8c9c'); appleGrad.addColorStop(1,'#e0425a');
+      ctx.beginPath();
+      ctx.fillStyle = appleGrad;
+      ctx.arc(cx,cy,CELL*0.4,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#4a8f3d';
+      ctx.fillRect(cx-2, cy-CELL*0.4-6, 4, 8);
+      ctx.restore();
+      // brillo
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.ellipse(cx-CELL*0.13, cy-CELL*0.16, CELL*0.09, CELL*0.05, -0.6, 0, Math.PI*2);
+      ctx.fill();
+      ctx.font = "bold " + Math.max(15, CELL*0.5) + "px 'Baloo 2'";
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.lineWidth = Math.max(2.5, CELL*0.08);
+      ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+      ctx.strokeText(f.val, cx, cy+1);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(f.val, cx, cy+1);
+    });
+
+    // bichos
+    bugs.forEach(b=>{
+      const cx=b.x*CELL+CELL/2, cy=b.y*CELL+CELL/2;
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(0,0,0,0.3)';
+      ctx.ellipse(cx, cy+CELL*0.28, CELL*0.26, CELL*0.08, 0, 0, Math.PI*2);
+      ctx.fill();
+      const bugGrad = ctx.createRadialGradient(cx-4,cy-4,2, cx,cy,CELL*0.34);
+      bugGrad.addColorStop(0,'#d79bff'); bugGrad.addColorStop(1,'#9b3fe0');
+      ctx.fillStyle = bugGrad;
+      ctx.beginPath(); ctx.ellipse(cx,cy,CELL*0.32,CELL*0.26,0,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(cx-5,cy-3,2.5,0,Math.PI*2); ctx.arc(cx+5,cy-3,2.5,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#2a0d40';
+      ctx.beginPath(); ctx.arc(cx-5,cy-3,1.1,0,Math.PI*2); ctx.arc(cx+5,cy-3,1.1,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='#7a2fbf'; ctx.lineWidth=1.5;
+      for(let k=-1;k<=1;k++){
+        ctx.beginPath(); ctx.moveTo(cx+k*8,cy+8); ctx.lineTo(cx+k*8,cy+14); ctx.stroke();
+      }
+    });
+
+    // serpiente (se desvanece al entrar a la bodega, y se oculta tras entregar)
+    let snakeVanishAlpha = 1;
+    if(delivering) snakeVanishAlpha = Math.max(0, 1 - (performance.now() - snakeVanishStart)/120);
+    if(!snakeHidden && snakeVanishAlpha > 0.01){
+    ctx.save();
+    ctx.globalAlpha = snakeVanishAlpha;
+    snake.forEach((s,i)=>{
+      const x=s.x*CELL, y=s.y*CELL;
+      const t = i/Math.max(snake.length-1,1);
+      const g1 = [139,212,80], g2=[95,174,36];
+      const r = Math.round(g1[0]+(g2[0]-g1[0])*t);
+      const gg = Math.round(g1[1]+(g2[1]-g1[1])*t);
+      const bcol = Math.round(g1[2]+(g2[2]-g1[2])*t);
+      const baseColor = i===0 ? '#b6f26a' : `rgb(${r},${gg},${bcol})`;
+      ctx.save();
+      ctx.shadowColor='rgba(0,0,0,0.35)'; ctx.shadowBlur=4; ctx.shadowOffsetY=2;
+      const segGrad = ctx.createLinearGradient(x,y,x,y+CELL);
+      segGrad.addColorStop(0, baseColor);
+      segGrad.addColorStop(1, i===0 ? '#8fd457' : `rgb(${Math.max(0,r-30)},${Math.max(0,gg-30)},${Math.max(0,bcol-20)})`);
+      ctx.fillStyle = segGrad;
+      roundRect(x+2,y+2,CELL-4,CELL-4, i===0?9:6);
+      ctx.fill();
+      ctx.restore();
+      // brillo superior sutil (efecto "gloss")
+      ctx.fillStyle='rgba(255,255,255,0.16)';
+      roundRect(x+CELL*0.18,y+CELL*0.14,CELL*0.64,CELL*0.22,4);
+      ctx.fill();
+      if(i===0){
+        ctx.fillStyle='#0b2a1f';
+        const ex = dir.x!==0 ? (dir.x>0?CELL*0.68:CELL*0.2) : CELL*0.3;
+        const ey = dir.y!==0 ? (dir.y>0?CELL*0.68:CELL*0.2) : CELL*0.3;
+        ctx.beginPath(); ctx.arc(x+ex,y+ey,2.6,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x+CELL-ex,y+ey,2.6,0,Math.PI*2); ctx.fill();
+      }
+    });
+    ctx.restore();
+    }
+
+    // ---- Manzanas transportadas sobre la cola de la culebra ----
+    const now = performance.now();
+    drawCarriedApples(now);
+
+    // ---- Casa / bodega, con puerta animada y humo ----
+    const houseInfo = drawHouse(now);
+
+    // destello breve en la puerta justo al momento en que la culebra entra
+    if(now - houseGulpStart < 260){
+      const gt = (now - houseGulpStart) / 260;
+      ctx.save();
+      ctx.globalAlpha = 1 - gt;
+      ctx.fillStyle = '#fff8e0';
+      ctx.beginPath();
+      ctx.arc(houseInfo.doorX, houseInfo.doorY, CELL*(0.3 + gt*1.4), 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // ---- Manzanas volando (recién comidas, o entregándose a la bodega) ----
+    for(let i=flyingApples.length-1;i>=0;i--){
+      const fa = flyingApples[i];
+      let t = (now - fa.start) / fa.duration;
+      if(t >= 1){ flyingApples.splice(i,1); continue; }
+      const ease = 1 - Math.pow(1-t, 2); // easeOutQuad
+      const px = fa.startX + (fa.toX - fa.startX) * ease;
+      const arc = -Math.sin(t*Math.PI) * CELL*1.1;
+      const py = fa.startY + (fa.toY - fa.startY) * ease + arc;
+      const scale = 1 - 0.35*t;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, 1 - t*0.25);
+      ctx.fillStyle = fa.golden ? '#ffd76a' : '#ff5d73';
+      ctx.beginPath(); ctx.arc(px, py, CELL*0.24*scale, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#4a8f3d';
+      ctx.fillRect(px-2, py-CELL*0.24*scale-6, 3, 7);
+      ctx.restore();
+    }
+
+    // ---- Secuencia de entrega: manzanas cargadas volando hacia la bodega ----
+    if(delivering){
+      for(let i=deliveryQueue.length-1;i>=0;i--){
+        const dq = deliveryQueue[i];
+        if(now < dq.start) continue; // aún no le toca salir
+        let t = (now - dq.start) / dq.duration;
+        if(t >= 1){ deliveryQueue.splice(i,1); continue; }
+        const ease = 1 - Math.pow(1-t,2);
+        const px = dq.fromX + (houseInfo.doorX - dq.fromX) * ease;
+        const arc = -Math.sin(t*Math.PI) * CELL*0.8;
+        const py = dq.fromY + (houseInfo.doorY - dq.fromY) * ease + arc;
+        const scale = 1 - 0.5*t;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, 1-t*0.2);
+        ctx.fillStyle = '#ffd76a';
+        ctx.beginPath(); ctx.arc(px,py,CELL*0.2*scale,0,Math.PI*2); ctx.fill();
+        ctx.restore();
+      }
+      if(now >= deliveryEndTime){ finalizeDelivery(); }
+    }
+
+    // Etiqueta flotante con la operación, siguiendo la cabeza de la culebra
+    if(snake && snake[0] && currentOp){
+      const head = snake[0];
+      const label = currentOp.a + ' ' + currentOp.symbol + ' ' + currentOp.b + ' = ?';
+      ctx.font = "bold " + Math.max(16, CELL*0.56) + "px 'Baloo 2'";
+      const textW = ctx.measureText(label).width;
+      const padX = 12, padY = 6;
+      const boxW = textW + padX*2, boxH = CELL*0.78 + padY;
+      let bx = head.x*CELL + CELL/2 - boxW/2;
+      let by = head.y*CELL - boxH - 8;
+      // si no cabe arriba (cerca del borde superior), se dibuja debajo de la cabeza
+      if(by < 4) by = head.y*CELL + CELL + 8;
+      bx = Math.min(Math.max(bx, 4), canvas.width - boxW - 4);
+
+      ctx.save();
+      ctx.fillStyle = 'rgba(255,159,67,0.96)';
+      roundRect(bx, by, boxW, boxH, 10);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(232,121,42,0.9)';
+      ctx.lineWidth = 2;
+      roundRect(bx, by, boxW, boxH, 10);
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(label, bx+boxW/2, by+boxH/2+1);
+      // piquito apuntando hacia la cabeza
+      ctx.beginPath();
+      const tipX = head.x*CELL+CELL/2;
+      if(by < head.y*CELL){
+        ctx.moveTo(tipX-7, by+boxH); ctx.lineTo(tipX+7, by+boxH); ctx.lineTo(tipX, by+boxH+8);
+      } else {
+        ctx.moveTo(tipX-7, by); ctx.lineTo(tipX+7, by); ctx.lineTo(tipX, by-8);
+      }
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255,159,67,0.96)';
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // viñeta final: oscurece levemente las esquinas, con el tinte del mundo actual
+    const vig = ctx.createRadialGradient(
+      canvas.width/2, canvas.height/2, canvas.width*0.35,
+      canvas.width/2, canvas.height/2, canvas.width*0.72
+    );
+    vig.addColorStop(0, 'rgba(0,0,0,0)');
+    vig.addColorStop(1, theme.vignette);
+    ctx.fillStyle = vig;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    if(running) requestAnimationFrame(draw);
+   } catch(e){
+     running = false;
+     showFatalError(e);
+   }
+  }
+
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+
+  // Manzanas que la culebra ya guardó, "montadas" sobre los últimos
+  // segmentos de su cuerpo (como un pequeño vagón de carga).
+  function drawCarriedApples(now){
+    if(!snake || snake.length < 2) return;
+    const carrying = delivering ? 0 : Math.min(deposit, snake.length-1, DEPOSIT_GOAL);
+    for(let i=0;i<carrying;i++){
+      const idx = snake.length-1-i;
+      const seg = snake[idx];
+      if(!seg) continue;
+      const bob = Math.sin(now/260 + i*0.8) * 2;
+      const px = seg.x*CELL + CELL/2;
+      const py = seg.y*CELL + CELL/2 - CELL*0.34 + bob;
+      ctx.save();
+      ctx.fillStyle = '#ff5d73';
+      ctx.beginPath(); ctx.arc(px, py, CELL*0.15, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#4a8f3d';
+      ctx.fillRect(px-1.4, py-CELL*0.15-4, 2.4, 5);
+      ctx.restore();
+    }
+  }
+
+  // Casa / bodega de la culebra: techo, chimenea con humo, puerta que se
+  // desliza al abrirse, y un letrero con el progreso del depósito.
+  function drawHouse(now){
+    // anima suavemente la puerta hacia su estado objetivo (abierta si el
+    // depósito ya está lleno y espera a la culebra, o durante la entrega)
+    const doorTarget = (deposit >= DEPOSIT_GOAL || delivering) ? 1 : 0;
+    houseDoorOpen += (doorTarget - houseDoorOpen) * 0.12;
+
+    const houseW = CELL*2.6, houseH = CELL*1.85;
+    const roofH = houseH*0.6;
+    const houseX = canvas.width - houseW - CELL*0.4;
+    const houseY = CELL*0.4;
+
+    ctx.save();
+
+    // sombra en el piso
+    ctx.fillStyle = 'rgba(0,0,0,0.28)';
+    ctx.beginPath();
+    ctx.ellipse(houseX+houseW/2, houseY+roofH+houseH+4, houseW*0.5, houseH*0.12, 0, 0, Math.PI*2);
+    ctx.fill();
+
+    // paredes
+    ctx.fillStyle = '#5a3a24';
+    roundRect(houseX, houseY+roofH, houseW, houseH, 5);
+    ctx.fill();
+    ctx.strokeStyle = '#3b2417'; ctx.lineWidth = 2;
+    roundRect(houseX, houseY+roofH, houseW, houseH, 5);
+    ctx.stroke();
+
+    // techo
+    ctx.fillStyle = '#c1502e';
+    ctx.beginPath();
+    ctx.moveTo(houseX-8, houseY+roofH+2);
+    ctx.lineTo(houseX+houseW/2, houseY-6);
+    ctx.lineTo(houseX+houseW+8, houseY+roofH+2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#8a3319'; ctx.lineWidth = 2; ctx.stroke();
+
+    // chimenea
+    const chimW = CELL*0.28, chimH = CELL*0.5;
+    const chimX = houseX + houseW*0.18, chimY = houseY - chimH*0.35;
+    ctx.fillStyle = '#7a4a2d';
+    ctx.fillRect(chimX, chimY, chimW, chimH);
+
+    // humo (loop continuo, puramente decorativo)
+    for(let i=0;i<3;i++){
+      const phase = ((now/900) + i/3) % 1;
+      const sy = chimY - phase*CELL*1.5;
+      const sx = chimX + chimW/2 + Math.sin(phase*6.283 + i)*4;
+      const a = (1-phase) * 0.5;
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(225,225,225,' + a + ')';
+      ctx.arc(sx, sy, CELL*0.13*(0.6+phase), 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    // hueco de la puerta (oscuro, siempre visible detrás)
+    const doorW = houseW*0.34, doorH = houseH*0.74;
+    const doorX = houseX + houseW/2 - doorW/2;
+    const doorBaseY = houseY + roofH + houseH - doorH;
+    ctx.fillStyle = '#140b08';
+    roundRect(doorX, doorBaseY, doorW, doorH, 3);
+    ctx.fill();
+
+    // puerta que se desliza hacia arriba al abrirse (queda "oculta" bajo el techo)
+    ctx.save();
+    roundRect(doorX, doorBaseY, doorW, doorH, 3);
+    ctx.clip();
+    ctx.fillStyle = '#8a5a34';
+    ctx.fillRect(doorX, doorBaseY + doorH*houseDoorOpen*0.95, doorW, doorH);
+    ctx.strokeStyle = '#5a3a24'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(doorX+doorW/2, doorBaseY + doorH*houseDoorOpen*0.95);
+    ctx.lineTo(doorX+doorW/2, doorBaseY+doorH);
+    ctx.stroke();
+    ctx.restore();
+
+    // ventanita: funciona como medidor de progreso del depósito.
+    // Se llena de abajo hacia arriba y brilla más mientras más cerca está de completarse.
+    const winCx = houseX+houseW*0.78, winCy = houseY+roofH+houseH*0.3;
+    const winR = CELL*0.18;
+    const fillFrac = Math.max(0, Math.min(1, deposit/DEPOSIT_GOAL));
+    ctx.save();
+    ctx.beginPath(); ctx.arc(winCx, winCy, winR, 0, Math.PI*2); ctx.clip();
+    ctx.fillStyle = '#1c0f08';
+    ctx.fillRect(winCx-winR, winCy-winR, winR*2, winR*2);
+    if(fillFrac > 0){
+      const fillH = winR*2*fillFrac;
+      const glow = 0.55 + 0.4*fillFrac;
+      ctx.fillStyle = 'rgba(255,215,106,' + glow + ')';
+      ctx.fillRect(winCx-winR, winCy+winR-fillH, winR*2, fillH);
+    }
+    ctx.restore();
+    ctx.strokeStyle = '#3b2417'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(winCx, winCy, winR, 0, Math.PI*2); ctx.stroke();
+    if(fillFrac >= 1){
+      // brillo pulsante cuando ya está lista para recibir a la culebra
+      const pulse = 0.5 + 0.5*Math.sin(now/220);
+      ctx.save();
+      ctx.globalAlpha = 0.35*pulse;
+      ctx.fillStyle = '#ffe9a8';
+      ctx.beginPath(); ctx.arc(winCx, winCy, winR*1.6, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+
+    // letrero con el progreso del depósito
+    ctx.font = "bold " + Math.max(9, CELL*0.2) + "px 'Fredoka'";
+    ctx.fillStyle = '#eafbf0'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('🏚️ ' + Math.min(deposit,DEPOSIT_GOAL) + '/' + DEPOSIT_GOAL, houseX+houseW/2, houseY+roofH+houseH+13);
+
+    ctx.restore();
+
+    return {
+      doorX: doorX + doorW/2,
+      doorY: doorBaseY + doorH*0.55,
+      houseX, houseY, houseW, houseH, roofH
+    };
+  }
+
+  // Inicia la secuencia animada de entrega: la puerta se abre y las
+  // manzanas cargadas vuelan una a una hacia la bodega.
+  var houseGulpStart = 0;
+  function triggerHouseDelivery(){
+    delivering = true;
+    snakeVanishStart = performance.now();
+    houseGulpStart = performance.now();
+    deliveryQueue = [];
+    const n = Math.min(deposit, snake.length-1, DEPOSIT_GOAL);
+    const stagger = 90, duration = 420;
+    const startBase = performance.now() + 180; // pequeña espera para que se vea abrir la puerta primero
+    for(let i=0;i<n;i++){
+      const idx = snake.length-1-i;
+      const seg = snake[idx] || snake[snake.length-1];
+      deliveryQueue.push({
+        fromX: seg.x*CELL+CELL/2, fromY: seg.y*CELL+CELL/2 - CELL*0.34,
+        start: startBase + i*stagger, duration
+      });
+    }
+    deliveryEndTime = startBase + Math.max(0,n-1)*stagger + duration + 220;
+  }
+
+  // Se ejecuta cuando termina la animación de entrega: otorga el trofeo,
+  // la vida extra, y reinicia el ciclo de recolección.
+  function finalizeDelivery(){
+    delivering = false;
+    deliveryQueue = [];
+    snakeHidden = true; // la culebra ya entró y desapareció dentro de la bodega
+    deposit = 0;
+    trophies += 1;
+    lives = Math.min(lives + 1, 5);
+    const leveledUp = speedLevel < 5;
+    if(leveledUp) speedLevel += 1;
+    sndLevelUp();
+    refreshMusicForLevel();
+    // cada entrega puede sumar un bicho extra, hasta un máximo de 5
+    if(bugs.length < 5){
+      let x,y,tries=0;
+      do{ x=randInt(0,COLS-1); y=randInt(0,ROWS-1); tries++; } while(!cellFree(x,y) && tries<200);
+      bugs.push({x,y});
+    }
+    applySpeedIfChanged();
+    updateHud();
+    showLevelCompleteScreen(leveledUp);
+  }
+
+  // Pausa el juego y muestra la pantalla de transición de nivel superado,
+  // hasta que el jugador decida continuar con el siguiente nivel.
+  function showLevelCompleteScreen(leveledUp){
+    running = false;
+    paused = false;
+    document.getElementById('levelCompleteTitle').textContent = leveledUp ? '🎉 ¡Nivel superado!' : '🏆 ¡Bodega llena!';
+    document.getElementById('levelCompleteMsg').textContent = playerName + ', la culebra entregó sus manzanas en la bodega.';
+    document.getElementById('levelCompleteSpeed').textContent = leveledUp ? ('Velocidad L' + speedLevel + ' 🚀') : 'Velocidad máxima (L5)';
+    document.getElementById('levelCompleteStats').textContent = 'Puntaje: ' + score + ' · Trofeos: ' + trophies;
+    document.getElementById('levelCompleteScreen').style.display = 'flex';
+  }
+
+  // ---------------- START / RESTART ----------------
+  function showFatalError(err){
+    console.error('Error al iniciar el juego:', err);
+    let box = document.getElementById('fatalErrorBox');
+    if(!box){
+      box = document.createElement('div');
+      box.id = 'fatalErrorBox';
+      box.style.cssText = 'position:absolute;inset:0;z-index:50;background:rgba(20,0,0,.92);color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-family:sans-serif;font-size:13px;overflow:auto;';
+      stageEl.appendChild(box);
+    }
+    box.innerHTML = '<div><b>Ocurrió un error al iniciar el juego</b><br><br>' +
+      (err && err.message ? err.message : String(err)) +
+      '<br><br><span style="opacity:.7">Toma una captura de esto y compártela para poder corregirlo.</span></div>';
+  }
+
+  function startGame(){
+    try{
+      resetGame();
+      resizeCanvas();
+      running = true;
+      tickMs = computeTickMs();
+      snakeAcc = 0; bugAcc = 0; lastFrameTime = 0;
+      requestAnimationFrame(draw);
+      startMusic();
+    } catch(e){
+      showFatalError(e);
+    }
+  }
+
+  // ---------------- TIPS DINÁMICOS (pantalla de inicio) ----------------
+  const GAME_TIPS = [
+    'Guía a la culebra hasta la manzana con la respuesta correcta a la operación mostrada arriba.',
+    '✅ Respuesta correcta: la culebra crece y suma un punto.',
+    '❌ Respuesta incorrecta: la culebra se acorta un segmento.',
+    '🐛 Si un bicho te muerde, la culebra se acorta y además pierde una manzana del depósito.',
+    '🧱 Chocar contra la pared, contra ti mismo o un obstáculo te cuesta una vida.',
+    '🍎 Recolecta manzanas correctas para llenar el depósito y abrir la bodega.',
+    '🏚️ Cuando el depósito esté lleno, lleva la culebra hasta la bodega para entregarlas.',
+    '🎉 Al entregar en la bodega subes de nivel de velocidad y ganas un trofeo + 1 vida.',
+    '⏸️ Presiona Espacio en cualquier momento para pausar o reanudar.',
+    '⚡ Mantén presionada una flecha para que la culebra corra más rápido (solo ella).',
+  ];
+  let tipIndex = 0;
+  let tipsTimer = null;
+  function showNextTip(){
+    const el = document.getElementById('tipsText');
+    if(!el) return;
+    el.classList.add('fade');
+    setTimeout(()=>{
+      tipIndex = (tipIndex + 1) % GAME_TIPS.length;
+      el.textContent = GAME_TIPS[tipIndex];
+      el.classList.remove('fade');
+    }, 250);
+  }
+  function startTipsRotation(){
+    stopTipsRotation();
+    tipIndex = 0;
+    const el = document.getElementById('tipsText');
+    if(el) el.textContent = GAME_TIPS[0];
+    tipsTimer = setInterval(showNextTip, 5500);
+  }
+  function stopTipsRotation(){
+    clearInterval(tipsTimer);
+  }
+  startTipsRotation();
+
+  document.getElementById('startBtn').addEventListener('click', ()=>{
+    stopTipsRotation();
+    const val = document.getElementById('nameInput').value.trim();
+    playerName = val || 'Jugador';
+    startScreen.style.display = 'none';
+    hud.style.display = 'flex';
+    try{ ac(); }catch(e){ console.warn('Audio no disponible', e); } // desbloquear audio con gesto de usuario
+    startGame();
+  });
+
+  document.getElementById('retryBtn').addEventListener('click', ()=>{
+    endScreen.style.display = 'none';
+    startGame();
+  });
+
+  document.getElementById('continueBtn').addEventListener('click', ()=>{
+    document.getElementById('continueScreen').style.display = 'none';
+    respawnSnake();
+    paused = false;
+    running = true;
+    tickMs = computeTickMs();
+    snakeAcc = 0; bugAcc = 0; lastFrameTime = 0;
+    requestAnimationFrame(draw);
+  });
+
+  document.getElementById('levelCompleteBtn').addEventListener('click', ()=>{
+    document.getElementById('levelCompleteScreen').style.display = 'none';
+    snakeHidden = false;
+    respawnSnake(true); // arranque fresco para el nuevo nivel
+    paused = false;
+    running = true;
+    tickMs = computeTickMs();
+    snakeAcc = 0; bugAcc = 0; lastFrameTime = 0;
+    requestAnimationFrame(draw);
+  });
+
+  // ---------------- PAUSA (barra espaciadora) ----------------
+  function togglePause(){
+    if(!running) return;
+    paused = !paused;
+    document.getElementById('pauseScreen').style.display = paused ? 'flex' : 'none';
+    if(paused){
+      if(musicOn){ clearInterval(musicTimer); }
+    } else {
+      if(musicOn){ musicTimer = setInterval(playMusicNote, currentTrack().tempo); }
+    }
+  }
+  window.addEventListener('keydown', (e)=>{
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    if(tag === 'INPUT') return; // no interferir mientras se escribe el nombre
+    if(e.code === 'Space' || e.key === ' '){
+      e.preventDefault();
+      togglePause();
+    }
+  });
+
+  document.getElementById('nameInput').addEventListener('keydown', (e)=>{
+    if(e.key==='Enter') document.getElementById('startBtn').click();
+  });
+
+  // Enter también confirma "Continuar" tras un choque, o "Jugar de nuevo" al terminar
+  window.addEventListener('keydown', (e)=>{
+    if(e.key !== 'Enter') return;
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    if(tag === 'INPUT') return; // ya lo maneja el listener del nombre
+    const continueScreenEl = document.getElementById('continueScreen');
+    const endScreenEl = document.getElementById('endScreen');
+    const levelCompleteScreenEl = document.getElementById('levelCompleteScreen');
+    if(continueScreenEl && continueScreenEl.style.display === 'flex'){
+      e.preventDefault();
+      document.getElementById('continueBtn').click();
+    } else if(levelCompleteScreenEl && levelCompleteScreenEl.style.display === 'flex'){
+      e.preventDefault();
+      document.getElementById('levelCompleteBtn').click();
+    } else if(endScreenEl && endScreenEl.style.display === 'flex'){
+      e.preventDefault();
+      document.getElementById('retryBtn').click();
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
