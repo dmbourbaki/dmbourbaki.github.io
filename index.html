@@ -618,6 +618,32 @@
                         </div>
                     </div>
 
+                    <div class="digital-card" id="card-laplace">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">ℒ</div>
+                            <div>
+                                <h3>Simulador de Transformada de Laplace</h3>
+                                <span class="topic-tag">Ecuaciones Diferenciales · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Explora la Transformada de Laplace ℒ{f(t)} = F(s) de forma interactiva: escribe f(t), observa su par transformado F(s) y compara ambos dominios lado a lado. Resuelve ecuaciones diferenciales lineales aplicando la transformada, con seguimiento paso a paso del método algebraico en el dominio s y su antitransformada final.</p>
+                        <div class="digital-tags">
+                            <span>Pares f(t) ↔ F(s)</span>
+                            <span>Solución de EDOs vía Laplace</span>
+                            <span>Dominio del tiempo y de s</span>
+                            <span>Galería de funciones clásicas</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/laplace/laplace-index.html" loading="lazy" title="Vista previa Transformada de Laplace" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('laplace')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-laplace" style="display:none">
+                            <iframe src="recursos/laplace/laplace-index.html" width="100%" height="720" frameborder="0" loading="lazy" title="Simulador de Transformada de Laplace"></iframe>
+                            <a href="recursos/laplace/laplace-index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -994,6 +1020,31 @@
                         </div>
                     </div>
 
+                    <div class="digital-card" id="card-pemdas">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">( )</div>
+                            <div>
+                                <h3>PEMDAS en Acción</h3>
+                                <span class="topic-tag">Matemáticas Discretas · Fundamentos · OMAI</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Simulador interactivo del orden de operaciones (PEMDAS/PAPOMUDAS): descompone paso a paso una expresión aritmética, resaltando en cada momento qué operación se ejecuta y por qué, para reforzar la jerarquía de paréntesis, exponentes, multiplicación/división y suma/resta.</p>
+                        <div class="digital-tags">
+                            <span>Resolución paso a paso</span>
+                            <span>Jerarquía de operaciones</span>
+                            <span>Resaltado en vivo de cada paso</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/pemdas/pemdas_en_accion-index.html" loading="lazy" title="Vista previa PEMDAS en Acción" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('pemdas')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-pemdas" style="display:none">
+                            <iframe src="recursos/pemdas/pemdas_en_accion-index.html" width="100%" height="680" frameborder="0" loading="lazy" title="PEMDAS en Acción"></iframe>
+                            <a href="recursos/pemdas/pemdas_en_accion-index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -1004,7 +1055,7 @@
         <div class="container">
             <h2 class="section-title">Otros Simuladores</h2>
             <div class="resources-intro">
-                <p>Proyectos interactivos independientes de la marca OMAI, ligados a mi línea de investigación en <strong>Historia de las Matemáticas</strong>. Nombre de colección propio pendiente de definir.</p>
+                <p>Proyectos interactivos independientes de la marca OMAI, ligados a mi línea de investigación en <strong>Historia de las Matemáticas</strong> y a exploraciones lúdicas de pensamiento computacional. Nombre de colección propio pendiente de definir.</p>
             </div>
 
             <div class="category-group" id="cat-otros-simuladores">
@@ -1037,6 +1088,31 @@
                         <div class="resource-frame" id="frame-euclides" style="display:none">
                             <iframe src="recursos/euclides/euclides-index.html" width="100%" height="720" frameborder="0" loading="lazy" title="Elementos de Euclides — Libro I"></iframe>
                             <a href="recursos/euclides/euclides-index.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
+                        </div>
+                    </div>
+
+                    <div class="digital-card" id="card-culebra">
+                        <div class="digital-card-header">
+                            <div class="digital-icon">🐍</div>
+                            <div>
+                                <h3>Culebra Matemática</h3>
+                                <span class="topic-tag">Pensamiento Computacional · Juego</span>
+                            </div>
+                            <span class="new-badge">Nuevo</span>
+                        </div>
+                        <p class="digital-desc">Variante matemática del clásico juego de la culebra (snake): en vez de crecer comiendo cualquier casilla, la serpiente debe recoger los valores correctos según la operación o condición aritmética que se plantea en pantalla, combinando reflejos con cálculo mental rápido.</p>
+                        <div class="digital-tags">
+                            <span>Juego educativo</span>
+                            <span>Cálculo mental bajo presión</span>
+                            <span>Pensamiento computacional</span>
+                        </div>
+                        <div class="digital-preview">
+                            <iframe src="recursos/culebra-matematica%20v27/culebra-matematica%20v27.html" loading="lazy" title="Vista previa Culebra Matemática" tabindex="-1" aria-hidden="true"></iframe>
+                        </div>
+                        <button class="digital-btn" onclick="toggleObservatorioResource('culebra')">▶ Abrir Visualización</button>
+                        <div class="resource-frame" id="frame-culebra" style="display:none">
+                            <iframe src="recursos/culebra-matematica%20v27/culebra-matematica%20v27.html" width="100%" height="680" frameborder="0" loading="lazy" title="Culebra Matemática"></iframe>
+                            <a href="recursos/culebra-matematica%20v27/culebra-matematica%20v27.html" target="_blank" class="open-full">↗ Abrir en pantalla completa</a>
                         </div>
                     </div>
 
