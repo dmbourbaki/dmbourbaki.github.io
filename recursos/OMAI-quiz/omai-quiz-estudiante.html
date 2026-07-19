@@ -36,11 +36,12 @@
     color: var(--gold); text-transform: uppercase; margin-bottom: 8px; text-align: center;
   }
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 28px; max-width: 420px; width: 100%; text-align: center; }
-  input {
+  input:not([type="checkbox"]) {
     width: 100%; padding: 14px; font-size: 18px; border-radius: 10px;
     border: 1px solid var(--line-soft); background: var(--abyss); color: var(--ink);
     margin: 12px 0; font-family: "Inter Tight", sans-serif;
   }
+  input[type="checkbox"] { width: 16px; height: 16px; flex: none; margin: 0; }
   .btn { width: 100%; font-weight: 600; font-size: 17px; background: var(--gold); color: var(--void); border: none; border-radius: 10px; padding: 16px; cursor: pointer; }
   .btn:disabled { background: var(--line); color: var(--ink-faint); }
   .puntos-actuales { font-family: "Spline Sans Mono", monospace; color: var(--gold-bright); font-size: 14px; }
@@ -514,11 +515,14 @@
   // ============================================================
   document.getElementById("btn-elegir-sala").onclick = () => mostrarVista("vista-unirse");
   document.getElementById("btn-elegir-repaso").onclick = () => {
+    asegurarAudioContext();
     mostrarVista("vista-repaso-config");
     renderizarListaBancosRepaso();
+    faseMusicalActual = "lobby";
+    if (musicaActiva) iniciarMusica("lobby");
   };
-  document.getElementById("link-volver-unirse").onclick = () => mostrarVista("vista-modo-inicial");
-  document.getElementById("link-volver-repaso").onclick = () => mostrarVista("vista-modo-inicial");
+  document.getElementById("link-volver-unirse").onclick = () => { clearInterval(musicaTimer); mostrarVista("vista-modo-inicial"); };
+  document.getElementById("link-volver-repaso").onclick = () => { clearInterval(musicaTimer); mostrarVista("vista-modo-inicial"); };
 
   // ============================================================
   // MODO DE REPASO INDIVIDUAL (100% local, sin necesitar sala ni profesor)
@@ -614,13 +618,20 @@
     repasoRespondidas = 0;
     repasoTiempoBase = cfg.tiempo;
     dibujarRuedaRepaso(repasoPreguntas.length);
+    faseMusicalActual = "juego";
+    if (musicaActiva) iniciarMusica("arpegio");
+    reproducirFanfarreInicio();
     avanzarPreguntaRepasoAleatoria();
   }
 
   document.getElementById("btn-repetir-repaso").onclick = () => {
     if (repasoConfigUsada) iniciarRepasoConConfig(repasoConfigUsada);
   };
-  document.getElementById("btn-otro-tema-repaso").onclick = () => mostrarVista("vista-repaso-config");
+  document.getElementById("btn-otro-tema-repaso").onclick = () => {
+    mostrarVista("vista-repaso-config");
+    faseMusicalActual = "lobby";
+    if (musicaActiva) iniciarMusica("lobby");
+  };
 
   function candidatosRepaso() {
     const candidatos = [];
@@ -727,6 +738,8 @@
     clearInterval(repasoTimerInterval);
     mostrarVista("vista-repaso-final");
     document.getElementById("resumen-repaso-final").textContent = `${repasoCorrectas} de ${repasoRespondidas} correctas`;
+    faseMusicalActual = "final";
+    if (musicaActiva) iniciarMusica("final");
     mostrarConfetiEstudiante();
   }
 
