@@ -96,6 +96,19 @@
   .config-note { font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--bad); margin-top: 20px; }
   .campo-config { text-align: left; margin: 16px 0; }
   .campo-config label { display:block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+
+  #panel-ruleta {
+    position: fixed; bottom: 24px; right: 24px; z-index: 60; display: none;
+    background: var(--panel); border: 1px solid var(--gold); border-radius: 16px;
+    padding: 20px; width: 260px; text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  #resultado-ruleta {
+    font-family: "Spline Sans Mono", monospace; font-size: 48px; color: var(--gold-bright);
+    margin: 14px 0;
+  }
+  #panel-ruleta input { width: 70px; text-align: center; }
+  #ruleta-info { color: var(--ink-soft); font-size: 12px; margin-top: 10px; word-break: break-word; }
 </style>
 </head>
 <body>
@@ -103,13 +116,29 @@
     <div class="info-codigo">Sala: <b id="barra-codigo">----</b>
       <span id="mini-qr"></span>
     </div>
-    <div>
-      <button class="btn-secundario" id="btn-musica">🔈 Música: off</button>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button class="btn-secundario" id="btn-toggle-ruleta">🎡 Ruleta</button>
+      <select id="select-pista">
+        <option value="arpegio">🎵 Arpegio</option>
+        <option value="ascendente">🎶 Ascendente</option>
+        <option value="suave">🎼 Suave</option>
+        <option value="retro">🕹️ Retro</option>
+      </select>
+      <button class="btn-secundario" id="btn-musica">🔊 Música: on</button>
     </div>
   </div>
 
   <div class="eyebrow">OMAI · Observatorio de Matemáticas Avanzadas para Ingeniería</div>
   <h1>Quiz en Vivo — Derivadas</h1>
+
+  <div id="panel-ruleta">
+    <div class="eyebrow">🎡 Ruleta (sin repetir)</div>
+    <input type="number" id="input-ruleta-max" min="1" value="10" />
+    <div id="resultado-ruleta">–</div>
+    <button class="btn" id="btn-girar-ruleta" style="width:100%;">Girar</button>
+    <button class="btn-secundario" id="btn-reiniciar-ruleta" style="width:100%; margin-top:8px;">Reiniciar</button>
+    <p id="ruleta-info"></p>
+  </div>
 
   <div class="card" id="vista-inicio">
     <p>Configura la partida y crea la sala.</p>
@@ -121,6 +150,16 @@
     <p class="config-note" id="config-warning" style="display:none;">
       ⚠ Falta configurar Firebase: edita el objeto <code>firebaseConfig</code> al inicio del script de esta página.
     </p>
+    <hr style="border-color: var(--line-soft); margin: 24px 0;" />
+    <p style="color:var(--ink-soft); font-size:14px;">¿Ya tenías una sala creada y quieres retomar el control?</p>
+    <div class="campo-config" style="display:flex; gap:8px; align-items:flex-end;">
+      <div style="flex:1;">
+        <label for="input-codigo-reconectar">Código de la sala</label>
+        <input type="text" id="input-codigo-reconectar" maxlength="4" style="text-transform:uppercase; width:100%; padding:10px 14px; border-radius:8px; border:1px solid var(--line-soft); background:var(--abyss); color:var(--ink); font-family:'Spline Sans Mono',monospace;" />
+      </div>
+      <button class="btn-secundario" id="btn-reconectar" style="padding: 10px 16px;">Reconectar</button>
+    </div>
+    <p class="config-note" id="reconectar-error" style="color:var(--bad); display:none;"></p>
   </div>
 
   <div class="card" id="vista-espera" style="display:none;">
@@ -160,7 +199,7 @@
   import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
   import {
     ESTADOS, crearSala, iniciarSiguientePregunta, cerrarPreguntaYCalcular,
-    escucharSala, ranking,
+    escucharSala, ranking, existeSala,
   } from "./kahoot-derivadas-app.js";
   import { PREGUNTAS_DERIVADAS } from "./kahoot-derivadas-preguntas.js";
 
@@ -189,37 +228,107 @@
     db = getDatabase(app);
   }
 
-  // ---------- Música de fondo (Web Audio API, sin archivos externos) ----------
+  // ---------- Música de fondo (Web Audio API, varias pistas sintetizadas) ----------
   let audioCtx = null;
-  let musicaActiva = false;
+  let musicaActiva = true; // activada por defecto
   let musicaTimer = null;
-  const secuencia = [261.63, 329.63, 392.00, 329.63, 261.63, 392.00, 440.00, 392.00];
   let pasoActual = 0;
 
-  function tocarNota(freq, duracion) {
+  const PISTAS = {
+    arpegio: { notas: [261.63, 329.63, 392.00, 329.63, 261.63, 392.00, 440.00, 392.00], tempo: 260, onda: "triangle" },
+    ascendente: { notas: [220.00, 246.94, 277.18, 293.66, 329.63, 369.99, 415.30, 440.00], tempo: 220, onda: "sine" },
+    suave: { notas: [196.00, 220.00, 246.94, 220.00, 196.00, 174.61, 196.00, 220.00], tempo: 340, onda: "sine" },
+    retro: { notas: [329.63, 329.63, 392.00, 329.63, 293.66, 261.63, 293.66, 329.63], tempo: 200, onda: "square" },
+  };
+  let pistaActual = "arpegio";
+
+  function tocarNota(freq, duracion, onda) {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    osc.type = "triangle";
+    osc.type = onda;
     osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.045, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duracion);
     osc.connect(gain).connect(audioCtx.destination);
     osc.start();
     osc.stop(audioCtx.currentTime + duracion);
   }
 
-  document.getElementById("btn-musica").onclick = () => {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    musicaActiva = !musicaActiva;
+  function iniciarMusica() {
+    clearInterval(musicaTimer);
+    const p = PISTAS[pistaActual];
+    musicaTimer = setInterval(() => {
+      tocarNota(p.notas[pasoActual % p.notas.length], p.tempo / 1000 * 1.3, p.onda);
+      pasoActual++;
+    }, p.tempo);
+  }
+
+  function actualizarBotonMusica() {
     document.getElementById("btn-musica").textContent = musicaActiva ? "🔊 Música: on" : "🔈 Música: off";
-    if (musicaActiva) {
-      musicaTimer = setInterval(() => {
-        tocarNota(secuencia[pasoActual % secuencia.length], 0.35);
-        pasoActual++;
-      }, 260);
-    } else {
-      clearInterval(musicaTimer);
+  }
+
+  function asegurarAudioContext() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+  }
+
+  document.getElementById("btn-musica").onclick = () => {
+    asegurarAudioContext();
+    musicaActiva = !musicaActiva;
+    actualizarBotonMusica();
+    if (musicaActiva) iniciarMusica();
+    else clearInterval(musicaTimer);
+  };
+
+  document.getElementById("select-pista").onchange = (e) => {
+    pistaActual = e.target.value;
+    if (musicaActiva) iniciarMusica();
+  };
+
+  actualizarBotonMusica();
+
+  // ---------- Ruleta (sin repetir números hasta reiniciar) ----------
+  const numerosUsados = new Set();
+  let girando = false;
+
+  document.getElementById("btn-toggle-ruleta").onclick = () => {
+    const panel = document.getElementById("panel-ruleta");
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  };
+
+  document.getElementById("btn-girar-ruleta").onclick = () => {
+    if (girando) return;
+    const max = parseInt(document.getElementById("input-ruleta-max").value, 10) || 1;
+    const disponibles = [];
+    for (let i = 1; i <= max; i++) if (!numerosUsados.has(i)) disponibles.push(i);
+
+    const infoEl = document.getElementById("ruleta-info");
+    if (disponibles.length === 0) {
+      infoEl.textContent = "¡Ya salieron todos los números! Da clic en Reiniciar.";
+      return;
     }
+    girando = true;
+    const resEl = document.getElementById("resultado-ruleta");
+    let vueltas = 0;
+    const totalVueltas = 16 + Math.floor(Math.random() * 6);
+    const intervalo = setInterval(() => {
+      resEl.textContent = disponibles[Math.floor(Math.random() * disponibles.length)];
+      vueltas++;
+      if (vueltas >= totalVueltas) {
+        clearInterval(intervalo);
+        const elegido = disponibles[Math.floor(Math.random() * disponibles.length)];
+        resEl.textContent = elegido;
+        numerosUsados.add(elegido);
+        infoEl.textContent = `Ya salieron: ${[...numerosUsados].sort((a, b) => a - b).join(", ")}`;
+        girando = false;
+      }
+    }, 70);
+  };
+
+  document.getElementById("btn-reiniciar-ruleta").onclick = () => {
+    numerosUsados.clear();
+    document.getElementById("resultado-ruleta").textContent = "–";
+    document.getElementById("ruleta-info").textContent = "";
   };
 
   function renderizarKatex(el) {
@@ -234,21 +343,45 @@
     }
   }
 
-  document.getElementById("btn-crear-sala").onclick = async () => {
-    const n = parseInt(document.getElementById("input-num-preguntas").value, 10) || 10;
-    codigoActual = await crearSala(db, PREGUNTAS_DERIVADAS, n);
+  function activarSala(codigo) {
+    codigoActual = codigo;
     document.getElementById("vista-inicio").style.display = "none";
-    document.getElementById("vista-espera").style.display = "block";
-    document.getElementById("texto-codigo").textContent = codigoActual;
+    document.getElementById("texto-codigo").textContent = codigo;
 
-    const urlEstudiante = `${location.origin}${location.pathname.replace("docente", "estudiante")}?sala=${codigoActual}`;
+    const urlEstudiante = `${location.origin}${location.pathname.replace("docente", "estudiante")}?sala=${codigo}`;
+    document.getElementById("qrcode-grande").innerHTML = "";
+    document.getElementById("mini-qr").innerHTML = "";
     new QRCode(document.getElementById("qrcode-grande"), { text: urlEstudiante, width: 200, height: 200 });
     new QRCode(document.getElementById("mini-qr"), { text: urlEstudiante, width: 46, height: 46 });
 
-    document.getElementById("barra-codigo").textContent = codigoActual;
+    document.getElementById("barra-codigo").textContent = codigo;
     document.getElementById("barra-sala").style.display = "flex";
 
-    escucharSala(db, codigoActual, renderizar);
+    asegurarAudioContext();
+    if (musicaActiva) iniciarMusica();
+
+    escucharSala(db, codigo, renderizar);
+  }
+
+  document.getElementById("btn-crear-sala").onclick = async () => {
+    const n = parseInt(document.getElementById("input-num-preguntas").value, 10) || 10;
+    const codigo = await crearSala(db, PREGUNTAS_DERIVADAS, n);
+    document.getElementById("vista-espera").style.display = "block";
+    activarSala(codigo);
+  };
+
+  document.getElementById("btn-reconectar").onclick = async () => {
+    const codigo = document.getElementById("input-codigo-reconectar").value.trim().toUpperCase();
+    const errorEl = document.getElementById("reconectar-error");
+    errorEl.style.display = "none";
+    if (!codigo) return;
+    const existe = await existeSala(db, codigo);
+    if (!existe) {
+      errorEl.textContent = "No se encontró ninguna sala con ese código.";
+      errorEl.style.display = "block";
+      return;
+    }
+    activarSala(codigo);
   };
 
   document.getElementById("btn-iniciar").onclick = () => iniciarSiguientePregunta(db, codigoActual);
@@ -278,7 +411,7 @@
       if (p.imagen) { imgEl.src = p.imagen; imgEl.style.display = "block"; }
       else { imgEl.style.display = "none"; }
       document.getElementById("opciones-grid").innerHTML = p.opciones
-        .map((op) => `<div class="opcion">${op}</div>`).join("");
+        .map((op) => `<div class="opcion">$${op}$</div>`).join("");
       const respondidos = Object.keys((s.respuestas && s.respuestas[idx]) || {}).length;
       document.getElementById("contador-respuestas").textContent =
         `${respondidos} de ${numJugadores} han respondido`;
