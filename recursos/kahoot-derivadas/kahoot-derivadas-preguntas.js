@@ -60,6 +60,8 @@ const PREGUNTAS_DERIVADAS = [
   },
 ];
 
+export { PREGUNTAS_DERIVADAS };
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { PREGUNTAS_DERIVADAS };
 }
