@@ -1,0 +1,60 @@
+CÓMO GENERAR UN NUEVO BANCO DE PREGUNTAS CON IA (ChatGPT, Claude, Gemini, etc.)
+================================================================================
+
+1. Copia y pega el siguiente prompt en la IA que prefieras, reemplazando
+   [TEMA] por el tema exacto (ej. "Integrales definidas", "Límites y continuidad",
+   "Ecuaciones diferenciales de primer orden", etc.) y [N] por la cantidad de
+   preguntas que quieras (recomendado: 50).
+
+--------------------------------------------------------------------------------
+PROMPT:
+
+Genera [N] preguntas de opción múltiple sobre [TEMA], en español, para
+estudiantes de ingeniería. Cada pregunta debe tener exactamente 4 opciones
+(A, B, C, D), solo una correcta, y las opciones incorrectas deben representar
+errores conceptuales plausibles (no errores absurdos).
+
+Usa este formato EXACTO para cada pregunta, sin numerarlas y sin agregar texto
+antes o después de la lista completa:
+
+TEXTO: <enunciado de la pregunta, usando LaTeX con delimitadores $...$>
+A: <opción A, con LaTeX si aplica, envuelta en $...$>
+B: <opción B>
+C: <opción C>
+D: <opción D>
+CORRECTA: <A, B, C o D>
+NIVEL: <basico, intermedio o aplicado>
+IMAGEN:
+---
+
+Verifica matemáticamente cada respuesta antes de escribirla: la opción marcada
+como CORRECTA debe ser demostrablemente la correcta, y ninguna otra opción debe
+coincidir con ella tras simplificar. No repitas preguntas ni valores.
+
+--------------------------------------------------------------------------------
+
+2. Copia la respuesta completa de la IA y guárdala como un archivo .txt
+   (ej. "banco-integrales.txt").
+
+3. Revisa rápidamente 5-10 preguntas al azar para confirmar que la IA no
+   cometió errores matemáticos (las IA generativas pueden equivocarse en
+   cálculos, así que no confíes ciegamente).
+
+4. Sube el archivo .txt a la carpeta recursos/omai-quiz/bancos/ de tu repo.
+
+5. Agrega una entrada nueva en recursos/omai-quiz/omai-quiz-bancos.json,
+   siguiendo el mismo formato que ya existe, por ejemplo:
+
+   {
+     "id": "integrales-basico",
+     "nombre": "Integrales — Nivel Básico",
+     "archivo": "bancos/banco-integrales.txt"
+   }
+
+6. Recarga la página del docente: el nuevo banco aparecerá automáticamente
+   en la lista de bancos seleccionables, junto a los demás.
+
+NOTA: también puedes subir un .txt directamente desde el botón "Agregar un
+banco adicional" en la pantalla del docente, sin tocar el repositorio — pero
+ese banco solo estará disponible para esa sesión del navegador, no de forma
+permanente. Para que quede disponible siempre, sigue los pasos 4 y 5.

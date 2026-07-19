@@ -1,0 +1,51 @@
+# ==========================================================================
+#  FORMATO DE BANCO DE PREGUNTAS — OMAI-Quiz
+# ==========================================================================
+#  Cómo usar este formato:
+#   - Cada pregunta es un bloque de líneas "CAMPO: valor".
+#   - Los bloques se separan con una línea que solo contiene: ---
+#   - Las líneas que empiezan con # son comentarios y se ignoran.
+#   - Las líneas en blanco se ignoran.
+#   - TEXTO y las opciones A/B/C/D admiten LaTeX con delimitadores $...$
+#     (ejemplo: $\frac{d}{dx}[x^2] = 2x$)
+#   - CORRECTA debe ser una sola letra: A, B, C o D.
+#   - NIVEL es opcional (ej: basico, intermedio, aplicado).
+#   - IMAGEN es opcional: una URL de imagen, o se deja vacío.
+#
+#  Campos por pregunta:
+#     TEXTO:     (obligatorio) el enunciado de la pregunta
+#     A:         (obligatorio) opción A
+#     B:         (obligatorio) opción B
+#     C:         (obligatorio) opción C
+#     D:         (obligatorio) opción D
+#     CORRECTA:  (obligatorio) A, B, C o D
+#     NIVEL:     (opcional)
+#     IMAGEN:    (opcional)
+# ==========================================================================
+
+TEXTO: ¿Cuál es la derivada de $f(x) = x^3$?
+A: $3x^2$
+B: $x^2$
+C: $3x^3$
+D: $x^3/3$
+CORRECTA: A
+NIVEL: basico
+IMAGEN:
+---
+TEXTO: ¿Cuál es la derivada de $f(x) = \sin(x)$?
+A: $-\cos(x)$
+B: $\cos(x)$
+C: $-\sin(x)$
+D: $\tan(x)$
+CORRECTA: B
+NIVEL: basico
+IMAGEN:
+---
+TEXTO: Usando la regla del producto, ¿cuál es $\dfrac{d}{dx}[x^2\sin(x)]$?
+A: $2x\sin(x) + x^2\cos(x)$
+B: $2x\cos(x)$
+C: $x^2\cos(x)$
+D: $2x\sin(x) - x^2\cos(x)$
+CORRECTA: A
+NIVEL: intermedio
+IMAGEN:
