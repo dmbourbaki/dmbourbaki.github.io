@@ -131,8 +131,7 @@
       <svg id="ruleta-svg" viewBox="0 0 220 220" width="220" height="220"></svg>
     </div>
     <div id="ruleta-resultado">–</div>
-    <button class="btn" id="btn-girar-ruleta" style="width:100%; margin-top:10px;">Girar</button>
-    <button class="btn-secundario" id="btn-reiniciar-ruleta" style="width:100%; margin-top:8px;">Reiniciar</button>
+    <button class="btn" id="btn-girar-ruleta" style="width:100%; margin-top:10px;">Girar (elige la siguiente pregunta)</button>
     <p id="ruleta-info"></p>
   </div>
 
@@ -211,6 +210,7 @@
     ESTADOS, TIEMPO_LIMITE_BASE, crearSala, existeSala, iniciarSiguientePregunta,
     agregarTiempoExtra, cerrarPreguntaYCalcular, escucharSala, ranking,
     parseBancoTxt, finalizarJuegoYaConRanking,
+    activarPreguntaPorIndice, candidatosDisponibles,
   } from "./omai-quiz-app.js";
   import { BANCOS_DEFECTO } from "./omai-quiz-bancos-default.js";
 
@@ -340,8 +340,7 @@
   };
   actualizarBotonMusica();
 
-  // ---------- Ruleta circular animada ----------
-  const numerosUsados = new Set();
+  // ---------- Ruleta circular animada: elige y activa la siguiente pregunta ----------
   let girando = false;
   const coloresRueda = ["#4dc9c9", "#c96b7a", "#7ac97a", "#9a7ac9", "#c9a04d", "#6b8fc9"];
 
@@ -370,13 +369,10 @@
     const abrir = panel.style.display !== "block";
     panel.style.display = abrir ? "block" : "none";
     if (abrir) {
-      const max = parseInt(document.getElementById("input-ruleta-max").value, 10) || 1;
-      dibujarRueda(max);
+      const total = salaActualCache ? salaActualCache.preguntas.length : (parseInt(document.getElementById("input-ruleta-max").value, 10) || 1);
+      dibujarRueda(total);
     }
   };
-  document.getElementById("input-ruleta-max").addEventListener("change", (e) => {
-    dibujarRueda(parseInt(e.target.value, 10) || 1);
-  });
 
   function reproducirTickRuleta() {
     asegurarAudioContext();
@@ -408,19 +404,29 @@
 
   document.getElementById("btn-girar-ruleta").onclick = () => {
     if (girando) return;
-    const max = parseInt(document.getElementById("input-ruleta-max").value, 10) || 1;
-    const disponibles = [];
-    for (let i = 1; i <= max; i++) if (!numerosUsados.has(i)) disponibles.push(i);
     const infoEl = document.getElementById("ruleta-info");
-    if (disponibles.length === 0) {
-      infoEl.textContent = "¡Ya salieron todos los números! Da clic en Reiniciar.";
+    if (!codigoActual || !salaActualCache) {
+      infoEl.textContent = "Primero crea o reconecta una sala.";
       return;
     }
+    if (salaActualCache.estado === ESTADOS.PREGUNTA_ACTIVA) {
+      infoEl.textContent = "Cierra la pregunta activa antes de girar para elegir la siguiente.";
+      return;
+    }
+    const total = salaActualCache.preguntas.length;
+    const usados = new Set(salaActualCache.indicesUsados || []);
+    const candidatos = [];
+    for (let i = 0; i < total; i++) if (!usados.has(i)) candidatos.push(i);
+    if (candidatos.length === 0) {
+      infoEl.textContent = "¡Ya salieron todas las preguntas de esta partida!";
+      return;
+    }
+    dibujarRueda(total);
     girando = true;
-    const elegido = disponibles[Math.floor(Math.random() * disponibles.length)];
-    const anguloSeg = 360 / max;
-    // el segmento (elegido-1) debe quedar alineado bajo el puntero (arriba)
-    const anguloObjetivo = 360 - ((elegido - 1) * anguloSeg + anguloSeg / 2);
+    const elegidoIdx = candidatos[Math.floor(Math.random() * candidatos.length)]; // índice real (0-based)
+    const numeroVisual = elegidoIdx + 1; // solo para la posición visual de la rueda
+    const anguloSeg = 360 / total;
+    const anguloObjetivo = 360 - ((numeroVisual - 1) * anguloSeg + anguloSeg / 2);
     const vueltasExtra = 5 * 360;
     rotacionAcumulada += vueltasExtra + anguloObjetivo - (rotacionAcumulada % 360);
     const svg = document.getElementById("ruleta-svg");
@@ -434,19 +440,13 @@
       setTimeout(reproducirTickRuleta, t);
     }
 
-    setTimeout(() => {
-      numerosUsados.add(elegido);
-      document.getElementById("ruleta-resultado").textContent = elegido;
-      infoEl.textContent = `Ya salieron: ${[...numerosUsados].sort((a, b) => a - b).join(", ")}`;
+    setTimeout(async () => {
+      document.getElementById("ruleta-resultado").textContent = numeroVisual;
+      infoEl.textContent = `¡Pregunta #${numeroVisual} activada para todos!`;
       reproducirCampanadaRuleta();
       girando = false;
+      await activarPreguntaPorIndice(db, codigoActual, elegidoIdx);
     }, 4100);
-  };
-
-  document.getElementById("btn-reiniciar-ruleta").onclick = () => {
-    numerosUsados.clear();
-    document.getElementById("ruleta-resultado").textContent = "–";
-    document.getElementById("ruleta-info").textContent = "";
   };
 
   // ---------- KaTeX ----------
@@ -531,6 +531,12 @@
     escucharSala(db, codigo, renderizar);
   }
 
+  document.getElementById("input-num-preguntas").addEventListener("input", (e) => {
+    const n = parseInt(e.target.value, 10) || 1;
+    document.getElementById("input-ruleta-max").value = n;
+    dibujarRueda(n);
+  });
+
   document.getElementById("btn-crear-sala").onclick = async () => {
     const n = parseInt(document.getElementById("input-num-preguntas").value, 10) || 10;
     const tiempo = parseInt(document.getElementById("input-tiempo-pregunta").value, 10) || 20;
@@ -541,6 +547,8 @@
     }
     const codigo = await crearSala(db, combinado, n, tiempo);
     document.getElementById("vista-espera").style.display = "block";
+    document.getElementById("input-ruleta-max").value = n;
+    dibujarRueda(n);
     activarSala(codigo);
   };
 
@@ -563,10 +571,16 @@
   document.getElementById("btn-siguiente").onclick = () => iniciarSiguientePregunta(db, codigoActual);
 
   let ultimaPreguntaRenderizada = -1;
+  let ruletaSincronizada = false;
 
   function renderizar(s) {
     if (!s) return;
     salaActualCache = s;
+    if (!ruletaSincronizada) {
+      ruletaSincronizada = true;
+      document.getElementById("input-ruleta-max").value = s.preguntas.length;
+      dibujarRueda(s.preguntas.length);
+    }
     const numJugadores = Object.keys(s.jugadores || {}).length;
 
     if (s.estado === ESTADOS.ESPERANDO) {
@@ -582,7 +596,7 @@
       mostrarVista("vista-pregunta");
       const idx = s.preguntaActual;
       const p = s.preguntas[idx];
-      document.getElementById("contador-pregunta").textContent = `Pregunta ${idx + 1} de ${s.preguntas.length}`;
+      document.getElementById("contador-pregunta").textContent = `Pregunta ${(s.indicesUsados || []).length} de ${s.preguntas.length}`;
       document.getElementById("texto-pregunta").textContent = p.texto;
       const imgEl = document.getElementById("pregunta-imagen");
       if (p.imagen) { imgEl.src = p.imagen; imgEl.style.display = "block"; } else { imgEl.style.display = "none"; }
@@ -606,7 +620,7 @@
       const rankingActual = ranking(s);
       document.getElementById("ranking-lista").innerHTML = rankingActual
         .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""}"><span>${i + 1}. ${j.nombre}</span><span>${j.puntos} pts</span></div>`).join("");
-      document.getElementById("btn-siguiente").textContent = idx + 1 >= s.preguntas.length ? "Ver ranking final" : "Siguiente pregunta";
+      document.getElementById("btn-siguiente").textContent = (s.indicesUsados || []).length >= s.preguntas.length ? "Ver ranking final" : "Siguiente pregunta";
     }
 
     if (s.estado === ESTADOS.TERMINADO) {

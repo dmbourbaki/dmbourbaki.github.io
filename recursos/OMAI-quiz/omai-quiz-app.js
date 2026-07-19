@@ -128,11 +128,49 @@ async function crearSala(db, bancoPreguntas, numPreguntas, tiempoLimiteSegundos)
     preguntas: preguntasElegidas,
     jugadores: {},
     respuestas: {},
+    indicesUsados: [],
     tiempoLimiteBase: tiempoLimiteSegundos || TIEMPO_LIMITE_BASE,
     tiempoExtra: 0,
     creada: Date.now(),
   });
   return codigo;
+}
+
+function candidatosDisponibles(sala) {
+  const total = sala.preguntas.length;
+  const usados = new Set(sala.indicesUsados || []);
+  const candidatos = [];
+  for (let i = 0; i < total; i++) if (!usados.has(i)) candidatos.push(i);
+  return candidatos;
+}
+
+async function activarPreguntaPorIndice(db, codigo, indice) {
+  const salaRef = ref(db, `salas/${codigo}`);
+  const snap = await get(salaRef);
+  const sala = snap.val();
+  const usados = sala.indicesUsados || [];
+  await update(salaRef, {
+    estado: ESTADOS.PREGUNTA_ACTIVA,
+    preguntaActual: indice,
+    [`respuestas/${indice}`]: {},
+    inicioPregunta: Date.now(),
+    tiempoExtra: 0,
+    indicesUsados: [...usados, indice],
+  });
+  return indice;
+}
+
+async function avanzarPreguntaAleatoria(db, codigo) {
+  const salaRef = ref(db, `salas/${codigo}`);
+  const snap = await get(salaRef);
+  const sala = snap.val();
+  const candidatos = candidatosDisponibles(sala);
+  if (candidatos.length === 0) {
+    await update(salaRef, { estado: ESTADOS.TERMINADO });
+    return null;
+  }
+  const elegido = candidatos[Math.floor(Math.random() * candidatos.length)];
+  return activarPreguntaPorIndice(db, codigo, elegido);
 }
 
 async function finalizarJuegoYaConRanking(db, codigo) {
@@ -151,23 +189,9 @@ async function existeSala(db, codigo) {
 }
 
 async function iniciarSiguientePregunta(db, codigo) {
-  const salaRef = ref(db, `salas/${codigo}`);
-  const snap = await get(salaRef);
-  const sala = snap.val();
-  const siguienteIdx = sala.preguntaActual + 1;
-
-  if (siguienteIdx >= sala.preguntas.length) {
-    await update(salaRef, { estado: ESTADOS.TERMINADO });
-    return null;
-  }
-  await update(salaRef, {
-    estado: ESTADOS.PREGUNTA_ACTIVA,
-    preguntaActual: siguienteIdx,
-    [`respuestas/${siguienteIdx}`]: {},
-    inicioPregunta: Date.now(),
-    tiempoExtra: 0,
-  });
-  return siguienteIdx;
+  // Ahora el avance (con o sin ruleta) siempre elige al azar entre las
+  // preguntas de la partida que todavía no han salido, sin repetir.
+  return avanzarPreguntaAleatoria(db, codigo);
 }
 
 async function agregarTiempoExtra(db, codigo, segundos) {
@@ -243,5 +267,6 @@ export {
   parseBancoTxt, cargarManifiestoBancos, cargarBanco,
   crearSala, existeSala, iniciarSiguientePregunta, agregarTiempoExtra,
   cerrarPreguntaYCalcular, escucharSala, eliminarSala, finalizarJuegoYaConRanking,
+  activarPreguntaPorIndice, avanzarPreguntaAleatoria, candidatosDisponibles,
   unirseASala, enviarRespuesta, ranking, calcularPuntos,
 };
