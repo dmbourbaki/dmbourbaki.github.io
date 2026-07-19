@@ -235,13 +235,19 @@ async function eliminarSala(db, codigo) {
 
 // ---------- Funciones ESTUDIANTE ----------
 
+const ANIMALES = ["🦁", "🐼", "🦊", "🐸", "🦉", "🐵", "🐯", "🐨", "🐰", "🦄", "🐙", "🦋", "🐢", "🦈", "🐧", "🦖"];
+
+function elegirAnimalAleatorio() {
+  return ANIMALES[Math.floor(Math.random() * ANIMALES.length)];
+}
+
 async function unirseASala(db, codigo, nombre) {
   const salaRef = ref(db, `salas/${codigo}`);
   const snap = await get(salaRef);
   if (!snap.exists()) throw new Error("Esa sala no existe. Verifica el código.");
 
   const id = generarIdJugador();
-  await set(ref(db, `salas/${codigo}/jugadores/${id}`), { nombre, puntos: 0 });
+  await set(ref(db, `salas/${codigo}/jugadores/${id}`), { nombre, puntos: 0, animal: elegirAnimalAleatorio() });
   return id;
 }
 

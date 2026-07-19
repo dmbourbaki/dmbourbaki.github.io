@@ -58,6 +58,11 @@
   .resultado-correcta { color: var(--good); font-size: 20px; font-weight: 600; }
   .resultado-incorrecta { color: var(--bad); font-size: 20px; font-weight: 600; }
   #cronometro-estudiante.urgente { color: var(--bad); }
+  .estrella-confeti { position: absolute; top: -5%; font-size: 20px; animation: caer-confeti linear forwards; }
+  @keyframes caer-confeti {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
+  }
 </style>
 </head>
 <body>
@@ -90,8 +95,11 @@
     <p class="estado-msg">Esperando la siguiente pregunta…</p>
   </div>
 
+  <div id="capa-confeti" style="position:fixed; inset:0; pointer-events:none; z-index:70; overflow:hidden; display:none;"></div>
+
   <div class="card" id="vista-final" style="display:none;">
     <h2 style="font-family:'Fraunces',serif;color:var(--gold-bright);">Quiz terminado</h2>
+    <div id="mi-animal-final" style="font-size:48px; margin-bottom:8px;"></div>
     <p class="puntos-actuales" id="puntos-finales"></p>
     <p id="posicion-final" style="color:var(--ink-soft)"></p>
   </div>
@@ -217,9 +225,11 @@
       const rankingFinal = ranking(sala);
       const posicion = rankingFinal.findIndex((j) => j.id === jugadorId) + 1;
       const yo = rankingFinal.find((j) => j.id === jugadorId);
+      document.getElementById("mi-animal-final").textContent = yo?.animal || "🎓";
       document.getElementById("puntos-finales").textContent = `${yo?.puntos ?? 0} puntos`;
       document.getElementById("posicion-final").textContent = posicion > 0 ? `Puesto ${posicion} de ${rankingFinal.length}` : "";
       mostrarVista("vista-final");
+      mostrarConfetiEstudiante();
     }
   }
 
@@ -300,6 +310,27 @@
   function mostrarVista(id) {
     ["vista-unirse", "vista-esperando", "vista-pregunta", "vista-resultado", "vista-final"]
       .forEach((v) => document.getElementById(v).style.display = v === id ? "block" : "none");
+  }
+
+  let confetiEstudianteActivo = false;
+  const EMOJIS_CONFETI_EST = ["⭐", "✨", "🌟", "🎉"];
+  function mostrarConfetiEstudiante() {
+    if (confetiEstudianteActivo) return;
+    confetiEstudianteActivo = true;
+    const capa = document.getElementById("capa-confeti");
+    capa.style.display = "block";
+    const intervalo = setInterval(() => {
+      const estrella = document.createElement("div");
+      estrella.className = "estrella-confeti";
+      estrella.textContent = EMOJIS_CONFETI_EST[Math.floor(Math.random() * EMOJIS_CONFETI_EST.length)];
+      estrella.style.left = `${Math.random() * 100}%`;
+      const duracion = 3 + Math.random() * 2;
+      estrella.style.animationDuration = `${duracion}s`;
+      estrella.style.fontSize = `${14 + Math.random() * 14}px`;
+      capa.appendChild(estrella);
+      setTimeout(() => estrella.remove(), duracion * 1000 + 200);
+    }, 200);
+    setTimeout(() => clearInterval(intervalo), 8000); // celebración breve, no infinita en el celular
   }
 </script>
 </body>

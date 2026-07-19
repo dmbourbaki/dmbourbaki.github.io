@@ -87,6 +87,30 @@
   .campo-config { text-align: left; margin: 16px 0; }
   .campo-config label { display:block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
 
+  /* Podio estilo olímpico */
+  #podio-final { display: flex; align-items: flex-end; justify-content: center; gap: 14px; margin: 28px 0 12px 0; }
+  .podio-puesto { display: flex; flex-direction: column; align-items: center; width: 140px; }
+  .podio-animal { font-size: 44px; margin-bottom: 4px; }
+  .podio-nombre { font-weight: 600; font-size: 15px; color: var(--ink); text-align:center; }
+  .podio-puntos { font-family: "Spline Sans Mono", monospace; color: var(--gold-bright); font-size: 13px; margin-bottom: 8px; }
+  .podio-bloque {
+    width: 100%; border-radius: 10px 10px 0 0; display: flex; align-items: flex-start;
+    justify-content: center; padding-top: 10px; font-family: "Fraunces", serif; font-weight: 700; font-size: 28px;
+  }
+  .podio-1 .podio-bloque { height: 130px; background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep)); color: #08090c; }
+  .podio-2 .podio-bloque { height: 95px; background: linear-gradient(180deg, #cfd4dc, #8890a0); color: #08090c; }
+  .podio-3 .podio-bloque { height: 65px; background: linear-gradient(180deg, #d99a63, #9a6435); color: #08090c; }
+
+  /* Confeti / estrellas */
+  #capa-confeti { position: fixed; inset: 0; pointer-events: none; z-index: 70; overflow: hidden; display: none; }
+  .estrella-confeti {
+    position: absolute; top: -5%; font-size: 22px; animation: caer-confeti linear forwards;
+  }
+  @keyframes caer-confeti {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
+  }
+
   #panel-ruleta {
     position: fixed; bottom: 24px; right: 24px; z-index: 60; display: block;
     background: var(--panel); border: 1px solid var(--gold); border-radius: 16px;
@@ -197,10 +221,13 @@
     <button class="btn" id="btn-siguiente">Siguiente pregunta</button>
   </div>
 
-  <div class="card" id="vista-final" style="display:none;">
+  <div id="capa-confeti"></div>
+
+  <div class="card" id="vista-final" style="display:none; max-width: 820px; position: relative; overflow: visible;">
     <div class="eyebrow">Quiz terminado</div>
     <h2 style="font-family:'Fraunces',serif; color:var(--gold-bright);">🏆 Ranking final</h2>
-    <div id="ranking-final"></div>
+    <div id="podio-final"></div>
+    <div id="ranking-final" style="margin-top:24px;"></div>
   </div>
 
 <script type="module">
@@ -299,8 +326,11 @@
     ascendente: { notas: [220.00, 246.94, 277.18, 293.66, 329.63, 369.99, 415.30, 440.00], tempo: 220, onda: "sine" },
     suave: { notas: [196.00, 220.00, 246.94, 220.00, 196.00, 174.61, 196.00, 220.00], tempo: 340, onda: "sine" },
     retro: { notas: [329.63, 329.63, 392.00, 329.63, 293.66, 261.63, 293.66, 329.63], tempo: 200, onda: "square" },
+    lobby: { notas: [196.00, 246.94, 293.66, 246.94], tempo: 480, onda: "sine" },
+    final: { notas: [392.00, 493.88, 587.33, 493.88, 392.00, 587.33, 659.25, 587.33], tempo: 150, onda: "square" },
   };
-  let pistaActual = "arpegio";
+  let pistaActual = "arpegio"; // pista elegida por el docente para la fase "durante el juego"
+  let faseMusicalActual = null; // 'lobby' | 'juego' | 'final'
 
   function tocarNota(freq, duracion, onda) {
     const osc = audioCtx.createOscillator();
@@ -313,9 +343,9 @@
     osc.start();
     osc.stop(audioCtx.currentTime + duracion);
   }
-  function iniciarMusica() {
+  function iniciarMusica(clavePista) {
     clearInterval(musicaTimer);
-    const p = PISTAS[pistaActual];
+    const p = PISTAS[clavePista || pistaActual];
     musicaTimer = setInterval(() => {
       tocarNota(p.notas[pasoActual % p.notas.length], p.tempo / 1000 * 1.3, p.onda);
       pasoActual++;
@@ -336,9 +366,61 @@
   };
   document.getElementById("select-pista").onchange = (e) => {
     pistaActual = e.target.value;
-    if (musicaActiva) iniciarMusica();
+    if (musicaActiva && faseMusicalActual === "juego") iniciarMusica(pistaActual);
   };
   actualizarBotonMusica();
+
+  // Cambia automáticamente de pista según la fase de la partida:
+  // antes de empezar (lobby), durante las preguntas (la elegida por el docente), y al final (victoria).
+  function actualizarFaseMusical(estado) {
+    const nuevaFase = estado === ESTADOS.TERMINADO ? "final" : (estado === ESTADOS.ESPERANDO ? "lobby" : "juego");
+    if (nuevaFase === faseMusicalActual) return;
+    faseMusicalActual = nuevaFase;
+    if (!musicaActiva) return;
+    const clave = nuevaFase === "juego" ? pistaActual : nuevaFase;
+    iniciarMusica(clave);
+  }
+
+  // ---------- Fanfarria de bongos al iniciar el juego ----------
+  function ruidoBlanco(duracionSeg) {
+    const tam = Math.floor(audioCtx.sampleRate * duracionSeg);
+    const buffer = audioCtx.createBuffer(1, tam, audioCtx.sampleRate);
+    const datos = buffer.getChannelData(0);
+    for (let i = 0; i < tam; i++) datos[i] = Math.random() * 2 - 1;
+    return buffer;
+  }
+  function golpeBongo(offsetSeg, frecuenciaFiltro) {
+    const fuente = audioCtx.createBufferSource();
+    fuente.buffer = ruidoBlanco(0.15);
+    const filtro = audioCtx.createBiquadFilter();
+    filtro.type = "bandpass";
+    filtro.frequency.value = frecuenciaFiltro;
+    filtro.Q.value = 1.1;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.4, audioCtx.currentTime + offsetSeg);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + offsetSeg + 0.16);
+    fuente.connect(filtro).connect(gain).connect(audioCtx.destination);
+    fuente.start(audioCtx.currentTime + offsetSeg);
+  }
+  function reproducirFanfarreInicio() {
+    asegurarAudioContext();
+    // Patrón de bongos: grave-agudo-grave-agudo-agudo-agudo (como un redoble de inauguración)
+    [[0, 180], [0.12, 340], [0.24, 180], [0.36, 340], [0.44, 340], [0.56, 500]]
+      .forEach(([t, f]) => golpeBongo(t, f));
+    // Acorde brillante al final del redoble
+    [523.25, 659.25, 783.99, 1046.50].forEach((freq) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.001, audioCtx.currentTime + 0.7);
+      gain.gain.linearRampToValueAtTime(0.09, audioCtx.currentTime + 0.76);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.6);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime + 0.7);
+      osc.stop(audioCtx.currentTime + 1.6);
+    });
+  }
 
   // ---------- Ruleta circular animada: elige y activa la siguiente pregunta ----------
   // Los segmentos de la rueda SIEMPRE representan solo las preguntas que aún no
@@ -556,8 +638,7 @@
     document.getElementById("barra-codigo").textContent = codigo;
     document.getElementById("barra-sala").style.display = "flex";
 
-    asegurarAudioContext();
-    if (musicaActiva) iniciarMusica();
+    asegurarAudioContext(); // el primer snapshot de la sala fijará la pista correcta (lobby/juego/final)
 
     escucharSala(db, codigo, renderizar);
   }
@@ -603,11 +684,17 @@
 
   let ultimaPreguntaRenderizada = -1;
   let yaAutoCerradaEstaPregunta = false;
+  let estadoAnterior = null;
 
   function renderizar(s) {
     if (!s) return;
     salaActualCache = s;
     sincronizarRuedaConSala();
+    actualizarFaseMusical(s.estado);
+    if (estadoAnterior === ESTADOS.ESPERANDO && s.estado === ESTADOS.PREGUNTA_ACTIVA) {
+      reproducirFanfarreInicio();
+    }
+    estadoAnterior = s.estado;
     const numJugadores = Object.keys(s.jugadores || {}).length;
 
     if (s.estado === ESTADOS.ESPERANDO) {
@@ -616,7 +703,7 @@
       document.getElementById("btn-iniciar").textContent =
         numJugadores === 0 ? "Esperando jugadores…" : `Iniciar quiz (${numJugadores} jugadores)`;
       document.getElementById("lista-jugadores").innerHTML = Object.values(s.jugadores || {})
-        .map((j) => `<div class="chip">${j.nombre}</div>`).join("");
+        .map((j) => `<div class="chip">${j.animal || "🎓"} ${j.nombre}</div>`).join("");
     }
 
     if (s.estado === ESTADOS.PREGUNTA_ACTIVA) {
@@ -653,21 +740,73 @@
       const idx = s.preguntaActual;
       const rankingActual = ranking(s);
       document.getElementById("ranking-lista").innerHTML = rankingActual
-        .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""}"><span>${i + 1}. ${j.nombre}</span><span>${j.puntos} pts</span></div>`).join("");
+        .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""}"><span>${i + 1}. ${j.animal || "🎓"} ${j.nombre}</span><span>${j.puntos} pts</span></div>`).join("");
       document.getElementById("btn-siguiente").textContent = (s.indicesUsados || []).length >= s.preguntas.length ? "Ver ranking final" : "Siguiente pregunta";
     }
 
     if (s.estado === ESTADOS.TERMINADO) {
       mostrarVista("vista-final");
       const rankingFinal = ranking(s);
-      document.getElementById("ranking-final").innerHTML = rankingFinal
-        .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""}"><span>${i + 1}. ${j.nombre}</span><span>${j.puntos} pts</span></div>`).join("");
+      renderizarPodio(rankingFinal);
+      const resto = rankingFinal.slice(3);
+      document.getElementById("ranking-final").innerHTML = resto
+        .map((j, i) => `<div class="ranking-row"><span>${i + 4}. ${j.animal || "🎓"} ${j.nombre}</span><span>${j.puntos} pts</span></div>`).join("");
+      mostrarConfeti();
+    } else {
+      ocultarConfeti();
     }
   }
 
   function mostrarVista(id) {
     ["vista-inicio", "vista-espera", "vista-pregunta", "vista-resultados", "vista-final"]
       .forEach((v) => document.getElementById(v).style.display = v === id ? "block" : "none");
+  }
+
+  // ---------- Podio estilo olímpico (2-1-3) ----------
+  function renderizarPodio(rankingFinal) {
+    const cont = document.getElementById("podio-final");
+    if (rankingFinal.length === 0) { cont.innerHTML = ""; return; }
+    const medallas = ["🥇", "🥈", "🥉"];
+    const orden = [1, 0, 2].filter((i) => rankingFinal[i]); // segundo-primero-tercero, como el podio real
+    cont.innerHTML = orden.map((i) => {
+      const j = rankingFinal[i];
+      const claseAltura = `podio-${i + 1}`;
+      return `<div class="podio-puesto ${claseAltura}">
+        <div class="podio-animal">${j.animal || "🎓"}</div>
+        <div class="podio-nombre">${j.nombre}</div>
+        <div class="podio-puntos">${j.puntos} pts</div>
+        <div class="podio-bloque">${medallas[i]}</div>
+      </div>`;
+    }).join("");
+  }
+
+  // ---------- Confeti / estrellas ----------
+  let confetiInterval = null;
+  const EMOJIS_CONFETI = ["⭐", "✨", "🌟", "🎉"];
+
+  function mostrarConfeti() {
+    const capa = document.getElementById("capa-confeti");
+    if (confetiInterval) return; // ya está activo
+    capa.style.display = "block";
+    confetiInterval = setInterval(() => {
+      const estrella = document.createElement("div");
+      estrella.className = "estrella-confeti";
+      estrella.textContent = EMOJIS_CONFETI[Math.floor(Math.random() * EMOJIS_CONFETI.length)];
+      estrella.style.left = `${Math.random() * 100}%`;
+      const duracion = 3 + Math.random() * 2.5;
+      estrella.style.animationDuration = `${duracion}s`;
+      estrella.style.fontSize = `${16 + Math.random() * 18}px`;
+      capa.appendChild(estrella);
+      setTimeout(() => estrella.remove(), duracion * 1000 + 200);
+    }, 180);
+  }
+
+  function ocultarConfeti() {
+    if (!confetiInterval) return;
+    clearInterval(confetiInterval);
+    confetiInterval = null;
+    document.getElementById("capa-confeti").innerHTML = "";
+    document.getElementById("capa-confeti").style.display = "none";
   }
 </script>
 </body>
