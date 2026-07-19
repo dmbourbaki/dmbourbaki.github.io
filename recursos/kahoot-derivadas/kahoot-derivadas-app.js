@@ -37,13 +37,23 @@ function generarIdJugador() {
 
 // ---------- Funciones DOCENTE ----------
 
-async function crearSala(db, preguntas) {
+function mezclarYTomar(arreglo, n) {
+  const copia = [...arreglo];
+  for (let i = copia.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia.slice(0, Math.min(n, copia.length));
+}
+
+async function crearSala(db, bancoPreguntas, numPreguntas) {
   const codigo = generarCodigoSala();
+  const preguntasElegidas = mezclarYTomar(bancoPreguntas, numPreguntas);
   const salaRef = ref(db, `salas/${codigo}`);
   await set(salaRef, {
     estado: ESTADOS.ESPERANDO,
     preguntaActual: -1,
-    preguntas,
+    preguntas: preguntasElegidas,
     jugadores: {},
     respuestas: {},
     creada: Date.now(),

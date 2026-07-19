@@ -7,45 +7,37 @@
 <meta name="description" content="Observatorio de Matemáticas Avanzadas para Ingeniería — Quiz en vivo sobre derivadas" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root {
-    --void: #08090c;
-    --abyss: #0f1116;
-    --panel: #15181f;
-    --gold: #c9a04d;
-    --gold-bright: #e8c273;
-    --gold-deep: #8a6a2f;
-    --cyan: #4dc9c9;
-    --rose: #c96b7a;
-    --grass: #7ac97a;
-    --violet: #9a7ac9;
-    --good: #7ac97a;
-    --bad: #c96b6b;
-    --line: #262b36;
-    --line-soft: #1b1e27;
-    --ink: #eceef2;
-    --ink-soft: #a7acb9;
-    --ink-faint: #6b7080;
+    --void: #08090c; --abyss: #0f1116; --panel: #15181f;
+    --gold: #c9a04d; --gold-bright: #e8c273; --gold-deep: #8a6a2f;
+    --cyan: #4dc9c9; --rose: #c96b7a; --grass: #7ac97a; --violet: #9a7ac9;
+    --good: #7ac97a; --bad: #c96b6b;
+    --line: #262b36; --line-soft: #1b1e27;
+    --ink: #eceef2; --ink-soft: #a7acb9; --ink-faint: #6b7080;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0; background: var(--void); color: var(--ink);
     font-family: "Inter Tight", sans-serif; min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 32px;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 24px; padding-top: 76px;
   }
   .eyebrow {
     font-family: "Spline Sans Mono", monospace; font-size: 12px; letter-spacing: 0.14em;
     color: var(--gold); text-transform: uppercase; margin-bottom: 8px;
   }
   h1 {
-    font-family: "Fraunces", serif; font-weight: 600; font-size: 40px; margin: 0 0 32px 0;
+    font-family: "Fraunces", serif; font-weight: 600; font-size: 36px; margin: 0 0 28px 0;
     color: var(--ink); text-align: center;
   }
   .card {
     background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
-    padding: 40px; max-width: 680px; width: 100%; text-align: center;
+    padding: 36px; max-width: 700px; width: 100%; text-align: center;
   }
   .btn {
     font-family: "Inter Tight", sans-serif; font-weight: 600; font-size: 16px;
@@ -54,24 +46,39 @@
   }
   .btn:hover { background: var(--gold-bright); }
   .btn:disabled { background: var(--line); color: var(--ink-faint); cursor: not-allowed; }
-  .codigo {
+  .btn-secundario {
+    background: transparent; border: 1px solid var(--line-soft); color: var(--ink-soft);
+    font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer;
+  }
+  select, input[type=number] {
+    font-family: "Spline Sans Mono", monospace; background: var(--abyss); color: var(--ink);
+    border: 1px solid var(--line-soft); border-radius: 8px; padding: 10px 14px; font-size: 15px;
+  }
+
+  #barra-sala {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: none; align-items: center; justify-content: space-between;
+    background: var(--panel); border-bottom: 1px solid var(--line);
+    padding: 10px 24px;
+  }
+  #barra-sala .info-codigo { font-family: "Spline Sans Mono", monospace; font-size: 15px; color: var(--gold-bright); }
+  #barra-sala .info-codigo b { font-size: 20px; letter-spacing: 0.08em; }
+  #mini-qr { display: inline-flex; background: #fff; border-radius: 6px; padding: 4px; margin-left: 10px; vertical-align: middle; }
+  #mini-qr img, #mini-qr canvas { display: block; width: 46px; height: 46px; }
+
+  .codigo-grande {
     font-family: "Spline Sans Mono", monospace; font-size: 56px; letter-spacing: 0.1em;
     color: var(--gold-bright); margin: 16px 0;
   }
-  #qrcode { display: inline-block; margin: 20px 0; padding: 16px; background: #fff; border-radius: 12px; }
-  .lista-jugadores {
-    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 24px;
-  }
+  #qrcode-grande { display: inline-block; margin: 16px 0; padding: 16px; background: #fff; border-radius: 12px; }
+  .lista-jugadores { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 20px; }
   .chip {
     background: var(--abyss); border: 1px solid var(--line-soft); border-radius: 999px;
     padding: 6px 14px; font-size: 14px; color: var(--ink-soft);
   }
-  .pregunta-texto {
-    font-family: "Fraunces", serif; font-size: 28px; margin: 24px 0; color: var(--ink);
-  }
-  .opciones-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0;
-  }
+  .pregunta-texto { font-family: "Fraunces", serif; font-size: 26px; margin: 20px 0; color: var(--ink); }
+  .pregunta-imagen { max-width: 100%; max-height: 260px; border-radius: 10px; margin: 12px 0; }
+  .opciones-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
   .opcion {
     border-radius: 10px; padding: 16px; font-size: 16px; text-align: left;
     border: 1px solid var(--line-soft); color: var(--ink);
@@ -80,27 +87,36 @@
   .opcion:nth-child(2) { background: rgba(201,107,122,0.12); border-color: var(--rose); }
   .opcion:nth-child(3) { background: rgba(122,201,122,0.12); border-color: var(--grass); }
   .opcion:nth-child(4) { background: rgba(154,122,201,0.12); border-color: var(--violet); }
-  .opcion.correcta { outline: 3px solid var(--good); }
-  .contador-respuestas {
-    font-family: "Spline Sans Mono", monospace; color: var(--ink-soft); margin: 8px 0;
-  }
+  .contador-respuestas { font-family: "Spline Sans Mono", monospace; color: var(--ink-soft); margin: 8px 0; }
   .ranking-row {
     display: flex; justify-content: space-between; padding: 10px 16px;
     background: var(--abyss); border-radius: 8px; margin-bottom: 8px; font-size: 16px;
   }
   .ranking-row.top1 { border: 1px solid var(--gold); }
-  .config-note {
-    font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--bad);
-    margin-top: 20px; max-width: 480px;
-  }
+  .config-note { font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--bad); margin-top: 20px; }
+  .campo-config { text-align: left; margin: 16px 0; }
+  .campo-config label { display:block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
 </style>
 </head>
 <body>
+  <div id="barra-sala">
+    <div class="info-codigo">Sala: <b id="barra-codigo">----</b>
+      <span id="mini-qr"></span>
+    </div>
+    <div>
+      <button class="btn-secundario" id="btn-musica">🔈 Música: off</button>
+    </div>
+  </div>
+
   <div class="eyebrow">OMAI · Observatorio de Matemáticas Avanzadas para Ingeniería</div>
   <h1>Quiz en Vivo — Derivadas</h1>
 
   <div class="card" id="vista-inicio">
-    <p>Crea una sala para que tus estudiantes se unan escaneando el QR.</p>
+    <p>Configura la partida y crea la sala.</p>
+    <div class="campo-config">
+      <label for="input-num-preguntas">Número de preguntas para esta partida (banco disponible: <span id="total-banco"></span>)</label>
+      <input type="number" id="input-num-preguntas" min="1" value="10" />
+    </div>
     <button class="btn" id="btn-crear-sala">Crear sala</button>
     <p class="config-note" id="config-warning" style="display:none;">
       ⚠ Falta configurar Firebase: edita el objeto <code>firebaseConfig</code> al inicio del script de esta página.
@@ -109,9 +125,9 @@
 
   <div class="card" id="vista-espera" style="display:none;">
     <div class="eyebrow">Código de sala</div>
-    <div class="codigo" id="texto-codigo"></div>
-    <div id="qrcode"></div>
-    <p style="color:var(--ink-soft)">Los estudiantes escanean el QR o entran a tu-sitio.github.io/...&nbsp;con el código.</p>
+    <div class="codigo-grande" id="texto-codigo"></div>
+    <div id="qrcode-grande"></div>
+    <p style="color:var(--ink-soft)">Los estudiantes escanean el QR o entran con el código. Pueden unirse en cualquier momento, incluso ya iniciado el quiz.</p>
     <div class="lista-jugadores" id="lista-jugadores"></div>
     <br/>
     <button class="btn" id="btn-iniciar" disabled>Esperando jugadores…</button>
@@ -120,6 +136,7 @@
   <div class="card" id="vista-pregunta" style="display:none;">
     <div class="eyebrow" id="contador-pregunta"></div>
     <div class="pregunta-texto" id="texto-pregunta"></div>
+    <img id="pregunta-imagen" class="pregunta-imagen" style="display:none;" />
     <div class="opciones-grid" id="opciones-grid"></div>
     <div class="contador-respuestas" id="contador-respuestas"></div>
     <button class="btn" id="btn-cerrar-pregunta">Cerrar pregunta y ver resultados</button>
@@ -147,7 +164,6 @@
   } from "./kahoot-derivadas-app.js";
   import { PREGUNTAS_DERIVADAS } from "./kahoot-derivadas-preguntas.js";
 
-  // ======= PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE =======
   const firebaseConfig = {
     apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
     authDomain: "omai-quiz.firebaseapp.com",
@@ -157,11 +173,12 @@
     messagingSenderId: "44663231333",
     appId: "1:44663231333:web:4467c56d21bca45a82878c",
   };
-  // =======================================================
+
+  document.getElementById("total-banco").textContent = PREGUNTAS_DERIVADAS.length;
+  document.getElementById("input-num-preguntas").max = PREGUNTAS_DERIVADAS.length;
 
   let db;
   let codigoActual = null;
-  let sala = null;
 
   const esConfigPlaceholder = firebaseConfig.apiKey === "TU_API_KEY";
   if (esConfigPlaceholder) {
@@ -172,14 +189,64 @@
     db = getDatabase(app);
   }
 
+  // ---------- Música de fondo (Web Audio API, sin archivos externos) ----------
+  let audioCtx = null;
+  let musicaActiva = false;
+  let musicaTimer = null;
+  const secuencia = [261.63, 329.63, 392.00, 329.63, 261.63, 392.00, 440.00, 392.00];
+  let pasoActual = 0;
+
+  function tocarNota(freq, duracion) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "triangle";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duracion);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duracion);
+  }
+
+  document.getElementById("btn-musica").onclick = () => {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    musicaActiva = !musicaActiva;
+    document.getElementById("btn-musica").textContent = musicaActiva ? "🔊 Música: on" : "🔈 Música: off";
+    if (musicaActiva) {
+      musicaTimer = setInterval(() => {
+        tocarNota(secuencia[pasoActual % secuencia.length], 0.35);
+        pasoActual++;
+      }, 260);
+    } else {
+      clearInterval(musicaTimer);
+    }
+  };
+
+  function renderizarKatex(el) {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(el, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+        throwOnError: false,
+      });
+    }
+  }
+
   document.getElementById("btn-crear-sala").onclick = async () => {
-    codigoActual = await crearSala(db, PREGUNTAS_DERIVADAS);
+    const n = parseInt(document.getElementById("input-num-preguntas").value, 10) || 10;
+    codigoActual = await crearSala(db, PREGUNTAS_DERIVADAS, n);
     document.getElementById("vista-inicio").style.display = "none";
     document.getElementById("vista-espera").style.display = "block";
     document.getElementById("texto-codigo").textContent = codigoActual;
 
     const urlEstudiante = `${location.origin}${location.pathname.replace("docente", "estudiante")}?sala=${codigoActual}`;
-    new QRCode(document.getElementById("qrcode"), { text: urlEstudiante, width: 200, height: 200 });
+    new QRCode(document.getElementById("qrcode-grande"), { text: urlEstudiante, width: 200, height: 200 });
+    new QRCode(document.getElementById("mini-qr"), { text: urlEstudiante, width: 46, height: 46 });
+
+    document.getElementById("barra-codigo").textContent = codigoActual;
+    document.getElementById("barra-sala").style.display = "flex";
 
     escucharSala(db, codigoActual, renderizar);
   };
@@ -190,10 +257,10 @@
 
   function renderizar(s) {
     if (!s) return;
-    sala = s;
     const numJugadores = Object.keys(s.jugadores || {}).length;
 
     if (s.estado === ESTADOS.ESPERANDO) {
+      mostrarVista("vista-espera");
       document.getElementById("btn-iniciar").disabled = numJugadores === 0;
       document.getElementById("btn-iniciar").textContent =
         numJugadores === 0 ? "Esperando jugadores…" : `Iniciar quiz (${numJugadores} jugadores)`;
@@ -207,18 +274,20 @@
       const p = s.preguntas[idx];
       document.getElementById("contador-pregunta").textContent = `Pregunta ${idx + 1} de ${s.preguntas.length}`;
       document.getElementById("texto-pregunta").textContent = p.texto;
+      const imgEl = document.getElementById("pregunta-imagen");
+      if (p.imagen) { imgEl.src = p.imagen; imgEl.style.display = "block"; }
+      else { imgEl.style.display = "none"; }
       document.getElementById("opciones-grid").innerHTML = p.opciones
         .map((op) => `<div class="opcion">${op}</div>`).join("");
       const respondidos = Object.keys((s.respuestas && s.respuestas[idx]) || {}).length;
       document.getElementById("contador-respuestas").textContent =
         `${respondidos} de ${numJugadores} han respondido`;
+      renderizarKatex(document.getElementById("vista-pregunta"));
     }
 
     if (s.estado === ESTADOS.RESULTADOS) {
       mostrarVista("vista-resultados");
       const idx = s.preguntaActual;
-      const p = s.preguntas[idx];
-      document.getElementById("opciones-grid")?.querySelectorAll?.(".opcion");
       const rankingActual = ranking(s);
       document.getElementById("ranking-lista").innerHTML = rankingActual
         .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""}">

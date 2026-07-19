@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>OMAI · Quiz en Vivo — Derivadas (Estudiante)</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <style>
   :root {
     --void: #08090c; --abyss: #0f1116; --panel: #15181f;
@@ -18,9 +21,17 @@
   body {
     margin: 0; background: var(--void); color: var(--ink);
     font-family: "Inter Tight", sans-serif; min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 20px;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 16px; padding-top: 60px;
   }
+  #barra-sala {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: none; align-items: center; justify-content: center;
+    background: var(--panel); border-bottom: 1px solid var(--line);
+    padding: 8px; font-family: "Spline Sans Mono", monospace; font-size: 14px;
+    color: var(--gold-bright);
+  }
+  #barra-sala b { font-size: 17px; letter-spacing: 0.08em; margin-left: 6px; }
   .eyebrow {
     font-family: "Spline Sans Mono", monospace; font-size: 11px; letter-spacing: 0.12em;
     color: var(--gold); text-transform: uppercase; margin-bottom: 8px; text-align: center;
@@ -40,12 +51,9 @@
     padding: 16px; cursor: pointer;
   }
   .btn:disabled { background: var(--line); color: var(--ink-faint); }
-  .puntos-actuales {
-    font-family: "Spline Sans Mono", monospace; color: var(--gold-bright); font-size: 14px;
-  }
-  .pregunta-texto {
-    font-family: "Fraunces", serif; font-size: 22px; margin: 16px 0; color: var(--ink);
-  }
+  .puntos-actuales { font-family: "Spline Sans Mono", monospace; color: var(--gold-bright); font-size: 14px; }
+  .pregunta-texto { font-family: "Fraunces", serif; font-size: 21px; margin: 14px 0; color: var(--ink); }
+  .pregunta-imagen { max-width: 100%; max-height: 200px; border-radius: 10px; margin: 10px 0; }
   .opciones-col { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
   .opcion-btn {
     padding: 22px 16px; border-radius: 12px; font-size: 17px; font-weight: 500;
@@ -63,10 +71,11 @@
 </style>
 </head>
 <body>
+  <div id="barra-sala">Sala: <b id="barra-codigo"></b></div>
   <div class="eyebrow">OMAI · Quiz en Vivo — Derivadas</div>
 
   <div class="card" id="vista-unirse">
-    <p>Ingresa el código de la sala y tu nombre.</p>
+    <p>Ingresa el código de la sala y tu nombre. Puedes entrar en cualquier momento, aunque el quiz ya haya empezado.</p>
     <input id="input-codigo" placeholder="Código (ej. AB12)" maxlength="4" style="text-transform:uppercase" />
     <input id="input-nombre" placeholder="Tu nombre" maxlength="24" />
     <button class="btn" id="btn-unirse">Entrar</button>
@@ -74,12 +83,13 @@
   </div>
 
   <div class="card" id="vista-esperando" style="display:none;">
-    <p>¡Listo, <b id="nombre-mostrado"></b>! Esperando a que el profesor inicie el quiz…</p>
+    <p>¡Listo, <b id="nombre-mostrado"></b>! Esperando a que el profesor inicie o avance el quiz…</p>
   </div>
 
   <div class="card" id="vista-pregunta" style="display:none;">
     <div class="eyebrow" id="contador-pregunta"></div>
     <div class="pregunta-texto" id="texto-pregunta"></div>
+    <img id="pregunta-imagen" class="pregunta-imagen" style="display:none;" />
     <div class="opciones-col" id="opciones-col"></div>
   </div>
 
@@ -102,7 +112,6 @@
     ESTADOS, unirseASala, enviarRespuesta, escucharSala, ranking,
   } from "./kahoot-derivadas-app.js";
 
-  // ======= PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE (misma que en docente) =======
   const firebaseConfig = {
     apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
     authDomain: "omai-quiz.firebaseapp.com",
@@ -112,7 +121,6 @@
     messagingSenderId: "44663231333",
     appId: "1:44663231333:web:4467c56d21bca45a82878c",
   };
-  // ==============================================================================
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
@@ -120,13 +128,24 @@
   let codigoSala = null;
   let jugadorId = null;
   let idxPreguntaMostrada = -1;
-  let inicioPreguntaCliente = null;
+  let inicioPreguntaServidor = null;
   let yaRespondio = false;
 
-  // Prellenar el código si viene del QR (?sala=AB12)
   const params = new URLSearchParams(location.search);
   if (params.get("sala")) {
     document.getElementById("input-codigo").value = params.get("sala").toUpperCase();
+  }
+
+  function renderizarKatex(el) {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(el, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+        throwOnError: false,
+      });
+    }
   }
 
   document.getElementById("btn-unirse").onclick = async () => {
@@ -143,6 +162,8 @@
       jugadorId = await unirseASala(db, codigo, nombre);
       codigoSala = codigo;
       document.getElementById("nombre-mostrado").textContent = nombre;
+      document.getElementById("barra-codigo").textContent = codigo;
+      document.getElementById("barra-sala").style.display = "flex";
       mostrarVista("vista-esperando");
       escucharSala(db, codigoSala, renderizar);
     } catch (e) {
@@ -157,7 +178,10 @@
       if (sala.preguntaActual !== idxPreguntaMostrada) {
         idxPreguntaMostrada = sala.preguntaActual;
         yaRespondio = false;
-        inicioPreguntaCliente = Date.now();
+        // Usamos el timestamp del servidor (no Date.now() local) para que
+        // quienes se unen tarde midan el tiempo real transcurrido desde
+        // que el profesor abrió la pregunta, no desde que ellos la vieron.
+        inicioPreguntaServidor = sala.inicioPregunta || Date.now();
         mostrarPregunta(sala);
       }
     }
@@ -172,7 +196,7 @@
       const yo = rankingFinal.find((j) => j.id === jugadorId);
       document.getElementById("puntos-finales").textContent = `${yo?.puntos ?? 0} puntos`;
       document.getElementById("posicion-final").textContent =
-        `Puesto ${posicion} de ${rankingFinal.length}`;
+        posicion > 0 ? `Puesto ${posicion} de ${rankingFinal.length}` : "";
       mostrarVista("vista-final");
     }
   }
@@ -183,6 +207,9 @@
     document.getElementById("contador-pregunta").textContent =
       `Pregunta ${sala.preguntaActual + 1} de ${sala.preguntas.length}`;
     document.getElementById("texto-pregunta").textContent = p.texto;
+    const imgEl = document.getElementById("pregunta-imagen");
+    if (p.imagen) { imgEl.src = p.imagen; imgEl.style.display = "block"; }
+    else { imgEl.style.display = "none"; }
 
     const cont = document.getElementById("opciones-col");
     cont.innerHTML = "";
@@ -193,6 +220,7 @@
       btn.onclick = () => responder(i, btn);
       cont.appendChild(btn);
     });
+    renderizarKatex(document.getElementById("vista-pregunta"));
   }
 
   async function responder(opcionIdx, btnEl) {
@@ -201,7 +229,7 @@
     document.querySelectorAll(".opcion-btn").forEach((b) => (b.disabled = true));
     btnEl.classList.add("elegida");
 
-    const tiempoSegundos = (Date.now() - inicioPreguntaCliente) / 1000;
+    const tiempoSegundos = (Date.now() - inicioPreguntaServidor) / 1000;
     try {
       await enviarRespuesta(db, codigoSala, idxPreguntaMostrada, jugadorId, opcionIdx, tiempoSegundos);
     } catch (e) {
@@ -221,11 +249,17 @@
     } else if (respuestaJugador.opcion === pregunta.correcta) {
       el.innerHTML = `<span class="resultado-correcta">¡Correcto! ✓</span>`;
     } else {
-      el.innerHTML = `<span class="resultado-incorrecta">Incorrecto ✗</span><br/><small>Era: ${pregunta.opciones[pregunta.correcta]}</small>`;
+      el.innerHTML = `<span class="resultado-incorrecta">Incorrecto ✗</span><br/><small>Era: <span id="resp-correcta"></span></small>`;
     }
 
     const miPuntaje = (sala.jugadores[jugadorId] || {}).puntos || 0;
     document.getElementById("puntos-totales").textContent = `${miPuntaje} puntos totales`;
+    renderizarKatex(el);
+    const spanCorrecta = document.getElementById("resp-correcta");
+    if (spanCorrecta) {
+      spanCorrecta.textContent = pregunta.opciones[pregunta.correcta];
+      renderizarKatex(spanCorrecta);
+    }
   }
 
   function mostrarVista(id) {
