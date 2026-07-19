@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OMAI · Quiz en Vivo — Derivadas (Docente)</title>
+<meta name="description" content="Observatorio de Matemáticas Avanzadas para Ingeniería — Quiz en vivo sobre derivadas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root {
+    --void: #08090c;
+    --abyss: #0f1116;
+    --panel: #15181f;
+    --gold: #c9a04d;
+    --gold-bright: #e8c273;
+    --gold-deep: #8a6a2f;
+    --cyan: #4dc9c9;
+    --rose: #c96b7a;
+    --grass: #7ac97a;
+    --violet: #9a7ac9;
+    --good: #7ac97a;
+    --bad: #c96b6b;
+    --line: #262b36;
+    --line-soft: #1b1e27;
+    --ink: #eceef2;
+    --ink-soft: #a7acb9;
+    --ink-faint: #6b7080;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--void); color: var(--ink);
+    font-family: "Inter Tight", sans-serif; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 32px;
+  }
+  .eyebrow {
+    font-family: "Spline Sans Mono", monospace; font-size: 12px; letter-spacing: 0.14em;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 8px;
+  }
+  h1 {
+    font-family: "Fraunces", serif; font-weight: 600; font-size: 40px; margin: 0 0 32px 0;
+    color: var(--ink); text-align: center;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 40px; max-width: 680px; width: 100%; text-align: center;
+  }
+  .btn {
+    font-family: "Inter Tight", sans-serif; font-weight: 600; font-size: 16px;
+    background: var(--gold); color: var(--void); border: none; border-radius: 10px;
+    padding: 14px 28px; cursor: pointer; transition: background 0.15s ease;
+  }
+  .btn:hover { background: var(--gold-bright); }
+  .btn:disabled { background: var(--line); color: var(--ink-faint); cursor: not-allowed; }
+  .codigo {
+    font-family: "Spline Sans Mono", monospace; font-size: 56px; letter-spacing: 0.1em;
+    color: var(--gold-bright); margin: 16px 0;
+  }
+  #qrcode { display: inline-block; margin: 20px 0; padding: 16px; background: #fff; border-radius: 12px; }
+  .lista-jugadores {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 24px;
+  }
+  .chip {
+    background: var(--abyss); border: 1px solid var(--line-soft); border-radius: 999px;
+    padding: 6px 14px; font-size: 14px; color: var(--ink-soft);
+  }
+  .pregunta-texto {
+    font-family: "Fraunces", serif; font-size: 28px; margin: 24px 0; color: var(--ink);
+  }
+  .opciones-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0;
+  }
+  .opcion {
+    border-radius: 10px; padding: 16px; font-size: 16px; text-align: left;
+    border: 1px solid var(--line-soft); color: var(--ink);
+  }
+  .opcion:nth-child(1) { background: rgba(77,201,201,0.12); border-color: var(--cyan); }
+  .opcion:nth-child(2) { background: rgba(201,107,122,0.12); border-color: var(--rose); }
+  .opcion:nth-child(3) { background: rgba(122,201,122,0.12); border-color: var(--grass); }
+  .opcion:nth-child(4) { background: rgba(154,122,201,0.12); border-color: var(--violet); }
+  .opcion.correcta { outline: 3px solid var(--good); }
+  .contador-respuestas {
+    font-family: "Spline Sans Mono", monospace; color: var(--ink-soft); margin: 8px 0;
+  }
+  .ranking-row {
+    display: flex; justify-content: space-between; padding: 10px 16px;
+    background: var(--abyss); border-radius: 8px; margin-bottom: 8px; font-size: 16px;
+  }
+  .ranking-row.top1 { border: 1px solid var(--gold); }
+  .config-note {
+    font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--bad);
+    margin-top: 20px; max-width: 480px;
+  }
+</style>
+</head>
+<body>
+  <div class="eyebrow">OMAI · Observatorio de Matemáticas Avanzadas para Ingeniería</div>
+  <h1>Quiz en Vivo — Derivadas</h1>
+
+  <div class="card" id="vista-inicio">
+    <p>Crea una sala para que tus estudiantes se unan escaneando el QR.</p>
+    <button class="btn" id="btn-crear-sala">Crear sala</button>
+    <p class="config-note" id="config-warning" style="display:none;">
+      ⚠ Falta configurar Firebase: edita el objeto <code>firebaseConfig</code> al inicio del script de esta página.
+    </p>
+  </div>
+
+  <div class="card" id="vista-espera" style="display:none;">
+    <div class="eyebrow">Código de sala</div>
+    <div class="codigo" id="texto-codigo"></div>
+    <div id="qrcode"></div>
+    <p style="color:var(--ink-soft)">Los estudiantes escanean el QR o entran a tu-sitio.github.io/...&nbsp;con el código.</p>
+    <div class="lista-jugadores" id="lista-jugadores"></div>
+    <br/>
+    <button class="btn" id="btn-iniciar" disabled>Esperando jugadores…</button>
+  </div>
+
+  <div class="card" id="vista-pregunta" style="display:none;">
+    <div class="eyebrow" id="contador-pregunta"></div>
+    <div class="pregunta-texto" id="texto-pregunta"></div>
+    <div class="opciones-grid" id="opciones-grid"></div>
+    <div class="contador-respuestas" id="contador-respuestas"></div>
+    <button class="btn" id="btn-cerrar-pregunta">Cerrar pregunta y ver resultados</button>
+  </div>
+
+  <div class="card" id="vista-resultados" style="display:none;">
+    <div class="eyebrow">Ranking</div>
+    <div id="ranking-lista"></div>
+    <br/>
+    <button class="btn" id="btn-siguiente">Siguiente pregunta</button>
+  </div>
+
+  <div class="card" id="vista-final" style="display:none;">
+    <div class="eyebrow">Quiz terminado</div>
+    <h2 style="font-family:'Fraunces',serif; color:var(--gold-bright);">🏆 Ranking final</h2>
+    <div id="ranking-final"></div>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import {
+    ESTADOS, crearSala, iniciarSiguientePregunta, cerrarPreguntaYCalcular,
+    escucharSala, ranking,
+  } from "./kahoot-derivadas-app.js";
+  import { PREGUNTAS_DERIVADAS } from "./kahoot-derivadas-preguntas.js";
+
+  // ======= PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE =======
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
+    authDomain: "omai-quiz.firebaseapp.com",
+    databaseURL: "https://omai-quiz-default-rtdb.firebaseio.com",
+    projectId: "omai-quiz",
+    storageBucket: "omai-quiz.firebasestorage.app",
+    messagingSenderId: "44663231333",
+    appId: "1:44663231333:web:4467c56d21bca45a82878c",
+  };
+  // =======================================================
+
+  let db;
+  let codigoActual = null;
+  let sala = null;
+
+  const esConfigPlaceholder = firebaseConfig.apiKey === "TU_API_KEY";
+  if (esConfigPlaceholder) {
+    document.getElementById("config-warning").style.display = "block";
+    document.getElementById("btn-crear-sala").disabled = true;
+  } else {
+    const app = initializeApp(firebaseConfig);
+    db = getDatabase(app);
+  }
+
+  document.getElementById("btn-crear-sala").onclick = async () => {
+    codigoActual = await crearSala(db, PREGUNTAS_DERIVADAS);
+    document.getElementById("vista-inicio").style.display = "none";
+    document.getElementById("vista-espera").style.display = "block";
+    document.getElementById("texto-codigo").textContent = codigoActual;
+
+    const urlEstudiante = `${location.origin}${location.pathname.replace("docente", "estudiante")}?sala=${codigoActual}`;
+    new QRCode(document.getElementById("qrcode"), { text: urlEstudiante, width: 200, height: 200 });
+
+    escucharSala(db, codigoActual, renderizar);
+  };
+
+  document.getElementById("btn-iniciar").onclick = () => iniciarSiguientePregunta(db, codigoActual);
+  document.getElementById("btn-cerrar-pregunta").onclick = () => cerrarPreguntaYCalcular(db, codigoActual);
+  document.getElementById("btn-siguiente").onclick = () => iniciarSiguientePregunta(db, codigoActual);
+
+  function renderizar(s) {
+    if (!s) return;
+    sala = s;
+    const numJugadores = Object.keys(s.jugadores || {}).length;
+
+    if (s.estado === ESTADOS.ESPERANDO) {
+      document.getElementById("btn-iniciar").disabled = numJugadores === 0;
+      document.getElementById("btn-iniciar").textContent =
+        numJugadores === 0 ? "Esperando jugadores…" : `Iniciar quiz (${numJugadores} jugadores)`;
+      document.getElementById("lista-jugadores").innerHTML = Object.values(s.jugadores || {})
+        .map((j) => `<div class="chip">${j.nombre}</div>`).join("");
+    }
+
+    if (s.estado === ESTADOS.PREGUNTA_ACTIVA) {
+      mostrarVista("vista-pregunta");
+      const idx = s.preguntaActual;
+      const p = s.preguntas[idx];
+      document.getElementById("contador-pregunta").textContent = `Pregunta ${idx + 1} de ${s.preguntas.length}`;
+      document.getElementById("texto-pregunta").textContent = p.texto;
+      document.getElementById("opciones-grid").innerHTML = p.opciones
+        .map((op) => `<div class="opcion">${op}</div>`).join("");
+      const respondidos = Object.keys((s.respuestas && s.respuestas[idx]) || {}).length;
+      document.getElementById("contador-respuestas").textContent =
+        `${respondidos} de ${numJugadores} han respondido`;
+    }
+
+    if (s.estado === ESTADOS.RESULTADOS) {
+      mostrarVista("vista-resultados");
+      const idx = s.preguntaActual;
+      const p = s.preguntas[idx];
+      document.getElementById("opciones-grid")?.querySelectorAll?.(".opcion");
+      const rankingActual = ranking(s);
+      document.getElementById("ranking-lista").innerHTML = rankingActual
+        .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""}">
+            <span>${i + 1}. ${j.nombre}</span><span>${j.puntos} pts</span>
+          </div>`).join("");
+      document.getElementById("btn-siguiente").textContent =
+        idx + 1 >= s.preguntas.length ? "Ver ranking final" : "Siguiente pregunta";
+    }
+
+    if (s.estado === ESTADOS.TERMINADO) {
+      mostrarVista("vista-final");
+      const rankingFinal = ranking(s);
+      document.getElementById("ranking-final").innerHTML = rankingFinal
+        .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""}">
+            <span>${i + 1}. ${j.nombre}</span><span>${j.puntos} pts</span>
+          </div>`).join("");
+    }
+  }
+
+  function mostrarVista(id) {
+    ["vista-inicio", "vista-espera", "vista-pregunta", "vista-resultados", "vista-final"]
+      .forEach((v) => document.getElementById(v).style.display = v === id ? "block" : "none");
+  }
+</script>
+</body>
+</html>
