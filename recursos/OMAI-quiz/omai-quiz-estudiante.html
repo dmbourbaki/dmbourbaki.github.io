@@ -542,12 +542,25 @@
       <input type="checkbox" id="chk-todos-repaso" checked />
       <label for="chk-todos-repaso"><b>Seleccionar todos</b></label>
     </div><hr style="border-color:var(--line-soft)"/>`;
+
+    const areasEnOrden = [];
+    const bancosPorArea = {};
     BANCOS_DEFECTO.forEach((b, i) => {
-      html += `<div class="banco-item-repaso">
-        <input type="checkbox" class="chk-banco-repaso" data-idx="${i}" checked />
-        <label>${b.nombre} <span class="conteo">(${b.preguntas.length})</span></label>
-      </div>`;
+      const area = b.area || "Otros";
+      if (!bancosPorArea[area]) { bancosPorArea[area] = []; areasEnOrden.push(area); }
+      bancosPorArea[area].push({ ...b, idx: i });
     });
+
+    areasEnOrden.forEach((area) => {
+      html += `<div style="margin-top:10px; margin-bottom:4px; font-family:'Spline Sans Mono',monospace; font-size:11px; letter-spacing:0.08em; color:var(--gold); text-transform:uppercase;">${area}</div>`;
+      bancosPorArea[area].forEach((b) => {
+        html += `<div class="banco-item-repaso">
+          <input type="checkbox" class="chk-banco-repaso" data-idx="${b.idx}" checked />
+          <label>${b.nombre} <span class="conteo">(${b.preguntas.length})</span></label>
+        </div>`;
+      });
+    });
+
     cont.innerHTML = html;
     document.getElementById("chk-todos-repaso").onclick = (e) => {
       document.querySelectorAll(".chk-banco-repaso").forEach((c) => (c.checked = e.target.checked));

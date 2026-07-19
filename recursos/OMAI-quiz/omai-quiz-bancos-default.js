@@ -2,6 +2,7 @@
 const BANCOS_DEFECTO = [
   {
     id: "reglas-basicas",
+    area: "Cálculo Diferencial",
     nombre: "Reglas Básicas de Derivación",
     preguntas: [
       {
@@ -358,6 +359,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "trig-exp-log",
+    area: "Cálculo Diferencial",
     nombre: "Trigonométricas, Exponenciales y Logarítmicas",
     preguntas: [
       {
@@ -714,6 +716,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "producto-cociente-cadena",
+    area: "Cálculo Diferencial",
     nombre: "Producto, Cociente y Regla de la Cadena",
     preguntas: [
       {
@@ -1070,6 +1073,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "aplicaciones",
+    area: "Cálculo Diferencial",
     nombre: "Aplicaciones (2da derivada, puntos críticos, monotonía)",
     preguntas: [
       {
@@ -1426,6 +1430,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "interpretacion-grafica",
+    area: "Cálculo Diferencial",
     nombre: "Interpretación Gráfica de la Derivada",
     preguntas: [
       {
@@ -1516,6 +1521,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "integrales-basicas",
+    area: "Cálculo Integral",
     nombre: "Integrales Básicas (potencias y sumas)",
     preguntas: [
       {
@@ -1872,6 +1878,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "integrales-trig-exp-log",
+    area: "Cálculo Integral",
     nombre: "Integrales Trigonométricas, Exponenciales y Logarítmicas",
     preguntas: [
       {
@@ -2228,6 +2235,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "integrales-sustitucion",
+    area: "Cálculo Integral",
     nombre: "Integración por Sustitución",
     preguntas: [
       {
@@ -2584,6 +2592,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "integrales-por-partes",
+    area: "Cálculo Integral",
     nombre: "Integración por Partes",
     preguntas: [
       {
@@ -2940,6 +2949,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "integrales-definidas-tfc",
+    area: "Cálculo Integral",
     nombre: "Integrales Definidas y Teorema Fundamental",
     preguntas: [
       {
@@ -3296,6 +3306,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "integrales-aplicaciones",
+    area: "Cálculo Integral",
     nombre: "Aplicaciones de la Integral (áreas y volúmenes)",
     preguntas: [
       {
@@ -3652,6 +3663,7 @@ const BANCOS_DEFECTO = [
   },
   {
     id: "integrales-interpretacion-grafica",
+    area: "Cálculo Integral",
     nombre: "Interpretación Gráfica de la Integral",
     preguntas: [
       {

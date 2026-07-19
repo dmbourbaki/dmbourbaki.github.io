@@ -253,7 +253,7 @@
 
   let db;
   let codigoActual = null;
-  let bancosDisponibles = BANCOS_DEFECTO.map((b) => ({ id: b.id, nombre: b.nombre, preguntas: b.preguntas }));
+  let bancosDisponibles = BANCOS_DEFECTO.map((b) => ({ id: b.id, nombre: b.nombre, area: b.area || "Otros", preguntas: b.preguntas }));
 
   const esConfigPlaceholder = firebaseConfig.apiKey === "TU_API_KEY";
   if (esConfigPlaceholder) {
@@ -276,12 +276,26 @@
       <input type="checkbox" id="chk-todos" checked />
       <label for="chk-todos"><b>Seleccionar todos</b></label>
     </div><hr style="border-color:var(--line-soft)"/>`;
+
+    // Agrupar por área, preservando el orden en que aparecen los bancos.
+    const areasEnOrden = [];
+    const bancosPorArea = {};
     bancosDisponibles.forEach((b, i) => {
-      html += `<div class="banco-item">
-        <input type="checkbox" class="chk-banco" data-idx="${i}" checked />
-        <label>${b.nombre} <span class="conteo">(${b.preguntas.length} preguntas)</span></label>
-      </div>`;
+      const area = b.area || "Otros";
+      if (!bancosPorArea[area]) { bancosPorArea[area] = []; areasEnOrden.push(area); }
+      bancosPorArea[area].push({ ...b, idx: i });
     });
+
+    areasEnOrden.forEach((area) => {
+      html += `<div style="margin-top:10px; margin-bottom:4px; font-family:'Spline Sans Mono',monospace; font-size:12px; letter-spacing:0.08em; color:var(--gold); text-transform:uppercase;">${area}</div>`;
+      bancosPorArea[area].forEach((b) => {
+        html += `<div class="banco-item">
+          <input type="checkbox" class="chk-banco" data-idx="${b.idx}" checked />
+          <label>${b.nombre} <span class="conteo">(${b.preguntas.length} preguntas)</span></label>
+        </div>`;
+      });
+    });
+
     contenedor.innerHTML = html;
 
     document.getElementById("chk-todos").onclick = (e) => {
@@ -301,7 +315,7 @@
       msgEl.style.color = "var(--bad)";
       return;
     }
-    bancosDisponibles.push({ id: "extra-" + Date.now(), nombre: `📄 ${archivo.name} (temporal)`, preguntas });
+    bancosDisponibles.push({ id: "extra-" + Date.now(), nombre: `📄 ${archivo.name} (temporal)`, area: "Cargados en esta sesión", preguntas });
     msgEl.style.color = "var(--good)";
     msgEl.textContent = `Se agregaron ${preguntas.length} preguntas` + (errores.length ? ` (${errores.length} bloques con errores fueron ignorados)` : "") + `. Este banco solo dura esta sesión (no queda guardado). Para hacerlo permanente, pide que se agregue directamente a omai-quiz-bancos-default.js.`;
     renderizarListaBancos();
