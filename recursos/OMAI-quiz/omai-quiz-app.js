@@ -118,7 +118,7 @@ function mezclarYTomar(arreglo, n) {
 
 // ---------- Funciones DOCENTE ----------
 
-async function crearSala(db, bancoPreguntas, numPreguntas) {
+async function crearSala(db, bancoPreguntas, numPreguntas, tiempoLimiteSegundos) {
   const codigo = generarCodigoSala();
   const preguntasElegidas = mezclarYTomar(bancoPreguntas, numPreguntas);
   const salaRef = ref(db, `salas/${codigo}`);
@@ -128,11 +128,21 @@ async function crearSala(db, bancoPreguntas, numPreguntas) {
     preguntas: preguntasElegidas,
     jugadores: {},
     respuestas: {},
-    tiempoLimiteBase: TIEMPO_LIMITE_BASE,
+    tiempoLimiteBase: tiempoLimiteSegundos || TIEMPO_LIMITE_BASE,
     tiempoExtra: 0,
     creada: Date.now(),
   });
   return codigo;
+}
+
+async function finalizarJuegoYaConRanking(db, codigo) {
+  const salaRef = ref(db, `salas/${codigo}`);
+  const snap = await get(salaRef);
+  const sala = snap.val();
+  if (sala.estado === ESTADOS.PREGUNTA_ACTIVA) {
+    await cerrarPreguntaYCalcular(db, codigo); // califica lo pendiente antes de saltar al final
+  }
+  await update(salaRef, { estado: ESTADOS.TERMINADO });
 }
 
 async function existeSala(db, codigo) {
@@ -232,6 +242,6 @@ export {
   ESTADOS, TIEMPO_LIMITE_BASE,
   parseBancoTxt, cargarManifiestoBancos, cargarBanco,
   crearSala, existeSala, iniciarSiguientePregunta, agregarTiempoExtra,
-  cerrarPreguntaYCalcular, escucharSala, eliminarSala,
+  cerrarPreguntaYCalcular, escucharSala, eliminarSala, finalizarJuegoYaConRanking,
   unirseASala, enviarRespuesta, ranking, calcularPuntos,
 };

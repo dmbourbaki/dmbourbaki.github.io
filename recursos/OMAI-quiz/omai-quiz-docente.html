@@ -108,6 +108,7 @@
   <div id="barra-sala">
     <div class="info-codigo">Sala: <b id="barra-codigo">----</b><span id="mini-qr"></span></div>
     <div style="display:flex; align-items:center; gap:8px;">
+      <button class="btn-secundario" id="btn-finalizar-juego" style="border-color:var(--bad); color:var(--bad);">🏁 Finalizar juego</button>
       <button class="btn-secundario" id="btn-toggle-ruleta">🎡 Ruleta</button>
       <select id="select-pista">
         <option value="arpegio">🎵 Arpegio</option>
@@ -148,6 +149,10 @@
     <div class="campo-config">
       <label for="input-num-preguntas">Número de preguntas para esta partida</label>
       <input type="number" id="input-num-preguntas" min="1" value="10" />
+    </div>
+    <div class="campo-config">
+      <label for="input-tiempo-pregunta">Tiempo por pregunta (segundos)</label>
+      <input type="number" id="input-tiempo-pregunta" min="5" value="20" />
     </div>
     <button class="btn" id="btn-crear-sala">Crear sala</button>
     <p class="config-note" id="config-warning" style="display:none;">
@@ -205,7 +210,7 @@
   import {
     ESTADOS, TIEMPO_LIMITE_BASE, crearSala, existeSala, iniciarSiguientePregunta,
     agregarTiempoExtra, cerrarPreguntaYCalcular, escucharSala, ranking,
-    parseBancoTxt,
+    parseBancoTxt, finalizarJuegoYaConRanking,
   } from "./omai-quiz-app.js";
   import { BANCOS_DEFECTO } from "./omai-quiz-bancos-default.js";
 
@@ -373,6 +378,34 @@
     dibujarRueda(parseInt(e.target.value, 10) || 1);
   });
 
+  function reproducirTickRuleta() {
+    asegurarAudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "square";
+    osc.frequency.value = 500;
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.06);
+  }
+
+  function reproducirCampanadaRuleta() {
+    asegurarAudioContext();
+    [523.25, 659.25, 783.99].forEach((freq, i) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.07, audioCtx.currentTime + i * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.08 + 0.4);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime + i * 0.08);
+      osc.stop(audioCtx.currentTime + i * 0.08 + 0.4);
+    });
+  }
+
   document.getElementById("btn-girar-ruleta").onclick = () => {
     if (girando) return;
     const max = parseInt(document.getElementById("input-ruleta-max").value, 10) || 1;
@@ -393,10 +426,19 @@
     const svg = document.getElementById("ruleta-svg");
     svg.style.transform = `rotate(${rotacionAcumulada}deg)`;
 
+    let t = 0;
+    const totalTicks = 26;
+    for (let i = 0; i < totalTicks; i++) {
+      const espaciado = 80 + Math.pow(i / totalTicks, 2) * 260; // se hace más lento, como fricción real
+      t += espaciado;
+      setTimeout(reproducirTickRuleta, t);
+    }
+
     setTimeout(() => {
       numerosUsados.add(elegido);
       document.getElementById("ruleta-resultado").textContent = elegido;
       infoEl.textContent = `Ya salieron: ${[...numerosUsados].sort((a, b) => a - b).join(", ")}`;
+      reproducirCampanadaRuleta();
       girando = false;
     }, 4100);
   };
@@ -433,7 +475,11 @@
     const restante = Math.max(0, Math.ceil(limite - transcurrido));
     const el = document.getElementById("cronometro");
     el.textContent = restante;
-    el.classList.toggle("urgente", restante <= 5);
+    el.classList.toggle("urgente", restante <= 10);
+    if (restante <= 10 && restante >= 1 && restante !== ultimoSegundoConBeep) {
+      ultimoSegundoConBeep = restante;
+      reproducirBeep(restante <= 3);
+    }
     if (restante <= 0) {
       clearInterval(timerInterval);
       cerrarPreguntaYCalcular(db, codigoActual); // auto-calificar; queda pausado en resultados para retroalimentación
@@ -441,6 +487,28 @@
   }
 
   document.getElementById("btn-mas-tiempo").onclick = () => agregarTiempoExtra(db, codigoActual, 10);
+
+  document.getElementById("btn-finalizar-juego").onclick = () => {
+    if (!codigoActual) return;
+    if (confirm("¿Seguro que quieres finalizar el juego ya y mostrar el ranking final?")) {
+      finalizarJuegoYaConRanking(db, codigoActual);
+    }
+  };
+
+  // ---------- Beep de alerta (últimos 10 segundos, uno por segundo) ----------
+  let ultimoSegundoConBeep = null;
+  function reproducirBeep(urgente) {
+    asegurarAudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "square";
+    osc.frequency.value = urgente ? 880 : 660;
+    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.12);
+  }
 
   // ---------- Flujo principal ----------
   function activarSala(codigo) {
@@ -465,12 +533,13 @@
 
   document.getElementById("btn-crear-sala").onclick = async () => {
     const n = parseInt(document.getElementById("input-num-preguntas").value, 10) || 10;
+    const tiempo = parseInt(document.getElementById("input-tiempo-pregunta").value, 10) || 20;
     const combinado = obtenerPreguntasCombinadas();
     if (combinado.length === 0) {
       alert("Selecciona al menos un banco de preguntas.");
       return;
     }
-    const codigo = await crearSala(db, combinado, n);
+    const codigo = await crearSala(db, combinado, n, tiempo);
     document.getElementById("vista-espera").style.display = "block";
     activarSala(codigo);
   };
@@ -523,6 +592,7 @@
       renderizarKatex(document.getElementById("vista-pregunta"));
       if (idx !== ultimaPreguntaRenderizada) {
         ultimaPreguntaRenderizada = idx;
+        ultimoSegundoConBeep = null;
         iniciarCronometroLocal();
       }
       actualizarCronometro();

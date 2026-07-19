@@ -1,10 +1,4 @@
 // omai-quiz-bancos-default.js
-// Bancos de preguntas de Calculo Diferencial incluidos por defecto en OMAI-Quiz.
-// Generados y verificados simbolicamente con sympy (ver generar_bancos_50.py).
-// Cada banco tiene 50 preguntas. Estos bancos se cargan siempre, sin necesidad
-// de red ni archivos externos. Para agregar tus propios bancos, usa la opcion
-// secundaria "Agregar un banco adicional (.txt)" en la pantalla del docente.
-
 const BANCOS_DEFECTO = [
   {
     id: "reglas-basicas",
@@ -291,7 +285,7 @@ const BANCOS_DEFECTO = [
         imagen: null,
       },
       {
-        texto: "¿Cuál es la derivada de $f(x) = x^{2} + 3x^{1}$?",
+        texto: "¿Cuál es la derivada de $f(x) = x^{2} + 3x$?",
         opciones: ["$2 x + 3$", "$x \\left(2 x + 3\\right)$", "$x + 3$", "$2 x + 4$"],
         correcta: 0,
         nivel: "basico",
@@ -312,7 +306,7 @@ const BANCOS_DEFECTO = [
         imagen: null,
       },
       {
-        texto: "¿Cuál es la derivada de $f(x) = x^{2} + 5x^{1}$?",
+        texto: "¿Cuál es la derivada de $f(x) = x^{2} + 5x$?",
         opciones: ["$x \\left(2 x + 5\\right)$", "$2 x + 6$", "$2 x + 5$", "$x + 5$"],
         correcta: 2,
         nivel: "basico",
@@ -326,21 +320,21 @@ const BANCOS_DEFECTO = [
         imagen: null,
       },
       {
-        texto: "¿Cuál es la derivada de $f(x) = x^{2} + 6x^{1}$?",
+        texto: "¿Cuál es la derivada de $f(x) = x^{2} + 6x$?",
         opciones: ["$2 x \\left(x + 3\\right)$", "$x + 6$", "$2 x + 7$", "$2 x + 6$"],
         correcta: 3,
         nivel: "basico",
         imagen: null,
       },
       {
-        texto: "¿Cuál es la derivada de $f(x) = x^{3} + 2x^{1}$?",
+        texto: "¿Cuál es la derivada de $f(x) = x^{3} + 2x$?",
         opciones: ["$3 x^{2} + 2$", "$x^{2} + 2$", "$3 x^{2} + 3$", "$x \\left(3 x^{2} + 2\\right)$"],
         correcta: 0,
         nivel: "basico",
         imagen: null,
       },
       {
-        texto: "¿Cuál es la derivada de $f(x) = x^{2} + 4x^{1}$?",
+        texto: "¿Cuál es la derivada de $f(x) = x^{2} + 4x$?",
         opciones: ["$2 x + 5$", "$2 x + 4$", "$2 x \\left(x + 2\\right)$", "$x + 4$"],
         correcta: 1,
         nivel: "basico",
@@ -354,7 +348,7 @@ const BANCOS_DEFECTO = [
         imagen: null,
       },
       {
-        texto: "¿Cuál es la derivada de $f(x) = x^{4} + 7x^{1}$?",
+        texto: "¿Cuál es la derivada de $f(x) = x^{4} + 7x$?",
         opciones: ["$4 x^{3} + 7$", "$x \\left(4 x^{3} + 7\\right)$", "$x^{3} + 7$", "$4 x^{3} + 8$"],
         correcta: 0,
         nivel: "basico",

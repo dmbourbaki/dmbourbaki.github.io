@@ -57,6 +57,7 @@
   .estado-msg { color: var(--ink-soft); margin-top: 20px; }
   .resultado-correcta { color: var(--good); font-size: 20px; font-weight: 600; }
   .resultado-incorrecta { color: var(--bad); font-size: 20px; font-weight: 600; }
+  #cronometro-estudiante.urgente { color: var(--bad); }
 </style>
 </head>
 <body>
@@ -77,6 +78,7 @@
 
   <div class="card" id="vista-pregunta" style="display:none;">
     <div class="eyebrow" id="contador-pregunta"></div>
+    <div id="cronometro-estudiante" style="font-family:'Spline Sans Mono',monospace; font-size:32px; color:var(--gold-bright); margin-bottom:8px;">20</div>
     <div class="pregunta-texto" id="texto-pregunta"></div>
     <img id="pregunta-imagen" class="pregunta-imagen" style="display:none;" />
     <div class="opciones-col" id="opciones-col"></div>
@@ -132,12 +134,54 @@
     }
   }
 
+  // ---------- Cronómetro local + beep de alerta (últimos 10s) ----------
+  let audioCtx = null;
+  let timerInterval = null;
+  let salaActualCache = null;
+  let ultimoSegundoConBeep = null;
+
+  function asegurarAudioContext() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+  }
+
+  function reproducirBeep(urgente) {
+    asegurarAudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "square";
+    osc.frequency.value = urgente ? 880 : 660;
+    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.12);
+  }
+
+  function actualizarCronometroEstudiante() {
+    if (!salaActualCache || salaActualCache.estado !== ESTADOS.PREGUNTA_ACTIVA) return;
+    const limite = (salaActualCache.tiempoLimiteBase || 20) + (salaActualCache.tiempoExtra || 0);
+    const transcurrido = (Date.now() - inicioPreguntaServidor) / 1000;
+    const restante = Math.max(0, Math.ceil(limite - transcurrido));
+    const el = document.getElementById("cronometro-estudiante");
+    if (el) {
+      el.textContent = restante;
+      el.classList.toggle("urgente", restante <= 10);
+    }
+    if (restante <= 10 && restante >= 1 && restante !== ultimoSegundoConBeep) {
+      ultimoSegundoConBeep = restante;
+      reproducirBeep(restante <= 3);
+    }
+    if (restante <= 0) clearInterval(timerInterval);
+  }
+
   document.getElementById("btn-unirse").onclick = async () => {
     const codigo = document.getElementById("input-codigo").value.trim().toUpperCase();
     const nombre = document.getElementById("input-nombre").value.trim();
     const errorEl = document.getElementById("mensaje-error");
     errorEl.textContent = "";
     if (!codigo || !nombre) { errorEl.textContent = "Completa el código y tu nombre."; return; }
+    asegurarAudioContext();
     try {
       jugadorId = await unirseASala(db, codigo, nombre);
       codigoSala = codigo;
@@ -153,13 +197,20 @@
 
   function renderizar(sala) {
     if (!sala) return;
+    salaActualCache = sala;
     if (sala.estado === ESTADOS.PREGUNTA_ACTIVA) {
       if (sala.preguntaActual !== idxPreguntaMostrada) {
         idxPreguntaMostrada = sala.preguntaActual;
         yaRespondio = false;
+        ultimoSegundoConBeep = null;
         inicioPreguntaServidor = sala.inicioPregunta || Date.now();
         mostrarPregunta(sala);
+        clearInterval(timerInterval);
+        timerInterval = setInterval(actualizarCronometroEstudiante, 250);
       }
+      actualizarCronometroEstudiante();
+    } else {
+      clearInterval(timerInterval);
     }
     if (sala.estado === ESTADOS.RESULTADOS) mostrarResultado(sala);
     if (sala.estado === ESTADOS.TERMINADO) {
