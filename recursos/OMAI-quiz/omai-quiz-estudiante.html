@@ -88,8 +88,10 @@
   .campo-config-repaso label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
 
   #panel-ruleta-repaso {
+    position: fixed; bottom: 20px; right: 20px; z-index: 60;
     background: var(--abyss); border: 1px solid var(--gold); border-radius: 14px;
-    padding: 16px; margin: 16px 0; text-align: center;
+    padding: 14px; text-align: center; width: 200px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
   }
   #ruleta-svg-repaso-wrap { position: relative; width: 170px; height: 170px; margin: 10px auto; }
   #ruleta-puntero-repaso {
@@ -102,9 +104,26 @@
     background: transparent; border: 1px solid var(--line-soft); color: var(--ink-soft);
     font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 8px;
   }
+  @media (max-width: 480px) {
+    #panel-ruleta-repaso { width: 160px; padding: 10px; bottom: 12px; right: 12px; }
+    #ruleta-svg-repaso-wrap { width: 130px !important; height: 130px !important; }
+  }
 </style>
 </head>
 <body>
+  <div id="panel-ruleta-repaso" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="eyebrow" style="margin-bottom:0;">🎡 Tu ruleta</div>
+      <span id="btn-cerrar-ruleta-repaso" style="cursor:pointer; color:var(--ink-soft); font-size:18px; line-height:1;">×</span>
+    </div>
+    <div id="ruleta-svg-repaso-wrap">
+      <div id="ruleta-puntero-repaso"></div>
+      <svg id="ruleta-svg-repaso" viewBox="0 0 170 170" width="170" height="170"></svg>
+    </div>
+    <button class="btn-secundario-repaso" id="btn-girar-ruleta-repaso-flotante" style="margin-top:4px;">Girar</button>
+  </div>
+  <button id="btn-abrir-ruleta-repaso" style="display:none; position:fixed; bottom:20px; right:20px; z-index:59; background:var(--gold); color:var(--void); border:none; border-radius:50%; width:52px; height:52px; font-size:22px; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,0.4);">🎡</button>
+
   <div id="barra-sala">Sala: <b id="barra-codigo"></b> <button class="btn-secundario" id="btn-musica-est" style="margin-left:10px; background:transparent; border:1px solid var(--line-soft); color:var(--gold-bright); border-radius:8px; padding:2px 8px; cursor:pointer; font-size:14px;">🔊</button></div>
   <div class="eyebrow">OMAI-Quiz</div>
 
@@ -169,15 +188,6 @@
     <div class="campo-config-repaso">
       <label for="input-tiempo-repaso">Tiempo por pregunta (segundos)</label>
       <input type="number" id="input-tiempo-repaso" min="5" value="20" />
-    </div>
-
-    <div id="panel-ruleta-repaso">
-      <div class="eyebrow">🎡 Tu ruleta (opcional, para elegir la siguiente al azar)</div>
-      <div id="ruleta-svg-repaso-wrap">
-        <div id="ruleta-puntero-repaso"></div>
-        <svg id="ruleta-svg-repaso" viewBox="0 0 170 170" width="170" height="170"></svg>
-      </div>
-      <p style="font-size:12px; color:var(--ink-soft);">Se activa una vez inicies el repaso.</p>
     </div>
 
     <button class="btn" id="btn-comenzar-repaso">Comenzar repaso</button>
@@ -508,7 +518,33 @@
     ["vista-modo-inicial", "vista-unirse", "vista-esperando", "vista-pregunta", "vista-resultado", "vista-final",
      "vista-repaso-config", "vista-repaso-pregunta", "vista-repaso-resultado", "vista-repaso-final"]
       .forEach((v) => document.getElementById(v).style.display = v === id ? "block" : "none");
+
+    const enModoRepaso = id.startsWith("vista-repaso") && id !== "vista-repaso-final";
+    if (enModoRepaso) {
+      if (ruletaRepasoAbierta) {
+        document.getElementById("panel-ruleta-repaso").style.display = "block";
+        document.getElementById("btn-abrir-ruleta-repaso").style.display = "none";
+      } else {
+        document.getElementById("panel-ruleta-repaso").style.display = "none";
+        document.getElementById("btn-abrir-ruleta-repaso").style.display = "block";
+      }
+    } else {
+      document.getElementById("panel-ruleta-repaso").style.display = "none";
+      document.getElementById("btn-abrir-ruleta-repaso").style.display = "none";
+    }
   }
+  let ruletaRepasoAbierta = true;
+  document.getElementById("btn-cerrar-ruleta-repaso").onclick = () => {
+    ruletaRepasoAbierta = false;
+    document.getElementById("panel-ruleta-repaso").style.display = "none";
+    document.getElementById("btn-abrir-ruleta-repaso").style.display = "block";
+  };
+  document.getElementById("btn-abrir-ruleta-repaso").onclick = () => {
+    ruletaRepasoAbierta = true;
+    document.getElementById("panel-ruleta-repaso").style.display = "block";
+    document.getElementById("btn-abrir-ruleta-repaso").style.display = "none";
+  };
+  document.getElementById("btn-girar-ruleta-repaso-flotante").onclick = girarRuletaRepaso;
 
   // ============================================================
   // Selección de modo (sala con profesor vs. repaso individual)
