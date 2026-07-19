@@ -63,13 +63,64 @@
     0% { transform: translateY(0) rotate(0deg); opacity: 1; }
     100% { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
   }
+
+  /* Responsive: en pantallas más anchas (PC), tarjetas más amplias */
+  @media (min-width: 700px) {
+    .card { max-width: 560px; padding: 36px; }
+    .card.card-ancha { max-width: 680px; }
+  }
+
+  .btn-modo {
+    width: 100%; padding: 20px; border-radius: 12px; border: 1px solid var(--line-soft);
+    background: var(--abyss); color: var(--ink); font-size: 16px; font-weight: 600;
+    cursor: pointer; margin-bottom: 14px; text-align: left;
+  }
+  .btn-modo small { display:block; color: var(--ink-soft); font-weight: 400; font-size: 13px; margin-top: 4px; }
+  .btn-modo:hover { border-color: var(--gold); }
+  .link-volver { color: var(--ink-soft); font-size: 13px; cursor: pointer; display: inline-block; margin-bottom: 12px; }
+  .link-volver:hover { color: var(--gold-bright); }
+
+  .lista-bancos-repaso { text-align: left; margin: 14px 0; border: 1px solid var(--line-soft); border-radius: 10px; padding: 12px; max-height: 260px; overflow-y: auto; }
+  .banco-item-repaso { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; }
+  .banco-item-repaso .conteo { color: var(--ink-faint); font-size: 12px; }
+  .campo-config-repaso { text-align: left; margin: 14px 0; }
+  .campo-config-repaso label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+
+  #panel-ruleta-repaso {
+    background: var(--abyss); border: 1px solid var(--gold); border-radius: 14px;
+    padding: 16px; margin: 16px 0; text-align: center;
+  }
+  #ruleta-svg-repaso-wrap { position: relative; width: 170px; height: 170px; margin: 10px auto; }
+  #ruleta-puntero-repaso {
+    position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent;
+    border-top: 15px solid var(--gold-bright); z-index: 2;
+  }
+  #ruleta-svg-repaso { transition: transform 3.5s cubic-bezier(0.12, 0.72, 0.15, 1); }
+  .btn-secundario-repaso {
+    background: transparent; border: 1px solid var(--line-soft); color: var(--ink-soft);
+    font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 8px;
+  }
 </style>
 </head>
 <body>
   <div id="barra-sala">Sala: <b id="barra-codigo"></b> <button class="btn-secundario" id="btn-musica-est" style="margin-left:10px; background:transparent; border:1px solid var(--line-soft); color:var(--gold-bright); border-radius:8px; padding:2px 8px; cursor:pointer; font-size:14px;">🔊</button></div>
   <div class="eyebrow">OMAI-Quiz</div>
 
-  <div class="card" id="vista-unirse">
+  <div class="card" id="vista-modo-inicial">
+    <p>¿Qué quieres hacer?</p>
+    <button class="btn-modo" id="btn-elegir-sala">
+      🏫 Unirme a una sala con mi profesor
+      <small>Necesitas el código que te dé el docente.</small>
+    </button>
+    <button class="btn-modo" id="btn-elegir-repaso">
+      📚 Modo de repaso individual
+      <small>Practica solo, a tu ritmo, eligiendo tema, tiempo y número de preguntas.</small>
+    </button>
+  </div>
+
+  <div class="card" id="vista-unirse" style="display:none;">
+    <div class="link-volver" id="link-volver-unirse">← Volver</div>
     <p>Ingresa el código de la sala y tu nombre. Puedes entrar en cualquier momento, aunque el quiz ya haya empezado.</p>
     <input id="input-codigo" placeholder="Código (ej. AB12)" maxlength="4" style="text-transform:uppercase" />
     <input id="input-nombre" placeholder="Tu nombre" maxlength="24" />
@@ -104,10 +155,64 @@
     <p id="posicion-final" style="color:var(--ink-soft)"></p>
   </div>
 
+  <div class="card card-ancha" id="vista-repaso-config" style="display:none;">
+    <div class="link-volver" id="link-volver-repaso">← Volver</div>
+    <p><b>Modo de repaso individual</b></p>
+    <p style="color:var(--ink-soft); font-size:14px;">Elige de qué temas quieres practicar.</p>
+    <div class="lista-bancos-repaso" id="lista-bancos-repaso">Cargando bancos…</div>
+
+    <div class="campo-config-repaso">
+      <label for="input-num-preguntas-repaso">Número de preguntas (máximo 20)</label>
+      <input type="number" id="input-num-preguntas-repaso" min="1" max="20" value="10" />
+    </div>
+    <div class="campo-config-repaso">
+      <label for="input-tiempo-repaso">Tiempo por pregunta (segundos)</label>
+      <input type="number" id="input-tiempo-repaso" min="5" value="20" />
+    </div>
+
+    <div id="panel-ruleta-repaso">
+      <div class="eyebrow">🎡 Tu ruleta (opcional, para elegir la siguiente al azar)</div>
+      <div id="ruleta-svg-repaso-wrap">
+        <div id="ruleta-puntero-repaso"></div>
+        <svg id="ruleta-svg-repaso" viewBox="0 0 170 170" width="170" height="170"></svg>
+      </div>
+      <p style="font-size:12px; color:var(--ink-soft);">Se activa una vez inicies el repaso.</p>
+    </div>
+
+    <button class="btn" id="btn-comenzar-repaso">Comenzar repaso</button>
+    <p class="estado-msg" id="mensaje-error-repaso"></p>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-pregunta" style="display:none;">
+    <div class="eyebrow" id="contador-repaso"></div>
+    <div id="cronometro-repaso" style="font-family:'Spline Sans Mono',monospace; font-size:32px; color:var(--gold-bright); margin-bottom:8px;">20</div>
+    <div class="pregunta-texto" id="texto-pregunta-repaso"></div>
+    <img id="pregunta-imagen-repaso" class="pregunta-imagen" style="display:none;" />
+    <div class="opciones-col" id="opciones-col-repaso"></div>
+    <button class="btn-secundario-repaso" id="btn-girar-ruleta-repaso">🎡 Girar ruleta para elegir la siguiente</button>
+    <button class="btn-secundario-repaso" id="btn-terminar-repaso">Terminar repaso ya</button>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-resultado" style="display:none;">
+    <div id="resultado-texto-repaso"></div>
+    <p class="puntos-actuales" id="marcador-repaso"></p>
+    <button class="btn" id="btn-siguiente-repaso">Siguiente pregunta</button>
+    <button class="btn-secundario-repaso" id="btn-girar-ruleta-repaso2">🎡 Girar ruleta para elegir la siguiente</button>
+    <button class="btn-secundario-repaso" id="btn-terminar-repaso2">Terminar repaso ya</button>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-final" style="display:none;">
+    <h2 style="font-family:'Fraunces',serif;color:var(--gold-bright);">Repaso terminado</h2>
+    <p class="puntos-actuales" id="resumen-repaso-final" style="font-size:22px;"></p>
+    <button class="btn" id="btn-repetir-repaso">Repetir con la misma configuración</button>
+    <button class="btn-secundario-repaso" id="btn-otro-tema-repaso">Elegir otro tema</button>
+  </div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
   import { ESTADOS, unirseASala, enviarRespuesta, escucharSala, ranking } from "./omai-quiz-app.js";
+  import { BANCOS_DEFECTO } from "./omai-quiz-bancos-default.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
@@ -399,9 +504,289 @@
   }
 
   function mostrarVista(id) {
-    ["vista-unirse", "vista-esperando", "vista-pregunta", "vista-resultado", "vista-final"]
+    ["vista-modo-inicial", "vista-unirse", "vista-esperando", "vista-pregunta", "vista-resultado", "vista-final",
+     "vista-repaso-config", "vista-repaso-pregunta", "vista-repaso-resultado", "vista-repaso-final"]
       .forEach((v) => document.getElementById(v).style.display = v === id ? "block" : "none");
   }
+
+  // ============================================================
+  // Selección de modo (sala con profesor vs. repaso individual)
+  // ============================================================
+  document.getElementById("btn-elegir-sala").onclick = () => mostrarVista("vista-unirse");
+  document.getElementById("btn-elegir-repaso").onclick = () => {
+    mostrarVista("vista-repaso-config");
+    renderizarListaBancosRepaso();
+  };
+  document.getElementById("link-volver-unirse").onclick = () => mostrarVista("vista-modo-inicial");
+  document.getElementById("link-volver-repaso").onclick = () => mostrarVista("vista-modo-inicial");
+
+  // ============================================================
+  // MODO DE REPASO INDIVIDUAL (100% local, sin necesitar sala ni profesor)
+  // ============================================================
+  let repasoPreguntas = [];
+  let repasoIndicesUsados = [];
+  let repasoIdxActual = -1;
+  let repasoTiempoBase = 20;
+  let repasoCorrectas = 0;
+  let repasoRespondidas = 0;
+  let repasoOrdenOpciones = [0, 1, 2, 3];
+  let repasoYaRespondio = false;
+  let repasoTimerInterval = null;
+  let repasoInicioPregunta = null;
+  let repasoUltimoSegundoBeep = null;
+  let repasoConfigUsada = null; // para "repetir con la misma configuración"
+
+  function renderizarListaBancosRepaso() {
+    const cont = document.getElementById("lista-bancos-repaso");
+    let html = `<div class="banco-item-repaso">
+      <input type="checkbox" id="chk-todos-repaso" checked />
+      <label for="chk-todos-repaso"><b>Seleccionar todos</b></label>
+    </div><hr style="border-color:var(--line-soft)"/>`;
+    BANCOS_DEFECTO.forEach((b, i) => {
+      html += `<div class="banco-item-repaso">
+        <input type="checkbox" class="chk-banco-repaso" data-idx="${i}" checked />
+        <label>${b.nombre} <span class="conteo">(${b.preguntas.length})</span></label>
+      </div>`;
+    });
+    cont.innerHTML = html;
+    document.getElementById("chk-todos-repaso").onclick = (e) => {
+      document.querySelectorAll(".chk-banco-repaso").forEach((c) => (c.checked = e.target.checked));
+    };
+  }
+
+  document.getElementById("input-num-preguntas-repaso").addEventListener("input", (e) => {
+    let v = parseInt(e.target.value, 10) || 1;
+    if (v > 20) v = 20;
+    if (v < 1) v = 1;
+    e.target.value = v;
+    dibujarRuedaRepaso(v);
+  });
+
+  function obtenerPreguntasCombinadasRepaso() {
+    const seleccionados = [...document.querySelectorAll(".chk-banco-repaso:checked")].map((c) => parseInt(c.dataset.idx, 10));
+    let combinado = [];
+    seleccionados.forEach((idx) => { combinado = combinado.concat(BANCOS_DEFECTO[idx].preguntas); });
+    return combinado;
+  }
+
+  function mezclarYTomarLocal(arreglo, n) {
+    const copia = [...arreglo];
+    for (let i = copia.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copia[i], copia[j]] = [copia[j], copia[i]];
+    }
+    return copia.slice(0, Math.min(n, copia.length));
+  }
+
+  document.getElementById("btn-comenzar-repaso").onclick = () => {
+    asegurarAudioContext();
+    const combinado = obtenerPreguntasCombinadasRepaso();
+    const errEl = document.getElementById("mensaje-error-repaso");
+    if (combinado.length === 0) {
+      errEl.textContent = "Selecciona al menos un tema.";
+      return;
+    }
+    errEl.textContent = "";
+    let n = parseInt(document.getElementById("input-num-preguntas-repaso").value, 10) || 10;
+    if (n > 20) n = 20;
+    repasoTiempoBase = parseInt(document.getElementById("input-tiempo-repaso").value, 10) || 20;
+    repasoConfigUsada = { combinado, n, tiempo: repasoTiempoBase };
+    iniciarRepasoConConfig(repasoConfigUsada);
+  };
+
+  function iniciarRepasoConConfig(cfg) {
+    repasoPreguntas = mezclarYTomarLocal(cfg.combinado, cfg.n);
+    repasoIndicesUsados = [];
+    repasoCorrectas = 0;
+    repasoRespondidas = 0;
+    repasoTiempoBase = cfg.tiempo;
+    dibujarRuedaRepaso(repasoPreguntas.length);
+    avanzarPreguntaRepasoAleatoria();
+  }
+
+  document.getElementById("btn-repetir-repaso").onclick = () => {
+    if (repasoConfigUsada) iniciarRepasoConConfig(repasoConfigUsada);
+  };
+  document.getElementById("btn-otro-tema-repaso").onclick = () => mostrarVista("vista-repaso-config");
+
+  function candidatosRepaso() {
+    const candidatos = [];
+    for (let i = 0; i < repasoPreguntas.length; i++) if (!repasoIndicesUsados.includes(i)) candidatos.push(i);
+    return candidatos;
+  }
+
+  function avanzarPreguntaRepasoAleatoria() {
+    const candidatos = candidatosRepaso();
+    if (candidatos.length === 0) {
+      mostrarRepasoFinal();
+      return;
+    }
+    const elegido = candidatos[Math.floor(Math.random() * candidatos.length)];
+    activarPreguntaRepaso(elegido);
+  }
+
+  function activarPreguntaRepaso(idx) {
+    repasoIndicesUsados.push(idx);
+    repasoIdxActual = idx;
+    repasoYaRespondio = false;
+    repasoUltimoSegundoBeep = null;
+    repasoInicioPregunta = Date.now();
+    mostrarPreguntaRepaso();
+    clearInterval(repasoTimerInterval);
+    repasoTimerInterval = setInterval(actualizarCronometroRepaso, 250);
+  }
+
+  function mostrarPreguntaRepaso() {
+    mostrarVista("vista-repaso-pregunta");
+    const p = repasoPreguntas[repasoIdxActual];
+    document.getElementById("contador-repaso").textContent = `Pregunta ${repasoIndicesUsados.length} de ${repasoPreguntas.length}`;
+    document.getElementById("texto-pregunta-repaso").textContent = p.texto;
+    const imgEl = document.getElementById("pregunta-imagen-repaso");
+    if (p.imagen) { imgEl.src = p.imagen; imgEl.style.display = "block"; } else { imgEl.style.display = "none"; }
+
+    repasoOrdenOpciones = mezclarOrdenOpciones();
+    const cont = document.getElementById("opciones-col-repaso");
+    cont.innerHTML = "";
+    repasoOrdenOpciones.forEach((indiceReal) => {
+      const btn = document.createElement("button");
+      btn.className = "opcion-btn";
+      btn.textContent = p.opciones[indiceReal];
+      btn.onclick = () => responderRepaso(indiceReal, btn);
+      cont.appendChild(btn);
+    });
+    renderizarKatex(document.getElementById("vista-repaso-pregunta"));
+  }
+
+  function actualizarCronometroRepaso() {
+    const transcurrido = (Date.now() - repasoInicioPregunta) / 1000;
+    const restante = Math.max(0, Math.ceil(repasoTiempoBase - transcurrido));
+    const el = document.getElementById("cronometro-repaso");
+    el.textContent = restante;
+    el.classList.toggle("urgente", restante <= 10);
+    if (restante <= 10 && restante >= 1 && restante !== repasoUltimoSegundoBeep) {
+      repasoUltimoSegundoBeep = restante;
+      reproducirBeep(restante <= 3);
+    }
+    if (restante <= 0 && !repasoYaRespondio) {
+      clearInterval(repasoTimerInterval);
+      mostrarResultadoRepaso(null); // se acabó el tiempo, sin respuesta
+    }
+  }
+
+  function responderRepaso(opcionIdx, btnEl) {
+    if (repasoYaRespondio) return;
+    repasoYaRespondio = true;
+    clearInterval(repasoTimerInterval);
+    document.querySelectorAll("#opciones-col-repaso .opcion-btn").forEach((b) => (b.disabled = true));
+    btnEl.classList.add("elegida");
+    mostrarResultadoRepaso(opcionIdx);
+  }
+
+  function mostrarResultadoRepaso(opcionElegida) {
+    mostrarVista("vista-repaso-resultado");
+    repasoRespondidas++;
+    const p = repasoPreguntas[repasoIdxActual];
+    const el = document.getElementById("resultado-texto-repaso");
+    if (opcionElegida === null) {
+      el.innerHTML = `<span class="resultado-incorrecta">Se acabó el tiempo</span><br/><small>La correcta era: <span id="resp-correcta-repaso"></span></small>`;
+    } else if (opcionElegida === p.correcta) {
+      repasoCorrectas++;
+      el.innerHTML = `<span class="resultado-correcta">¡Correcto! ✓</span>`;
+    } else {
+      el.innerHTML = `<span class="resultado-incorrecta">Incorrecto ✗</span><br/><small>Tu respuesta: <span id="resp-tuya-repaso"></span></small><br/><small>La correcta era: <span id="resp-correcta-repaso"></span></small>`;
+    }
+    document.getElementById("marcador-repaso").textContent = `${repasoCorrectas} de ${repasoRespondidas} correctas`;
+    renderizarKatex(el);
+    const spanCorrecta = document.getElementById("resp-correcta-repaso");
+    if (spanCorrecta) { spanCorrecta.textContent = p.opciones[p.correcta]; renderizarKatex(spanCorrecta); }
+    const spanTuya = document.getElementById("resp-tuya-repaso");
+    if (spanTuya && opcionElegida !== null) { spanTuya.textContent = p.opciones[opcionElegida]; renderizarKatex(spanTuya); }
+
+    const esUltima = candidatosRepaso().length === 0;
+    document.getElementById("btn-siguiente-repaso").textContent = esUltima ? "Ver resumen final" : "Siguiente pregunta";
+  }
+
+  document.getElementById("btn-siguiente-repaso").onclick = () => avanzarPreguntaRepasoAleatoria();
+  document.getElementById("btn-terminar-repaso").onclick = () => mostrarRepasoFinal();
+  document.getElementById("btn-terminar-repaso2").onclick = () => mostrarRepasoFinal();
+
+  function mostrarRepasoFinal() {
+    clearInterval(repasoTimerInterval);
+    mostrarVista("vista-repaso-final");
+    document.getElementById("resumen-repaso-final").textContent = `${repasoCorrectas} de ${repasoRespondidas} correctas`;
+    mostrarConfetiEstudiante();
+  }
+
+  // ---------- Ruleta del modo repaso (circular, reutiliza sonidos ya definidos) ----------
+  let repasoGirando = false;
+  let repasoRotacionAcumulada = 0;
+  const coloresRuedaRepaso = ["#4dc9c9", "#c96b7a", "#7ac97a", "#9a7ac9", "#c9a04d", "#6b8fc9"];
+
+  function dibujarRuedaRepaso(n) {
+    const svg = document.getElementById("ruleta-svg-repaso");
+    const cantidad = Math.max(1, n);
+    const cx = 85, cy = 85, r = 76;
+    let html = "";
+    const anguloSeg = 360 / cantidad;
+    for (let i = 0; i < cantidad; i++) {
+      const a0 = (i * anguloSeg - 90) * Math.PI / 180;
+      const a1 = ((i + 1) * anguloSeg - 90) * Math.PI / 180;
+      const x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0);
+      const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+      const largeArc = anguloSeg > 180 ? 1 : 0;
+      const color = coloresRuedaRepaso[i % coloresRuedaRepaso.length];
+      html += `<path d="M${cx},${cy} L${x0},${y0} A${r},${r} 0 ${largeArc} 1 ${x1},${y1} Z" fill="${color}" stroke="#0f1116" stroke-width="1"/>`;
+      const amid = (a0 + a1) / 2;
+      const tx = cx + (r * 0.65) * Math.cos(amid), ty = cy + (r * 0.65) * Math.sin(amid);
+      html += `<text x="${tx}" y="${ty}" fill="#08090c" font-size="11" font-weight="600" text-anchor="middle" dominant-baseline="middle">${i + 1}</text>`;
+    }
+    svg.innerHTML = html;
+  }
+
+  function girarRuletaRepaso() {
+    if (repasoGirando) return;
+    const candidatos = candidatosRepaso();
+    if (candidatos.length === 0) { mostrarRepasoFinal(); return; }
+    repasoGirando = true;
+    const posicion = Math.floor(Math.random() * candidatos.length);
+    const elegido = candidatos[posicion];
+    dibujarRuedaRepaso(candidatos.length);
+    const anguloSeg = 360 / candidatos.length;
+    const anguloObjetivo = 360 - (posicion * anguloSeg + anguloSeg / 2);
+    const vueltasExtra = 4 * 360;
+    repasoRotacionAcumulada += vueltasExtra + anguloObjetivo - (repasoRotacionAcumulada % 360);
+    const svg = document.getElementById("ruleta-svg-repaso");
+    svg.style.transform = `rotate(${repasoRotacionAcumulada}deg)`;
+
+    let t = 0;
+    for (let i = 0; i < 22; i++) {
+      const espaciado = 70 + Math.pow(i / 22, 2) * 220;
+      t += espaciado;
+      setTimeout(reproducirTickRepaso, t);
+    }
+    setTimeout(() => {
+      repasoGirando = false;
+      activarPreguntaRepaso(elegido);
+    }, 3600);
+  }
+
+  function reproducirTickRepaso() {
+    asegurarAudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "square";
+    osc.frequency.value = 500;
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.06);
+  }
+
+  document.getElementById("btn-girar-ruleta-repaso").onclick = girarRuletaRepaso;
+  document.getElementById("btn-girar-ruleta-repaso2").onclick = girarRuletaRepaso;
+
+  dibujarRuedaRepaso(parseInt(document.getElementById("input-num-preguntas-repaso").value, 10) || 10);
 
   let confetiEstudianteActivo = false;
   const EMOJIS_CONFETI_EST = ["⭐", "✨", "🌟", "🎉"];
