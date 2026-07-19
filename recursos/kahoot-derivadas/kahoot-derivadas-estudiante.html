@@ -216,7 +216,7 @@
     p.opciones.forEach((op, i) => {
       const btn = document.createElement("button");
       btn.className = "opcion-btn";
-      btn.textContent = op;
+      btn.textContent = `$${op}$`;
       btn.onclick = () => responder(i, btn);
       cont.appendChild(btn);
     });
@@ -257,7 +257,7 @@
     renderizarKatex(el);
     const spanCorrecta = document.getElementById("resp-correcta");
     if (spanCorrecta) {
-      spanCorrecta.textContent = pregunta.opciones[pregunta.correcta];
+      spanCorrecta.textContent = `$${pregunta.opciones[pregunta.correcta]}$`;
       renderizarKatex(spanCorrecta);
     }
   }

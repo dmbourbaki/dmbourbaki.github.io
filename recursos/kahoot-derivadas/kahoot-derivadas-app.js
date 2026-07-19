@@ -102,6 +102,11 @@ async function cerrarPreguntaYCalcular(db, codigo) {
   return resumen;
 }
 
+async function existeSala(db, codigo) {
+  const snap = await get(ref(db, `salas/${codigo}`));
+  return snap.exists();
+}
+
 function escucharSala(db, codigo, callback) {
   const salaRef = ref(db, `salas/${codigo}`);
   return onValue(salaRef, (snap) => callback(snap.val()));
@@ -143,6 +148,6 @@ function ranking(sala) {
 
 export {
   ESTADOS, TIEMPO_LIMITE,
-  crearSala, iniciarSiguientePregunta, cerrarPreguntaYCalcular, escucharSala, eliminarSala,
+  crearSala, iniciarSiguientePregunta, cerrarPreguntaYCalcular, escucharSala, eliminarSala, existeSala,
   unirseASala, enviarRespuesta, ranking, calcularPuntos,
 };
