@@ -66,7 +66,7 @@
 </style>
 </head>
 <body>
-  <div id="barra-sala">Sala: <b id="barra-codigo"></b></div>
+  <div id="barra-sala">Sala: <b id="barra-codigo"></b> <button class="btn-secundario" id="btn-musica-est" style="margin-left:10px; background:transparent; border:1px solid var(--line-soft); color:var(--gold-bright); border-radius:8px; padding:2px 8px; cursor:pointer; font-size:14px;">🔊</button></div>
   <div class="eyebrow">OMAI-Quiz</div>
 
   <div class="card" id="vista-unirse">
@@ -166,6 +166,92 @@
     osc.stop(audioCtx.currentTime + 0.12);
   }
 
+  // ---------- Música de fondo por fases (igual que el docente, para que suene para todos) ----------
+  let musicaActiva = true;
+  let musicaTimer = null;
+  let pasoActual = 0;
+  let faseMusicalActual = null;
+  const PISTAS = {
+    arpegio: { notas: [261.63, 329.63, 392.00, 329.63, 261.63, 392.00, 440.00, 392.00], tempo: 260, onda: "triangle" },
+    lobby: { notas: [196.00, 246.94, 293.66, 246.94], tempo: 480, onda: "sine" },
+    final: { notas: [392.00, 493.88, 587.33, 493.88, 392.00, 587.33, 659.25, 587.33], tempo: 150, onda: "square" },
+  };
+
+  function tocarNota(freq, duracion, onda) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = onda;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duracion);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duracion);
+  }
+  function iniciarMusica(clavePista) {
+    clearInterval(musicaTimer);
+    const p = PISTAS[clavePista];
+    musicaTimer = setInterval(() => {
+      tocarNota(p.notas[pasoActual % p.notas.length], p.tempo / 1000 * 1.3, p.onda);
+      pasoActual++;
+    }, p.tempo);
+  }
+  function actualizarFaseMusical(estado) {
+    const nuevaFase = estado === ESTADOS.TERMINADO ? "final" : (estado === ESTADOS.ESPERANDO ? "lobby" : "juego");
+    if (nuevaFase === faseMusicalActual) return;
+    faseMusicalActual = nuevaFase;
+    if (!musicaActiva) return;
+    iniciarMusica(nuevaFase === "juego" ? "arpegio" : nuevaFase);
+  }
+  document.getElementById("btn-musica-est").onclick = () => {
+    asegurarAudioContext();
+    musicaActiva = !musicaActiva;
+    document.getElementById("btn-musica-est").textContent = musicaActiva ? "🔊" : "🔈";
+    if (musicaActiva && faseMusicalActual) iniciarMusica(faseMusicalActual === "juego" ? "arpegio" : faseMusicalActual);
+    else clearInterval(musicaTimer);
+  };
+
+  // ---------- Fanfarria de bongos al iniciar (idéntica a la del docente) ----------
+  function ruidoBlanco(duracionSeg) {
+    const tam = Math.floor(audioCtx.sampleRate * duracionSeg);
+    const buffer = audioCtx.createBuffer(1, tam, audioCtx.sampleRate);
+    const datos = buffer.getChannelData(0);
+    for (let i = 0; i < tam; i++) datos[i] = Math.random() * 2 - 1;
+    return buffer;
+  }
+  function golpeBongo(offsetSeg, frecuenciaFiltro) {
+    const fuente = audioCtx.createBufferSource();
+    fuente.buffer = ruidoBlanco(0.15);
+    const filtro = audioCtx.createBiquadFilter();
+    filtro.type = "bandpass";
+    filtro.frequency.value = frecuenciaFiltro;
+    filtro.Q.value = 1.1;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.35, audioCtx.currentTime + offsetSeg);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + offsetSeg + 0.16);
+    fuente.connect(filtro).connect(gain).connect(audioCtx.destination);
+    fuente.start(audioCtx.currentTime + offsetSeg);
+  }
+  function reproducirFanfarreInicio() {
+    if (!musicaActiva) return;
+    asegurarAudioContext();
+    [[0, 180], [0.12, 340], [0.24, 180], [0.36, 340], [0.44, 340], [0.56, 500]]
+      .forEach(([t, f]) => golpeBongo(t, f));
+    [523.25, 659.25, 783.99, 1046.50].forEach((freq) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.001, audioCtx.currentTime + 0.7);
+      gain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 0.76);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.6);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime + 0.7);
+      osc.stop(audioCtx.currentTime + 1.6);
+    });
+  }
+  let estadoAnteriorEst = null;
+
   function actualizarCronometroEstudiante() {
     if (!salaActualCache || salaActualCache.estado !== ESTADOS.PREGUNTA_ACTIVA) return;
     const limite = (salaActualCache.tiempoLimiteBase || 20) + (salaActualCache.tiempoExtra || 0);
@@ -206,6 +292,11 @@
   function renderizar(sala) {
     if (!sala) return;
     salaActualCache = sala;
+    actualizarFaseMusical(sala.estado);
+    if (estadoAnteriorEst === ESTADOS.ESPERANDO && sala.estado === ESTADOS.PREGUNTA_ACTIVA) {
+      reproducirFanfarreInicio();
+    }
+    estadoAnteriorEst = sala.estado;
     if (sala.estado === ESTADOS.PREGUNTA_ACTIVA) {
       if (sala.preguntaActual !== idxPreguntaMostrada) {
         idxPreguntaMostrada = sala.preguntaActual;
