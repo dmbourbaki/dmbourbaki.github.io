@@ -140,7 +140,7 @@
     <div class="lista-bancos" id="lista-bancos">Cargando bancos disponibles…</div>
 
     <div class="campo-config" style="text-align:left;">
-      <label>Agregar un banco adicional (.txt) solo para esta sesión</label>
+      <label>Opción avanzada (no obligatoria): agregar un banco adicional desde un .txt, solo para esta sesión</label>
       <input type="file" id="input-archivo-banco" accept=".txt" />
       <p id="mensaje-carga-archivo" class="config-note" style="display:none;"></p>
     </div>
@@ -205,8 +205,9 @@
   import {
     ESTADOS, TIEMPO_LIMITE_BASE, crearSala, existeSala, iniciarSiguientePregunta,
     agregarTiempoExtra, cerrarPreguntaYCalcular, escucharSala, ranking,
-    cargarManifiestoBancos, cargarBanco, parseBancoTxt,
+    parseBancoTxt,
   } from "./omai-quiz-app.js";
+  import { BANCOS_DEFECTO } from "./omai-quiz-bancos-default.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
@@ -220,7 +221,7 @@
 
   let db;
   let codigoActual = null;
-  let bancosDisponibles = []; // [{id, nombre, preguntas: [...]}]
+  let bancosDisponibles = BANCOS_DEFECTO.map((b) => ({ id: b.id, nombre: b.nombre, preguntas: b.preguntas }));
 
   const esConfigPlaceholder = firebaseConfig.apiKey === "TU_API_KEY";
   if (esConfigPlaceholder) {
@@ -231,26 +232,7 @@
     db = getDatabase(app);
   }
 
-  // ---------- Cargar manifiesto de bancos y construir checkboxes ----------
-  async function cargarBancos() {
-    const contenedor = document.getElementById("lista-bancos");
-    try {
-      const manifiesto = await cargarManifiestoBancos("./omai-quiz-bancos.json");
-      for (const item of manifiesto) {
-        try {
-          const { preguntas, errores } = await cargarBanco(item.archivo);
-          if (errores.length > 0) console.warn(`Avisos en banco ${item.nombre}:`, errores);
-          bancosDisponibles.push({ id: item.id, nombre: item.nombre, preguntas });
-        } catch (e) {
-          console.error(`No se pudo cargar el banco ${item.nombre}:`, e.message);
-        }
-      }
-    } catch (e) {
-      contenedor.innerHTML = `<p class="config-note">No se pudo cargar el manifiesto de bancos (${e.message}).</p>`;
-      return;
-    }
-    renderizarListaBancos();
-  }
+  renderizarListaBancos();
 
   function renderizarListaBancos() {
     const contenedor = document.getElementById("lista-bancos");
@@ -259,7 +241,7 @@
       return;
     }
     let html = `<div class="banco-item">
-      <input type="checkbox" id="chk-todos" />
+      <input type="checkbox" id="chk-todos" checked />
       <label for="chk-todos"><b>Seleccionar todos</b></label>
     </div><hr style="border-color:var(--line-soft)"/>`;
     bancosDisponibles.forEach((b, i) => {
@@ -289,7 +271,7 @@
     }
     bancosDisponibles.push({ id: "extra-" + Date.now(), nombre: `📄 ${archivo.name} (temporal)`, preguntas });
     msgEl.style.color = "var(--good)";
-    msgEl.textContent = `Se agregaron ${preguntas.length} preguntas` + (errores.length ? ` (${errores.length} bloques con errores fueron ignorados)` : "") + `. Este banco solo dura esta sesión: para hacerlo permanente, sube el .txt a la carpeta bancos/ del repositorio y agrégalo a omai-quiz-bancos.json.`;
+    msgEl.textContent = `Se agregaron ${preguntas.length} preguntas` + (errores.length ? ` (${errores.length} bloques con errores fueron ignorados)` : "") + `. Este banco solo dura esta sesión (no queda guardado). Para hacerlo permanente, pide que se agregue directamente a omai-quiz-bancos-default.js.`;
     renderizarListaBancos();
   });
 
@@ -300,7 +282,7 @@
     return combinado;
   }
 
-  cargarBancos();
+  // (los bancos por defecto ya se renderizaron arriba, al cargar la página)
 
   // ---------- Música ----------
   let audioCtx = null;
