@@ -237,7 +237,7 @@
   function mostrarPregunta(sala) {
     mostrarVista("vista-pregunta");
     const p = sala.preguntas[sala.preguntaActual];
-    document.getElementById("contador-pregunta").textContent = `Pregunta ${sala.preguntaActual + 1} de ${sala.preguntas.length}`;
+    document.getElementById("contador-pregunta").textContent = `Pregunta ${(sala.indicesUsados || []).length} de ${sala.preguntas.length}`;
     document.getElementById("texto-pregunta").textContent = p.texto;
     const imgEl = document.getElementById("pregunta-imagen");
     if (p.imagen) { imgEl.src = p.imagen; imgEl.style.display = "block"; } else { imgEl.style.display = "none"; }
@@ -280,7 +280,7 @@
     } else if (respuestaJugador.opcion === pregunta.correcta) {
       el.innerHTML = `<span class="resultado-correcta">¡Correcto! ✓</span>`;
     } else {
-      el.innerHTML = `<span class="resultado-incorrecta">Incorrecto ✗</span><br/><small>Era: <span id="resp-correcta"></span></small>`;
+      el.innerHTML = `<span class="resultado-incorrecta">Incorrecto ✗</span><br/><small>Tu respuesta: <span id="resp-tuya"></span></small><br/><small>La correcta era: <span id="resp-correcta"></span></small>`;
     }
     const miPuntaje = (sala.jugadores[jugadorId] || {}).puntos || 0;
     document.getElementById("puntos-totales").textContent = `${miPuntaje} puntos totales`;
@@ -289,6 +289,11 @@
     if (spanCorrecta) {
       spanCorrecta.textContent = pregunta.opciones[pregunta.correcta];
       renderizarKatex(spanCorrecta);
+    }
+    const spanTuya = document.getElementById("resp-tuya");
+    if (spanTuya && respuestaJugador) {
+      spanTuya.textContent = pregunta.opciones[respuestaJugador.opcion];
+      renderizarKatex(spanTuya);
     }
   }
 

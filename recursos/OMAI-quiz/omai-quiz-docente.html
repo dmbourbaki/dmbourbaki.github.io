@@ -88,7 +88,7 @@
   .campo-config label { display:block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
 
   #panel-ruleta {
-    position: fixed; bottom: 24px; right: 24px; z-index: 60; display: none;
+    position: fixed; bottom: 24px; right: 24px; z-index: 60; display: block;
     background: var(--panel); border: 1px solid var(--gold); border-radius: 16px;
     padding: 20px; width: 280px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
   }
@@ -341,10 +341,23 @@
   actualizarBotonMusica();
 
   // ---------- Ruleta circular animada: elige y activa la siguiente pregunta ----------
+  // Los segmentos de la rueda SIEMPRE representan solo las preguntas que aún no
+  // han salido; al usarse una, la rueda se redibuja más pequeña automáticamente.
   let girando = false;
   const coloresRueda = ["#4dc9c9", "#c96b7a", "#7ac97a", "#9a7ac9", "#c9a04d", "#6b8fc9"];
+  let ultimoConteoCandidatos = null;
 
-  function dibujarRueda(n) {
+  function candidatosDeSala(sala) {
+    if (!sala) return [];
+    const total = sala.preguntas.length;
+    const usados = new Set(sala.indicesUsados || []);
+    const candidatos = [];
+    for (let i = 0; i < total; i++) if (!usados.has(i)) candidatos.push(i);
+    return candidatos;
+  }
+
+  function dibujarRueda(cantidadSegmentos) {
+    const n = Math.max(1, cantidadSegmentos);
     const cx = 110, cy = 110, r = 100;
     let html = "";
     const anguloSeg = 360 / n;
@@ -363,15 +376,29 @@
     document.getElementById("ruleta-svg").innerHTML = html;
   }
 
+  // Redibuja la rueda para que coincida con las preguntas restantes reales,
+  // pero nunca mientras está girando (para no cortar la animación).
+  function sincronizarRuedaConSala() {
+    if (girando) return;
+    const candidatos = candidatosDeSala(salaActualCache);
+    const conteo = candidatos.length || (salaActualCache ? salaActualCache.preguntas.length : parseInt(document.getElementById("input-ruleta-max").value, 10) || 1);
+    if (conteo !== ultimoConteoCandidatos) {
+      ultimoConteoCandidatos = conteo;
+      const svg = document.getElementById("ruleta-svg");
+      svg.style.transition = "none";
+      dibujarRueda(conteo);
+      svg.style.transform = "rotate(0deg)";
+      rotacionAcumulada = 0;
+      requestAnimationFrame(() => { svg.style.transition = "transform 4s cubic-bezier(0.12, 0.72, 0.15, 1)"; });
+    }
+  }
+
   let rotacionAcumulada = 0;
+  dibujarRueda(parseInt(document.getElementById("input-ruleta-max").value, 10) || 10);
+
   document.getElementById("btn-toggle-ruleta").onclick = () => {
     const panel = document.getElementById("panel-ruleta");
-    const abrir = panel.style.display !== "block";
-    panel.style.display = abrir ? "block" : "none";
-    if (abrir) {
-      const total = salaActualCache ? salaActualCache.preguntas.length : (parseInt(document.getElementById("input-ruleta-max").value, 10) || 1);
-      dibujarRueda(total);
-    }
+    panel.style.display = panel.style.display === "none" ? "block" : "none";
   };
 
   function reproducirTickRuleta() {
@@ -413,20 +440,22 @@
       infoEl.textContent = "Cierra la pregunta activa antes de girar para elegir la siguiente.";
       return;
     }
-    const total = salaActualCache.preguntas.length;
-    const usados = new Set(salaActualCache.indicesUsados || []);
-    const candidatos = [];
-    for (let i = 0; i < total; i++) if (!usados.has(i)) candidatos.push(i);
+    const candidatos = candidatosDeSala(salaActualCache);
     if (candidatos.length === 0) {
       infoEl.textContent = "¡Ya salieron todas las preguntas de esta partida!";
       return;
     }
-    dibujarRueda(total);
+    // La rueda muestra exactamente los candidatos restantes, numerados 1..N
+    // en ese mismo orden — este número SIEMPRE coincide con "Pregunta X de N".
+    dibujarRueda(candidatos.length);
+    ultimoConteoCandidatos = candidatos.length;
     girando = true;
-    const elegidoIdx = candidatos[Math.floor(Math.random() * candidatos.length)]; // índice real (0-based)
-    const numeroVisual = elegidoIdx + 1; // solo para la posición visual de la rueda
-    const anguloSeg = 360 / total;
-    const anguloObjetivo = 360 - ((numeroVisual - 1) * anguloSeg + anguloSeg / 2);
+    const posicion = Math.floor(Math.random() * candidatos.length); // posición dentro de los restantes
+    const elegidoIdx = candidatos[posicion]; // índice real en el arreglo de preguntas
+    const numeroProgreso = (salaActualCache.indicesUsados || []).length + 1; // "Pregunta X de N" que verán todos
+
+    const anguloSeg = 360 / candidatos.length;
+    const anguloObjetivo = 360 - (posicion * anguloSeg + anguloSeg / 2);
     const vueltasExtra = 5 * 360;
     rotacionAcumulada += vueltasExtra + anguloObjetivo - (rotacionAcumulada % 360);
     const svg = document.getElementById("ruleta-svg");
@@ -441,11 +470,13 @@
     }
 
     setTimeout(async () => {
-      document.getElementById("ruleta-resultado").textContent = numeroVisual;
-      infoEl.textContent = `¡Pregunta #${numeroVisual} activada para todos!`;
+      document.getElementById("ruleta-resultado").textContent = numeroProgreso;
+      infoEl.textContent = `¡Pregunta #${numeroProgreso} activada para todos!`;
       reproducirCampanadaRuleta();
       girando = false;
       await activarPreguntaPorIndice(db, codigoActual, elegidoIdx);
+      // Tras activar, la rueda se redibujará automáticamente más pequeña
+      // la próxima vez que se abra el panel o se llame a sincronizarRuedaConSala().
     }, 4100);
   };
 
@@ -571,16 +602,12 @@
   document.getElementById("btn-siguiente").onclick = () => iniciarSiguientePregunta(db, codigoActual);
 
   let ultimaPreguntaRenderizada = -1;
-  let ruletaSincronizada = false;
+  let yaAutoCerradaEstaPregunta = false;
 
   function renderizar(s) {
     if (!s) return;
     salaActualCache = s;
-    if (!ruletaSincronizada) {
-      ruletaSincronizada = true;
-      document.getElementById("input-ruleta-max").value = s.preguntas.length;
-      dibujarRueda(s.preguntas.length);
-    }
+    sincronizarRuedaConSala();
     const numJugadores = Object.keys(s.jugadores || {}).length;
 
     if (s.estado === ESTADOS.ESPERANDO) {
@@ -607,9 +634,16 @@
       if (idx !== ultimaPreguntaRenderizada) {
         ultimaPreguntaRenderizada = idx;
         ultimoSegundoConBeep = null;
+        yaAutoCerradaEstaPregunta = false;
         iniciarCronometroLocal();
       }
       actualizarCronometro();
+      // Si ya respondieron todos los jugadores conectados, cerrar de una vez sin esperar el tiempo.
+      if (numJugadores > 0 && respondidos >= numJugadores && !yaAutoCerradaEstaPregunta) {
+        yaAutoCerradaEstaPregunta = true;
+        clearInterval(timerInterval);
+        cerrarPreguntaYCalcular(db, codigoActual);
+      }
     } else {
       clearInterval(timerInterval);
     }
