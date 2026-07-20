@@ -10,16 +10,17 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <style>
   :root {
-    --void: #08090c; --abyss: #0f1116; --panel: #15181f;
-    --gold: #c9a04d; --gold-bright: #e8c273;
-    --cyan: #4dc9c9; --rose: #c96b7a; --grass: #7ac97a; --violet: #9a7ac9;
-    --good: #7ac97a; --bad: #c96b6b;
-    --line: #262b36; --line-soft: #1b1e27;
-    --ink: #eceef2; --ink-soft: #a7acb9; --ink-faint: #6b7080;
+    --void: #f7f9fd; --abyss: #ffffff; --panel: #ffffff;
+    --gold: #f5a623; --gold-bright: #ffbe55; --gold-deep: #c9820a;
+    --cyan: #12b3a8; --rose: #ef5d7a; --grass: #29b36b; --violet: #7c5cff;
+    --good: #22a866; --bad: #e14b62;
+    --line: #e2e6f0; --line-soft: #edf0f8;
+    --ink: #1d2333; --ink-soft: #5b6577; --ink-faint: #8991a3;
+    --symbol-watermark: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22260%22%20height%3D%22260%22%20viewBox%3D%220%200%20260%20260%22%3E%0A%3Ctext%20x%3D%2214%22%20y%3D%2236%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2230%22%20fill%3D%22%23dfe4f0%22%3E%CF%80%3C/text%3E%0A%3Ctext%20x%3D%22120%22%20y%3D%2222%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2222%22%20fill%3D%22%23e3e9f5%22%3E%E2%88%91%3C/text%3E%0A%3Ctext%20x%3D%22195%22%20y%3D%2255%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2226%22%20fill%3D%22%23dfe4f0%22%3E%E2%88%AB%3C/text%3E%0A%3Ctext%20x%3D%2250%22%20y%3D%2295%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2224%22%20fill%3D%22%23e3e9f5%22%3E%E2%88%9Ax%3C/text%3E%0A%3Ctext%20x%3D%22165%22%20y%3D%22110%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2228%22%20fill%3D%22%23dfe4f0%22%3E%E2%88%9E%3C/text%3E%0A%3Ctext%20x%3D%2210%22%20y%3D%22150%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2224%22%20fill%3D%22%23e3e9f5%22%3E%CE%A9%3C/text%3E%0A%3Ctext%20x%3D%2295%22%20y%3D%22150%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2222%22%20fill%3D%22%23dfe4f0%22%3E%E2%9A%9B%3C/text%3E%0A%3Ctext%20x%3D%22185%22%20y%3D%22165%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2220%22%20fill%3D%22%23e3e9f5%22%3EH%E2%82%82O%3C/text%3E%0A%3Ctext%20x%3D%2235%22%20y%3D%22200%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2218%22%20fill%3D%22%23dfe4f0%22%3EE%3Dmc%C2%B2%3C/text%3E%0A%3Ctext%20x%3D%22150%22%20y%3D%22210%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2224%22%20fill%3D%22%23e3e9f5%22%3E%F0%9F%A7%AC%3C/text%3E%0A%3Ctext%20x%3D%22215%22%20y%3D%22235%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2222%22%20fill%3D%22%23dfe4f0%22%3E%CE%94%3C/text%3E%0A%3Ctext%20x%3D%2270%22%20y%3D%22245%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2220%22%20fill%3D%22%23e3e9f5%22%3E%F0%9F%8C%8D%3C/text%3E%0A%3C/svg%3E");
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0; background: var(--void); color: var(--ink);
+    margin: 0; background-color: var(--void); background-image: var(--symbol-watermark); background-repeat: repeat; color: var(--ink);
     font-family: "Inter Tight", sans-serif; min-height: 100vh;
     display: flex; flex-direction: column; align-items: center;
     padding: 16px; padding-top: 60px;
@@ -27,15 +28,15 @@
   #barra-sala {
     position: fixed; top: 0; left: 0; right: 0; z-index: 50;
     display: none; align-items: center; justify-content: center;
-    background: var(--panel); border-bottom: 1px solid var(--line);
-    padding: 8px; font-family: "Spline Sans Mono", monospace; font-size: 14px; color: var(--gold-bright);
+    background: var(--panel); border-bottom: 1px solid var(--line); box-shadow: 0 2px 12px rgba(30,40,80,0.05);
+    padding: 8px; font-family: "Spline Sans Mono", monospace; font-size: 14px; color: var(--gold-deep);
   }
   #barra-sala b { font-size: 17px; letter-spacing: 0.08em; margin-left: 6px; }
   .eyebrow {
     font-family: "Spline Sans Mono", monospace; font-size: 11px; letter-spacing: 0.12em;
     color: var(--gold); text-transform: uppercase; margin-bottom: 8px; text-align: center;
   }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 28px; max-width: 420px; width: 100%; text-align: center; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 4px 24px rgba(30,40,80,0.06); padding: 28px; max-width: 420px; width: 100%; text-align: center; }
   input:not([type="checkbox"]) {
     width: 100%; padding: 14px; font-size: 18px; border-radius: 10px;
     border: 1px solid var(--line-soft); background: var(--abyss); color: var(--ink);
@@ -44,7 +45,7 @@
   input[type="checkbox"] { width: 16px; height: 16px; flex: none; margin: 0; }
   .btn { width: 100%; font-weight: 600; font-size: 17px; background: var(--gold); color: var(--void); border: none; border-radius: 10px; padding: 16px; cursor: pointer; }
   .btn:disabled { background: var(--line); color: var(--ink-faint); }
-  .puntos-actuales { font-family: "Spline Sans Mono", monospace; color: var(--gold-bright); font-size: 14px; }
+  .puntos-actuales { font-family: "Spline Sans Mono", monospace; color: var(--gold-deep); font-size: 14px; }
   .pregunta-texto { font-family: "Fraunces", serif; font-size: 21px; margin: 14px 0; color: var(--ink); }
   .pregunta-imagen { max-width: 100%; max-height: 200px; border-radius: 10px; margin: 10px auto; display: block; }
   .opciones-col { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
@@ -79,7 +80,7 @@
   .btn-modo small { display:block; color: var(--ink-soft); font-weight: 400; font-size: 13px; margin-top: 4px; }
   .btn-modo:hover { border-color: var(--gold); }
   .link-volver { color: var(--ink-soft); font-size: 13px; cursor: pointer; display: inline-block; margin-bottom: 12px; }
-  .link-volver:hover { color: var(--gold-bright); }
+  .link-volver:hover { color: var(--gold-deep); }
 
   .lista-bancos-repaso { text-align: left; margin: 14px 0; border: 1px solid var(--line-soft); border-radius: 10px; padding: 12px; max-height: 260px; overflow-y: auto; }
   .banco-item-repaso { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; }
@@ -108,6 +109,11 @@
     #panel-ruleta-repaso { width: 160px; padding: 10px; bottom: 12px; right: 12px; }
     #ruleta-svg-repaso-wrap { width: 130px !important; height: 130px !important; }
   }
+
+  .franja-simbolos {
+    font-size: 20px; letter-spacing: 10px; margin: -14px 0 26px 0;
+    color: var(--ink-faint); opacity: 0.55; text-align: center; user-select: none;
+  }
 </style>
 </head>
 <body>
@@ -125,8 +131,9 @@
   <button id="btn-abrir-ruleta-repaso" style="display:none; position:fixed; bottom:20px; right:20px; z-index:59; background:var(--gold); color:var(--void); border:none; border-radius:50%; width:52px; height:52px; font-size:22px; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,0.4);">🎡</button>
 
   <div id="barra-sala">Sala: <b id="barra-codigo"></b></div>
-  <button id="btn-musica-est" style="position:fixed; top:10px; right:12px; z-index:65; background:var(--panel); border:1px solid var(--line-soft); color:var(--gold-bright); border-radius:8px; padding:6px 12px; cursor:pointer; font-size:15px;">🔊 Música</button>
+  <button id="btn-musica-est" style="position:fixed; top:10px; right:12px; z-index:65; background:var(--panel); border:1px solid var(--line-soft); color:var(--gold-deep); border-radius:8px; padding:6px 12px; cursor:pointer; font-size:15px;">🔊 Música</button>
   <div class="eyebrow">OMAI-Quiz · Cultura General</div>
+  <div class="franja-simbolos" aria-hidden="true">🧬 π ⚛️ ∑ 🔭 √ 🌍 ∞ 🧪 Ω 🪐 Δ</div>
 
   <div class="card" id="vista-modo-inicial">
     <p>¿Qué quieres hacer?</p>
@@ -155,7 +162,7 @@
 
   <div class="card" id="vista-pregunta" style="display:none;">
     <div class="eyebrow" id="contador-pregunta"></div>
-    <div id="cronometro-estudiante" style="font-family:'Spline Sans Mono',monospace; font-size:32px; color:var(--gold-bright); margin-bottom:8px;">20</div>
+    <div id="cronometro-estudiante" style="font-family:'Spline Sans Mono',monospace; font-size:32px; color:var(--gold-deep); margin-bottom:8px;">20</div>
     <div class="pregunta-texto" id="texto-pregunta"></div>
     <img id="pregunta-imagen" class="pregunta-imagen" style="display:none;" />
     <div class="opciones-col" id="opciones-col"></div>
@@ -170,7 +177,7 @@
   <div id="capa-confeti" style="position:fixed; inset:0; pointer-events:none; z-index:70; overflow:hidden; display:none;"></div>
 
   <div class="card" id="vista-final" style="display:none;">
-    <h2 style="font-family:'Fraunces',serif;color:var(--gold-bright);">Quiz terminado</h2>
+    <h2 style="font-family:'Fraunces',serif;color:var(--gold-deep);">Quiz terminado</h2>
     <div id="mi-animal-final" style="font-size:48px; margin-bottom:8px;"></div>
     <p class="puntos-actuales" id="puntos-finales"></p>
     <p id="posicion-final" style="color:var(--ink-soft)"></p>
@@ -197,7 +204,7 @@
 
   <div class="card card-ancha" id="vista-repaso-pregunta" style="display:none;">
     <div class="eyebrow" id="contador-repaso"></div>
-    <div id="cronometro-repaso" style="font-family:'Spline Sans Mono',monospace; font-size:32px; color:var(--gold-bright); margin-bottom:8px;">20</div>
+    <div id="cronometro-repaso" style="font-family:'Spline Sans Mono',monospace; font-size:32px; color:var(--gold-deep); margin-bottom:8px;">20</div>
     <div class="pregunta-texto" id="texto-pregunta-repaso"></div>
     <img id="pregunta-imagen-repaso" class="pregunta-imagen" style="display:none;" />
     <div class="opciones-col" id="opciones-col-repaso"></div>
@@ -214,7 +221,7 @@
   </div>
 
   <div class="card card-ancha" id="vista-repaso-final" style="display:none;">
-    <h2 style="font-family:'Fraunces',serif;color:var(--gold-bright);">Repaso terminado</h2>
+    <h2 style="font-family:'Fraunces',serif;color:var(--gold-deep);">Repaso terminado</h2>
     <p class="puntos-actuales" id="resumen-repaso-final" style="font-size:22px;"></p>
     <button class="btn" id="btn-repetir-repaso">Repetir con la misma configuración</button>
     <button class="btn-secundario-repaso" id="btn-otro-tema-repaso">Elegir otro tema</button>
