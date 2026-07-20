@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>OMAI · Resolución Libre Minimal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+:root{
+  --void:#0a0908; --abyss:#121110; --panel:#181614;
+  --gold:#c9a24b; --gold-bright:#e8c874; --gold-deep:#8a6d2e;
+  --cyan:#5fb3b3; --rose:#b3607a; --grass:#7a9d5a; --violet:#8a7ab3;
+  --good:#7a9d5a; --bad:#b3607a;
+  --line:#2a2622; --line-soft:#1e1b18;
+  --ink:#ece6da; --ink-soft:#a89e8f; --ink-faint:#5f584e;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--void); color:var(--ink);
+  font-family:'Inter Tight',sans-serif; font-size:14px;
+}
+.eyebrow{
+  font-family:'Spline Sans Mono',monospace; font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--gold); margin:0 0 4px;
+}
+h1{
+  font-family:'Fraunces',serif; font-weight:600; font-size:26px; margin:0 0 2px; color:var(--ink);
+}
+.subtitle{ color:var(--ink-soft); font-size:13px; margin-bottom:18px; }
+.layout{ display:grid; grid-template-columns:250px 1fr 300px; gap:0; min-height:100vh; }
+.rail{ padding:20px 16px; background:var(--abyss); }
+.rail.left{ border-right:1px solid var(--line); }
+.rail.right{ border-left:1px solid var(--line); overflow-y:auto; max-height:100vh; }
+.stage{ padding:24px 28px; overflow-y:auto; max-height:100vh; }
+.section-h{
+  position:relative; padding-left:12px; font-family:'Spline Sans Mono',monospace;
+  font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft);
+  margin:18px 0 10px;
+}
+.section-h::before{
+  content:''; position:absolute; left:0; top:1px; bottom:1px; width:3px; background:var(--gold);
+}
+.preset{
+  background:var(--panel); border:1px solid var(--line); border-radius:6px;
+  padding:10px 12px; margin-bottom:8px; cursor:pointer; transition:border-color .15s;
+  font-family:'Spline Sans Mono',monospace; font-size:12px; color:var(--ink-soft);
+}
+.preset:hover{ border-color:var(--gold-deep); color:var(--ink); }
+.preset .name{ color:var(--ink); font-weight:500; display:block; margin-bottom:2px; font-family:'Inter Tight',sans-serif;}
+.gen-input{ display:flex; gap:6px; align-items:center; margin-bottom:8px; }
+.gen-input input{
+  width:38px; background:var(--panel); border:1px solid var(--line); color:var(--ink);
+  border-radius:4px; padding:5px 4px; text-align:center; font-family:'Spline Sans Mono',monospace; font-size:13px;
+}
+.gen-input .lbl{ font-family:'Spline Sans Mono',monospace; color:var(--ink-faint); font-size:11px; width:16px; }
+.btn{
+  width:100%; background:var(--gold-deep); border:none; color:var(--void); font-weight:600;
+  padding:9px; border-radius:6px; cursor:pointer; margin-top:10px; font-family:'Inter Tight',sans-serif;
+  transition:background .15s;
+}
+.btn:hover{ background:var(--gold); }
+table{ border-collapse:collapse; width:100%; margin-bottom:6px; }
+th,td{
+  border:1px solid var(--line); padding:6px 10px; text-align:center;
+  font-family:'Spline Sans Mono',monospace; font-size:12.5px;
+}
+th{ color:var(--gold); font-weight:500; background:var(--panel); }
+td{ color:var(--ink); }
+.stage-body{ display:flex; flex-direction:column; gap:26px; }
+.matrix-wrap{ display:flex; align-items:center; gap:14px; }
+.bigparen{ font-size:56px; color:var(--ink-faint); font-family:serif; line-height:1;}
+.resolution-line{
+  font-family:'Spline Sans Mono',monospace; font-size:15px; color:var(--ink);
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 0;
+}
+.F{ color:var(--cyan); }
+.arrow{ color:var(--ink-faint); }
+.rank-badge{
+  display:inline-block; background:var(--panel); border:1px solid var(--gold-deep);
+  border-radius:4px; padding:2px 7px; font-size:11px; color:var(--gold-bright); margin-left:4px;
+}
+.analysis-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:12px; margin-bottom:14px;
+}
+.readout-grid{ display:flex; flex-direction:column; gap:6px; font-family:'Spline Sans Mono',monospace; font-size:12px; }
+.readout-grid .row{ display:flex; justify-content:space-between; color:var(--ink-soft); }
+.readout-grid .row b{ color:var(--gold-bright); font-weight:500; }
+.diffmap{ margin-bottom:20px; }
+.diffmap-title{ font-family:'Spline Sans Mono',monospace; font-size:12.5px; color:var(--ink-soft); margin-bottom:8px; }
+.diffmap-title .F{ color:var(--cyan); }
+.entry-neg{ color:var(--rose); }
+.entry-pos{ color:var(--ink); }
+.entry-zero{ color:var(--ink-faint); }
+.katex{ color:inherit; }
+.err{ color:var(--bad); font-family:'Spline Sans Mono',monospace; font-size:12.5px; padding:10px; border:1px solid var(--bad); border-radius:6px; }
+.betti-degree{ color:var(--ink-faint); font-size:11px; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <div class="rail left">
+    <p class="eyebrow">OMAI · Álgebra</p>
+    <h1 style="font-size:18px;">Resolución Minimal</h1>
+    <div class="section-h">Generadores</div>
+    <div id="gen-inputs"></div>
+    <button class="btn" id="calc-btn">Calcular resolución</button>
+
+    <div class="section-h">Ejemplos</div>
+    <div class="preset" data-gens="2,1,3;4,4,1;1,3,6">
+      <span class="name">Ejemplo original</span>
+      x²yz³, x⁴y⁴z, xy³z⁶
+    </div>
+    <div class="preset" data-gens="2,0,0;0,2,0;0,0,2">
+      <span class="name">Koszul completo</span>
+      x², y², z² (sin cancelación)
+    </div>
+    <div class="preset" data-gens="1,1,0;0,1,1;1,0,1">
+      <span class="name">Ciclo mixto</span>
+      xy, yz, xz
+    </div>
+    <div class="preset" data-gens="3,0,0;0,3,0;2,2,2">
+      <span class="name">Casi-CI</span>
+      x³, y³, x²y²z²
+    </div>
+  </div>
+
+  <div class="stage">
+    <p class="eyebrow">Observatorio de Matemáticas Avanzadas para Ingeniería</p>
+    <h1>Resoluciones Libres Minimales</h1>
+    <p class="subtitle">Complejo de Taylor → reducción algebraica (eliminación gaussiana en entradas unitarias) → resolución minimal, análoga a <span style="font-family:'Spline Sans Mono',monospace;">res()</span> de Macaulay2.</p>
+    <div class="stage-body" id="stage-body"></div>
+  </div>
+
+  <div class="rail right" id="right-rail">
+    <div class="section-h">Números de Betti graduados</div>
+    <div id="betti-panel"></div>
+  </div>
+
+</div>
+
+<script>
+/* ================= MOTOR (portado de engine.js) ================= */
+function lcmExp(a,b){return a.map((v,i)=>Math.max(v,b[i]));}
+function addExp(a,b){return a.map((v,i)=>v+b[i]);}
+function subExp(a,b){return a.map((v,i)=>v-b[i]);}
+function isZeroExp(a){return a.every(v=>v===0);}
+function expKey(e){return e.join(',');}
+function simplify(terms){
+  const map=new Map();
+  for(const t of terms){const k=expKey(t.exp); map.set(k,(map.get(k)||0)+t.coef);}
+  const out=[];
+  for(const [k,coef] of map.entries()) if(coef!==0) out.push({coef,exp:k.split(',').map(Number)});
+  out.sort((a,b)=>expKey(a.exp).localeCompare(expKey(b.exp)));
+  return out;
+}
+function scaleTerms(terms,factor){return terms.map(t=>({coef:t.coef*factor.coef, exp:addExp(t.exp,factor.exp)}));}
+function subTermsLists(a,b){return simplify([...a, ...b.map(t=>({coef:-t.coef,exp:t.exp}))]);}
+function isUnitEntry(terms){return terms.length===1 && Math.abs(terms[0].coef)===1 && isZeroExp(terms[0].exp);}
+
+function subsetsOfSize(n,k){
+  const res=[]; const idxs=[...Array(n).keys()];
+  function rec(start,chosen){ if(chosen.length===k){res.push([...chosen]); return;} for(let i=start;i<n;i++){chosen.push(idxs[i]); rec(i+1,chosen); chosen.pop();} }
+  rec(0,[]); return res;
+}
+function lcmOfSubset(gens,subset){ let acc=gens[subset[0]]; for(let i=1;i<subset.length;i++) acc=lcmExp(acc,gens[subset[i]]); return acc; }
+
+function buildTaylor(gens){
+  const n=gens.length;
+  const basis=[[[]]];
+  for(let k=1;k<=n;k++) basis.push(subsetsOfSize(n,k));
+  const multideg=basis.map(level=>level.map(S=>S.length===0? gens[0].map(()=>0) : lcmOfSubset(gens,S)));
+  const D=[];
+  for(let k=1;k<=n;k++){
+    const rows=basis[k-1], cols=basis[k];
+    const mat=rows.map(()=>cols.map(()=>[]));
+    cols.forEach((S,cIdx)=>{
+      const mS=multideg[k][cIdx];
+      S.forEach((i,pos)=>{
+        const Sminus=S.filter(x=>x!==i);
+        const rIdx=rows.findIndex(R=>R.length===Sminus.length && R.every((v,j)=>v===Sminus[j]));
+        const mR=multideg[k-1][rIdx];
+        const sign=pos%2===0?1:-1;
+        const quotient=subExp(mS,mR);
+        mat[rIdx][cIdx]=[{coef:sign,exp:quotient}];
+      });
+    });
+    D.push(mat);
+  }
+  return {n,basis,multideg,D};
+}
+
+function reduceToMinimal(taylor){
+  const {n}=taylor;
+  const alive=taylor.basis.map(level=>level.map((_,i)=>i));
+  const D=taylor.D;
+  function getEntry(k,r,c){return D[k-1][r][c];}
+  function setEntry(k,r,c,val){D[k-1][r][c]=val;}
+  let changed=true;
+  while(changed){
+    changed=false;
+    for(let k=1;k<=n && !changed;k++){
+      const rows=alive[k-1], cols=alive[k];
+      outer:
+      for(const r of rows){
+        for(const c of cols){
+          const entry=getEntry(k,r,c);
+          if(isUnitEntry(entry)){
+            const u=entry[0];
+            const uInv={coef:u.coef, exp:[0,0,0]};
+            for(const i of rows){
+              if(i===r) continue;
+              for(const j of cols){
+                if(j===c) continue;
+                const Dij=getEntry(k,i,j), Dic=getEntry(k,i,c), Drj=getEntry(k,r,j);
+                if(Dic.length && Drj.length){
+                  const correction=[];
+                  for(const t1 of Dic) for(const t2 of scaleTerms(Drj,uInv))
+                    correction.push({coef:t1.coef*t2.coef, exp:addExp(t1.exp,t2.exp)});
+                  setEntry(k,i,j, subTermsLists(Dij,correction));
+                }
+              }
+            }
+            alive[k-1]=alive[k-1].filter(x=>x!==r);
+            alive[k]=alive[k].filter(x=>x!==c);
+            changed=true;
+            break outer;
+          }
+        }
+      }
+    }
+  }
+  return {alive,D,basis:taylor.basis,multideg:taylor.multideg,n};
+}
+
+function summarize(gens){
+  const taylor=buildTaylor(gens);
+  const red=reduceToMinimal(taylor);
+  const {alive,D,basis,multideg,n}=red;
+  const levels=[];
+  for(let k=0;k<=n;k++){
+    const idxs=alive[k];
+    levels.push({rank:idxs.length, generators: idxs.map(i=>({subset:basis[k][i], multidegree:multideg[k][i]}))});
+  }
+  const maps=[];
+  for(let k=1;k<=n;k++){
+    const rows=alive[k-1], cols=alive[k];
+    if(rows.length===0 && cols.length===0) continue;
+    const matrix=rows.map(r=>cols.map(c=>D[k-1][r][c]));
+    maps.push({k, rows: rows.map(r=>multideg[k-1][r]), cols: cols.map(c=>multideg[k][c]), matrix});
+  }
+  const bettiTable=levels.map((lvl,k)=>{
+    const byDeg=new Map();
+    lvl.generators.forEach(g=>{ const key=g.multidegree.join(','); byDeg.set(key,(byDeg.get(key)||0)+1); });
+    return {k, entries:[...byDeg.entries()].map(([deg,count])=>({degree:deg.split(',').map(Number), count}))};
+  });
+  return {levels, maps, bettiTable};
+}
+
+/* ================= RENDER ================= */
+const VARS=['x','y','z'];
+function monoLatex(exp){
+  const parts=[];
+  exp.forEach((e,i)=>{ if(e===1) parts.push(VARS[i]); else if(e>1) parts.push(VARS[i]+'^{'+e+'}'); });
+  return parts.length? parts.join(''): '1';
+}
+function termsLatex(terms){
+  if(terms.length===0) return '0';
+  return terms.map((t,idx)=>{
+    const m=monoLatex(t.exp);
+    const sign = t.coef<0 ? '-' : (idx===0?'':'+');
+    const ac=Math.abs(t.coef);
+    const cs = ac===1? '' : String(ac);
+    return sign+cs+m;
+  }).join('\\,');
+}
+function katexHtml(latex){
+  try{ return katex.renderToString(latex,{throwOnError:false}); }catch(e){ return latex; }
+}
+
+function genInputsHtml(n){
+  let html='';
+  for(let g=0; g<n; g++){
+    html += `<div class="gen-input"><span class="lbl">m<sub>${g+1}</sub></span>`;
+    for(let v=0; v<3; v++){
+      html += `<input type="number" min="0" value="${g===v?2:0}" data-g="${g}" data-v="${v}">`;
+    }
+    html += `</div>`;
+  }
+  return html;
+}
+
+function readGens(n){
+  const gens=[];
+  for(let g=0; g<n; g++){
+    const row=[0,0,0];
+    for(let v=0; v<3; v++){
+      row[v] = parseInt(document.querySelector(`input[data-g="${g}"][data-v="${v}"]`).value) || 0;
+    }
+    gens.push(row);
+  }
+  return gens;
+}
+
+function setGens(gensStr){
+  const gens = gensStr.split(';').map(s=>s.split(',').map(Number));
+  document.getElementById('gen-inputs').innerHTML = genInputsHtml(gens.length);
+  gens.forEach((row,g)=>{
+    row.forEach((val,v)=>{
+      document.querySelector(`input[data-g="${g}"][data-v="${v}"]`).value = val;
+    });
+  });
+  render(gens);
+}
+
+function render(gens){
+  // Validar minimalidad (ningún generador divide a otro)
+  const divides=(a,b)=>a.every((v,i)=>v<=b[i]);
+  for(let i=0;i<gens.length;i++) for(let j=0;j<gens.length;j++){
+    if(i!==j && divides(gens[i],gens[j])){
+      document.getElementById('stage-body').innerHTML = `<div class="err">El generador m${j+1} es múltiplo de m${i+1} — el conjunto no es minimal. Ajusta los exponentes.</div>`;
+      document.getElementById('betti-panel').innerHTML='';
+      return;
+    }
+  }
+
+  const result = summarize(gens);
+
+  let html = '';
+
+  // --- Matriz B(G) ---
+  html += `<div><div class="section-h" style="margin-top:0;">Matriz B(G) — exponentes</div>`;
+  html += `<div class="matrix-wrap"><span class="bigparen">(</span><table><tr>`;
+  gens.forEach((_,i)=>html+=`<th>m<sub>${i+1}</sub></th>`);
+  html+=`</tr>`;
+  for(let v=0; v<3; v++){
+    html+=`<tr>`;
+    gens.forEach(g=>html+=`<td>${g[v]}</td>`);
+    html+=`</tr>`;
+  }
+  html+=`</table><span class="bigparen">)</span></div>`;
+  html+=`<p class="subtitle" style="margin-top:8px;">Ideal: <span id="ideal-latex"></span></p></div>`;
+
+  // --- Resolución (rangos) ---
+  html += `<div><div class="section-h">Resolución libre minimal</div><div class="resolution-line">0`;
+  for(let k=result.levels.length-1; k>=0; k--){
+    html += ` <span class="arrow">→</span> <span class="F">F<sub>${k}</sub></span><span class="rank-badge">rango ${result.levels[k].rank}</span>`;
+  }
+  html += ` <span class="arrow">→</span> R/I <span class="arrow">→</span> 0</div></div>`;
+
+  // --- Mapas diferenciales ---
+  html += `<div><div class="section-h">Mapas diferenciales</div>`;
+  result.maps.forEach(m=>{
+    html += `<div class="diffmap"><div class="diffmap-title"><span class="F">F<sub>${m.k}</sub></span> → <span class="F">F<sub>${m.k-1}</sub></span> &nbsp; (∂<sub>${m.k}</sub>)</div>`;
+    html += `<table><tr><th></th>`;
+    m.cols.forEach(c=>html+=`<th>[${c.join(',')}]</th>`);
+    html+=`</tr>`;
+    m.matrix.forEach((row,i)=>{
+      html+=`<tr><th>[${m.rows[i].join(',')}]</th>`;
+      row.forEach(entry=>{
+        const cls = entry.length===0 ? 'entry-zero' : (entry[0].coef<0?'entry-neg':'entry-pos');
+        html += `<td class="${cls}" data-latex="${termsLatex(entry).replace(/"/g,'&quot;')}"></td>`;
+      });
+      html+=`</tr>`;
+    });
+    html+=`</table></div>`;
+  });
+  html += `</div>`;
+
+  document.getElementById('stage-body').innerHTML = html;
+
+  // Render KaTeX en celdas y en el ideal
+  document.querySelectorAll('td[data-latex]').forEach(td=>{
+    td.innerHTML = katexHtml(td.getAttribute('data-latex'));
+  });
+  document.getElementById('ideal-latex').innerHTML = katexHtml(
+    '\\langle ' + gens.map(g=>monoLatex(g)).join(',\\,') + ' \\rangle'
+  );
+
+  // --- Panel de Betti ---
+  let bhtml='';
+  result.bettiTable.forEach(row=>{
+    if(row.entries.length===0) return;
+    bhtml += `<div class="analysis-card"><div class="readout-grid">`;
+    row.entries.forEach(e=>{
+      bhtml += `<div class="row"><span>β<sub>${row.k},(${e.degree.join(',')})</span> <b>${e.count}</b></div>`;
+    });
+    bhtml += `</div></div>`;
+  });
+  const pd = result.levels.length - 1 - (result.levels[result.levels.length-1].rank===0 ? countTrailingZeros(result.levels) : 0);
+  document.getElementById('betti-panel').innerHTML = bhtml || '<p class="subtitle">Sin datos.</p>';
+}
+function countTrailingZeros(levels){
+  let c=0;
+  for(let i=levels.length-1;i>=0;i--){ if(levels[i].rank===0) c++; else break; }
+  return c;
+}
+
+document.querySelectorAll('.preset').forEach(p=>{
+  p.addEventListener('click', ()=> setGens(p.getAttribute('data-gens')));
+});
+document.getElementById('calc-btn').addEventListener('click', ()=> render(readGens(3)));
+
+// Inicializar con el ejemplo del usuario
+setGens('2,1,3;4,4,1;1,3,6');
+</script>
+</body>
+</html>
