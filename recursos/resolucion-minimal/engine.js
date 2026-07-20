@@ -249,3 +249,63 @@ function summarize(gens, varNames = ['x', 'y', 'z']) {
 }
 
 module.exports = { buildTaylor, reduceToMinimal, summarize, polyToString };
+
+/* =========================================================================
+   DESCOMPOSICIÓN IRREDUCIBLE IRREDUNDANTE (∞-covers maximales)
+   Teorema 2.12 (Ibarguen–Moran–Valencia–Villarreal, "The signature of a
+   monomial ideal"): I_G = ∩_{a∈T(G)} m^a, donde T(G) es el conjunto de
+   ∞-covers maximales de la anticadena G.
+   ========================================================================= */
+
+function supportOf(g) {
+  return g.map((v, i) => i).filter((i) => g[i] > 0);
+}
+
+function cartesianProduct(arrays) {
+  return arrays.reduce((acc, arr) => {
+    const out = [];
+    for (const a of acc) for (const x of arr) out.push([...a, x]);
+    return out;
+  }, [[]]);
+}
+
+function computeInfinityCovers(gens) {
+  const n = gens[0].length;
+  const supports = gens.map(supportOf);
+  const combos = cartesianProduct(supports); // cada combo: J (longitud q)
+
+  const covers = combos.map((J) => {
+    const c = new Array(n).fill(Infinity);
+    J.forEach((k, i) => {
+      const val = gens[i][k];
+      if (c[k] === Infinity || val < c[k]) c[k] = val;
+    });
+    return c;
+  });
+
+  // deduplicar
+  const uniqueMap = new Map();
+  covers.forEach((c) => uniqueMap.set(c.join(','), c));
+  const uniqueCovers = [...uniqueMap.values()];
+
+  // filtrar maximales: c es maximal si no existe d != c con c <= d (componente a componente)
+  const leq = (a, b) => a.every((v, i) => v <= b[i]);
+  const isStrictlyDominated = (c) =>
+    uniqueCovers.some((d) => d !== c && leq(c, d) && !leq(d, c));
+  const maximal = uniqueCovers.filter((c) => !isStrictlyDominated(c));
+
+  return maximal; // array de vectores en (N ∪ {∞})^n
+}
+
+function irreducibleDecomposition(gens) {
+  const covers = computeInfinityCovers(gens);
+  // cada cover a produce el factor irreducible m^a = <x_i^{a_i} : a_i finito>
+  const factors = covers.map((a) => ({
+    exponents: a, // Infinity donde no aplica
+    finiteIdx: a.map((v, i) => (v !== Infinity ? i : null)).filter((i) => i !== null),
+  }));
+  return factors;
+}
+
+module.exports.computeInfinityCovers = computeInfinityCovers;
+module.exports.irreducibleDecomposition = irreducibleDecomposition;

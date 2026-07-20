@@ -161,6 +161,87 @@ function scaleTerms(terms,factor){return terms.map(t=>({coef:t.coef*factor.coef,
 function subTermsLists(a,b){return simplify([...a, ...b.map(t=>({coef:-t.coef,exp:t.exp}))]);}
 function isUnitEntry(terms){return terms.length===1 && Math.abs(terms[0].coef)===1 && isZeroExp(terms[0].exp);}
 
+/* --- Descomposición irreducible irredundante (∞-covers maximales, Thm 2.12) --- */
+function supportOf(g){ return g.map((v,i)=>i).filter(i=>g[i]>0); }
+function cartesianProduct(arrays){
+  return arrays.reduce((acc,arr)=>{
+    const out=[]; for(const a of acc) for(const x of arr) out.push([...a,x]); return out;
+  },[[]]);
+}
+function computeInfinityCovers(gens){
+  const n=gens[0].length;
+  const supports=gens.map(supportOf);
+  const combos=cartesianProduct(supports);
+  const covers=combos.map(J=>{
+    const c=new Array(n).fill(Infinity);
+    J.forEach((k,i)=>{ const val=gens[i][k]; if(c[k]===Infinity || val<c[k]) c[k]=val; });
+    return c;
+  });
+  const uniqueMap=new Map();
+  covers.forEach(c=>uniqueMap.set(c.join(','),c));
+  const uniqueCovers=[...uniqueMap.values()];
+  const leq=(a,b)=>a.every((v,i)=>v<=b[i]);
+  const isDominated=c=>uniqueCovers.some(d=>d!==c && leq(c,d) && !leq(d,c));
+  return uniqueCovers.filter(c=>!isDominated(c));
+}
+function irreducibleDecomposition(gens){
+  const covers=computeInfinityCovers(gens);
+  return covers.map(a=>({
+    exponents:a,
+    finiteIdx:a.map((v,i)=>v!==Infinity?i:null).filter(i=>i!==null)
+  }));
+}
+
+/* --- Signatura σ(I_G): rango de cada fila (variable) del incidence matrix --- */
+function computeSignature(gens){
+  const n=gens[0].length;
+  const sigma=[];
+  for(let v=0; v<n; v++){
+    const row=gens.map(g=>g[v]);
+    const distinct=[...new Set(row)].sort((a,b)=>a-b);
+    const rank=new Map(distinct.map((val,idx)=>[val,idx]));
+    sigma.push(row.map(val=>rank.get(val)));
+  }
+  return sigma; // sigma[v][i], v=variable, i=generador
+}
+
+/* --- Datos del poset de la resolución (Hasse diagram, Subsección 3.4.2 de la tesis) --- */
+function computeLatticeData(gens){
+  const taylorPristine = buildTaylor(gens);
+  const taylorForReduction = buildTaylor(gens);
+  const red = reduceToMinimal(taylorForReduction);
+  const n = taylorPristine.n;
+  const levels = [];
+  for(let k=0; k<=n; k++){
+    levels.push(taylorPristine.basis[k].map((S,idx)=>({
+      subset:S,
+      multidegree: taylorPristine.multideg[k][idx],
+      alive: red.alive[k].includes(idx),
+      idx
+    })));
+  }
+  const grayEdges=[];
+  for(let k=1; k<=n; k++){
+    taylorPristine.basis[k].forEach((S,cIdx)=>{
+      S.forEach(i=>{
+        const Sminus=S.filter(x=>x!==i);
+        const rIdx=taylorPristine.basis[k-1].findIndex(R=>R.length===Sminus.length && R.every((v,j)=>v===Sminus[j]));
+        grayEdges.push({k, rIdx, cIdx});
+      });
+    });
+  }
+  const redEdges=[];
+  for(let k=1; k<=n; k++){
+    red.alive[k-1].forEach(r=>{
+      red.alive[k].forEach(c=>{
+        const entry = red.D[k-1][r][c];
+        if(entry.length>0) redEdges.push({k, rIdx:r, cIdx:c, label: termsLatex(entry)});
+      });
+    });
+  }
+  return {levels, grayEdges, redEdges, n};
+}
+
 function subsetsOfSize(n,k){
   const res=[]; const idxs=[...Array(n).keys()];
   function rec(start,chosen){ if(chosen.length===k){res.push([...chosen]); return;} for(let i=start;i<n;i++){chosen.push(idxs[i]); rec(i+1,chosen); chosen.pop();} }
@@ -281,6 +362,57 @@ function katexHtml(latex){
   try{ return katex.renderToString(latex,{throwOnError:false}); }catch(e){ return latex; }
 }
 
+function renderLatticeSVG(gens){
+  const data = computeLatticeData(gens);
+  const W = 640, Hpad = 60, rowGap = 110;
+  const H = Hpad*2 + data.n*rowGap;
+  const nodePos = {}; // key "k,idx" -> {x,y}
+  data.levels.forEach((level, k) => {
+    const y = H - Hpad - k*rowGap; // k=0 abajo, k=n arriba
+    const count = level.length;
+    level.forEach((node, i) => {
+      const x = W/2 + (i - (count-1)/2) * (count===1? 0 : 170);
+      nodePos[`${k},${node.idx}`] = {x, y};
+    });
+  });
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Spline Sans Mono, monospace">`;
+
+  // aristas grises (estructura completa del complejo de Taylor)
+  data.grayEdges.forEach(e => {
+    const p1 = nodePos[`${e.k-1},${e.rIdx}`], p2 = nodePos[`${e.k},${e.cIdx}`];
+    svg += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="var(--line)" stroke-width="1.4"/>`;
+  });
+  // aristas rojas (diferenciales que sobreviven en la resolución minimal)
+  data.redEdges.forEach(e => {
+    const p1 = nodePos[`${e.k-1},${e.rIdx}`], p2 = nodePos[`${e.k},${e.cIdx}`];
+    svg += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="var(--rose)" stroke-width="2.4"/>`;
+  });
+  // nodos
+  data.levels.forEach((level, k) => {
+    level.forEach(node => {
+      const p = nodePos[`${k},${node.idx}`];
+      const label = k===0 ? '1' : monoPlain(node.multidegree);
+      const r = node.alive ? 20 : 13;
+      const fill = node.alive ? 'var(--panel)' : 'var(--void)';
+      const stroke = node.alive ? 'var(--gold)' : 'var(--line)';
+      const textColor = node.alive ? 'var(--ink)' : 'var(--ink-faint)';
+      svg += `<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="1.6"/>`;
+      svg += `<text x="${p.x}" y="${p.y+r+16}" text-anchor="middle" font-size="12" fill="${textColor}">${escapeXml(label)}</text>`;
+    });
+  });
+  svg += `</svg>`;
+  return svg;
+}
+const SUP = {0:'⁰',1:'¹',2:'²',3:'³',4:'⁴',5:'⁵',6:'⁶',7:'⁷',8:'⁸',9:'⁹'};
+function toSup(n){ return String(n).split('').map(d=>SUP[d]).join(''); }
+function monoPlain(exp){
+  const parts=[];
+  exp.forEach((e,i)=>{ if(e===1) parts.push(VARS[i]); else if(e>1) parts.push(VARS[i]+toSup(e)); });
+  return parts.length? parts.join(''): '1';
+}
+function escapeXml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 function genInputsHtml(n){
   let html='';
   for(let g=0; g<n; g++){
@@ -344,6 +476,20 @@ function render(gens){
   html+=`</table><span class="bigparen">)</span></div>`;
   html+=`<p class="subtitle" style="margin-top:8px;">Ideal: <span id="ideal-latex"></span></p></div>`;
 
+  // --- Signatura σ(I_G) ---
+  const sigma = computeSignature(gens);
+  html += `<div><div class="section-h">Signatura <span class="betti-degree">σ(I<sub>G</sub>) — Def. 3.2.5</span></div>`;
+  html += `<div class="matrix-wrap"><span class="bigparen">(</span><table><tr>`;
+  gens.forEach((_,i)=>html+=`<th>m<sub>${i+1}</sub></th>`);
+  html+=`</tr>`;
+  for(let v=0; v<3; v++){
+    html+=`<tr>`;
+    sigma[v].forEach(val=>html+=`<td>${val}</td>`);
+    html+=`</tr>`;
+  }
+  html+=`</table><span class="bigparen">)</span></div>`;
+  html+=`<p class="subtitle">Cada fila codifica el orden relativo de los exponentes de esa variable entre los generadores (rango 0 = menor).</p></div>`;
+
   // --- Resolución (rangos) ---
   html += `<div><div class="section-h">Resolución libre minimal</div><div class="resolution-line">0`;
   for(let k=result.levels.length-1; k>=0; k--){
@@ -370,7 +516,21 @@ function render(gens){
   });
   html += `</div>`;
 
+  // --- Poset de la resolución (Hasse diagram, Subsección 3.4.2) ---
+  html += `<div><div class="section-h">Poset de la resolución <span class="betti-degree">(reticulado de subconjuntos; rojo = flechas de ∂ que sobreviven)</span></div>`;
+  html += `<div id="lattice-svg-wrap" style="display:flex; justify-content:center;"></div></div>`;
+  const irrFactors = irreducibleDecomposition(gens);
+  html += `<div><div class="section-h">Descomposición irreducible irredundante <span class="betti-degree">(∞-covers maximales, Thm. 2.12)</span></div>`;
+  const factorLatex = irrFactors.map(f => {
+    const parts = f.finiteIdx.map(i => f.exponents[i]===1 ? VARS[i] : VARS[i]+'^{'+f.exponents[i]+'}');
+    return '\\langle ' + parts.join(',\\,') + ' \\rangle';
+  });
+  html += `<p style="font-size:15px;" id="irr-decomp-latex"></p>`;
+  html += `<p class="subtitle">${irrFactors.length} factor(es) irreducible(s) — cada uno corresponde a un ∞-cover maximal de la anticadena de exponentes.</p></div>`;
+
   document.getElementById('stage-body').innerHTML = html;
+  document.getElementById('lattice-svg-wrap').innerHTML = renderLatticeSVG(gens);
+  document.getElementById('irr-decomp-latex').innerHTML = katexHtml(factorLatex.join('\\;\\cap\\;'));
 
   // Render KaTeX en celdas y en el ideal
   document.querySelectorAll('td[data-latex]').forEach(td=>{
