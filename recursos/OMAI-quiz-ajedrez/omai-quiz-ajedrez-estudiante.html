@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OMAI-Quiz Ajedrez — Estudiante</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    --void: #08090c; --abyss: #0f1116; --panel: #15181f;
+    --gold: #c9a04d; --gold-bright: #e8c273;
+    --cyan: #4dc9c9; --rose: #c96b7a; --grass: #7ac97a; --violet: #9a7ac9;
+    --good: #7ac97a; --bad: #c96b6b;
+    --line: #262b36; --line-soft: #1b1e27;
+    --ink: #eceef2; --ink-soft: #a7acb9; --ink-faint: #6b7080;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--void); color: var(--ink);
+    font-family: "Inter Tight", sans-serif; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 16px; padding-top: 60px;
+  }
+  #barra-sala {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: none; align-items: center; justify-content: center;
+    background: var(--panel); border-bottom: 1px solid var(--line);
+    padding: 8px; font-family: "Spline Sans Mono", monospace; font-size: 14px; color: var(--gold-bright);
+  }
+  #barra-sala b { font-size: 17px; letter-spacing: 0.08em; margin-left: 6px; }
+  .eyebrow {
+    font-family: "Spline Sans Mono", monospace; font-size: 11px; letter-spacing: 0.12em;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 8px; text-align: center;
+  }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 28px; max-width: 420px; width: 100%; text-align: center; }
+  input:not([type="checkbox"]) {
+    width: 100%; padding: 14px; font-size: 18px; border-radius: 10px;
+    border: 1px solid var(--line-soft); background: var(--abyss); color: var(--ink);
+    margin: 12px 0; font-family: "Inter Tight", sans-serif;
+  }
+  input[type="checkbox"] { width: 16px; height: 16px; flex: none; margin: 0; }
+  .btn { width: 100%; font-weight: 600; font-size: 17px; background: var(--gold); color: var(--void); border: none; border-radius: 10px; padding: 16px; cursor: pointer; }
+  .btn:disabled { background: var(--line); color: var(--ink-faint); }
+  .puntos-actuales { font-family: "Spline Sans Mono", monospace; color: var(--gold-bright); font-size: 14px; }
+  .pregunta-texto { font-family: "Fraunces", serif; font-size: 21px; margin: 14px 0; color: var(--ink); }
+  .pregunta-imagen { max-width: 100%; max-height: 200px; border-radius: 10px; margin: 10px 0; }
+  .opciones-col { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .opcion-btn { padding: 22px 16px; border-radius: 12px; font-size: 17px; font-weight: 500; border: none; color: #08090c; cursor: pointer; text-align: left; }
+  .opcion-btn:nth-child(1) { background: var(--cyan); }
+  .opcion-btn:nth-child(2) { background: var(--rose); }
+  .opcion-btn:nth-child(3) { background: var(--grass); }
+  .opcion-btn:nth-child(4) { background: var(--violet); }
+  .opcion-btn:disabled { opacity: 0.4; }
+  .opcion-btn.elegida { outline: 4px solid var(--gold-bright); }
+  .estado-msg { color: var(--ink-soft); margin-top: 20px; }
+  .resultado-correcta { color: var(--good); font-size: 20px; font-weight: 600; }
+  .resultado-incorrecta { color: var(--bad); font-size: 20px; font-weight: 600; }
+  #cronometro-estudiante.urgente { color: var(--bad); }
+  .estrella-confeti { position: absolute; top: -5%; font-size: 20px; animation: caer-confeti linear forwards; }
+  @keyframes caer-confeti {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
+  }
+
+  /* Responsive: en pantallas más anchas (PC), tarjetas más amplias */
+  @media (min-width: 700px) {
+    .card { max-width: 560px; padding: 36px; }
+    .card.card-ancha { max-width: 680px; }
+  }
+
+  .btn-modo {
+    width: 100%; padding: 20px; border-radius: 12px; border: 1px solid var(--line-soft);
+    background: var(--abyss); color: var(--ink); font-size: 16px; font-weight: 600;
+    cursor: pointer; margin-bottom: 14px; text-align: left;
+  }
+  .btn-modo small { display:block; color: var(--ink-soft); font-weight: 400; font-size: 13px; margin-top: 4px; }
+  .btn-modo:hover { border-color: var(--gold); }
+  .link-volver { color: var(--ink-soft); font-size: 13px; cursor: pointer; display: inline-block; margin-bottom: 12px; }
+  .link-volver:hover { color: var(--gold-bright); }
+
+  .lista-bancos-repaso { text-align: left; margin: 14px 0; border: 1px solid var(--line-soft); border-radius: 10px; padding: 12px; max-height: 260px; overflow-y: auto; }
+  .banco-item-repaso { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; }
+  .banco-item-repaso .conteo { color: var(--ink-faint); font-size: 12px; }
+  .campo-config-repaso { text-align: left; margin: 14px 0; }
+  .campo-config-repaso label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+
+  #panel-ruleta-repaso {
+    position: fixed; bottom: 20px; right: 20px; z-index: 60;
+    background: var(--abyss); border: 1px solid var(--gold); border-radius: 14px;
+    padding: 14px; text-align: center; width: 200px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  #ruleta-svg-repaso-wrap { position: relative; width: 170px; height: 170px; margin: 10px auto; }
+  #ruleta-puntero-repaso {
+    position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent;
+    border-top: 15px solid var(--gold-bright); z-index: 2;
+  }
+  #ruleta-svg-repaso { transition: transform 3.5s cubic-bezier(0.12, 0.72, 0.15, 1); }
+  .btn-secundario-repaso {
+    background: transparent; border: 1px solid var(--line-soft); color: var(--ink-soft);
+    font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 8px;
+  }
+  @media (max-width: 480px) {
+    #panel-ruleta-repaso { width: 160px; padding: 10px; bottom: 12px; right: 12px; }
+    #ruleta-svg-repaso-wrap { width: 130px !important; height: 130px !important; }
+  }
+</style>
+</head>
+<body>
+  <div id="panel-ruleta-repaso" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="eyebrow" style="margin-bottom:0;">🎡 Tu ruleta</div>
+      <span id="btn-cerrar-ruleta-repaso" style="cursor:pointer; color:var(--ink-soft); font-size:18px; line-height:1;">×</span>
+    </div>
+    <div id="ruleta-svg-repaso-wrap">
+      <div id="ruleta-puntero-repaso"></div>
+      <svg id="ruleta-svg-repaso" viewBox="0 0 170 170" width="170" height="170"></svg>
+    </div>
+    <button class="btn-secundario-repaso" id="btn-girar-ruleta-repaso-flotante" style="margin-top:4px;">Girar</button>
+  </div>
+  <button id="btn-abrir-ruleta-repaso" style="display:none; position:fixed; bottom:20px; right:20px; z-index:59; background:var(--gold); color:var(--void); border:none; border-radius:50%; width:52px; height:52px; font-size:22px; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,0.4);">🎡</button>
+
+  <div id="barra-sala">Sala: <b id="barra-codigo"></b></div>
+  <button id="btn-musica-est" style="position:fixed; top:10px; right:12px; z-index:65; background:var(--panel); border:1px solid var(--line-soft); color:var(--gold-bright); border-radius:8px; padding:6px 12px; cursor:pointer; font-size:15px;">🔊 Música</button>
+  <div class="eyebrow">OMAI-Quiz · Ajedrez</div>
+
+  <div class="card" id="vista-modo-inicial">
+    <p>¿Qué quieres hacer?</p>
+    <button class="btn-modo" id="btn-elegir-sala">
+      🏫 Unirme a una sala con mi profesor
+      <small>Necesitas el código que te dé el docente.</small>
+    </button>
+    <button class="btn-modo" id="btn-elegir-repaso">
+      📚 Modo de repaso individual
+      <small>Practica solo, a tu ritmo, eligiendo tema, tiempo y número de preguntas.</small>
+    </button>
+  </div>
+
+  <div class="card" id="vista-unirse" style="display:none;">
+    <div class="link-volver" id="link-volver-unirse">← Volver</div>
+    <p>Ingresa el código de la sala y tu nombre. Puedes entrar en cualquier momento, aunque el quiz ya haya empezado.</p>
+    <input id="input-codigo" placeholder="Código (ej. AB12)" maxlength="4" style="text-transform:uppercase" />
+    <input id="input-nombre" placeholder="Tu nombre" maxlength="24" />
+    <button class="btn" id="btn-unirse">Entrar</button>
+    <p class="estado-msg" id="mensaje-error"></p>
+  </div>
+
+  <div class="card" id="vista-esperando" style="display:none;">
+    <p>¡Listo, <b id="nombre-mostrado"></b>! Esperando a que el profesor inicie o avance el quiz…</p>
+  </div>
+
+  <div class="card" id="vista-pregunta" style="display:none;">
+    <div class="eyebrow" id="contador-pregunta"></div>
+    <div id="cronometro-estudiante" style="font-family:'Spline Sans Mono',monospace; font-size:32px; color:var(--gold-bright); margin-bottom:8px;">20</div>
+    <div class="pregunta-texto" id="texto-pregunta"></div>
+    <img id="pregunta-imagen" class="pregunta-imagen" style="display:none;" />
+    <div class="opciones-col" id="opciones-col"></div>
+  </div>
+
+  <div class="card" id="vista-resultado" style="display:none;">
+    <div id="resultado-texto"></div>
+    <p class="puntos-actuales" id="puntos-totales"></p>
+    <p class="estado-msg">Esperando la siguiente pregunta…</p>
+  </div>
+
+  <div id="capa-confeti" style="position:fixed; inset:0; pointer-events:none; z-index:70; overflow:hidden; display:none;"></div>
+
+  <div class="card" id="vista-final" style="display:none;">
+    <h2 style="font-family:'Fraunces',serif;color:var(--gold-bright);">Quiz terminado</h2>
+    <div id="mi-animal-final" style="font-size:48px; margin-bottom:8px;"></div>
+    <p class="puntos-actuales" id="puntos-finales"></p>
+    <p id="posicion-final" style="color:var(--ink-soft)"></p>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-config" style="display:none;">
+    <div class="link-volver" id="link-volver-repaso">← Volver</div>
+    <p><b>Modo de repaso individual</b></p>
+    <p style="color:var(--ink-soft); font-size:14px;">Elige de qué temas quieres practicar.</p>
+    <div class="lista-bancos-repaso" id="lista-bancos-repaso">Cargando bancos…</div>
+
+    <div class="campo-config-repaso">
+      <label for="input-num-preguntas-repaso">Número de preguntas (máximo 20)</label>
+      <input type="number" id="input-num-preguntas-repaso" min="1" max="20" value="10" />
+    </div>
+    <div class="campo-config-repaso">
+      <label for="input-tiempo-repaso">Tiempo por pregunta (segundos)</label>
+      <input type="number" id="input-tiempo-repaso" min="5" value="20" />
+    </div>
+
+    <button class="btn" id="btn-comenzar-repaso">Comenzar repaso</button>
+    <p class="estado-msg" id="mensaje-error-repaso"></p>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-pregunta" style="display:none;">
+    <div class="eyebrow" id="contador-repaso"></div>
+    <div id="cronometro-repaso" style="font-family:'Spline Sans Mono',monospace; font-size:32px; color:var(--gold-bright); margin-bottom:8px;">20</div>
+    <div class="pregunta-texto" id="texto-pregunta-repaso"></div>
+    <img id="pregunta-imagen-repaso" class="pregunta-imagen" style="display:none;" />
+    <div class="opciones-col" id="opciones-col-repaso"></div>
+    <button class="btn-secundario-repaso" id="btn-girar-ruleta-repaso">🎡 Girar ruleta para elegir la siguiente</button>
+    <button class="btn-secundario-repaso" id="btn-terminar-repaso">Terminar repaso ya</button>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-resultado" style="display:none;">
+    <div id="resultado-texto-repaso"></div>
+    <p class="puntos-actuales" id="marcador-repaso"></p>
+    <button class="btn" id="btn-siguiente-repaso">Siguiente pregunta</button>
+    <button class="btn-secundario-repaso" id="btn-girar-ruleta-repaso2">🎡 Girar ruleta para elegir la siguiente</button>
+    <button class="btn-secundario-repaso" id="btn-terminar-repaso2">Terminar repaso ya</button>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-final" style="display:none;">
+    <h2 style="font-family:'Fraunces',serif;color:var(--gold-bright);">Repaso terminado</h2>
+    <p class="puntos-actuales" id="resumen-repaso-final" style="font-size:22px;"></p>
+    <button class="btn" id="btn-repetir-repaso">Repetir con la misma configuración</button>
+    <button class="btn-secundario-repaso" id="btn-otro-tema-repaso">Elegir otro tema</button>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { ESTADOS, unirseASala, enviarRespuesta, escucharSala, ranking } from "./omai-quiz-app.js";
+  import { BANCOS_DEFECTO } from "./omai-quiz-ajedrez-bancos-default.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
+    authDomain: "omai-quiz.firebaseapp.com",
+    databaseURL: "https://omai-quiz-default-rtdb.firebaseio.com",
+    projectId: "omai-quiz",
+    storageBucket: "omai-quiz.firebasestorage.app",
+    messagingSenderId: "44663231333",
+    appId: "1:44663231333:web:4467c56d21bca45a82878c",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  let codigoSala = null;
+  let jugadorId = null;
+  let idxPreguntaMostrada = -1;
+  let inicioPreguntaServidor = null;
+  let yaRespondio = false;
+
+  const params = new URLSearchParams(location.search);
+  if (params.get("sala")) {
+    document.getElementById("input-codigo").value = params.get("sala").toUpperCase();
+  }
+
+  function renderizarKatex(el) {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(el, {
+        delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }],
+        throwOnError: false,
+      });
+    }
+  }
+
+  // ---------- Cronómetro local + beep de alerta (últimos 10s) ----------
+  let audioCtx = null;
+  let timerInterval = null;
+  let salaActualCache = null;
+  let ultimoSegundoConBeep = null;
+
+  function asegurarAudioContext() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+  }
+
+  function reproducirBeep(urgente) {
+    asegurarAudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "square";
+    osc.frequency.value = urgente ? 880 : 660;
+    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.12);
+  }
+
+  // ---------- Música de fondo por fases (igual que el docente, para que suene para todos) ----------
+  let musicaActiva = true;
+  let musicaTimer = null;
+  let pasoActual = 0;
+  let faseMusicalActual = null;
+  const PISTAS = {
+    arpegio: { notas: [261.63, 329.63, 392.00, 329.63, 261.63, 392.00, 440.00, 392.00], tempo: 260, onda: "triangle" },
+    lobby: { notas: [196.00, 246.94, 293.66, 246.94], tempo: 480, onda: "sine" },
+    final: { notas: [392.00, 493.88, 587.33, 493.88, 392.00, 587.33, 659.25, 587.33], tempo: 150, onda: "square" },
+  };
+
+  function tocarNota(freq, duracion, onda) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = onda;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duracion);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duracion);
+  }
+  function iniciarMusica(clavePista) {
+    clearInterval(musicaTimer);
+    const p = PISTAS[clavePista];
+    musicaTimer = setInterval(() => {
+      tocarNota(p.notas[pasoActual % p.notas.length], p.tempo / 1000 * 1.3, p.onda);
+      pasoActual++;
+    }, p.tempo);
+  }
+  function actualizarFaseMusical(estado) {
+    const nuevaFase = estado === ESTADOS.TERMINADO ? "final" : (estado === ESTADOS.ESPERANDO ? "lobby" : "juego");
+    if (nuevaFase === faseMusicalActual) return;
+    faseMusicalActual = nuevaFase;
+    if (!musicaActiva) return;
+    iniciarMusica(nuevaFase === "juego" ? "arpegio" : nuevaFase);
+  }
+  document.getElementById("btn-musica-est").onclick = () => {
+    asegurarAudioContext();
+    musicaActiva = !musicaActiva;
+    document.getElementById("btn-musica-est").textContent = musicaActiva ? "🔊 Música" : "🔈 Música";
+    if (musicaActiva && faseMusicalActual) iniciarMusica(faseMusicalActual === "juego" ? "arpegio" : faseMusicalActual);
+    else clearInterval(musicaTimer);
+  };
+
+  // ---------- Fanfarria de bongos al iniciar (idéntica a la del docente) ----------
+  function ruidoBlanco(duracionSeg) {
+    const tam = Math.floor(audioCtx.sampleRate * duracionSeg);
+    const buffer = audioCtx.createBuffer(1, tam, audioCtx.sampleRate);
+    const datos = buffer.getChannelData(0);
+    for (let i = 0; i < tam; i++) datos[i] = Math.random() * 2 - 1;
+    return buffer;
+  }
+  function golpeBongo(offsetSeg, frecuenciaFiltro) {
+    const fuente = audioCtx.createBufferSource();
+    fuente.buffer = ruidoBlanco(0.15);
+    const filtro = audioCtx.createBiquadFilter();
+    filtro.type = "bandpass";
+    filtro.frequency.value = frecuenciaFiltro;
+    filtro.Q.value = 1.1;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.35, audioCtx.currentTime + offsetSeg);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + offsetSeg + 0.16);
+    fuente.connect(filtro).connect(gain).connect(audioCtx.destination);
+    fuente.start(audioCtx.currentTime + offsetSeg);
+  }
+  function reproducirFanfarreInicio() {
+    if (!musicaActiva) return;
+    asegurarAudioContext();
+    [[0, 180], [0.12, 340], [0.24, 180], [0.36, 340], [0.44, 340], [0.56, 500]]
+      .forEach(([t, f]) => golpeBongo(t, f));
+    [523.25, 659.25, 783.99, 1046.50].forEach((freq) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.001, audioCtx.currentTime + 0.7);
+      gain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 0.76);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.6);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime + 0.7);
+      osc.stop(audioCtx.currentTime + 1.6);
+    });
+  }
+  let estadoAnteriorEst = null;
+
+  function actualizarCronometroEstudiante() {
+    if (!salaActualCache || salaActualCache.estado !== ESTADOS.PREGUNTA_ACTIVA) return;
+    const limite = (salaActualCache.tiempoLimiteBase || 20) + (salaActualCache.tiempoExtra || 0);
+    const transcurrido = (Date.now() - inicioPreguntaServidor) / 1000;
+    const restante = Math.max(0, Math.ceil(limite - transcurrido));
+    const el = document.getElementById("cronometro-estudiante");
+    if (el) {
+      el.textContent = restante;
+      el.classList.toggle("urgente", restante <= 10);
+    }
+    if (restante <= 10 && restante >= 1 && restante !== ultimoSegundoConBeep) {
+      ultimoSegundoConBeep = restante;
+      reproducirBeep(restante <= 3);
+    }
+    if (restante <= 0) clearInterval(timerInterval);
+  }
+
+  document.getElementById("btn-unirse").onclick = async () => {
+    const codigo = document.getElementById("input-codigo").value.trim().toUpperCase();
+    const nombre = document.getElementById("input-nombre").value.trim();
+    const errorEl = document.getElementById("mensaje-error");
+    errorEl.textContent = "";
+    if (!codigo || !nombre) { errorEl.textContent = "Completa el código y tu nombre."; return; }
+    asegurarAudioContext();
+    try {
+      jugadorId = await unirseASala(db, codigo, nombre);
+      codigoSala = codigo;
+      document.getElementById("nombre-mostrado").textContent = nombre;
+      document.getElementById("barra-codigo").textContent = codigo;
+      document.getElementById("barra-sala").style.display = "flex";
+      mostrarVista("vista-esperando");
+      escucharSala(db, codigoSala, renderizar);
+    } catch (e) {
+      errorEl.textContent = e.message;
+    }
+  };
+
+  function renderizar(sala) {
+    if (!sala) return;
+    salaActualCache = sala;
+    actualizarFaseMusical(sala.estado);
+    if (estadoAnteriorEst === ESTADOS.ESPERANDO && sala.estado === ESTADOS.PREGUNTA_ACTIVA) {
+      reproducirFanfarreInicio();
+    }
+    estadoAnteriorEst = sala.estado;
+    if (sala.estado === ESTADOS.PREGUNTA_ACTIVA) {
+      if (sala.preguntaActual !== idxPreguntaMostrada) {
+        idxPreguntaMostrada = sala.preguntaActual;
+        yaRespondio = false;
+        ultimoSegundoConBeep = null;
+        inicioPreguntaServidor = sala.inicioPregunta || Date.now();
+        mostrarPregunta(sala);
+        clearInterval(timerInterval);
+        timerInterval = setInterval(actualizarCronometroEstudiante, 250);
+      }
+      actualizarCronometroEstudiante();
+    } else {
+      clearInterval(timerInterval);
+    }
+    if (sala.estado === ESTADOS.RESULTADOS) mostrarResultado(sala);
+    if (sala.estado === ESTADOS.TERMINADO) {
+      const rankingFinal = ranking(sala);
+      const posicion = rankingFinal.findIndex((j) => j.id === jugadorId) + 1;
+      const yo = rankingFinal.find((j) => j.id === jugadorId);
+      document.getElementById("mi-animal-final").textContent = yo?.animal || "🎓";
+      document.getElementById("puntos-finales").textContent = `${yo?.puntos ?? 0} puntos`;
+      document.getElementById("posicion-final").textContent = posicion > 0 ? `Puesto ${posicion} de ${rankingFinal.length}` : "";
+      mostrarVista("vista-final");
+      mostrarConfetiEstudiante();
+    }
+  }
+
+  let ordenOpcionesActual = [0, 1, 2, 3];
+
+  function mezclarOrdenOpciones() {
+    const orden = [0, 1, 2, 3];
+    for (let i = orden.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [orden[i], orden[j]] = [orden[j], orden[i]];
+    }
+    return orden;
+  }
+
+  function mostrarPregunta(sala) {
+    mostrarVista("vista-pregunta");
+    const p = sala.preguntas[sala.preguntaActual];
+    document.getElementById("contador-pregunta").textContent = `Pregunta ${(sala.indicesUsados || []).length} de ${sala.preguntas.length}`;
+    document.getElementById("texto-pregunta").textContent = p.texto;
+    const imgEl = document.getElementById("pregunta-imagen");
+    if (p.imagen) { imgEl.src = p.imagen; imgEl.style.display = "block"; } else { imgEl.style.display = "none"; }
+
+    // Cada estudiante ve las opciones en un orden aleatorio propio, para evitar copia.
+    ordenOpcionesActual = mezclarOrdenOpciones();
+
+    const cont = document.getElementById("opciones-col");
+    cont.innerHTML = "";
+    ordenOpcionesActual.forEach((indiceReal, posicionLocal) => {
+      const btn = document.createElement("button");
+      btn.className = "opcion-btn";
+      btn.textContent = p.opciones[indiceReal];
+      btn.onclick = () => responder(indiceReal, btn);
+      cont.appendChild(btn);
+    });
+    renderizarKatex(document.getElementById("vista-pregunta"));
+  }
+
+  async function responder(opcionIdx, btnEl) {
+    if (yaRespondio) return;
+    yaRespondio = true;
+    document.querySelectorAll(".opcion-btn").forEach((b) => (b.disabled = true));
+    btnEl.classList.add("elegida");
+    const tiempoSegundos = (Date.now() - inicioPreguntaServidor) / 1000;
+    try {
+      await enviarRespuesta(db, codigoSala, idxPreguntaMostrada, jugadorId, opcionIdx, tiempoSegundos);
+    } catch (e) { /* doble click: se ignora */ }
+  }
+
+  function mostrarResultado(sala) {
+    mostrarVista("vista-resultado");
+    const idx = sala.preguntaActual;
+    const respuestaJugador = (sala.respuestas[idx] || {})[jugadorId];
+    const pregunta = sala.preguntas[idx];
+    const el = document.getElementById("resultado-texto");
+
+    if (!respuestaJugador) {
+      el.innerHTML = `<span class="resultado-incorrecta">No respondiste a tiempo</span>`;
+    } else if (respuestaJugador.opcion === pregunta.correcta) {
+      el.innerHTML = `<span class="resultado-correcta">¡Correcto! ✓</span>`;
+    } else {
+      el.innerHTML = `<span class="resultado-incorrecta">Incorrecto ✗</span><br/><small>Tu respuesta: <span id="resp-tuya"></span></small><br/><small>La correcta era: <span id="resp-correcta"></span></small>`;
+    }
+    const miPuntaje = (sala.jugadores[jugadorId] || {}).puntos || 0;
+    document.getElementById("puntos-totales").textContent = `${miPuntaje} puntos totales`;
+    renderizarKatex(el);
+    const spanCorrecta = document.getElementById("resp-correcta");
+    if (spanCorrecta) {
+      spanCorrecta.textContent = pregunta.opciones[pregunta.correcta];
+      renderizarKatex(spanCorrecta);
+    }
+    const spanTuya = document.getElementById("resp-tuya");
+    if (spanTuya && respuestaJugador) {
+      spanTuya.textContent = pregunta.opciones[respuestaJugador.opcion];
+      renderizarKatex(spanTuya);
+    }
+  }
+
+  function mostrarVista(id) {
+    ["vista-modo-inicial", "vista-unirse", "vista-esperando", "vista-pregunta", "vista-resultado", "vista-final",
+     "vista-repaso-config", "vista-repaso-pregunta", "vista-repaso-resultado", "vista-repaso-final"]
+      .forEach((v) => document.getElementById(v).style.display = v === id ? "block" : "none");
+
+    const enModoRepaso = id.startsWith("vista-repaso") && id !== "vista-repaso-final";
+    if (enModoRepaso) {
+      if (ruletaRepasoAbierta) {
+        document.getElementById("panel-ruleta-repaso").style.display = "block";
+        document.getElementById("btn-abrir-ruleta-repaso").style.display = "none";
+      } else {
+        document.getElementById("panel-ruleta-repaso").style.display = "none";
+        document.getElementById("btn-abrir-ruleta-repaso").style.display = "block";
+      }
+    } else {
+      document.getElementById("panel-ruleta-repaso").style.display = "none";
+      document.getElementById("btn-abrir-ruleta-repaso").style.display = "none";
+    }
+  }
+  let ruletaRepasoAbierta = true;
+  document.getElementById("btn-cerrar-ruleta-repaso").onclick = () => {
+    ruletaRepasoAbierta = false;
+    document.getElementById("panel-ruleta-repaso").style.display = "none";
+    document.getElementById("btn-abrir-ruleta-repaso").style.display = "block";
+  };
+  document.getElementById("btn-abrir-ruleta-repaso").onclick = () => {
+    ruletaRepasoAbierta = true;
+    document.getElementById("panel-ruleta-repaso").style.display = "block";
+    document.getElementById("btn-abrir-ruleta-repaso").style.display = "none";
+  };
+  document.getElementById("btn-girar-ruleta-repaso-flotante").onclick = girarRuletaRepaso;
+
+  // ============================================================
+  // Selección de modo (sala con profesor vs. repaso individual)
+  // ============================================================
+  document.getElementById("btn-elegir-sala").onclick = () => mostrarVista("vista-unirse");
+  document.getElementById("btn-elegir-repaso").onclick = () => {
+    asegurarAudioContext();
+    mostrarVista("vista-repaso-config");
+    renderizarListaBancosRepaso();
+    faseMusicalActual = "lobby";
+    if (musicaActiva) iniciarMusica("lobby");
+  };
+  document.getElementById("link-volver-unirse").onclick = () => { clearInterval(musicaTimer); mostrarVista("vista-modo-inicial"); };
+  document.getElementById("link-volver-repaso").onclick = () => { clearInterval(musicaTimer); mostrarVista("vista-modo-inicial"); };
+
+  // ============================================================
+  // MODO DE REPASO INDIVIDUAL (100% local, sin necesitar sala ni profesor)
+  // ============================================================
+  let repasoPreguntas = [];
+  let repasoIndicesUsados = [];
+  let repasoIdxActual = -1;
+  let repasoTiempoBase = 20;
+  let repasoCorrectas = 0;
+  let repasoRespondidas = 0;
+  let repasoOrdenOpciones = [0, 1, 2, 3];
+  let repasoYaRespondio = false;
+  let repasoTimerInterval = null;
+  let repasoInicioPregunta = null;
+  let repasoUltimoSegundoBeep = null;
+  let repasoConfigUsada = null; // para "repetir con la misma configuración"
+
+  function renderizarListaBancosRepaso() {
+    const cont = document.getElementById("lista-bancos-repaso");
+    let html = `<div class="banco-item-repaso">
+      <input type="checkbox" id="chk-todos-repaso" checked />
+      <label for="chk-todos-repaso"><b>Seleccionar todos</b></label>
+    </div><hr style="border-color:var(--line-soft)"/>`;
+
+    const areasEnOrden = [];
+    const bancosPorArea = {};
+    BANCOS_DEFECTO.forEach((b, i) => {
+      const area = b.area || "Otros";
+      if (!bancosPorArea[area]) { bancosPorArea[area] = []; areasEnOrden.push(area); }
+      bancosPorArea[area].push({ ...b, idx: i });
+    });
+
+    areasEnOrden.forEach((area) => {
+      html += `<div style="margin-top:10px; margin-bottom:4px; font-family:'Spline Sans Mono',monospace; font-size:11px; letter-spacing:0.08em; color:var(--gold); text-transform:uppercase;">${area}</div>`;
+      bancosPorArea[area].forEach((b) => {
+        html += `<div class="banco-item-repaso">
+          <input type="checkbox" class="chk-banco-repaso" data-idx="${b.idx}" checked />
+          <label>${b.nombre} <span class="conteo">(${b.preguntas.length})</span></label>
+        </div>`;
+      });
+    });
+
+    cont.innerHTML = html;
+    document.getElementById("chk-todos-repaso").onclick = (e) => {
+      document.querySelectorAll(".chk-banco-repaso").forEach((c) => (c.checked = e.target.checked));
+    };
+  }
+
+  document.getElementById("input-num-preguntas-repaso").addEventListener("input", (e) => {
+    let v = parseInt(e.target.value, 10) || 1;
+    if (v > 20) v = 20;
+    if (v < 1) v = 1;
+    e.target.value = v;
+    dibujarRuedaRepaso(v);
+  });
+
+  function obtenerPreguntasCombinadasRepaso() {
+    const seleccionados = [...document.querySelectorAll(".chk-banco-repaso:checked")].map((c) => parseInt(c.dataset.idx, 10));
+    let combinado = [];
+    seleccionados.forEach((idx) => { combinado = combinado.concat(BANCOS_DEFECTO[idx].preguntas); });
+    return combinado;
+  }
+
+  function mezclarYTomarLocal(arreglo, n) {
+    const copia = [...arreglo];
+    for (let i = copia.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copia[i], copia[j]] = [copia[j], copia[i]];
+    }
+    return copia.slice(0, Math.min(n, copia.length));
+  }
+
+  document.getElementById("btn-comenzar-repaso").onclick = () => {
+    asegurarAudioContext();
+    const combinado = obtenerPreguntasCombinadasRepaso();
+    const errEl = document.getElementById("mensaje-error-repaso");
+    if (combinado.length === 0) {
+      errEl.textContent = "Selecciona al menos un tema.";
+      return;
+    }
+    errEl.textContent = "";
+    let n = parseInt(document.getElementById("input-num-preguntas-repaso").value, 10) || 10;
+    if (n > 20) n = 20;
+    repasoTiempoBase = parseInt(document.getElementById("input-tiempo-repaso").value, 10) || 20;
+    repasoConfigUsada = { combinado, n, tiempo: repasoTiempoBase };
+    iniciarRepasoConConfig(repasoConfigUsada);
+  };
+
+  function iniciarRepasoConConfig(cfg) {
+    repasoPreguntas = mezclarYTomarLocal(cfg.combinado, cfg.n);
+    repasoIndicesUsados = [];
+    repasoCorrectas = 0;
+    repasoRespondidas = 0;
+    repasoTiempoBase = cfg.tiempo;
+    dibujarRuedaRepaso(repasoPreguntas.length);
+    faseMusicalActual = "juego";
+    if (musicaActiva) iniciarMusica("arpegio");
+    reproducirFanfarreInicio();
+    avanzarPreguntaRepasoAleatoria();
+  }
+
+  document.getElementById("btn-repetir-repaso").onclick = () => {
+    if (repasoConfigUsada) iniciarRepasoConConfig(repasoConfigUsada);
+  };
+  document.getElementById("btn-otro-tema-repaso").onclick = () => {
+    mostrarVista("vista-repaso-config");
+    faseMusicalActual = "lobby";
+    if (musicaActiva) iniciarMusica("lobby");
+  };
+
+  function candidatosRepaso() {
+    const candidatos = [];
+    for (let i = 0; i < repasoPreguntas.length; i++) if (!repasoIndicesUsados.includes(i)) candidatos.push(i);
+    return candidatos;
+  }
+
+  function avanzarPreguntaRepasoAleatoria() {
+    const candidatos = candidatosRepaso();
+    if (candidatos.length === 0) {
+      mostrarRepasoFinal();
+      return;
+    }
+    const elegido = candidatos[Math.floor(Math.random() * candidatos.length)];
+    activarPreguntaRepaso(elegido);
+  }
+
+  function activarPreguntaRepaso(idx) {
+    repasoIndicesUsados.push(idx);
+    repasoIdxActual = idx;
+    repasoYaRespondio = false;
+    repasoUltimoSegundoBeep = null;
+    repasoInicioPregunta = Date.now();
+    mostrarPreguntaRepaso();
+    clearInterval(repasoTimerInterval);
+    repasoTimerInterval = setInterval(actualizarCronometroRepaso, 250);
+  }
+
+  function mostrarPreguntaRepaso() {
+    mostrarVista("vista-repaso-pregunta");
+    const p = repasoPreguntas[repasoIdxActual];
+    document.getElementById("contador-repaso").textContent = `Pregunta ${repasoIndicesUsados.length} de ${repasoPreguntas.length}`;
+    document.getElementById("texto-pregunta-repaso").textContent = p.texto;
+    const imgEl = document.getElementById("pregunta-imagen-repaso");
+    if (p.imagen) { imgEl.src = p.imagen; imgEl.style.display = "block"; } else { imgEl.style.display = "none"; }
+
+    repasoOrdenOpciones = mezclarOrdenOpciones();
+    const cont = document.getElementById("opciones-col-repaso");
+    cont.innerHTML = "";
+    repasoOrdenOpciones.forEach((indiceReal) => {
+      const btn = document.createElement("button");
+      btn.className = "opcion-btn";
+      btn.textContent = p.opciones[indiceReal];
+      btn.onclick = () => responderRepaso(indiceReal, btn);
+      cont.appendChild(btn);
+    });
+    renderizarKatex(document.getElementById("vista-repaso-pregunta"));
+  }
+
+  function actualizarCronometroRepaso() {
+    const transcurrido = (Date.now() - repasoInicioPregunta) / 1000;
+    const restante = Math.max(0, Math.ceil(repasoTiempoBase - transcurrido));
+    const el = document.getElementById("cronometro-repaso");
+    el.textContent = restante;
+    el.classList.toggle("urgente", restante <= 10);
+    if (restante <= 10 && restante >= 1 && restante !== repasoUltimoSegundoBeep) {
+      repasoUltimoSegundoBeep = restante;
+      reproducirBeep(restante <= 3);
+    }
+    if (restante <= 0 && !repasoYaRespondio) {
+      clearInterval(repasoTimerInterval);
+      mostrarResultadoRepaso(null); // se acabó el tiempo, sin respuesta
+    }
+  }
+
+  function responderRepaso(opcionIdx, btnEl) {
+    if (repasoYaRespondio) return;
+    repasoYaRespondio = true;
+    clearInterval(repasoTimerInterval);
+    document.querySelectorAll("#opciones-col-repaso .opcion-btn").forEach((b) => (b.disabled = true));
+    btnEl.classList.add("elegida");
+    mostrarResultadoRepaso(opcionIdx);
+  }
+
+  function mostrarResultadoRepaso(opcionElegida) {
+    mostrarVista("vista-repaso-resultado");
+    repasoRespondidas++;
+    const p = repasoPreguntas[repasoIdxActual];
+    const el = document.getElementById("resultado-texto-repaso");
+    if (opcionElegida === null) {
+      el.innerHTML = `<span class="resultado-incorrecta">Se acabó el tiempo</span><br/><small>La correcta era: <span id="resp-correcta-repaso"></span></small>`;
+    } else if (opcionElegida === p.correcta) {
+      repasoCorrectas++;
+      el.innerHTML = `<span class="resultado-correcta">¡Correcto! ✓</span>`;
+    } else {
+      el.innerHTML = `<span class="resultado-incorrecta">Incorrecto ✗</span><br/><small>Tu respuesta: <span id="resp-tuya-repaso"></span></small><br/><small>La correcta era: <span id="resp-correcta-repaso"></span></small>`;
+    }
+    document.getElementById("marcador-repaso").textContent = `${repasoCorrectas} de ${repasoRespondidas} correctas`;
+    renderizarKatex(el);
+    const spanCorrecta = document.getElementById("resp-correcta-repaso");
+    if (spanCorrecta) { spanCorrecta.textContent = p.opciones[p.correcta]; renderizarKatex(spanCorrecta); }
+    const spanTuya = document.getElementById("resp-tuya-repaso");
+    if (spanTuya && opcionElegida !== null) { spanTuya.textContent = p.opciones[opcionElegida]; renderizarKatex(spanTuya); }
+
+    const esUltima = candidatosRepaso().length === 0;
+    document.getElementById("btn-siguiente-repaso").textContent = esUltima ? "Ver resumen final" : "Siguiente pregunta";
+  }
+
+  document.getElementById("btn-siguiente-repaso").onclick = () => avanzarPreguntaRepasoAleatoria();
+  document.getElementById("btn-terminar-repaso").onclick = () => mostrarRepasoFinal();
+  document.getElementById("btn-terminar-repaso2").onclick = () => mostrarRepasoFinal();
+
+  function mostrarRepasoFinal() {
+    clearInterval(repasoTimerInterval);
+    mostrarVista("vista-repaso-final");
+    document.getElementById("resumen-repaso-final").textContent = `${repasoCorrectas} de ${repasoRespondidas} correctas`;
+    faseMusicalActual = "final";
+    if (musicaActiva) iniciarMusica("final");
+    mostrarConfetiEstudiante();
+  }
+
+  // ---------- Ruleta del modo repaso (circular, reutiliza sonidos ya definidos) ----------
+  let repasoGirando = false;
+  let repasoRotacionAcumulada = 0;
+  const coloresRuedaRepaso = ["#4dc9c9", "#c96b7a", "#7ac97a", "#9a7ac9", "#c9a04d", "#6b8fc9"];
+
+  function dibujarRuedaRepaso(n) {
+    const svg = document.getElementById("ruleta-svg-repaso");
+    const cantidad = Math.max(1, n);
+    const cx = 85, cy = 85, r = 76;
+    let html = "";
+    const anguloSeg = 360 / cantidad;
+    for (let i = 0; i < cantidad; i++) {
+      const a0 = (i * anguloSeg - 90) * Math.PI / 180;
+      const a1 = ((i + 1) * anguloSeg - 90) * Math.PI / 180;
+      const x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0);
+      const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+      const largeArc = anguloSeg > 180 ? 1 : 0;
+      const color = coloresRuedaRepaso[i % coloresRuedaRepaso.length];
+      html += `<path d="M${cx},${cy} L${x0},${y0} A${r},${r} 0 ${largeArc} 1 ${x1},${y1} Z" fill="${color}" stroke="#0f1116" stroke-width="1"/>`;
+      const amid = (a0 + a1) / 2;
+      const tx = cx + (r * 0.65) * Math.cos(amid), ty = cy + (r * 0.65) * Math.sin(amid);
+      html += `<text x="${tx}" y="${ty}" fill="#08090c" font-size="11" font-weight="600" text-anchor="middle" dominant-baseline="middle">${i + 1}</text>`;
+    }
+    svg.innerHTML = html;
+  }
+
+  function girarRuletaRepaso() {
+    if (repasoGirando) return;
+    const candidatos = candidatosRepaso();
+    if (candidatos.length === 0) { mostrarRepasoFinal(); return; }
+    repasoGirando = true;
+    const posicion = Math.floor(Math.random() * candidatos.length);
+    const elegido = candidatos[posicion];
+    dibujarRuedaRepaso(candidatos.length);
+    const anguloSeg = 360 / candidatos.length;
+    const anguloObjetivo = 360 - (posicion * anguloSeg + anguloSeg / 2);
+    const vueltasExtra = 4 * 360;
+    repasoRotacionAcumulada += vueltasExtra + anguloObjetivo - (repasoRotacionAcumulada % 360);
+    const svg = document.getElementById("ruleta-svg-repaso");
+    svg.style.transform = `rotate(${repasoRotacionAcumulada}deg)`;
+
+    let t = 0;
+    for (let i = 0; i < 22; i++) {
+      const espaciado = 70 + Math.pow(i / 22, 2) * 220;
+      t += espaciado;
+      setTimeout(reproducirTickRepaso, t);
+    }
+    setTimeout(() => {
+      repasoGirando = false;
+      activarPreguntaRepaso(elegido);
+    }, 3600);
+  }
+
+  function reproducirTickRepaso() {
+    asegurarAudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "square";
+    osc.frequency.value = 500;
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.06);
+  }
+
+  document.getElementById("btn-girar-ruleta-repaso").onclick = girarRuletaRepaso;
+  document.getElementById("btn-girar-ruleta-repaso2").onclick = girarRuletaRepaso;
+
+  dibujarRuedaRepaso(parseInt(document.getElementById("input-num-preguntas-repaso").value, 10) || 10);
+
+  let confetiEstudianteActivo = false;
+  const EMOJIS_CONFETI_EST = ["⭐", "✨", "🌟", "🎉"];
+  function mostrarConfetiEstudiante() {
+    if (confetiEstudianteActivo) return;
+    confetiEstudianteActivo = true;
+    const capa = document.getElementById("capa-confeti");
+    capa.style.display = "block";
+    const intervalo = setInterval(() => {
+      const estrella = document.createElement("div");
+      estrella.className = "estrella-confeti";
+      estrella.textContent = EMOJIS_CONFETI_EST[Math.floor(Math.random() * EMOJIS_CONFETI_EST.length)];
+      estrella.style.left = `${Math.random() * 100}%`;
+      const duracion = 3 + Math.random() * 2;
+      estrella.style.animationDuration = `${duracion}s`;
+      estrella.style.fontSize = `${14 + Math.random() * 14}px`;
+      capa.appendChild(estrella);
+      setTimeout(() => estrella.remove(), duracion * 1000 + 200);
+    }, 200);
+    setTimeout(() => clearInterval(intervalo), 8000); // celebración breve, no infinita en el celular
+  }
+</script>
+</body>
+</html>
