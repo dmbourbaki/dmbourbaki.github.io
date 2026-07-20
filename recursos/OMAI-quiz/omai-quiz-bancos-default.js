@@ -7,6 +7,7 @@ import { BANCOS_INTEGRAL } from "./omai-quiz-bancos-integral.js";
 import { BANCOS_MULTIVARIABLE } from "./omai-quiz-bancos-multivariable.js";
 import { BANCOS_EDO } from "./omai-quiz-bancos-edo.js";
 import { BANCOS_LAPLACE } from "./omai-quiz-bancos-laplace.js";
+import { BANCOS_ALGEBRA_LINEAL } from "./omai-quiz-bancos-algebra-lineal.js";
 
 const BANCOS_DEFECTO = [
   ...BANCOS_DIFERENCIAL,
@@ -14,6 +15,7 @@ const BANCOS_DEFECTO = [
   ...BANCOS_MULTIVARIABLE,
   ...BANCOS_EDO,
   ...BANCOS_LAPLACE,
+  ...BANCOS_ALGEBRA_LINEAL,
 ];
 
 export { BANCOS_DEFECTO };
