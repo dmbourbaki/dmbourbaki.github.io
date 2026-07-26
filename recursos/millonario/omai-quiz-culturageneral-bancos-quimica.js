@@ -13,6 +13,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-quim-01-hidrogeno.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es el símbolo químico del agua?",
@@ -20,6 +21,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el símbolo químico del oro?",
@@ -27,6 +29,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-quim-02-oro.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es el símbolo químico de la sal común (cloruro de sodio)?",
@@ -34,6 +37,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué científico ruso creó la tabla periódica de los elementos en 1869, organizándolos según su masa atómica y propiedades?",
@@ -41,6 +45,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-quim-03-mendeleyev-tabla-periodica.png",
+        dificultad: 3,
       },
       {
         texto: "¿Cuántos elementos químicos conforman actualmente la tabla periódica reconocida oficialmente?",
@@ -48,6 +53,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué químico francés es conocido como el 'padre de la química moderna' por establecer la ley de conservación de la masa?",
@@ -55,6 +61,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-quim-04-lavoisier.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué científica polaco-francesa ganó dos premios Nobel en distintas disciplinas por sus estudios sobre la radiactividad?",
@@ -62,6 +69,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-quim-05-marie-curie.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué elementos químicos, ambos radiactivos, fueron descubiertos por el matrimonio Curie a finales del siglo XIX?",
@@ -69,6 +77,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Cuál es el pH aproximado del agua pura, considerado neutro en la escala de acidez?",
@@ -76,6 +85,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-quim-06-escala-ph.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué tipo de sustancia tiene un pH menor a 7, como el jugo de limón o el vinagre?",
@@ -83,6 +93,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué tipo de sustancia tiene un pH mayor a 7, como el bicarbonato de sodio o el jabón?",
@@ -90,6 +101,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la partícula subatómica con carga positiva que se encuentra en el núcleo del átomo?",
@@ -97,6 +109,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-quim-07-atomo-estructura.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la partícula subatómica con carga negativa que orbita alrededor del núcleo del átomo?",
@@ -104,6 +117,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la partícula subatómica sin carga eléctrica que se encuentra en el núcleo del átomo junto a los protones?",
@@ -111,6 +125,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué modelo atómico, propuesto en 1913, describe a los electrones orbitando el núcleo en niveles de energía definidos?",
@@ -118,6 +133,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-quim-08-modelo-bohr.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué físico y químico neozelandés descubrió el núcleo atómico mediante su famoso experimento de dispersión de partículas alfa?",
@@ -125,6 +141,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-quim-09-rutherford.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama el enlace químico que se forma cuando dos átomos comparten electrones, como en la molécula de agua?",
@@ -132,6 +149,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama el enlace químico que se forma por la transferencia de electrones entre átomos, como en la sal de mesa?",
@@ -139,6 +157,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama el número que representa la cantidad de protones en el núcleo de un átomo, determinando su identidad como elemento?",
@@ -146,6 +165,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se llama la constante que representa el número de partículas (átomos o moléculas) en un mol de sustancia (6.022×10²³)?",
@@ -153,6 +173,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué gas incoloro e inodoro, esencial para la respiración humana, constituye aproximadamente el 21% de la atmósfera terrestre?",
@@ -160,6 +181,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué gas constituye la mayor parte (cerca del 78%) de la atmósfera terrestre?",
@@ -167,6 +189,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué gas de efecto invernadero, producido por la combustión de combustibles fósiles, es liberado también por las plantas durante la respiración celular?",
@@ -174,6 +197,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-quim-10-co2-invernadero.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué mineral es el más duro conocido en la escala de Mohs, compuesto de carbono puro cristalizado?",
@@ -181,6 +205,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-quim-11-diamante.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué elemento químico, en su forma de grafito, es un componente clave de la mina de los lápices?",
@@ -188,6 +213,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué proceso químico consiste en la combinación de una sustancia con oxígeno, liberando energía en forma de calor y luz?",
@@ -195,6 +221,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-quim-12-combustion-fuego.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué proceso permite separar los componentes de una mezcla líquida aprovechando sus diferentes puntos de ebullición?",
@@ -202,6 +229,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-quim-13-destilacion.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué proceso químico utiliza corriente eléctrica para descomponer una sustancia, como en la separación del agua en hidrógeno y oxígeno?",
@@ -209,6 +237,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama la reacción química entre un ácido y una base que produce una sal y agua?",
@@ -216,6 +245,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama el estado de la materia en el que un gas se convierte directamente en sólido sin pasar por el estado líquido?",
@@ -223,6 +253,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama el estado de la materia en el que un sólido pasa directamente a gas sin pasar por el estado líquido, como el hielo seco?",
@@ -230,6 +261,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-quim-14-hielo-seco-sublimacion.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué elemento químico, gas noble incoloro, se usa para llenar globos porque es más ligero que el aire y no es inflamable?",
@@ -237,6 +269,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-quim-15-globo-helio.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué gas noble se utiliza en los carteles luminosos por el brillo rojo-anaranjado que emite al aplicarle electricidad?",
@@ -244,6 +277,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-quim-16-letreros-neon.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué elemento metálico líquido a temperatura ambiente se usaba antiguamente en termómetros, actualmente restringido por su toxicidad?",
@@ -251,6 +285,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-quim-17-mercurio-termometro.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué elemento metálico ligero y resistente a la corrosión se utiliza ampliamente en la fabricación de latas de bebidas y aviones?",
@@ -258,6 +293,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué proceso natural, causado por la exposición al oxígeno y la humedad, hace que el hierro se cubra de óxido rojizo?",
@@ -265,6 +301,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-quim-18-oxidacion-hierro.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué compuesto orgánico, producido por la fermentación de azúcares mediante levaduras, es el principal componente psicoactivo de las bebidas alcohólicas?",
@@ -272,6 +309,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué gas incoloro y altamente inflamable es el elemento más ligero y abundante del universo?",
@@ -279,6 +317,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué molécula de tres átomos de oxígeno, presente en la estratosfera, filtra la radiación ultravioleta dañina del Sol?",
@@ -286,6 +325,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-quim-19-capa-de-ozono.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué elemento químico radiactivo, usado como combustible en centrales nucleares, tiene el número atómico 92?",
@@ -293,6 +333,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-quim-20-uranio.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué químico sueco, inventor de la dinamita, estableció con su fortuna los premios que llevan su nombre?",
@@ -300,6 +341,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-quim-21-alfred-nobel.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué rama de la química estudia los compuestos que contienen carbono, base de la vida y de los combustibles fósiles?",
@@ -307,6 +349,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué tipo de macromolécula biológica, compuesta por aminoácidos, forma estructuras como el colágeno y las enzimas?",
@@ -314,6 +357,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué tipo de macromolécula biológica, como la glucosa y el almidón, es la principal fuente de energía rápida para el cuerpo?",
@@ -321,6 +365,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué elemento químico se representa con el símbolo 'Fe' en la tabla periódica?",
@@ -328,6 +373,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué elemento químico se representa con el símbolo 'Na' en la tabla periódica?",
@@ -335,6 +381,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué elemento químico, esencial para los huesos y dientes, se representa con el símbolo 'Ca'?",
@@ -342,6 +389,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué químico inglés propuso en el siglo XIX la primera teoría atómica moderna, describiendo a los átomos como esferas indivisibles?",
@@ -349,6 +397,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-quim-22-dalton-teoria-atomica.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué químico inglés es reconocido por haber aislado y descrito el oxígeno de forma independiente en el siglo XVIII?",
@@ -356,6 +405,7 @@ const BANCOS_QUIMICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 3,
       },
     ],
   },

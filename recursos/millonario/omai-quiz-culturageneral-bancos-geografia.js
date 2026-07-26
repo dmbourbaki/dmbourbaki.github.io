@@ -13,6 +13,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-geo-01-rio-nilo.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el desierto cálido más extenso del mundo?",
@@ -20,6 +21,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-geo-02-desierto-sahara.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es la cordillera más larga del mundo?",
@@ -27,6 +29,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-geo-03-cordillera-andes.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es la montaña más alta del mundo sobre el nivel del mar?",
@@ -34,6 +37,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-geo-04-monte-everest.png",
+        dificultad: 1,
       },
       {
         texto: "¿En qué cordillera se encuentra el monte Everest?",
@@ -41,6 +45,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cuál es el océano más grande y profundo del planeta?",
@@ -48,6 +53,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el lago de agua dulce con mayor volumen del mundo?",
@@ -55,6 +61,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-geo-05-lago-baikal.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cuál es el país más extenso del mundo por superficie?",
@@ -62,6 +69,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el país más poblado del mundo actualmente?",
@@ -69,6 +77,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cuál es la capital de Australia?",
@@ -76,6 +85,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-geo-06-canberra.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cuál es la capital de Canadá?",
@@ -83,6 +93,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Cuál es la capital de Brasil?",
@@ -90,6 +101,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-geo-07-brasilia.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es la capital de Colombia?",
@@ -97,6 +109,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué país tiene la mayor cantidad de husos horarios en su territorio?",
@@ -104,6 +117,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Qué continente es el más extenso del mundo?",
@@ -111,6 +125,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el continente menos poblado (excluyendo la Antártida)?",
@@ -118,6 +133,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué estrecho separa Europa de África en su punto más occidental, entre España y Marruecos?",
@@ -125,6 +141,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-geo-08-estrecho-gibraltar.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué estrecho separa Asia de América del Norte?",
@@ -132,6 +149,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué canal artificial une el mar Mediterráneo con el mar Rojo?",
@@ -139,6 +157,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-geo-09-canal-suez.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué canal artificial une los océanos Atlántico y Pacífico a través de Centroamérica?",
@@ -146,6 +165,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-geo-10-canal-panama.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es la cascada con la mayor caída de agua ininterrumpida del mundo?",
@@ -153,6 +173,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-geo-11-salto-angel.png",
+        dificultad: 6,
       },
       {
         texto: "¿En qué frontera se ubican las cataratas Victoria?",
@@ -160,6 +181,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-geo-12-cataratas-victoria.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cuál es la fosa oceánica más profunda conocida del planeta?",
@@ -167,6 +189,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué mar interior, en realidad el lago más grande del mundo, es famoso por su alta salinidad y su costa compartida por varios países?",
@@ -174,6 +197,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué mar, entre Israel, Jordania y Cisjordania, es conocido por su extrema salinidad que permite flotar sin esfuerzo?",
@@ -181,6 +205,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-geo-13-mar-muerto.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es el archipiélago volcánico del Pacífico ecuatoriano famoso por inspirar la teoría de la evolución de Darwin?",
@@ -188,6 +213,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-geo-14-islas-galapagos.png",
+        dificultad: 3,
       },
       {
         texto: "¿A qué país pertenecen las islas Canarias?",
@@ -195,6 +221,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué país está compuesto en su totalidad por miles de islas y es conocido como el archipiélago más grande del mundo?",
@@ -202,6 +229,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Cuál es la selva tropical más extensa del mundo?",
@@ -209,6 +237,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-geo-15-selva-amazonica.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué países comparten la mayor parte de la cuenca amazónica?",
@@ -216,6 +245,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es la línea imaginaria que divide la Tierra en hemisferio norte y hemisferio sur?",
@@ -223,6 +253,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué meridiano se utiliza como referencia (0°) para establecer los husos horarios mundiales?",
@@ -230,6 +261,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué capital europea está dividida por el río Sena?",
@@ -237,6 +269,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-geo-16-rio-sena-paris.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué río atraviesa Londres?",
@@ -244,6 +277,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué río europeo, uno de los más largos del continente, atraviesa varias capitales como Viena, Bratislava y Budapest?",
@@ -251,6 +285,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-geo-17-rio-danubio.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cuál es el punto más bajo de la superficie terrestre no cubierto por agua, ubicado en la costa del Mar Muerto?",
@@ -258,6 +293,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué país africano alberga el punto más alto del continente, el monte Kilimanjaro?",
@@ -265,6 +301,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-geo-18-kilimanjaro.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué gran macizo montañoso separa Europa de Asia a lo largo de Rusia?",
@@ -272,6 +309,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué país escandinavo tiene la mayor cantidad de fiordos, formaciones costeras talladas por glaciares?",
@@ -279,6 +317,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-geo-19-fiordos-noruega.png",
+        dificultad: 3,
       },
       {
         texto: "¿Cuál es el único continente que se extiende por los cuatro hemisferios (norte, sur, este y oeste)?",
@@ -286,6 +325,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Qué país es atravesado por el mayor número de husos horarios internos si se contaran solo por longitud geográfica, aunque Rusia y Francia lo superan políticamente?",
@@ -293,6 +333,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué desierto de Sudamérica es considerado uno de los lugares más áridos del planeta?",
@@ -300,6 +341,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-geo-20-desierto-atacama.png",
+        dificultad: 3,
       },
       {
         texto: "¿Cuál es el volcán activo más alto del mundo, ubicado en la frontera entre Argentina y Chile?",
@@ -307,6 +349,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-geo-21-ojos-del-salado.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué gran arrecife de coral, visible incluso desde el espacio, se encuentra frente a la costa noreste de Australia?",
@@ -314,6 +357,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-geo-22-gran-barrera-coral.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué país es simultáneamente un continente entero?",
@@ -321,6 +365,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cuál es el país más pequeño del mundo por superficie?",
@@ -328,6 +373,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-geo-23-ciudad-vaticano.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué país sin salida al mar está enclavado por completo dentro del territorio de Sudáfrica?",
@@ -335,6 +381,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué río es el más largo de Asia y de gran importancia histórica para la civilización china?",
@@ -342,6 +389,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-geo-24-rio-yangtse.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué cordillera separa España de Francia?",
@@ -349,6 +397,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-geo-25-pirineos.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es el estrecho más transitado del mundo por tráfico petrolero, ubicado entre el golfo Pérsico y el golfo de Omán?",
@@ -356,6 +405,7 @@ const BANCOS_GEOGRAFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
     ],
   },

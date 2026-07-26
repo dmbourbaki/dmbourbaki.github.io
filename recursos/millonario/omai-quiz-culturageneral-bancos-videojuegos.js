@@ -13,6 +13,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-01-nintendo-mario.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cómo se llama el fontanero italiano, personaje insignia de Nintendo, protagonista de innumerables videojuegos desde 1981?",
@@ -20,6 +21,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-02-super-mario.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué princesa debe ser rescatada tradicionalmente en los juegos clásicos de Super Mario Bros?",
@@ -27,6 +29,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué saga de videojuegos de Nintendo sigue las aventuras de un héroe llamado Link en el reino de Hyrule?",
@@ -34,6 +37,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-03-legend-of-zelda.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué compañía japonesa desarrolló la consola PlayStation, lanzada en 1994?",
@@ -41,6 +45,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-04-playstation.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué compañía estadounidense desarrolló la consola Xbox, lanzada en 2001?",
@@ -48,6 +53,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-05-xbox.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué erizo azul veloz es la mascota principal de la compañía Sega?",
@@ -55,6 +61,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-06-sonic-erizo.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué videojuego de construcción y supervivencia en bloques, lanzado en 2011 por Mojang, es uno de los más vendidos de la historia?",
@@ -62,6 +69,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-07-minecraft.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué videojuego battle royale, lanzado por Epic Games en 2017, se popularizó por su modo gratuito y construcción de estructuras?",
@@ -69,6 +77,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-08-fortnite.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué videojuego de rol multijugador masivo (MMORPG), lanzado por Blizzard en 2004, se convirtió en uno de los más influyentes del género?",
@@ -76,6 +85,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-09-world-of-warcraft.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué compañía de videojuegos desarrolló la saga 'Call of Duty', uno de los shooters militares más exitosos comercialmente?",
@@ -83,6 +93,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué saga de videojuegos de rol y acción, desarrollada por CD Projekt Red y basada en novelas polacas, sigue las aventuras del brujo Geralt de Rivia?",
@@ -90,6 +101,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-10-witcher-geralt.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué saga de videojuegos de acción y sigilo, protagonizada por Solid Snake, fue creada por Hideo Kojima?",
@@ -97,6 +109,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-11-metal-gear-solid.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué saga de videojuegos de acción y sigilo histórico sigue a asesinos de una hermandad secreta a través de distintas épocas?",
@@ -104,6 +117,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-12-assassins-creed.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué videojuego de disparos en primera persona, lanzado en 1993 por id Software, es considerado pionero fundamental del género 'shooter'?",
@@ -111,6 +125,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-13-doom.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué saga de videojuegos de acción y ciencia ficción, desarrollada por Valve, sigue a un científico llamado Gordon Freeman?",
@@ -118,6 +133,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-14-half-life.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué plataforma digital de distribución de videojuegos para PC, propiedad de Valve, es una de las más grandes del mundo?",
@@ -125,6 +141,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-15-steam-plataforma.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué saga de videojuegos de lucha, con personajes icónicos como Ryu y Ken, fue desarrollada por Capcom desde 1987?",
@@ -132,6 +149,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-16-street-fighter.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué saga de videojuegos de lucha, conocida por su violencia gráfica y los 'fatalities', fue desarrollada por Midway/NetherRealm?",
@@ -139,6 +157,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-17-mortal-kombat.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué serie de videojuegos de rol japonés, con más de quince entregas numeradas, es una de las franquicias más longevas de Square Enix?",
@@ -146,6 +165,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-18-final-fantasy.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué franquicia de videojuegos de rol por turnos, creada por Satoshi Tajiri, presenta criaturas coleccionables que los jugadores entrenan y hacen batallar?",
@@ -153,6 +173,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-19-pokemon.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cómo se llama el criador de Pokémon protagonista original de los primeros juegos y del anime clásico?",
@@ -160,6 +181,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué videojuego de estrategia y construcción de ciudades permite a los jugadores diseñar y gestionar una metrópoli virtual?",
@@ -167,6 +189,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-20-simcity.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué videojuego de simulación de vida, desarrollado por Maxis, permite a los jugadores controlar la vida cotidiana de personajes virtuales?",
@@ -174,6 +197,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-21-the-sims.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué videojuego de simulación de vida rural y social, desarrollado por Nintendo, invita a los jugadores a vivir en una isla junto a vecinos animales?",
@@ -181,6 +205,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-22-animal-crossing.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué juego de rompecabezas, creado por el ingeniero soviético Alexey Pajitnov en 1984, es uno de los videojuegos más icónicos e influyentes de la historia?",
@@ -188,6 +213,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-23-tetris.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué videojuego arcade clásico de 1980, protagonizado por un personaje amarillo que come puntos mientras huye de fantasmas, es un ícono cultural?",
@@ -195,6 +221,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-24-pacman.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué videojuego arcade de 1978, en el que se disparaba a filas de aliens descendentes, es considerado uno de los pioneros del género shooter?",
@@ -202,6 +229,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-25-space-invaders.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué gorila gigante, antagonista original y luego protagonista de sus propios juegos, apareció por primera vez en un arcade de Nintendo en 1981?",
@@ -209,6 +237,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-26-donkey-kong.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué saga de videojuegos de carreras, protagonizada por personajes de Nintendo como Mario y sus amigos, es una de las más vendidas del género?",
@@ -216,6 +245,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-27-mario-kart.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué saga de videojuegos de lucha multiplataforma, con personajes de distintas franquicias de Nintendo enfrentándose entre sí, es muy popular en torneos de eSports?",
@@ -223,6 +253,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-28-super-smash-bros.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué videojuego de terror de supervivencia, lanzado en 1996 por Capcom, es considerado pionero fundamental del género 'survival horror'?",
@@ -230,6 +261,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-29-resident-evil.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué videojuego de terror psicológico, ambientado en un pueblo brumoso, es reconocido por su atmósfera inquietante y su banda sonora?",
@@ -237,6 +269,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-30-silent-hill.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué videojuego de estrategia en tiempo real y disparos en primera persona, desarrollado por Valve, es uno de los eSports más populares del mundo?",
@@ -244,6 +277,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-31-counter-strike.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué videojuego MOBA (arena de batalla multijugador en línea), desarrollado por Riot Games, es uno de los más jugados y con mayores premios en eSports?",
@@ -251,6 +285,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-32-league-of-legends.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué videojuego de rol y mundo abierto, secuela de una saga de fantasía, ganó el premio Juego del Año en 2015 con su quinta entrega?",
@@ -258,6 +293,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué saga de videojuegos de rol de acción, desarrollada por FromSoftware, es conocida por su extrema dificultad y su lore críptico?",
@@ -265,6 +301,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-33-dark-souls.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué videojuego de FromSoftware, ganador de múltiples premios Juego del Año en 2022, se desarrolló en colaboración con el escritor George R.R. Martin?",
@@ -272,6 +309,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-34-elden-ring.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué saga de videojuegos de acción y aventura, con Nathan Drake como protagonista buscador de tesoros, fue desarrollada por Naughty Dog?",
@@ -279,6 +317,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-35-uncharted.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué videojuego post-apocalíptico de Naughty Dog, adaptado luego a una exitosa serie de televisión, sigue a un hombre protegiendo a una niña inmune a una infección fúngica?",
@@ -286,6 +325,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-36-the-last-of-us.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué arqueóloga británica, protagonista de la saga 'Tomb Raider', es uno de los personajes femeninos más icónicos de los videojuegos?",
@@ -293,6 +333,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-37-lara-croft.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué cazarrecompensas con traje espacial de combate, protagonista de la saga Metroid, oculta su identidad femenina hasta el final del primer juego original?",
@@ -300,6 +341,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-38-samus-metroid.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué videojuego de simulación agrícola independiente, creado por un solo desarrollador (Eric Barone), se ha vuelto muy popular desde su lanzamiento en 2016?",
@@ -307,6 +349,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-39-stardew-valley.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué plataforma de videojuegos y creación de experiencias virtuales, muy popular entre niños y adolescentes, permite a los usuarios diseñar sus propios juegos dentro de la misma?",
@@ -314,6 +357,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-40-roblox.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué videojuego de rol de acción y mazmorras, desarrollado por Blizzard, popularizó el subgénero conocido como 'hack and slash'?",
@@ -321,6 +365,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-41-diablo.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué competición organizada de videojuegos, con equipos profesionales y grandes premios en efectivo, se conoce internacionalmente como 'eSports'?",
@@ -328,6 +373,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué videojuego de rompecabezas y plataformas, desarrollado por Valve, es célebre por su mecánica de portales y su inteligencia artificial villana llamada GLaDOS?",
@@ -335,6 +381,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-vg-42-portal.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué saga de carreras de simulación, desarrollada por Polyphony Digital, es conocida por su realismo y su gran variedad de automóviles con licencia?",
@@ -342,6 +389,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-43-gran-turismo.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué videojuego de simulación de fútbol, desarrollado por Electronic Arts, es una de las franquicias deportivas más vendidas del mundo?",
@@ -349,6 +397,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-vg-44-fifa-futbol.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué videojuego combina fútbol con carreras de autos acrobáticos propulsados por cohetes, desarrollado por Psyonix?",
@@ -356,6 +405,7 @@ const BANCOS_VIDEOJUEGOS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-vg-45-rocket-league.png",
+        dificultad: 4,
       },
     ],
   },

@@ -13,6 +13,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mate-01-pi.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué relación matemática describe π en un círculo?",
@@ -20,6 +21,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es el valor aproximado del número áureo (phi)?",
@@ -27,6 +29,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mate-02-numero-aureo.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es el resultado de elevar cualquier número (distinto de cero) a la potencia cero?",
@@ -34,6 +37,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cómo se llama el teorema que relaciona los catetos y la hipotenusa de un triángulo rectángulo?",
@@ -41,6 +45,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mate-03-teorema-pitagoras.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es la fórmula del teorema de Pitágoras?",
@@ -48,6 +53,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué matemático griego es considerado el 'padre de la geometría' por su obra 'Los Elementos'?",
@@ -55,6 +61,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mate-04-euclides.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué matemático griego calculó el valor de π y desarrolló el principio de flotación que lleva su nombre?",
@@ -62,6 +69,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mate-05-arquimedes.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué matemático persa del siglo IX es considerado el 'padre del álgebra', dando origen también a la palabra 'algoritmo'?",
@@ -69,6 +77,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-06-al-juarismi.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué matemático y filósofo francés del siglo XVII desarrolló la geometría analítica, uniendo álgebra y geometría?",
@@ -76,6 +85,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-07-descartes.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué matemático francés del siglo XVII formuló su célebre 'último teorema', que permaneció sin demostrar durante más de 350 años?",
@@ -83,6 +93,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-08-fermat.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué matemático británico demostró finalmente el 'Último Teorema de Fermat' en 1994?",
@@ -90,6 +101,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué matemático suizo del siglo XVIII es uno de los más prolíficos de la historia, con contribuciones a casi todas las ramas de las matemáticas?",
@@ -97,6 +109,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-09-euler.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué matemático alemán del siglo XIX es conocido como el 'príncipe de las matemáticas' por sus aportes en teoría de números y geometría?",
@@ -104,6 +117,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-10-gauss.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué matemática rusa del siglo XIX fue la primera mujer en obtener un doctorado en matemáticas y ocupar una cátedra universitaria en Europa?",
@@ -111,6 +125,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-11-sofia-kovalevskaya.png",
+        dificultad: 8,
       },
       {
         texto: "¿Qué matemática alemana del siglo XX hizo aportes fundamentales al álgebra abstracta, siendo célebre pese a las barreras de género de su época?",
@@ -118,6 +133,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-12-emmy-noether.png",
+        dificultad: 8,
       },
       {
         texto: "¿Cómo se llama la secuencia numérica en la que cada número es la suma de los dos anteriores (1, 1, 2, 3, 5, 8...)?",
@@ -125,6 +141,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mate-13-fibonacci.png",
+        dificultad: 3,
       },
       {
         texto: "¿Con qué figura triangular numérica se representan los coeficientes del desarrollo del binomio de Newton?",
@@ -132,6 +149,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mate-14-triangulo-pascal.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se le llama a un número que solo es divisible por 1 y por sí mismo?",
@@ -139,6 +157,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es el único número primo par?",
@@ -146,6 +165,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cómo se llama un número que no puede expresarse como una fracción exacta de dos enteros, como π o √2?",
@@ -153,6 +173,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es la raíz cuadrada de 144?",
@@ -160,6 +181,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cuánto es el factorial de 5 (5!)?",
@@ -167,6 +189,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cómo se llama la rama de las matemáticas que estudia las tasas de cambio y la acumulación, mediante derivadas e integrales?",
@@ -174,6 +197,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mate-15-calculo.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué dos matemáticos desarrollaron el cálculo infinitesimal de forma independiente en el siglo XVII, generando una disputa histórica de prioridad?",
@@ -181,6 +205,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-16-newton-leibniz.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama la figura geométrica que se repite a sí misma a diferentes escalas, como el conjunto de Mandelbrot?",
@@ -188,6 +213,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-17-fractal-mandelbrot.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cuántos lados tiene un heptágono?",
@@ -195,6 +221,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cuántas caras tiene un cubo?",
@@ -202,6 +229,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mate-18-cubo.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cómo se llaman los cinco poliedros regulares (tetraedro, cubo, octaedro, dodecaedro e icosaedro), asociados por Platón a los elementos clásicos?",
@@ -209,6 +237,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-19-solidos-platonicos.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cuál es el resultado de la suma de los ángulos internos de cualquier triángulo?",
@@ -216,6 +245,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama el conjunto de números que incluye a los números negativos, el cero y los positivos, pero no las fracciones?",
@@ -223,6 +253,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué unidad imaginaria se define como la raíz cuadrada de -1?",
@@ -230,6 +261,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué famoso problema matemático, propuesto en 1900 y aún sin resolver, forma parte de los siete 'Problemas del Milenio' con un premio de un millón de dólares?",
@@ -237,6 +269,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 8,
       },
       {
         texto: "¿Qué matemático francés resolvió la conjetura de Poincaré en el año 2003, y rechazó tanto la Medalla Fields como el premio del Instituto Clay?",
@@ -244,6 +277,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-20-perelman.png",
+        dificultad: 7,
       },
       {
         texto: "¿Cómo se llama la rama de las matemáticas que estudia la probabilidad y el análisis de datos?",
@@ -251,6 +285,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es la probabilidad de obtener 'cara' al lanzar una moneda justa una sola vez?",
@@ -258,6 +293,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cómo se llama el sistema de numeración que usa únicamente los dígitos 0 y 1, base del funcionamiento de las computadoras?",
@@ -265,6 +301,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mate-21-sistema-binario.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué matemático inglés del siglo XIX es considerado el padre de la lógica booleana, base de la programación moderna?",
@@ -272,6 +309,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-22-george-boole.png",
+        dificultad: 6,
       },
       {
         texto: "¿Quién es considerada la primera programadora de la historia, por escribir el primer algoritmo destinado a ser ejecutado por una máquina, la de Charles Babbage?",
@@ -279,6 +317,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-23-ada-lovelace.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se llama la operación matemática que consiste en repartir una cantidad en partes iguales?",
@@ -286,6 +325,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el resultado de la expresión 2 elevado a la quinta potencia (2⁵)?",
@@ -293,6 +333,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cómo se llama la constante matemática e (número de Euler), base de los logaritmos naturales, con valor aproximado de 2.71828?",
@@ -300,6 +341,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué matemático indio autodidacta del siglo XX hizo enormes contribuciones a la teoría de números pese a no tener formación académica formal?",
@@ -307,6 +349,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-24-ramanujan.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama la figura geométrica formada por todos los puntos equidistantes de un punto central?",
@@ -314,6 +357,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el área de un cuadrado cuyo lado mide 5 unidades?",
@@ -321,6 +365,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama el estudio de las relaciones entre los ángulos y los lados de los triángulos?",
@@ -328,6 +373,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué matemático búlgaro-francés desarrolló la teoría de conjuntos, sentando las bases de las matemáticas modernas en el siglo XIX?",
@@ -335,6 +381,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-25-cantor.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué matemático austríaco demostró en el siglo XX los famosos 'teoremas de incompletitud', mostrando límites intrínsecos a los sistemas matemáticos formales?",
@@ -342,6 +389,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mate-26-godel.png",
+        dificultad: 8,
       },
       {
         texto: "¿Cómo se llama la representación gráfica de datos mediante barras rectangulares proporcionales a sus valores?",
@@ -349,6 +397,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cómo se llama la medida estadística que representa el valor promedio de un conjunto de datos?",
@@ -356,6 +405,7 @@ const BANCOS_MATEMATICAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
     ],
   },

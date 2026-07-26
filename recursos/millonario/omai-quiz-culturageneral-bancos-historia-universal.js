@@ -13,6 +13,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-01-piramide-guiza.png",
+        dificultad: 1,
       },
       {
         texto: "¿En qué río se desarrolló la civilización mesopotámica junto con el Éufrates?",
@@ -20,6 +21,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué imperio construyó el Coliseo de Roma?",
@@ -27,6 +29,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-02-coliseo-romano.png",
+        dificultad: 1,
       },
       {
         texto: "¿Quién fue el emperador romano durante gran parte de la expansión hacia Britania en el siglo I d.C.?",
@@ -34,6 +37,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Qué acontecimiento se sitúa tradicionalmente en el año 476 d.C.?",
@@ -41,6 +45,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿En qué año se firmó la Carta Magna en Inglaterra?",
@@ -48,6 +53,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-hist-03-carta-magna.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué pandemia devastó Europa a mediados del siglo XIV?",
@@ -55,6 +61,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué imperio mesoamericano fue conquistado por Hernán Cortés en 1521?",
@@ -62,6 +69,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-04-tenochtitlan.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué explorador genovés llegó a América en 1492 al servicio de la Corona española?",
@@ -69,6 +77,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué imperio andino fue conquistado por Francisco Pizarro en 1533?",
@@ -76,6 +85,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-05-machu-picchu.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué movimiento cultural y artístico floreció en Italia entre los siglos XIV y XVI?",
@@ -83,6 +93,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué monje alemán inició la Reforma Protestante en 1517 al publicar sus 95 tesis?",
@@ -90,6 +101,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué revolución comenzó en 1789 y puso fin a la monarquía absoluta en Francia?",
@@ -97,6 +109,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-06-toma-bastilla.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué fortaleza-prisión parisina fue tomada por el pueblo el 14 de julio de 1789?",
@@ -104,6 +117,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Quién se coronó Emperador de los franceses en 1804?",
@@ -111,6 +125,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-07-napoleon.png",
+        dificultad: 2,
       },
       {
         texto: "¿En qué batalla de 1815 fue derrotado definitivamente Napoleón?",
@@ -118,6 +133,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué proceso económico y social, iniciado en Inglaterra en el siglo XVIII, transformó la producción mediante la máquina de vapor?",
@@ -125,6 +141,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-08-maquina-vapor.png",
+        dificultad: 2,
       },
       {
         texto: "¿En qué año se independizaron las Trece Colonias de Gran Bretaña mediante la Declaración de Independencia?",
@@ -132,6 +149,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Quién fue el libertador que encabezó la independencia de gran parte de Sudamérica, incluida la actual Colombia?",
@@ -139,6 +157,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-09-simon-bolivar.png",
+        dificultad: 1,
       },
       {
         texto: "¿En qué año se proclamó la independencia de la Nueva Granada (actual Colombia), el 20 de julio?",
@@ -146,6 +165,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué guerra civil estadounidense (1861-1865) terminó con la abolición de la esclavitud en Estados Unidos?",
@@ -153,6 +173,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué atentado en Sarajevo en 1914 desencadenó la Primera Guerra Mundial?",
@@ -160,6 +181,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-hist-10-francisco-fernando.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué tratado de 1919 puso fin oficialmente a la Primera Guerra Mundial e impuso duras condiciones a Alemania?",
@@ -167,6 +189,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué revolución de 1917 derrocó al zar Nicolás II e instauró posteriormente un gobierno bolchevique en Rusia?",
@@ -174,6 +197,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-hist-11-revolucion-rusa.png",
+        dificultad: 3,
       },
       {
         texto: "¿Quién lideró a los bolcheviques durante la Revolución Rusa de 1917?",
@@ -181,6 +205,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué crisis económica mundial comenzó con el colapso de la bolsa de Nueva York en 1929?",
@@ -188,6 +213,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué partido llevó a Adolf Hitler al poder en Alemania en 1933?",
@@ -195,6 +221,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué invasión alemana el 1 de septiembre de 1939 marcó el inicio de la Segunda Guerra Mundial?",
@@ -202,6 +229,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-hist-12-invasion-polonia.png",
+        dificultad: 3,
       },
       {
         texto: "¿En qué fecha se produjo el desembarco aliado en las playas de Normandía, conocido como el 'Día D'?",
@@ -209,6 +237,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-hist-13-desembarco-normandia.png",
+        dificultad: 4,
       },
       {
         texto: "¿Sobre qué dos ciudades japonesas se lanzaron bombas atómicas en agosto de 1945?",
@@ -216,6 +245,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué organización internacional se fundó en 1945 para promover la paz y la cooperación entre naciones?",
@@ -223,6 +253,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué muro simbolizó la división entre el bloque occidental y el bloque soviético desde 1961 hasta 1989?",
@@ -230,6 +261,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-14-muro-berlin.png",
+        dificultad: 2,
       },
       {
         texto: "¿En qué año cayó el Muro de Berlín, marcando el fin simbólico de la Guerra Fría en Europa?",
@@ -237,6 +269,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué revolución liderada por Fidel Castro y el Che Guevara triunfó en Cuba en 1959?",
@@ -244,6 +277,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-hist-15-che-guevara.png",
+        dificultad: 3,
       },
       {
         texto: "¿En qué año llegó el ser humano a la Luna por primera vez, con la misión Apolo 11?",
@@ -251,6 +285,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-16-apolo-11.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué líder sudafricano fue encarcelado durante 27 años y luego se convirtió en presidente, poniendo fin oficial al apartheid?",
@@ -258,6 +293,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-17-nelson-mandela.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué atentados ocurridos el 11 de septiembre de 2001 marcaron un antes y un después en la política de seguridad mundial?",
@@ -265,6 +301,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué antiguo imperio helenístico fue fundado tras las conquistas de Alejandro Magno en el siglo IV a.C.?",
@@ -272,6 +309,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-hist-18-alejandro-magno.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué dinastía gobernó China durante la construcción de gran parte de la Gran Muralla que se conserva hoy?",
@@ -279,6 +317,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-hist-19-gran-muralla-china.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué civilización precolombina desarrolló un sofisticado sistema de escritura jeroglífica y un calendario astronómico avanzado en Mesoamérica?",
@@ -286,6 +325,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-hist-20-piramide-maya.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué imperio islámico, con capital en Estambul, dominó gran parte del Mediterráneo oriental durante siglos hasta su disolución en 1922?",
@@ -293,6 +333,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-hist-21-imperio-otomano.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué expedición naval, iniciada en 1519 bajo el mando de Fernando de Magallanes y concluida por Juan Sebastián Elcano, logró la primera vuelta al mundo?",
@@ -300,6 +341,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué guerra enfrentó a Estados Unidos y sus aliados contra Vietnam del Norte, extendiéndose hasta 1975?",
@@ -307,6 +349,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué crisis de 1962, relacionada con misiles soviéticos en Cuba, llevó al mundo al borde de una guerra nuclear?",
@@ -314,6 +357,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué reina inglesa, cuyo largo reinado dio nombre a una era de expansión industrial y colonial, gobernó desde 1837 hasta 1901?",
@@ -321,6 +365,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-hist-22-reina-victoria.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué filósofo griego fue maestro de Alejandro Magno y discípulo de Platón?",
@@ -328,6 +373,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿En qué ciudad se firmó en 1648 el conjunto de tratados que puso fin a la Guerra de los Treinta Años en Europa?",
@@ -335,6 +381,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Qué faraona egipcia gobernó como corregente y luego como faraón en el siglo XV a.C., destacando por su prolongado y próspero reinado?",
@@ -342,6 +389,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-hist-23-hatshepsut.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué última reina ptolemaica de Egipto, célebre por sus alianzas con Julio César y Marco Antonio, gobernó hasta el año 30 a.C.?",
@@ -349,6 +397,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-hist-24-cleopatra.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué conjunto de expediciones militares religiosas, iniciadas en 1096, buscaron recuperar Tierra Santa para la cristiandad?",
@@ -356,6 +405,7 @@ const BANCOS_HISTORIA_UNIVERSAL = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-hist-25-cruzados.png",
+        dificultad: 4,
       },
     ],
   },

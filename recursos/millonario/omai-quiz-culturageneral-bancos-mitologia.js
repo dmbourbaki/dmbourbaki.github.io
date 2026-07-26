@@ -13,6 +13,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mito-01-zeus.png",
+        dificultad: 1,
       },
       {
         texto: "¿Quién es el dios griego del mar?",
@@ -20,6 +21,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mito-02-poseidon.png",
+        dificultad: 1,
       },
       {
         texto: "¿Quién es el dios griego del inframundo?",
@@ -27,6 +29,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mito-03-hades.png",
+        dificultad: 2,
       },
       {
         texto: "¿Quién es la diosa griega de la sabiduría, nacida de la cabeza de Zeus?",
@@ -34,6 +37,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-04-atenea.png",
+        dificultad: 3,
       },
       {
         texto: "¿Quién es la diosa griega del amor y la belleza?",
@@ -41,6 +45,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mito-05-afrodita.png",
+        dificultad: 1,
       },
       {
         texto: "¿Quién es el dios griego de la guerra?",
@@ -48,6 +53,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-06-ares.png",
+        dificultad: 2,
       },
       {
         texto: "¿Quién es el dios griego del sol, la música y las artes?",
@@ -55,6 +61,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-07-apolo.png",
+        dificultad: 3,
       },
       {
         texto: "¿Quién es la diosa griega de la caza y hermana gemela de Apolo?",
@@ -62,6 +69,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-08-artemisa.png",
+        dificultad: 4,
       },
       {
         texto: "¿Quién es el mensajero de los dioses griegos, representado con sandalias aladas?",
@@ -69,6 +77,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-09-hermes.png",
+        dificultad: 3,
       },
       {
         texto: "¿Quién es el dios griego del vino y las fiestas?",
@@ -76,6 +85,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-10-dionisio.png",
+        dificultad: 3,
       },
       {
         texto: "¿Quién es la esposa de Zeus y diosa protectora del matrimonio?",
@@ -83,6 +93,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-11-hera.png",
+        dificultad: 3,
       },
       {
         texto: "¿Quién es el dios griego herrero y artesano, esposo de Afrodita?",
@@ -90,6 +101,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-12-hefesto.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué héroe griego debió cumplir doce trabajos imposibles como penitencia, incluyendo matar al león de Nemea?",
@@ -97,6 +109,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mito-13-heracles.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué héroe griego mató al Minotauro en el laberinto de Creta con ayuda del hilo de Ariadna?",
@@ -104,6 +117,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-14-teseo-minotauro.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué criatura mitológica griega, mitad hombre y mitad toro, habitaba el laberinto de Creta?",
@@ -111,6 +125,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mito-15-minotauro.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué héroe griego decapitó a la Medusa usando un escudo pulido como espejo?",
@@ -118,6 +133,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-16-perseo-medusa.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué criatura mitológica griega tenía serpientes en lugar de cabello y podía convertir en piedra con su mirada?",
@@ -125,6 +141,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mito-17-medusa.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué héroe griego lideró a los argonautas en busca del vellocino de oro?",
@@ -132,6 +149,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-18-jason-argonautas.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué guerrero griego, protagonista de la Ilíada, era invulnerable salvo en su talón?",
@@ -139,6 +157,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mito-19-aquiles.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué rey griego ideó el astuto plan del Caballo de Troya para conquistar la ciudad?",
@@ -146,6 +165,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-20-caballo-de-troya.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué titán griego robó el fuego de los dioses para dárselo a la humanidad?",
@@ -153,6 +173,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-21-prometeo.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué titán griego fue condenado a sostener el cielo (o la bóveda celeste) sobre sus hombros por toda la eternidad?",
@@ -160,6 +181,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-22-atlas.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué titán griego, padre de Zeus, devoraba a sus propios hijos por temor a ser destronado?",
@@ -167,6 +189,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-23-cronos.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué criatura mitológica griega, mitad mujer y mitad ave o león según la versión, proponía enigmas mortales a los viajeros de Tebas?",
@@ -174,6 +197,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-24-esfinge.png",
+        dificultad: 5,
       },
       {
         texto: "¿Quién es el dios romano equivalente a Zeus, rey de los dioses?",
@@ -181,6 +205,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-25-jupiter.png",
+        dificultad: 3,
       },
       {
         texto: "¿Quién es el dios romano de la guerra, equivalente a Ares en la mitología griega?",
@@ -188,6 +213,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-26-marte.png",
+        dificultad: 3,
       },
       {
         texto: "¿Quién es el dios nórdico del trueno, portador del martillo Mjölnir?",
@@ -195,6 +221,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-mito-27-thor.png",
+        dificultad: 2,
       },
       {
         texto: "¿Quién es el dios supremo de la mitología nórdica, padre de Thor y asociado a la sabiduría y la guerra?",
@@ -202,6 +229,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-28-odin.png",
+        dificultad: 3,
       },
       {
         texto: "¿Quién es el dios embaucador de la mitología nórdica, asociado al engaño y la transformación?",
@@ -209,6 +237,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-29-loki.png",
+        dificultad: 3,
       },
       {
         texto: "¿Cómo se llama el salón de los guerreros caídos en la mitología nórdica, donde Odín los recibe?",
@@ -216,6 +245,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-30-valhalla.png",
+        dificultad: 5,
       },
       {
         texto: "¿Quién es el dios egipcio del sol, representado con cabeza de halcón?",
@@ -223,6 +253,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-31-ra.png",
+        dificultad: 5,
       },
       {
         texto: "¿Quién es el dios egipcio de los muertos y del inframundo, representado con cabeza de chacal?",
@@ -230,6 +261,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-32-anubis.png",
+        dificultad: 4,
       },
       {
         texto: "¿Quién es el dios egipcio del más allá, esposo de Isis y asesinado por su hermano Set?",
@@ -237,6 +269,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-33-osiris.png",
+        dificultad: 5,
       },
       {
         texto: "¿Quién es la diosa egipcia de la magia y la maternidad, esposa de Osiris y madre de Horus?",
@@ -244,6 +277,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-34-isis.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué diosa egipcia con cabeza de gato representa la protección del hogar y la fertilidad?",
@@ -251,6 +285,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-35-bastet.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué dios azteca, representado como una serpiente emplumada, es asociado con la sabiduría y el viento?",
@@ -258,6 +293,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-36-quetzalcoatl.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué dios azteca de la guerra y el sol dio origen al nombre de Tenochtitlán según la leyenda fundacional?",
@@ -265,6 +301,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-37-huitzilopochtli.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué dios azteca de la lluvia era honrado con ofrendas para asegurar buenas cosechas?",
@@ -272,6 +309,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-38-tlaloc.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué héroe mítico maya, junto a su hermano gemelo, venció a los señores del inframundo (Xibalbá) en el Popol Vuh?",
@@ -279,6 +317,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-39-popol-vuh.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué dios inca del sol era considerado el ancestro divino de los emperadores (Sapa Inca)?",
@@ -286,6 +325,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-40-inti.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se llama la diosa de la tierra y la fertilidad venerada por los pueblos andinos, incluida la cultura inca?",
@@ -293,6 +333,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-41-pachamama.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué dios chibcha (muisca) de la actual Colombia está asociado con la creación y es representado como un ser luminoso?",
@@ -300,6 +341,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-42-bochica.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué criaturas marinas de la mitología griega atraían a los marineros con su canto hacia naufragios mortales?",
@@ -307,6 +349,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-43-sirenas.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué criatura mitológica griega tiene cuerpo de león, cabeza de cabra y cola de serpiente, y lanza fuego por la boca?",
@@ -314,6 +357,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-44-quimera.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué perro de tres cabezas custodia la entrada al inframundo griego?",
@@ -321,6 +365,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-45-cerbero.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué caballo alado de la mitología griega nació de la sangre de la Medusa decapitada?",
@@ -328,6 +373,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-46-pegaso.png",
+        dificultad: 4,
       },
       {
         texto: "¿Quién es el barquero que transporta las almas de los muertos a través del río Estigia en la mitología griega?",
@@ -335,6 +381,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-47-caronte.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué gigante de fuego, en la mitología nórdica, provocará el Ragnarök (el fin del mundo) junto a otras fuerzas del caos?",
@@ -342,6 +389,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-48-ragnarok.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué lobo gigante de la mitología nórdica, hijo de Loki, está destinado a devorar a Odín durante el Ragnarök?",
@@ -349,6 +397,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-mito-49-fenrir.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué diosa griega de la agricultura y las cosechas es madre de Perséfone?",
@@ -356,6 +405,7 @@ const BANCOS_MITOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-mito-50-demeter.png",
+        dificultad: 4,
       },
     ],
   },

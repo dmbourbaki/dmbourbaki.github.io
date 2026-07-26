@@ -1,0 +1,138 @@
+{
+  "categorias": {
+    "omai-quiz-culturageneral-bancos-anatomia-medicina.js": {
+      "n": 50,
+      "promedio": 4.24,
+      "min": 1,
+      "max": 8
+    },
+    "omai-quiz-culturageneral-bancos-arte-literatura.js": {
+      "n": 50,
+      "promedio": 3.92,
+      "min": 1,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-astronomia.js": {
+      "n": 50,
+      "promedio": 4.28,
+      "min": 1,
+      "max": 9
+    },
+    "omai-quiz-culturageneral-bancos-biologia.js": {
+      "n": 50,
+      "promedio": 4.12,
+      "min": 2,
+      "max": 9
+    },
+    "omai-quiz-culturageneral-bancos-ciencia-naturaleza.js": {
+      "n": 50,
+      "promedio": 3.72,
+      "min": 1,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-cine.js": {
+      "n": 50,
+      "promedio": 3.94,
+      "min": 2,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-deportes.js": {
+      "n": 50,
+      "promedio": 3.32,
+      "min": 1,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-filosofia.js": {
+      "n": 50,
+      "promedio": 4.76,
+      "min": 2,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-fisica.js": {
+      "n": 50,
+      "promedio": 4.1,
+      "min": 1,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-gastronomia.js": {
+      "n": 50,
+      "promedio": 3.76,
+      "min": 1,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-geografia.js": {
+      "n": 50,
+      "promedio": 3.56,
+      "min": 1,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-historia-universal.js": {
+      "n": 50,
+      "promedio": 3.04,
+      "min": 1,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-idiomas.js": {
+      "n": 50,
+      "promedio": 4.74,
+      "min": 1,
+      "max": 9
+    },
+    "omai-quiz-culturageneral-bancos-matematicas.js": {
+      "n": 50,
+      "promedio": 4.02,
+      "min": 1,
+      "max": 8
+    },
+    "omai-quiz-culturageneral-bancos-mitologia.js": {
+      "n": 50,
+      "promedio": 3.66,
+      "min": 1,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-musica.js": {
+      "n": 50,
+      "promedio": 3.84,
+      "min": 1,
+      "max": 8
+    },
+    "omai-quiz-culturageneral-bancos-naturaleza-animales.js": {
+      "n": 50,
+      "promedio": 2.74,
+      "min": 1,
+      "max": 7
+    },
+    "omai-quiz-culturageneral-bancos-quimica.js": {
+      "n": 50,
+      "promedio": 3.5,
+      "min": 1,
+      "max": 6
+    },
+    "omai-quiz-culturageneral-bancos-tecnologia.js": {
+      "n": 50,
+      "promedio": 2.68,
+      "min": 1,
+      "max": 5
+    },
+    "omai-quiz-culturageneral-bancos-videojuegos.js": {
+      "n": 50,
+      "promedio": 3.56,
+      "min": 1,
+      "max": 6
+    }
+  },
+  "histograma": [
+    0,
+    92,
+    188,
+    185,
+    187,
+    149,
+    150,
+    36,
+    10,
+    3,
+    0
+  ],
+  "total": 1000
+}

@@ -13,6 +13,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-01-elefante-africano.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el animal más alto del mundo?",
@@ -20,6 +21,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-02-jirafa.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el animal terrestre más rápido del mundo en distancias cortas?",
@@ -27,6 +29,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-03-guepardo.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el mamífero marino más grande que ha existido en la historia del planeta?",
@@ -34,6 +37,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-04-ballena-azul.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué gran felino es el más grande del mundo, superando incluso al león en tamaño?",
@@ -41,6 +45,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-05-tigre-siberiano.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué felino es conocido como el 'rey de la selva' pese a habitar principalmente sabanas africanas?",
@@ -48,6 +53,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-06-leon.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué animal es conocido por cambiar de color mediante células especializadas llamadas cromatóforos?",
@@ -55,6 +61,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-07-camaleon.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué reptil es el más grande del mundo, capaz de alcanzar más de 6 metros de longitud?",
@@ -62,6 +69,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-08-cocodrilo-marino.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cuál es la serpiente más larga del mundo según registros verificados?",
@@ -69,6 +77,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-09-piton-reticulada.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué serpiente venenosa, la más larga de todas las serpientes venenosas del mundo, habita en el sudeste asiático y puede erguir gran parte de su cuerpo?",
@@ -76,6 +85,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-10-cobra-real.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué mamífero volador es el único capaz de volar de forma activa y sostenida, gracias a sus alas membranosas?",
@@ -83,6 +93,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-11-murcielago.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué ave rapaz nocturna es reconocida por su capacidad de girar la cabeza hasta 270 grados y su vuelo silencioso?",
@@ -90,6 +101,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-12-buho.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué ave rapaz, símbolo nacional de Estados Unidos, tiene una envergadura de más de dos metros y vive cerca de cuerpos de agua?",
@@ -97,6 +109,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-13-aguila-calva.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué ave rapaz es considerada el animal más rápido del mundo al realizar su picado de caza, superando los 300 km/h?",
@@ -104,6 +117,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-14-halcon-peregrino.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué gran ave rapaz sudamericana, símbolo de varios países andinos, es uno de los pájaros voladores más grandes del mundo?",
@@ -111,6 +125,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-15-condor-andino.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué ave no voladora es la más grande y pesada del mundo actualmente?",
@@ -118,6 +133,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-16-avestruz.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué ave no voladora del hemisferio sur es capaz de nadar y bucear con gran destreza en aguas heladas?",
@@ -125,6 +141,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-17-pinguino.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué molusco marino, conocido por su inteligencia y capacidad de camuflaje casi instantáneo, tiene tres corazones?",
@@ -132,6 +149,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-18-pulpo.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué animal marino invertebrado puede regenerar brazos completos, e incluso, en algunas especies, un cuerpo entero a partir de un solo brazo?",
@@ -139,6 +157,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-19-estrella-de-mar.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué gran pez cartilaginoso, el más grande de todos los peces del mundo, se alimenta filtrando plancton y peces pequeños?",
@@ -146,6 +165,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-20-tiburon-ballena.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué gran depredador marino, protagonista de películas como 'Tiburón', es el mayor pez depredador del océano?",
@@ -153,6 +173,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-21-tiburon-blanco.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué mamífero marino, conocido como 'ballena asesina', en realidad pertenece a la familia de los delfines?",
@@ -160,6 +181,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-22-orca.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué mamífero marino ártico es apodado 'unicornio del mar' por su largo colmillo en espiral?",
@@ -167,6 +189,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-23-narval.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué insecto es responsable de la polinización de gran parte de los cultivos alimentarios del mundo?",
@@ -174,6 +197,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-24-abeja-polinizando.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué proceso de transformación atraviesa una oruga hasta convertirse en mariposa?",
@@ -181,6 +205,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-25-metamorfosis-mariposa.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué insecto social vive en colonias organizadas jerárquicamente con una reina, y es conocido por construir hormigueros complejos?",
@@ -188,6 +213,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué mamífero australiano, marsupial, es célebre por su bolsa marsupial y su capacidad de dar grandes saltos?",
@@ -195,6 +221,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-26-canguro.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué mamífero marsupial australiano se alimenta casi exclusivamente de hojas de eucalipto y duerme la mayor parte del día?",
@@ -202,6 +229,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-27-koala.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué mamífero es el único que pone huevos en lugar de parir crías vivas, junto con el equidna?",
@@ -209,6 +237,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-28-ornitorrinco.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué gran oso blanco, adaptado al frío extremo del Ártico, es el mayor depredador terrestre del mundo?",
@@ -216,6 +245,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-29-oso-polar.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué oso, de pelaje blanco y negro característico, se alimenta casi exclusivamente de bambú y es originario de China?",
@@ -223,6 +253,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-30-oso-panda.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué gran simio, el más grande de todos los primates, habita en las selvas de África central?",
@@ -230,6 +261,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-31-gorila.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué gran simio de pelaje anaranjado, cuyo nombre significa 'hombre del bosque' en malayo, habita en Borneo y Sumatra?",
@@ -237,6 +269,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-32-orangutan.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué primate, genéticamente el más cercano al ser humano junto al bonobo, ha sido objeto de célebres estudios de campo por Jane Goodall?",
@@ -244,6 +277,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-33-chimpance.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué animal africano, con un cuello extremadamente largo y patrón de manchas único, es el pariente vivo más cercano de la jirafa?",
@@ -251,6 +285,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-34-okapi.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué mamífero africano de gran tamaño, herbívoro y semiacuático, es responsable de más muertes humanas que la mayoría de grandes depredadores del continente?",
@@ -258,6 +293,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-35-hipopotamo.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué mamífero africano de gran tamaño posee uno o dos cuernos hechos de queratina sobre el hocico y está en peligro de extinción por la caza furtiva?",
@@ -265,6 +301,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-36-rinoceronte.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué animal, símbolo de longevidad en muchas culturas, puede vivir más de cien años en algunas especies marinas o terrestres gigantes?",
@@ -272,6 +309,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-37-tortuga-gigante.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué proceso permite a ciertos organismos, como los osos, reducir su actividad metabólica durante el invierno para sobrevivir con escasez de alimento?",
@@ -279,6 +317,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-38-oso-hibernando.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué proceso biológico permite a ciertos animales, como algunas aves y mariposas, migrar largas distancias siguiendo patrones estacionales?",
@@ -286,6 +325,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-39-migracion-aves.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué relación biológica beneficia a ambas especies involucradas, como la de los peces payaso y las anémonas?",
@@ -293,6 +333,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-40-pez-payaso-anemona.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué selva tropical, la más extensa del mundo, alberga aproximadamente el 10% de la biodiversidad conocida del planeta?",
@@ -300,6 +341,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-41-selva-amazonica.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué gran arrecife de coral, visible incluso desde el espacio, se encuentra frente a la costa noreste de Australia y alberga miles de especies marinas?",
@@ -307,6 +349,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-42-gran-barrera-coral.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué archipiélago volcánico del Pacífico ecuatoriano, con especies endémicas únicas, inspiró a Darwin en su teoría de la evolución?",
@@ -314,6 +357,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-43-islas-galapagos.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué gran felino sudamericano, de manchas en forma de roseta, es el mayor depredador de la selva amazónica?",
@@ -321,6 +365,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-natan-44-jaguar.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué gran felino americano, también llamado león de montaña o puma, tiene la mayor distribución geográfica de cualquier mamífero terrestre en el continente?",
@@ -328,6 +373,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-45-puma.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué animal andino, camélido sudamericano, es apreciado por su fibra fina y suave, considerada una de las más valiosas del mundo?",
@@ -335,6 +381,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-46-vicuna.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué camélido sudamericano, doméstico desde hace milenios, se usa tradicionalmente como animal de carga en los Andes?",
@@ -342,6 +389,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-47-llama.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué único oso originario de Sudamérica, con manchas claras alrededor de los ojos, habita principalmente en los Andes?",
@@ -349,6 +397,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-natan-48-oso-de-anteojos.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué ave migratoria, de plumaje rosado o rojizo debido a su dieta rica en carotenoides, suele vivir en grandes bandadas en lagunas someras?",
@@ -356,6 +405,7 @@ const BANCOS_NATURALEZA_ANIMALES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-natan-49-flamenco.png",
+        dificultad: 2,
       },
     ],
   },

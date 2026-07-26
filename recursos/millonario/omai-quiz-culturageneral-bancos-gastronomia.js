@@ -13,6 +13,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-gas-01-pizza-margarita.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué ingredientes representan los colores de la bandera italiana en la pizza margarita?",
@@ -20,6 +21,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿De qué país es originario el sushi?",
@@ -27,6 +29,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-gas-02-sushi.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cómo se llama el arroz avinagrado utilizado como base del sushi?",
@@ -34,6 +37,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué salsa picante japonesa, hecha de rábano, se sirve tradicionalmente junto al sushi?",
@@ -41,6 +45,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-03-wasabi.png",
+        dificultad: 3,
       },
       {
         texto: "¿De qué país es originario el taco, plato icónico basado en tortilla de maíz rellena?",
@@ -48,6 +53,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-gas-04-tacos-mexicanos.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué plato mexicano consiste en tortilla frita rellena o cubierta de frijoles, queso y otros ingredientes, similar a una tostada?",
@@ -55,6 +61,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué salsa mexicana tradicional, elaborada con chile, chocolate y diversas especias, se sirve típicamente sobre pollo o pavo?",
@@ -62,6 +69,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-05-mole-mexicano.png",
+        dificultad: 3,
       },
       {
         texto: "¿De qué país es originaria la paella, plato de arroz típico de la región valenciana?",
@@ -69,6 +77,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-gas-06-paella-valenciana.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué ingrediente da a la paella su característico color amarillo/naranja?",
@@ -76,6 +85,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿De qué país es originario el curry, un conjunto de especias y platos característicos de su cocina?",
@@ -83,6 +93,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-gas-07-curry-indio.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué bebida caliente elaborada con hojas fermentadas de la planta Camellia sinensis es la segunda más consumida del mundo después del agua?",
@@ -90,6 +101,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿De qué país es originario el café expreso, preparado con presión de agua caliente a través de café molido fino?",
@@ -97,6 +109,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-08-cafe-expreso.png",
+        dificultad: 3,
       },
       {
         texto: "¿En qué continente se originó la planta del café antes de expandirse por el mundo?",
@@ -104,6 +117,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué país es el mayor productor mundial de café?",
@@ -111,6 +125,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿De qué país es originario el goulash, guiso de carne con pimentón?",
@@ -118,6 +133,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-09-goulash-hungaro.png",
+        dificultad: 5,
       },
       {
         texto: "¿De qué país es originario el hummus, puré de garbanzos con tahini muy popular en Medio Oriente?",
@@ -125,6 +141,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-10-hummus.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué pasta italiana rellena, con forma de anillo, se sirve típicamente con salsa de tomate o mantequilla?",
@@ -132,6 +149,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué plato italiano de arroz cremoso se cocina lentamente añadiendo caldo poco a poco?",
@@ -139,6 +157,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-11-risotto.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué queso francés, de pasta blanda y corteza enmohecida blanca, es originario de la región de Brie?",
@@ -146,6 +165,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-12-queso-brie.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué queso francés, de vetas azules características, se elabora tradicionalmente en cuevas de la región homónima?",
@@ -153,6 +173,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿De qué país es originario el vino tinto conocido como Rioja?",
@@ -160,6 +181,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué región francesa da nombre al vino espumoso elaborado con un método específico de segunda fermentación en botella?",
@@ -167,6 +189,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-13-champagne.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué bebida destilada mexicana se elabora a partir del agave azul, siendo la base de bebidas como el 'margarita'?",
@@ -174,6 +197,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-14-tequila.png",
+        dificultad: 2,
       },
       {
         texto: "¿De qué país es originario el ron, bebida destilada a partir de la caña de azúcar, muy asociada al Caribe?",
@@ -181,6 +205,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué plato colombiano tradicional consiste en un caldo con papa, pollo, mazorca y guasca, típico de la región andina bogotana?",
@@ -188,6 +213,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-15-ajiaco-bogotano.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué plato colombiano combina frijoles, arroz, carne molida, chicharrón, huevo, plátano y aguacate en una sola presentación abundante?",
@@ -195,6 +221,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-16-bandeja-paisa.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué guiso caribeño y latinoamericano, elaborado con varias carnes, tubérculos y plátano, se caracteriza por su larga cocción en caldo?",
@@ -202,6 +229,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿De qué país es originario el ceviche, plato de pescado o marisco crudo marinado en cítricos?",
@@ -209,6 +237,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-17-ceviche-peruano.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué plato peruano de origen chino-peruano combina técnicas de wok con ingredientes locales como el ají amarillo?",
@@ -216,6 +245,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-18-lomo-saltado.png",
+        dificultad: 6,
       },
       {
         texto: "¿De qué país es originaria la empanada, masa rellena horneada o frita, con variantes en toda América Latina?",
@@ -223,6 +253,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-19-empanadas.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué corte de carne asada, típico de Argentina, se cocina lentamente sobre brasas en un asado tradicional?",
@@ -230,6 +261,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-20-asado-argentino.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué plato brasileño, elaborado con frijoles negros y diversas carnes de cerdo, es considerado el plato nacional de Brasil?",
@@ -237,6 +269,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-21-feijoada.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué técnica culinaria brasileña de asar diversas carnes en espadas de metal directamente sobre el fuego dio origen a los restaurantes tipo 'churrascaria'?",
@@ -244,6 +277,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿De qué país es originario el kimchi, col fermentada picante que acompaña casi todas las comidas?",
@@ -251,6 +285,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-22-kimchi.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué platillo coreano de arroz mezclado con vegetales, carne y un huevo, servido a menudo en un bowl caliente de piedra, es muy popular internacionalmente?",
@@ -258,6 +293,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-23-bibimbap.png",
+        dificultad: 2,
       },
       {
         texto: "¿De qué país es originario el pad thai, plato de fideos de arroz salteados con tamarindo, maní y camarones?",
@@ -265,6 +301,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-24-pad-thai.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué sopa vietnamita, elaborada con caldo aromático, fideos de arroz y carne, es uno de los platos más representativos del país?",
@@ -272,6 +309,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-25-pho-vietnamita.png",
+        dificultad: 3,
       },
       {
         texto: "¿De qué país es originario el falafel, bolitas fritas de garbanzo o habas, populares en toda la región de Medio Oriente?",
@@ -279,6 +317,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-26-falafel.png",
+        dificultad: 2,
       },
       {
         texto: "¿De qué país es originaria la fondue de queso, plato en el que se sumerge pan en queso derretido?",
@@ -286,6 +325,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-27-fondue-suiza.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué postre francés, hecho de capas delgadas de masa hojaldrada, crema pastelera y a menudo glaseado, es un clásico de la repostería?",
@@ -293,6 +333,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué pequeño bizcocho francés, hecho con almendra molida y relleno de crema o ganache entre dos discos, es reconocible por sus colores vivos?",
@@ -300,6 +341,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-28-macarons.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué postre italiano, elaborado con capas de bizcocho empapado en café, mascarpone y cacao en polvo, es uno de los más famosos del mundo?",
@@ -307,6 +349,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-gas-29-tiramisu.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué pan plano italiano, horneado con aceite de oliva y hierbas, es similar a la base de una pizza pero más esponjoso?",
@@ -314,6 +357,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué especia, obtenida de los estigmas de una flor de crocus, es considerada la más cara del mundo por gramo?",
@@ -321,6 +365,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-30-azafran.png",
+        dificultad: 6,
       },
       {
         texto: "¿De qué planta se obtiene el chocolate, tras fermentar, secar y tostar sus semillas?",
@@ -328,6 +373,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-gas-31-cacao-chocolate.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué civilización antigua de Mesoamérica es reconocida como una de las primeras en consumir el cacao como bebida ceremonial?",
@@ -335,6 +381,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué técnica culinaria de cocción lenta a baja temperatura, en bolsas selladas al vacío, es muy usada en la gastronomía moderna de precisión?",
@@ -342,6 +389,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué chef español, del restaurante El Bulli, es considerado pionero de la gastronomía molecular?",
@@ -349,6 +397,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-gas-32-ferran-adria.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué distinción culinaria internacional, otorgada por una guía francesa homónima, es considerada el máximo reconocimiento gastronómico para restaurantes?",
@@ -356,6 +405,7 @@ const BANCOS_GASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-gas-33-estrella-michelin.png",
+        dificultad: 4,
       },
     ],
   },

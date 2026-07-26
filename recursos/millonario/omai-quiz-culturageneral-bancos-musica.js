@@ -13,6 +13,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-01-mozart.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué compositor alemán, célebre por su 'Novena Sinfonía', continuó componiendo pese a quedarse sordo?",
@@ -20,6 +21,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-02-beethoven.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué banda británica de los años 60, formada por John Lennon y Paul McCartney entre otros, es una de las más influyentes de la historia?",
@@ -27,6 +29,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-03-beatles.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué cantante estadounidense es conocido como el 'Rey del Rock and Roll'?",
@@ -34,6 +37,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-04-elvis-presley.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué cantante y compositor estadounidense es conocido como el 'Rey del Pop'?",
@@ -41,6 +45,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-05-michael-jackson.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué álbum de Michael Jackson, lanzado en 1982, es el más vendido de la historia?",
@@ -48,6 +53,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué banda británica de rock progresivo es autora del álbum 'The Dark Side of the Moon'?",
@@ -55,6 +61,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-06-pink-floyd.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué cantante y líder de la banda Queen es autor de 'Bohemian Rhapsody'?",
@@ -62,6 +69,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-07-freddie-mercury.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué compositor alemán del período barroco es autor de las 'Variaciones Goldberg' y numerosas obras corales?",
@@ -69,6 +77,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-08-bach.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué compositor italiano barroco es autor de 'Las cuatro estaciones'?",
@@ -76,6 +85,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-09-vivaldi.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué compositor italiano-estadounidense compuso la música de 'El Padrino', 'La Misión' y 'Cinema Paradiso'?",
@@ -83,6 +93,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-10-ennio-morricone.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué compositor estadounidense es autor de las bandas sonoras de 'Star Wars', 'Indiana Jones' y 'Jurassic Park'?",
@@ -90,6 +101,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-11-john-williams.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué compositor alemán ha musicalizado películas como 'El Rey León', 'Gladiador' y 'Interstellar'?",
@@ -97,6 +109,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué icónica cantante estadounidense de soul es conocida como la 'Reina del Soul' y cantó 'Respect'?",
@@ -104,6 +117,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-12-aretha-franklin.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué cantante estadounidense es conocida como la 'Reina del Pop' desde los años 80, autora de 'Like a Virgin' y 'Vogue'?",
@@ -111,6 +125,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-13-madonna.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué guitarrista estadounidense de rock, célebre por 'Purple Haze', es considerado uno de los mejores instrumentistas de la historia?",
@@ -118,6 +133,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-14-jimi-hendrix.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué banda británica de heavy metal, liderada por Ozzy Osbourne en sus inicios, es considerada pionera del género?",
@@ -125,6 +141,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-15-black-sabbath.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué compositor y director de orquesta austríaco del clasicismo es autor de sinfonías como 'La Sorpresa' y 'El Reloj'?",
@@ -132,6 +149,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué género musical originado en Nueva Orleans a principios del siglo XX combina raíces africanas, blues y ragtime?",
@@ -139,6 +157,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-16-jazz-nueva-orleans.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué trompetista y cantante estadounidense es una de las máximas figuras del jazz, célebre por 'What a Wonderful World'?",
@@ -146,6 +165,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-17-louis-armstrong.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué cantante colombiana ha vendido millones de discos con éxitos como 'Waka Waka' y 'Hips Don't Lie'?",
@@ -153,6 +173,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-18-shakira.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué banda de rock estadounidense, liderada por los hermanos Gallagher, protagonizó una de las rivalidades musicales más famosas de los años 90 con Blur?",
@@ -160,6 +181,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-19-oasis-banda.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué cantante puertorriqueño, conocido como uno de los máximos exponentes del reguetón, ha colaborado con Daddy Yankee y Wisin?",
@@ -167,6 +189,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué compositor alemán, célebre por su ciclo operístico 'El anillo del Nibelungo', revolucionó la ópera en el siglo XIX?",
@@ -174,6 +197,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-20-wagner-opera.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué compositor italiano es autor de óperas como 'La Traviata', 'Aida' y 'Rigoletto'?",
@@ -181,6 +205,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué banda británica de rock, liderada por Mick Jagger y Keith Richards, es célebre por 'Satisfaction' y su longeva trayectoria desde los años 60?",
@@ -188,6 +213,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-21-rolling-stones.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué banda británica de rock, formada en 1968, es autora de 'Stairway to Heaven'?",
@@ -195,6 +221,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-22-led-zeppelin.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué cantante estadounidense de country y pop, conocida como 'la reina del country pop', ha lanzado álbumes desde 'Fearless' hasta 'Midnights'?",
@@ -202,6 +229,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-23-taylor-swift.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué cantante colombiano, conocido por fusionar reguetón y pop, es autor de éxitos como 'Mi Gente' y 'Ginza'?",
@@ -209,6 +237,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-24-j-balvin.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué cantante colombiana, conocida como 'la Bichota', es una de las artistas de reguetón femeninas más exitosas de la actualidad?",
@@ -216,6 +245,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-25-karol-g.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué cantante canadiense de R&B, célebre por 'Blinding Lights', se presentó en el show de medio tiempo del Super Bowl LV?",
@@ -223,6 +253,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-26-the-weeknd.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué cantante estadounidense, conocida por 'Rolling in the Deep' y 'Someone Like You', ha ganado múltiples premios Grammy?",
@@ -230,6 +261,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-musica-27-adele.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué compositor austríaco del romanticismo es autor de 'El Danubio Azul', un célebre vals?",
@@ -237,6 +269,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-28-danubio-azul.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué compositor ruso es autor del ballet 'El lago de los cisnes' y del 'Cascanueces'?",
@@ -244,6 +277,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-29-lago-de-los-cisnes.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué compositor alemán del romanticismo es autor de la 'Marcha Nupcial' incluida en 'El sueño de una noche de verano'?",
@@ -251,6 +285,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué género musical afroamericano, precursor del rock and roll, se caracteriza por su estructura de doce compases y letras melancólicas?",
@@ -258,6 +293,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-30-blues.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué guitarrista y cantante estadounidense de blues, conocido como 'el Rey del Blues', es autor de 'The Thrill Is Gone'?",
@@ -265,6 +301,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-31-bb-king.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué banda sueca de pop de los años 70 es autora de 'Dancing Queen' y ganó Eurovisión en 1974 con 'Waterloo'?",
@@ -272,6 +309,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-32-abba.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué cantante y bajista británico fue miembro de The Beatles y luego formó Wings?",
@@ -279,6 +317,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué compositor y pianista estadounidense de música clásica y jazz es autor de 'Rhapsody in Blue'?",
@@ -286,6 +325,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-33-rhapsody-in-blue.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué compositor estadounidense es autor del musical 'West Side Story' y dirigió importantes orquestas sinfónicas?",
@@ -293,6 +333,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-34-west-side-story.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué cantante brasileña, ícono de la bossa nova, popularizó junto a Tom Jobim canciones como 'Garota de Ipanema'?",
@@ -300,6 +341,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-35-bossa-nova.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué género musical de raíces afrocubanas, con clave rítmica característica, dio origen a la salsa moderna?",
@@ -307,6 +349,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-36-son-cubano.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué género musical colombiano, originario de la región Caribe y con acordeón como instrumento principal, fue declarado Patrimonio Cultural Inmaterial por la UNESCO?",
@@ -314,6 +357,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-37-vallenato.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué acordeonero y compositor colombiano es considerado uno de los máximos exponentes del vallenato tradicional, con más de 30 discos junto a distintos cantantes?",
@@ -321,6 +365,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 8,
       },
       {
         texto: "¿Qué cantante y compositor colombiano fusionó el vallenato tradicional con el pop, popularizándolo internacionalmente en los años 90?",
@@ -328,6 +373,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-38-carlos-vives.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué género musical caribeño de origen dominicano se caracteriza por un ritmo rápido en compás de 2/4 y el uso de la güira?",
@@ -335,6 +381,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-39-merengue.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué género musical dominicano romántico, con guitarras y letras de desamor, se popularizó mundialmente en los años 2000?",
@@ -342,6 +389,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-musica-40-bachata.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué compositor polaco-francés del romanticismo es autor de numerosos nocturnos y polonesas para piano?",
@@ -349,6 +397,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-musica-41-chopin.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué compositor húngaro del romanticismo, célebre virtuoso del piano, es autor de las 'Rapsodias Húngaras'?",
@@ -356,6 +405,7 @@ const BANCOS_MUSICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
     ],
   },

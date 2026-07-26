@@ -13,6 +13,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-idio-01-chino-mandarin.png",
+        dificultad: 3,
       },
       {
         texto: "¿Cuál es el segundo idioma con más hablantes nativos del mundo?",
@@ -20,6 +21,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿De qué familia lingüística forman parte el español, el francés, el italiano y el portugués?",
@@ -27,6 +29,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-idio-02-lenguas-romances.png",
+        dificultad: 4,
       },
       {
         texto: "¿De qué familia lingüística forman parte el inglés, el alemán y el neerlandés?",
@@ -34,6 +37,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿De qué familia lingüística forman parte el ruso, el polaco y el serbio?",
@@ -41,6 +45,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué lengua antigua, ya no hablada de forma nativa, es considerada la base de la que derivan las lenguas romances?",
@@ -48,6 +53,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-idio-03-latin.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué alfabeto, derivado del griego, es utilizado para escribir el ruso y otras lenguas eslavas?",
@@ -55,6 +61,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-idio-04-alfabeto-cirilico.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué sistema de escritura japonés utiliza caracteres derivados del chino, cada uno representando una palabra o concepto completo?",
@@ -62,6 +69,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-05-kanji-japones.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué sistema de escritura, creado en el siglo XV por orden del rey Sejong, se utiliza para el idioma coreano?",
@@ -69,6 +77,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-06-hangul-coreano.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué idioma se escribe de derecha a izquierda y es el idioma litúrgico del islam?",
@@ -76,6 +85,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-idio-07-escritura-arabe.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué idioma, hablado principalmente en Israel, fue revivido como lengua cotidiana a finales del siglo XIX y principios del XX tras siglos de uso casi exclusivamente litúrgico?",
@@ -83,6 +93,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-08-hebreo.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué lengua indígena de Mesoamérica, hablada por millones de personas hoy en México, fue la lengua principal del Imperio Azteca?",
@@ -90,6 +101,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-09-nahuatl.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué lengua indígena, hablada en la región andina, fue el idioma oficial del Imperio Inca y se sigue hablando hoy en Perú, Bolivia y Ecuador?",
@@ -97,6 +109,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-idio-10-quechua.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué lengua indígena de Paraguay es cooficial junto al español y es hablada por la mayoría de la población, incluida la no indígena?",
@@ -104,6 +117,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-11-guarani.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué idioma artificial, creado en el siglo XIX por L.L. Zamenhof, fue diseñado para servir como lengua universal auxiliar?",
@@ -111,6 +125,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-12-esperanto.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué lengua de signos es utilizada principalmente por la comunidad sorda de un país o región, con gramática y estructura propias distintas del idioma oral?",
@@ -118,6 +133,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-idio-13-lengua-de-senas.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué sistema de escritura táctil, inventado por un francés en el siglo XIX, permite a personas con discapacidad visual leer mediante el tacto?",
@@ -125,6 +141,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-idio-14-braille.png",
+        dificultad: 3,
       },
       {
         texto: "¿Cuántas letras tiene el alfabeto español actual, reconocido oficialmente por la RAE?",
@@ -132,6 +149,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué institución es la máxima autoridad normativa del idioma español, encargada de velar por su unidad?",
@@ -139,6 +157,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-idio-15-real-academia-espanola.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la rama de la lingüística que estudia el significado de las palabras y las oraciones?",
@@ -146,6 +165,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama la rama de la lingüística que estudia el orden y la estructura de las palabras en las oraciones?",
@@ -153,6 +173,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama la rama de la lingüística que estudia los sonidos del habla humana?",
@@ -160,6 +181,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama la rama de la lingüística que estudia la formación y estructura interna de las palabras?",
@@ -167,6 +189,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Cómo se le llama a una palabra que se escribe y suena igual en dos idiomas pero tiene significados distintos, generando confusión al traducir?",
@@ -174,6 +197,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se le llama a una persona que domina y utiliza con fluidez dos idiomas?",
@@ -181,6 +205,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cómo se le llama a una persona que domina varios idiomas, generalmente más de dos o tres?",
@@ -188,6 +213,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué idioma oficial de la India, escrito en escritura devanagari, tiene cientos de millones de hablantes?",
@@ -195,6 +221,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-idio-16-hindi-devanagari.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuántos idiomas oficiales tiene la Unión Europea aproximadamente?",
@@ -202,6 +229,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Cuántos idiomas oficiales tiene la Organización de las Naciones Unidas (ONU)?",
@@ -209,6 +237,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué lengua criolla, con base léxica francesa, es el idioma más hablado en Haití junto al francés?",
@@ -216,6 +245,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué idioma germánico del norte de Europa, hablado en Islandia, ha cambiado relativamente poco desde la época vikinga?",
@@ -223,6 +253,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-17-islandes.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué lengua no indoeuropea, hablada en el País Vasco entre España y Francia, es considerada un aislado lingüístico sin parentesco conocido con otras lenguas?",
@@ -230,6 +261,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-18-euskera.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué idioma cooficial de Cataluña, con millones de hablantes, es hablado también en Valencia (como valenciano) y Baleares?",
@@ -237,6 +269,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué idioma cooficial de Galicia, en España, está estrechamente emparentado con el portugués?",
@@ -244,6 +277,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se le llama a la traducción oral simultánea o consecutiva de un discurso de un idioma a otro?",
@@ -251,6 +285,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué gramático hindú, que vivió aproximadamente en el siglo IV a.C., es reconocido por haber escrito una de las primeras gramáticas formales de la historia, sobre el sánscrito?",
@@ -258,6 +293,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-19-panini-sanscrito.png",
+        dificultad: 9,
       },
       {
         texto: "¿Qué lengua clásica de la India, considerada sagrada en el hinduismo, es la lengua en la que se escribieron los Vedas?",
@@ -265,6 +301,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-20-sanscrito.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cuál es el idioma con el mayor número total de hablantes en el mundo, sumando nativos y no nativos?",
@@ -272,6 +309,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-idio-21-ingles-global.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuántos países tienen el español como idioma oficial en el mundo?",
@@ -279,6 +317,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué instituto internacional promueve la enseñanza y difusión del idioma español en el mundo, fundado en 1991?",
@@ -286,6 +325,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-22-instituto-cervantes.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué lengua tonal, hablada en el sudeste asiático, utiliza tonos para distinguir el significado de palabras que se escriben igual?",
@@ -293,6 +333,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué idioma, hablado por más de mil millones de personas como segunda lengua, es el idioma más utilizado en la aviación internacional?",
@@ -300,6 +341,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué lengua bantú del África oriental, hablada en Kenia, Tanzania y otros países, es una de las lenguas africanas con más hablantes?",
@@ -307,6 +349,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-23-suajili.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué lengua semítica, escrita con su propio alfabeto único, es el idioma oficial de Etiopía?",
@@ -314,6 +357,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-24-amarico-etiope.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué palabra en español proviene del árabe y se refiere a un edificio con una gran cúpula o torre para rezar?",
@@ -321,6 +365,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Aproximadamente cuántas palabras contiene el diccionario de la Real Academia Española en su edición actual?",
@@ -328,6 +373,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Cómo se le llama al proceso mediante el cual una lengua incorpora palabras de otro idioma, como 'fútbol' del inglés 'football'?",
@@ -335,6 +381,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se le llama a una variedad regional o social de un idioma, con particularidades de pronunciación, vocabulario o gramática?",
@@ -342,6 +389,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué lengua criolla nace generalmente del contacto simplificado entre dos o más idiomas para facilitar el comercio, antes de convertirse en lengua materna de una comunidad?",
@@ -349,6 +397,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué sistema de escritura antiguo, usado en Mesopotamia y grabado sobre tablillas de arcilla con un punzón, es uno de los más antiguos conocidos?",
@@ -356,6 +405,7 @@ const BANCOS_IDIOMAS = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-idio-26-escritura-cuneiforme.png",
+        dificultad: 5,
       },
     ],
   },

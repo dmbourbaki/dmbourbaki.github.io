@@ -13,6 +13,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-tec-01-ada-lovelace.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué matemático inglés es considerado el padre de la informática teórica, por su trabajo en la máquina que descifró el código Enigma?",
@@ -20,6 +21,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-02-alan-turing.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué código de cifrado alemán, utilizado en la Segunda Guerra Mundial, fue descifrado por el equipo de Bletchley Park liderado por Alan Turing?",
@@ -27,6 +29,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-tec-03-maquina-enigma.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué inglés diseñó en el siglo XIX la 'máquina analítica', considerada un precursor conceptual de la computadora moderna?",
@@ -34,6 +37,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-tec-04-charles-babbage.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué empresario estadounidense cofundó Microsoft junto a Paul Allen en 1975?",
@@ -41,6 +45,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-tec-05-bill-gates.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué empresario estadounidense cofundó Apple junto a Steve Wozniak en 1976?",
@@ -48,6 +53,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-tec-06-steve-jobs.png",
+        dificultad: 1,
       },
       {
         texto: "¿En qué año se lanzó al mercado el primer iPhone de Apple?",
@@ -55,6 +61,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-07-primer-iphone.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué empresarios fundaron Google en 1998 mientras eran estudiantes de doctorado en Stanford?",
@@ -62,6 +69,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-08-google-fundadores.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué empresario estadounidense fundó Amazon en 1994 como una tienda de libros en línea?",
@@ -69,6 +77,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-tec-09-jeff-bezos.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué empresario sudafricano-estadounidense fundó SpaceX y es director ejecutivo de Tesla?",
@@ -76,6 +85,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-tec-10-elon-musk.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué empresario estadounidense fundó Facebook (hoy Meta) en 2004 mientras era estudiante en Harvard?",
@@ -83,6 +93,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-tec-11-mark-zuckerberg.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué red social, lanzada en 2006, popularizó el formato de mensajes breves conocidos originalmente como 'tuits'?",
@@ -90,6 +101,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama el lenguaje de programación creado por Guido van Rossum en 1991, muy usado hoy en inteligencia artificial y ciencia de datos?",
@@ -97,6 +109,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-12-python-logo.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué lenguaje de marcado se utiliza para estructurar el contenido de las páginas web?",
@@ -104,6 +117,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué sistema operativo de código abierto, creado por Linus Torvalds en 1991, es la base de Android y de muchos servidores en el mundo?",
@@ -111,6 +125,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-13-linus-torvalds-linux.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama la red global de computadoras interconectadas que permite el intercambio de información en todo el mundo?",
@@ -118,6 +133,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Quién es considerado el inventor de la World Wide Web en 1989, mientras trabajaba en el CERN?",
@@ -125,6 +141,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-tec-14-tim-berners-lee.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se le llama a un programa malicioso diseñado para dañar, espiar o tomar control de un dispositivo sin el consentimiento del usuario?",
@@ -132,6 +149,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se le llama a la técnica de manipulación psicológica usada por ciberdelincuentes para obtener información confidencial mediante correos o mensajes engañosos?",
@@ -139,6 +157,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué unidad de medida representa aproximadamente mil millones de bytes de información?",
@@ -146,6 +165,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué unidad de medida representa aproximadamente un billón (un millón de millones) de bytes de información?",
@@ -153,6 +173,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué componente físico de una computadora ejecuta las instrucciones de los programas y es considerado su 'cerebro'?",
@@ -160,6 +181,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-tec-15-procesador-cpu.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué componente de una computadora almacena temporalmente los datos que el procesador necesita mientras el equipo está encendido?",
@@ -167,6 +189,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué empresa fabricante de semiconductores, fundada en 1968, es líder mundial en procesadores para computadoras personales?",
@@ -174,6 +197,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué empresa estadounidense, fundada en 1993, es líder mundial en tarjetas gráficas y procesadores clave para la inteligencia artificial actual?",
@@ -181,6 +205,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-16-nvidia-gpu.png",
+        dificultad: 3,
       },
       {
         texto: "¿Cómo se llama el campo de la informática que busca crear sistemas capaces de simular procesos de razonamiento y aprendizaje humano?",
@@ -188,6 +213,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-tec-17-inteligencia-artificial.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué técnica de inteligencia artificial, inspirada en el funcionamiento del cerebro humano, utiliza redes neuronales con múltiples capas?",
@@ -195,6 +221,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-tec-18-redes-neuronales.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué prueba, propuesta por Alan Turing en 1950, evalúa si una máquina puede exhibir un comportamiento indistinguible del de un humano?",
@@ -202,6 +229,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué empresa desarrolló el asistente de inteligencia artificial conversacional llamado Claude?",
@@ -209,6 +237,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la moneda digital descentralizada creada en 2009 bajo el seudónimo de Satoshi Nakamoto?",
@@ -216,6 +245,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-19-bitcoin.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la tecnología de registro distribuido e inmutable en la que se basan las criptomonedas como el Bitcoin?",
@@ -223,6 +253,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-tec-20-blockchain.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué robot de la NASA, activo desde 2012, ha explorado la superficie de Marte en busca de señales de vida pasada?",
@@ -230,6 +261,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-tec-21-rover-marte.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué compañía aeroespacial privada, fundada por Elon Musk, desarrolló el cohete reutilizable Falcon 9?",
@@ -237,6 +269,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-22-spacex-falcon9.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué compañía aeroespacial privada, fundada por Jeff Bezos, desarrolla cohetes suborbitales y orbitales como el New Shepard?",
@@ -244,6 +277,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama la impresión de objetos tridimensionales capa por capa a partir de un diseño digital?",
@@ -251,6 +285,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-tec-23-impresion-3d.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la tecnología que simula un entorno digital envolvente mediante visores especiales, sumergiendo al usuario en un mundo virtual?",
@@ -258,6 +293,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-24-realidad-virtual.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la tecnología que superpone elementos digitales sobre el mundo real, como en aplicaciones de cámara con filtros interactivos?",
@@ -265,6 +301,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué tipo de computación, aún en desarrollo experimental, utiliza qubits en lugar de bits binarios tradicionales para procesar información?",
@@ -272,6 +309,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-tec-25-computacion-cuantica.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se llama el conjunto de dispositivos cotidianos conectados a internet, como electrodomésticos y sensores, que intercambian datos entre sí?",
@@ -279,6 +317,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama el almacenamiento y procesamiento de datos e información a través de servidores remotos accesibles por internet, en lugar de un disco local?",
@@ -286,6 +325,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-26-computacion-nube.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama al proceso de convertir información legible en un código para protegerla de accesos no autorizados?",
@@ -293,6 +333,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué empresa china de tecnología, fundada por Jack Ma, es una de las mayores plataformas de comercio electrónico del mundo?",
@@ -300,6 +341,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-tec-27-alibaba-jack-ma.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué empresa surcoreana es uno de los mayores fabricantes mundiales de teléfonos inteligentes, televisores y semiconductores?",
@@ -307,6 +349,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué inventor estadounidense es reconocido por patentar el teléfono en 1876, revolucionando las telecomunicaciones?",
@@ -314,6 +357,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-tec-28-graham-bell-telefono.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué inventor italiano es reconocido por desarrollar la radio y realizar las primeras transmisiones inalámbricas transatlánticas?",
@@ -321,6 +365,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-tec-29-marconi-radio.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se llama el navegador web desarrollado por Google, lanzado en 2008 y actualmente el más utilizado en el mundo?",
@@ -328,6 +373,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cómo se llama el sistema operativo móvil de código abierto desarrollado por Google, utilizado en la mayoría de teléfonos inteligentes del mundo?",
@@ -335,6 +381,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué videojuego de construcción y supervivencia en bloques, lanzado en 2011, es uno de los más vendidos de la historia?",
@@ -342,6 +389,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-tec-30-minecraft.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué compañía japonesa de videojuegos es creadora de personajes como Mario y Zelda, y de consolas como la Nintendo Switch?",
@@ -349,6 +397,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-tec-31-nintendo-mario.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué red social basada en fotografías y videos cortos, lanzada en 2010 y adquirida por Facebook en 2012, es propiedad hoy de Meta?",
@@ -356,6 +405,7 @@ const BANCOS_TECNOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
     ],
   },
