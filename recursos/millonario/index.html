@@ -55,6 +55,20 @@
   @keyframes glowPulse{0%,100%{box-shadow:0 0 0 rgba(224,86,86,0)} 50%{box-shadow:0 0 22px rgba(224,86,86,.7)}}
   @keyframes correctFlash{0%{background:rgba(62,193,124,.15)} 50%{background:rgba(62,193,124,.5)} 100%{background:rgba(62,193,124,.25)}}
   @keyframes wrongFlash{0%{background:rgba(224,86,86,.15)} 50%{background:rgba(224,86,86,.55)} 100%{background:rgba(224,86,86,.25)}}
+  @keyframes screenEnter{from{opacity:0; transform:translateY(14px) scale(.985)} to{opacity:1; transform:translateY(0) scale(1)}}
+  @keyframes optionEnter{from{opacity:0; transform:translateY(16px) scale(.94)} to{opacity:1; transform:translateY(0) scale(1)}}
+  @keyframes shakeX{
+    10%,90%{transform:translateX(-3px)} 20%,80%{transform:translateX(5px)}
+    30%,50%,70%{transform:translateX(-7px)} 40%,60%{transform:translateX(7px)}
+  }
+  @keyframes correctPulse{
+    0%{box-shadow:0 0 0 rgba(51,209,126,0);}
+    40%{box-shadow:0 0 32px rgba(51,209,126,.85);}
+    100%{box-shadow:0 0 0 rgba(51,209,126,0);}
+  }
+  .screen.active{ animation:screenEnter .4s cubic-bezier(.2,.9,.3,1) both; }
+  .option{ animation:optionEnter .38s cubic-bezier(.2,.9,.3,1) both; }
+  .question-area.shake{ animation:shakeX .5s ease; }
 
   h1,h2,h3{font-family:var(--font-display); font-weight:600; margin:0;}
   .title{font-size:2.6rem; color:var(--gold-light); letter-spacing:.5px; text-align:center;}
@@ -92,6 +106,7 @@
   #screen-juego{justify-content:flex-start; padding-top:18px;}
   .hud{width:100%; max-width:980px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;}
   .hud-badge{font-family:var(--font-mono); font-weight:700; font-size:.85rem; padding:6px 12px; border:2px solid var(--panel-border); border-radius:10px; background:var(--panel);}
+  .hud-badge.pop-badge{animation:pop .4s ease;}
   .game-wrap{display:flex; gap:20px; width:100%; max-width:980px; margin-top:14px; flex-wrap:wrap-reverse; justify-content:center;}
   .ladder{
     display:flex; flex-direction:column-reverse; gap:5px; min-width:190px;
@@ -127,8 +142,8 @@
     display:flex; align-items:center; justify-content:center;
     background:var(--opt-color, var(--gold-light)); color:#141017;
   }
-  .option.selected{background:#1a2750; box-shadow:5px 5px 0 rgba(0,0,0,.35); transform:translate(-2px,-2px);}
-  .option.correct{animation:correctFlash .8s ease forwards; border-color:var(--success);}
+  .option.selected{background:#1a2750; box-shadow:5px 5px 0 rgba(0,0,0,.35); transform:translate(-2px,-2px); animation:none;}
+  .option.correct{animation:correctFlash .8s ease forwards, correctPulse .8s ease; border-color:var(--success);}
   .option.wrong{animation:wrongFlash .8s ease forwards; border-color:var(--danger);}
   .option.disabled-5050{opacity:.15; pointer-events:none;}
   .option.locked{pointer-events:none;}
@@ -578,6 +593,13 @@ class MusicManager{
     this.audio = audioManager; this.settings = settings;
     this.nodes = {}; this.activa = false; this.progreso = 0;
     this.pulsoHandle = null; this.pulsoPaso = 0;
+    // Distintos "ambientes" musicales — se elige uno al azar por partida, para que no suene igual siempre
+    this.MOTIVOS = [
+      { nombre:"tension",   raiz:110,   escala:[0,3,5,7,10] },
+      { nombre:"mistico",   raiz:98,    escala:[0,2,3,7,9]  },
+      { nombre:"electrico", raiz:130.8, escala:[0,3,5,6,7,10] },
+      { nombre:"ancestral", raiz:87.3,  escala:[0,2,4,7,9]  },
+    ];
   }
 
   _limpiar(){
@@ -592,67 +614,80 @@ class MusicManager{
     this.detener();
     this.progreso = 0;
     if(!this.settings.data.musica) return;
+    this.motivo = this.MOTIVOS[Math.floor(Math.random()*this.MOTIVOS.length)];
+    const raiz = this.motivo.raiz;
     const ctx = this.audio.ensureCtx();
-    const master = ctx.createGain();
-    master.gain.value = this._volumenBase();
-    master.connect(ctx.destination);
+
+    // Filtro que se va "abriendo" (más brillante) a medida que avanzas -> sensación cinematográfica
+    const filtro = ctx.createBiquadFilter(); filtro.type = "lowpass"; filtro.frequency.value = 480; filtro.Q.value = 0.7;
+    const master = ctx.createGain(); master.gain.value = this._volumenBase();
+    filtro.connect(master); master.connect(ctx.destination);
 
     // Drone con leve "batido" entre osciladores desafinados -> tensión de fondo
-    const o1 = ctx.createOscillator(); o1.type = "sine"; o1.frequency.value = 110;
-    const o2 = ctx.createOscillator(); o2.type = "sine"; o2.frequency.value = 110.8;
-    const o3 = ctx.createOscillator(); o3.type = "triangle"; o3.frequency.value = 220.4;
-    const g3 = ctx.createGain(); g3.gain.value = 0.3;
-    const gDrone = ctx.createGain(); gDrone.gain.value = 0.55;
+    const o1 = ctx.createOscillator(); o1.type = "sine"; o1.frequency.value = raiz;
+    const o2 = ctx.createOscillator(); o2.type = "sine"; o2.frequency.value = raiz*1.007;
+    const o3 = ctx.createOscillator(); o3.type = "triangle"; o3.frequency.value = raiz*2;
+    const g3 = ctx.createGain(); g3.gain.value = 0.28;
+    const gDrone = ctx.createGain(); gDrone.gain.value = 0.5;
 
     // LFO que pulsa el volumen del drone, como un latido -> se acelera con el progreso
     const lfo = ctx.createOscillator(); lfo.type = "sine"; lfo.frequency.value = 0.2;
-    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.22;
+    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.2;
     lfo.connect(lfoGain); lfoGain.connect(gDrone.gain);
 
     o1.connect(gDrone); o2.connect(gDrone); o3.connect(g3);
-    gDrone.connect(master); g3.connect(master);
+    gDrone.connect(filtro); g3.connect(filtro);
 
     o1.start(); o2.start(); o3.start(); lfo.start();
-    this.nodes = {ctx,o1,o2,o3,lfo,master,gDrone,g3,lfoGain};
+    this.nodes = {ctx,o1,o2,o3,lfo,master,gDrone,g3,lfoGain,filtro,raiz};
     this.activa = true;
 
-    // Pulso rítmico (notas cortas repetidas) para que se note claramente que hay música sonando
-    this.pulsoPaso = 0;
+    this.pulsoPaso = 0; this._direccion = 1;
     this._programarPulso();
   }
 
   _programarPulso(){
     if(this.pulsoHandle) clearInterval(this.pulsoHandle);
-    const escala = [220,261.6,293.7,329.6,392]; // escala menor sencilla
-    const intervaloMs = Math.max(280, 620 - this.progreso*340); // se acelera con el progreso
+    const raiz = this.nodes.raiz;
+    const escala = this.motivo.escala.map(semitonos => raiz*2*Math.pow(2, semitonos/12));
+    const intervaloMs = Math.max(230, 600 - this.progreso*370);
+    const conPan = typeof this.nodes.ctx.createStereoPanner === "function";
     this.pulsoHandle = setInterval(()=>{
       if(!this.activa || !this.nodes.ctx) return;
       const ctx = this.nodes.ctx;
-      const nota = escala[this.pulsoPaso % escala.length];
+      // Recorre la escala de subida y bajada (no siempre en el mismo orden) -> más musical
+      if(this.pulsoPaso>0 && this.pulsoPaso % escala.length === 0) this._direccion *= -1;
+      const idx = Math.abs((this.pulsoPaso*this._direccion) % escala.length);
+      const nota = escala[idx];
       this.pulsoPaso++;
       const osc = ctx.createOscillator(); osc.type = "triangle"; osc.frequency.value = nota;
       const g = ctx.createGain();
-      osc.connect(g); g.connect(this.nodes.master);
+      osc.connect(g);
+      if(conPan){
+        const pan = ctx.createStereoPanner(); pan.pan.value = (this.pulsoPaso%2===0 ? -1 : 1) * 0.35;
+        g.connect(pan); pan.connect(this.nodes.filtro);
+      } else { g.connect(this.nodes.filtro); }
       const t0 = ctx.currentTime;
-      const vol = 0.5 + this.progreso*0.4;
+      const vol = 0.45 + this.progreso*0.35;
       g.gain.setValueAtTime(0, t0);
       g.gain.linearRampToValueAtTime(vol, t0+0.02);
-      g.gain.exponentialRampToValueAtTime(0.001, t0+0.35);
-      osc.start(t0); osc.stop(t0+0.4);
+      g.gain.exponentialRampToValueAtTime(0.001, t0+0.4);
+      osc.start(t0); osc.stop(t0+0.45);
     }, intervaloMs);
   }
 
-  /** progreso: 0 (recién empieza) a 1 (última pregunta) — sube el tono, el pulso y el volumen */
+  /** progreso: 0 (recién empieza) a 1 (última pregunta) — sube el tono, el pulso, el brillo y el volumen */
   actualizarIntensidad(progreso){
     if(!this.activa || !this.settings.data.musica || !this.nodes.ctx) return;
     this.progreso = Math.max(0, Math.min(1, progreso));
-    const {ctx,o1,o2,o3,lfo,master} = this.nodes;
+    const {ctx,o1,o2,o3,lfo,master,filtro,raiz} = this.nodes;
     const t = ctx.currentTime, RAMP = 1.4;
     lfo.frequency.linearRampToValueAtTime(0.2 + this.progreso*1.1, t+RAMP);
     master.gain.linearRampToValueAtTime(this._volumenBase() * (1 + this.progreso*0.9), t+RAMP);
-    o1.frequency.linearRampToValueAtTime(110 + this.progreso*30, t+RAMP);
-    o2.frequency.linearRampToValueAtTime(110.8 + this.progreso*32, t+RAMP);
-    o3.frequency.linearRampToValueAtTime(220.4 + this.progreso*64, t+RAMP);
+    filtro.frequency.linearRampToValueAtTime(480 + this.progreso*3600, t+RAMP);
+    o1.frequency.linearRampToValueAtTime(raiz + this.progreso*20, t+RAMP);
+    o2.frequency.linearRampToValueAtTime(raiz*1.007 + this.progreso*22, t+RAMP);
+    o3.frequency.linearRampToValueAtTime(raiz*2 + this.progreso*40, t+RAMP);
     this._programarPulso();
   }
 
@@ -663,7 +698,7 @@ class MusicManager{
 class Effects{
   constructor(canvas, settings){
     this.canvas = canvas; this.ctx = canvas.getContext("2d");
-    this.settings = settings; this.particles = [];
+    this.settings = settings; this.particles = []; this.confeti = [];
     this.resize(); window.addEventListener("resize", ()=>this.resize());
     this.spawn(); this.loop();
   }
@@ -683,10 +718,39 @@ class Effects{
         ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
         ctx.fillStyle = `rgba(184,134,47,${p.a})`; ctx.fill();
       }
+      if(this.confeti.length){
+        this.confeti = this.confeti.filter(c=>c.vida > 0.02);
+        for(const c of this.confeti){
+          c.x += c.vx; c.y += c.vy; c.vy += c.g; c.rot += c.vrot; c.vida *= 0.985;
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, c.vida);
+          ctx.translate(c.x, c.y); ctx.rotate(c.rot);
+          ctx.fillStyle = c.color;
+          ctx.fillRect(-c.size/2, -c.size/2, c.size, c.size*0.6);
+          ctx.restore();
+        }
+      }
     }
     requestAnimationFrame(()=>this.loop());
   }
-  burst(){ /* reservado para futuras animaciones de partículas en aciertos */ }
+  burst(){
+    if(!this.settings.data.animaciones) return;
+    const colores = ["#f0a72e","#4fc3f7","#ff8f9c","#b28dff","#33d17e","#ffcf6b"];
+    const cx = this.canvas.width/2, cy = this.canvas.height*0.32;
+    for(let i=0;i<55;i++){
+      this.confeti.push({
+        x:cx, y:cy,
+        vx:(Math.random()-0.5)*9,
+        vy:Math.random()*-7-2,
+        g:0.22+Math.random()*0.12,
+        color:colores[Math.floor(Math.random()*colores.length)],
+        size:4+Math.random()*5,
+        rot:Math.random()*Math.PI*2,
+        vrot:(Math.random()-0.5)*0.35,
+        vida:1,
+      });
+    }
+  }
 }
 
 /* ============ QuestionValidator + QuestionImporter ============ */
@@ -1370,14 +1434,16 @@ class Game{
     this.preguntaActual = this.qm.secuencia[idx];
     document.getElementById("hudNivel").textContent = `Pregunta ${idx+1}/${this.numPreguntas}`;
     this.music.actualizarIntensidad(idx / Math.max(1,this.numPreguntas-1));
+    const hudPremio = document.getElementById("hudPremio");
     if(this.modoMultijugador){
-      document.getElementById("hudPremio").textContent = `Puntos: ${this.player.puntos.toLocaleString("es-CO")}`;
+      hudPremio.textContent = `Puntos: ${this.player.puntos.toLocaleString("es-CO")}`;
       document.getElementById("hudSeguro").style.display = "none";
     } else {
-      document.getElementById("hudPremio").textContent = `Premio: ${this.player.premio.toLocaleString("es-CO")}`;
+      hudPremio.textContent = `Premio: ${this.player.premio.toLocaleString("es-CO")}`;
       document.getElementById("hudSeguro").style.display = "";
       document.getElementById("hudSeguro").textContent = `Asegurado: ${this.player.asegurado.toLocaleString("es-CO")}`;
     }
+    if(idx > 0){ hudPremio.classList.remove("pop-badge"); void hudPremio.offsetWidth; hudPremio.classList.add("pop-badge"); }
     this._actualizarLadder();
 
     const p = this.preguntaActual;
@@ -1494,6 +1560,12 @@ class Game{
       document.querySelector(`.option[data-idx="${this._correctaVisible}"]`)?.classList.add("correct");
       if(!esCorrecta && idxElegido >= 0){
         document.querySelector(`.option[data-idx="${idxElegido}"]`)?.classList.add("wrong");
+      }
+      if(esCorrecta){
+        this.effects.burst();
+      } else {
+        const area = document.querySelector(".question-area");
+        area?.classList.remove("shake"); void area?.offsetWidth; area?.classList.add("shake");
       }
       if(p.explicacion){
         const panel = document.getElementById("sidePanel");
