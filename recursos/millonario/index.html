@@ -193,6 +193,7 @@
 </head>
 <body>
 <canvas id="bgCanvas"></canvas>
+<button class="btn" id="btnMuteFlotante" title="Silenciar/activar música" style="position:fixed; bottom:18px; right:18px; z-index:20; width:48px; height:48px; border-radius:50%; padding:0; font-size:1.2rem;">🔊</button>
 
 <!-- MENU -->
 <section class="screen active" id="screen-menu">
@@ -573,12 +574,19 @@ class AudioManager{
 
 /* ============ MusicManager (música de fondo con Web Audio, sin archivos) ============ */
 class MusicManager{
-  constructor(audioManager, settings){ this.audio = audioManager; this.settings = settings; this.nodes = {}; this.activa = false; this.progreso = 0; }
+  constructor(audioManager, settings){
+    this.audio = audioManager; this.settings = settings;
+    this.nodes = {}; this.activa = false; this.progreso = 0;
+    this.pulsoHandle = null; this.pulsoPaso = 0;
+  }
 
   _limpiar(){
     Object.values(this.nodes).forEach(n=>{ try{ n.stop && n.stop(); }catch(e){} try{ n.disconnect && n.disconnect(); }catch(e){} });
     this.nodes = {};
+    if(this.pulsoHandle){ clearInterval(this.pulsoHandle); this.pulsoHandle = null; }
   }
+
+  _volumenBase(){ return (this.settings.data.volumen/100) * 0.11; }
 
   iniciar(){
     this.detener();
@@ -586,19 +594,19 @@ class MusicManager{
     if(!this.settings.data.musica) return;
     const ctx = this.audio.ensureCtx();
     const master = ctx.createGain();
-    master.gain.value = (this.settings.data.volumen/100) * 0.045;
+    master.gain.value = this._volumenBase();
     master.connect(ctx.destination);
 
-    // Drone grave con leve "batido" entre dos osciladores desafinados -> tensión
-    const o1 = ctx.createOscillator(); o1.type = "sine"; o1.frequency.value = 55;
-    const o2 = ctx.createOscillator(); o2.type = "sine"; o2.frequency.value = 55.6;
-    const o3 = ctx.createOscillator(); o3.type = "triangle"; o3.frequency.value = 110.3;
-    const g3 = ctx.createGain(); g3.gain.value = 0.35;
-    const gDrone = ctx.createGain(); gDrone.gain.value = 0.7;
+    // Drone con leve "batido" entre osciladores desafinados -> tensión de fondo
+    const o1 = ctx.createOscillator(); o1.type = "sine"; o1.frequency.value = 110;
+    const o2 = ctx.createOscillator(); o2.type = "sine"; o2.frequency.value = 110.8;
+    const o3 = ctx.createOscillator(); o3.type = "triangle"; o3.frequency.value = 220.4;
+    const g3 = ctx.createGain(); g3.gain.value = 0.3;
+    const gDrone = ctx.createGain(); gDrone.gain.value = 0.55;
 
-    // LFO que pulsa el volumen, como un latido de suspenso -> se acelera con el progreso
-    const lfo = ctx.createOscillator(); lfo.type = "sine"; lfo.frequency.value = 0.18;
-    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.25;
+    // LFO que pulsa el volumen del drone, como un latido -> se acelera con el progreso
+    const lfo = ctx.createOscillator(); lfo.type = "sine"; lfo.frequency.value = 0.2;
+    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.22;
     lfo.connect(lfoGain); lfoGain.connect(gDrone.gain);
 
     o1.connect(gDrone); o2.connect(gDrone); o3.connect(g3);
@@ -607,6 +615,31 @@ class MusicManager{
     o1.start(); o2.start(); o3.start(); lfo.start();
     this.nodes = {ctx,o1,o2,o3,lfo,master,gDrone,g3,lfoGain};
     this.activa = true;
+
+    // Pulso rítmico (notas cortas repetidas) para que se note claramente que hay música sonando
+    this.pulsoPaso = 0;
+    this._programarPulso();
+  }
+
+  _programarPulso(){
+    if(this.pulsoHandle) clearInterval(this.pulsoHandle);
+    const escala = [220,261.6,293.7,329.6,392]; // escala menor sencilla
+    const intervaloMs = Math.max(280, 620 - this.progreso*340); // se acelera con el progreso
+    this.pulsoHandle = setInterval(()=>{
+      if(!this.activa || !this.nodes.ctx) return;
+      const ctx = this.nodes.ctx;
+      const nota = escala[this.pulsoPaso % escala.length];
+      this.pulsoPaso++;
+      const osc = ctx.createOscillator(); osc.type = "triangle"; osc.frequency.value = nota;
+      const g = ctx.createGain();
+      osc.connect(g); g.connect(this.nodes.master);
+      const t0 = ctx.currentTime;
+      const vol = 0.5 + this.progreso*0.4;
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(vol, t0+0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t0+0.35);
+      osc.start(t0); osc.stop(t0+0.4);
+    }, intervaloMs);
   }
 
   /** progreso: 0 (recién empieza) a 1 (última pregunta) — sube el tono, el pulso y el volumen */
@@ -615,12 +648,12 @@ class MusicManager{
     this.progreso = Math.max(0, Math.min(1, progreso));
     const {ctx,o1,o2,o3,lfo,master} = this.nodes;
     const t = ctx.currentTime, RAMP = 1.4;
-    const volBase = (this.settings.data.volumen/100) * 0.045;
-    lfo.frequency.linearRampToValueAtTime(0.18 + this.progreso*0.95, t+RAMP);
-    master.gain.linearRampToValueAtTime(volBase * (1 + this.progreso*0.9), t+RAMP);
-    o1.frequency.linearRampToValueAtTime(55 + this.progreso*15, t+RAMP);
-    o2.frequency.linearRampToValueAtTime(55.6 + this.progreso*16, t+RAMP);
-    o3.frequency.linearRampToValueAtTime(110.3 + this.progreso*32, t+RAMP);
+    lfo.frequency.linearRampToValueAtTime(0.2 + this.progreso*1.1, t+RAMP);
+    master.gain.linearRampToValueAtTime(this._volumenBase() * (1 + this.progreso*0.9), t+RAMP);
+    o1.frequency.linearRampToValueAtTime(110 + this.progreso*30, t+RAMP);
+    o2.frequency.linearRampToValueAtTime(110.8 + this.progreso*32, t+RAMP);
+    o3.frequency.linearRampToValueAtTime(220.4 + this.progreso*64, t+RAMP);
+    this._programarPulso();
   }
 
   detener(){ this._limpiar(); this.activa = false; this.progreso = 0; }
@@ -931,6 +964,7 @@ class Game{
     this._bindJuego();
     this._bindMultijugador();
     this._bindConfigPartida();
+    this._bindMuteFlotante();
     this._renderRanking();
     this._renderStats();
     this._renderCategoriasEn("cpCategorias");
@@ -1006,6 +1040,15 @@ class Game{
       el.dataset.on = String(s[key]);
       el.addEventListener("click", ()=>{
         s[key] = !s[key]; el.dataset.on = String(s[key]); this.settings.save(); this.settings.apply();
+        if(key === "musica"){
+          document.getElementById("btnMuteFlotante").textContent = s.musica ? "🔊" : "🔇";
+          if(s.musica){
+            if(this.ui.screens.juego.classList.contains("active")){
+              this.music.iniciar();
+              this.music.actualizarIntensidad(this.player.nivelActual / Math.max(1,this.numPreguntas-1));
+            }
+          } else { this.music.detener(); }
+        }
       });
     });
 
@@ -1178,6 +1221,27 @@ class Game{
     ].map(([label,val])=>`<div class="stat-card"><b>${val}</b>${label}</div>`).join("");
   }
 
+  _bindMuteFlotante(){
+    const btn = document.getElementById("btnMuteFlotante");
+    const actualizarIcono = ()=>{ btn.textContent = this.settings.data.musica ? "🔊" : "🔇"; };
+    actualizarIcono();
+    btn.addEventListener("click", ()=>{
+      this.settings.data.musica = !this.settings.data.musica;
+      this.settings.save();
+      actualizarIcono();
+      const cfgToggle = document.getElementById("cfgMusica");
+      if(cfgToggle) cfgToggle.dataset.on = String(this.settings.data.musica);
+      if(this.settings.data.musica){
+        if(this.ui.screens.juego.classList.contains("active")){
+          this.music.iniciar();
+          this.music.actualizarIntensidad(this.player.nivelActual / Math.max(1,this.numPreguntas-1));
+        }
+      } else {
+        this.music.detener();
+      }
+    });
+  }
+
   _escapar(str){ const d=document.createElement("div"); d.textContent=str; return d.innerHTML; }
 
   _renderCategoriasEn(containerId){
@@ -1327,8 +1391,10 @@ class Game{
     } else { img.removeAttribute("src"); img.style.display = "none"; }
 
     const cont = document.getElementById("qOpciones");
-    cont.innerHTML = p.opciones.map((op,i)=>`
-      <button class="option" data-idx="${i}"><span class="k">${"ABCD"[i]}.</span> <span>${this._escapar(op)}</span></button>`).join("");
+    this._ordenOpciones = this._mezclarIndices(p.opciones.length);
+    this._correctaVisible = this._ordenOpciones.indexOf(p.correcta);
+    cont.innerHTML = this._ordenOpciones.map((origIdx,i)=>`
+      <button class="option" data-idx="${i}"><span class="k">${"ABCD"[i]}.</span> <span>${this._escapar(p.opciones[origIdx])}</span></button>`).join("");
     cont.querySelectorAll(".option").forEach(btn=>{
       btn.addEventListener("click", ()=>this._responder(Number(btn.dataset.idx)));
     });
@@ -1339,6 +1405,15 @@ class Game{
     this.timer = new Timer(document.getElementById("timerBar"), this.settings.data.tiempo,
       null, ()=>this._responder(-1, true));
     this.timer.start();
+  }
+
+  _mezclarIndices(n){
+    const arr = Array.from({length:n}, (_,i)=>i);
+    for(let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]] = [arr[j],arr[i]];
+    }
+    return arr;
   }
 
   _actualizarComodinesUI(){
@@ -1358,8 +1433,7 @@ class Game{
   _usar5050(){
     if(!this.lifelines.puedeUsar("c5050")) return;
     this.lifelines.marcar("c5050"); this.audio.comodin(); this._actualizarComodinesUI();
-    const p = this.preguntaActual;
-    const incorrectas = [0,1,2,3].filter(i=>i!==p.correcta);
+    const incorrectas = [0,1,2,3].filter(i=>i!==this._correctaVisible);
     const aOcultar = incorrectas.sort(()=>Math.random()-0.5).slice(0,2);
     aOcultar.forEach(i=>document.querySelector(`.option[data-idx="${i}"]`)?.classList.add("disabled-5050"));
   }
@@ -1367,10 +1441,9 @@ class Game{
   _usarPublico(){
     if(!this.lifelines.puedeUsar("publico")) return;
     this.lifelines.marcar("publico"); this.audio.comodin(); this._actualizarComodinesUI();
-    const p = this.preguntaActual;
     const visibles = [...document.querySelectorAll("#qOpciones .option")].filter(b=>!b.classList.contains("disabled-5050"));
     const idxsVisibles = visibles.map(b=>Number(b.dataset.idx));
-    let pesos = idxsVisibles.map(i=> i===p.correcta ? 45+Math.random()*25 : Math.random()*30);
+    let pesos = idxsVisibles.map(i=> i===this._correctaVisible ? 45+Math.random()*25 : Math.random()*30);
     const suma = pesos.reduce((a,b)=>a+b,0);
     pesos = pesos.map(w=>Math.round((w/suma)*100));
     const panel = document.getElementById("sidePanel");
@@ -1385,10 +1458,9 @@ class Game{
   _usarExperto(){
     if(!this.lifelines.puedeUsar("experto")) return;
     this.lifelines.marcar("experto"); this.audio.comodin(); this._actualizarComodinesUI();
-    const p = this.preguntaActual;
     const acierta = Math.random() < 0.8;
     const visibles = [...document.querySelectorAll("#qOpciones .option")].filter(b=>!b.classList.contains("disabled-5050")).map(b=>Number(b.dataset.idx));
-    const sugerido = acierta ? p.correcta : visibles.filter(i=>i!==p.correcta)[Math.floor(Math.random()*Math.max(1,visibles.filter(i=>i!==p.correcta).length))];
+    const sugerido = acierta ? this._correctaVisible : visibles.filter(i=>i!==this._correctaVisible)[Math.floor(Math.random()*Math.max(1,visibles.filter(i=>i!==this._correctaVisible).length))];
     const panel = document.getElementById("sidePanel");
     panel.innerHTML = `<div class="expert-box"><b>🎓 Profesor Ábaco</b><p>"Yo me inclinaría por la opción <b>${"ABCD"[sugerido]}</b>. ${
       acierta ? "Tengo bastante confianza en esta respuesta." : "Aunque debo admitir que no estoy del todo seguro."
@@ -1412,14 +1484,14 @@ class Game{
     document.querySelectorAll("#qOpciones .option").forEach(b=>b.classList.add("locked"));
     const p = this.preguntaActual;
     this.player.respondidas++;
-    const esCorrecta = idxElegido === p.correcta;
+    const esCorrecta = idxElegido === this._correctaVisible;
 
     if(idxElegido >= 0){
       document.querySelector(`.option[data-idx="${idxElegido}"]`)?.classList.add("selected");
     }
 
     setTimeout(()=>{
-      document.querySelector(`.option[data-idx="${p.correcta}"]`)?.classList.add("correct");
+      document.querySelector(`.option[data-idx="${this._correctaVisible}"]`)?.classList.add("correct");
       if(!esCorrecta && idxElegido >= 0){
         document.querySelector(`.option[data-idx="${idxElegido}"]`)?.classList.add("wrong");
       }
