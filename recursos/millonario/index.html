@@ -173,6 +173,17 @@
   .leaderboard-row .nombre{flex:1; font-weight:700;}
   .leaderboard-row .puntos{font-family:var(--font-mono); font-weight:800; color:var(--gold-light);}
   .leaderboard-row .estado-tag{font-size:.7rem; font-family:var(--font-mono); color:var(--text-dim);}
+
+  .comodin-card{
+    display:flex; gap:10px; align-items:flex-start; padding:12px; border-radius:12px;
+    background:var(--bg2); border:2px solid var(--panel-border); box-shadow:2px 2px 0 rgba(0,0,0,.3);
+  }
+  .comodin-card .icon{
+    flex-shrink:0; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--gold-light); color:#1a1206; font-weight:800; font-family:var(--font-mono); font-size:.8rem;
+  }
+  .comodin-card .txt b{display:block; font-size:.9rem; margin-bottom:2px;}
+  .comodin-card .txt span{font-size:.8rem; color:var(--text-dim);}
 </style>
 </head>
 <body>
@@ -185,7 +196,7 @@
     <p class="subtitle">Cultura General · Observatorio de Matemáticas Avanzadas para Ingeniería</p>
   </div>
   <nav class="menu-list slide-up">
-    <button class="btn btn-gold" data-nav="jugar">Jugar</button>
+    <button class="btn btn-gold" data-nav="config-partida">Jugar</button>
     <button class="btn" data-nav="multijugador">Jugar en línea</button>
     <button class="btn" data-nav="config">Configuración</button>
     <button class="btn" data-nav="ranking">Ranking</button>
@@ -196,26 +207,58 @@
   <div class="warn-box" id="importWarnings"></div>
 </section>
 
+<!-- CONFIGURACIÓN DE PARTIDA (modo solo) -->
+<section class="screen" id="screen-config-partida">
+  <button class="btn back-btn" data-nav="menu">← Volver</button>
+  <div class="panel slide-up" style="max-width:640px;">
+    <h2>Configura tu partida</h2>
+    <label>Número de preguntas
+      <input type="number" id="cpNumPreguntas" min="3" max="200" value="15" style="width:90px;">
+    </label>
+    <p class="subtitle" style="text-align:left; margin:14px 0 6px;">Temáticas</p>
+    <div class="btn-row" style="justify-content:flex-start; margin-bottom:8px;">
+      <button class="btn" id="cpTodas">Todas</button>
+      <button class="btn" id="cpNinguna">Ninguna</button>
+    </div>
+    <div id="cpCategorias" style="display:grid; grid-template-columns:1fr 1fr; gap:4px; max-height:260px; overflow:auto; margin-bottom:12px; padding-right:6px;"></div>
+    <div class="warn-box" id="cpError"></div>
+    <div class="btn-row"><button class="btn btn-gold" id="btnComenzarSolo">Comenzar</button></div>
+  </div>
+</section>
+
 <!-- MULTIJUGADOR -->
 <section class="screen" id="screen-multijugador">
   <button class="btn back-btn" data-nav="menu">← Volver</button>
   <div class="panel slide-up" style="max-width:560px;">
-    <h2>Jugar en línea</h2>
-    <p class="subtitle" style="margin-top:0; text-align:left;">Todos responden las mismas 15 preguntas a su propio ritmo. Nadie queda eliminado por fallar — al final se arma un marcador por puntos, de mayor a menor.</p>
+    <h2 id="mpTitulo">Jugar en línea</h2>
+    <p class="subtitle" style="margin-top:0; text-align:left;" id="mpSubtitulo">Todos responden las mismas preguntas a su propio ritmo. Nadie queda eliminado por fallar — al final se arma un marcador por puntos, de mayor a menor.</p>
     <div id="mpSetup">
       <label>Tu nombre <input type="text" id="mpNombre" maxlength="24" placeholder="Tu nombre"></label>
-      <div class="btn-row"><button class="btn btn-gold" id="btnCrearSala">Crear sala y generar enlace</button></div>
-      <div style="margin:14px 0; text-align:center; color:var(--text-dim); font-family:var(--font-mono);">— o —</div>
-      <label>Código de sala <input type="text" id="mpCodigo" maxlength="4" placeholder="Ej: ABCD" style="text-transform:uppercase;"></label>
-      <div class="btn-row"><button class="btn" id="btnUnirseSala">Unirme a una sala</button></div>
+
+      <div id="mpCrearBlock">
+        <label>Número de preguntas <input type="number" id="mpNumPreguntas" min="3" max="200" value="15" style="width:90px;"></label>
+        <p class="subtitle" style="text-align:left; margin:10px 0 4px;">Temáticas</p>
+        <div class="btn-row" style="justify-content:flex-start; margin-bottom:8px;">
+          <button class="btn" id="mpTodas">Todas</button>
+          <button class="btn" id="mpNinguna">Ninguna</button>
+        </div>
+        <div id="mpCategorias" style="display:grid; grid-template-columns:1fr 1fr; gap:4px; max-height:200px; overflow:auto; margin-bottom:12px; padding-right:6px;"></div>
+        <div class="btn-row"><button class="btn btn-gold" id="btnCrearSala">Crear sala y generar enlace</button></div>
+        <div id="mpDivisor" style="margin:14px 0; text-align:center; color:var(--text-dim); font-family:var(--font-mono);">— o —</div>
+      </div>
+
+      <div id="mpUnirseBlock">
+        <label id="mpCodigoLabel">Código de sala <input type="text" id="mpCodigo" maxlength="4" placeholder="Ej: ABCD" style="text-transform:uppercase;"></label>
+        <div class="btn-row"><button class="btn btn-gold" id="btnUnirseSala">Unirme a la sala</button></div>
+      </div>
     </div>
     <div id="mpLobby" style="display:none;">
       <p>Código de sala: <b id="mpCodigoMostrado" style="font-family:var(--font-mono); color:var(--gold-light);"></b></p>
-      <label>Enlace para compartir <input type="text" id="mpEnlace" readonly></label>
-      <div class="btn-row"><button class="btn" id="btnCopiarEnlace">Copiar enlace</button></div>
+      <label id="mpEnlaceLabel">Enlace para compartir <input type="text" id="mpEnlace" readonly></label>
+      <div class="btn-row" id="mpCopiarRow"><button class="btn" id="btnCopiarEnlace">Copiar enlace</button></div>
       <p id="mpEstadoRival" class="subtitle" style="text-align:left; margin-bottom:4px;">Esperando jugadores...</p>
       <div class="player-chip-list" id="mpJugadoresList"></div>
-      <div class="btn-row"><button class="btn btn-gold" id="btnIniciarMulti" disabled>Iniciar partida</button></div>
+      <div class="btn-row" id="mpIniciarRow"><button class="btn btn-gold" id="btnIniciarMulti" disabled>Iniciar partida</button></div>
     </div>
     <div class="warn-box" id="mpError"></div>
   </div>
@@ -305,6 +348,27 @@
   </div>
 </section>
 
+<!-- REGLAS (tutorial antes de empezar) -->
+<section class="screen" id="screen-reglas">
+  <div class="panel slide-up" style="max-width:640px;">
+    <h2>Antes de empezar...</h2>
+    <p class="subtitle" id="reglasIntro" style="text-align:left; margin-top:0;"></p>
+
+    <div style="display:flex; align-items:center; gap:10px; margin:18px 0 10px;">
+      <svg viewBox="0 0 48 48" width="38" height="38" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="24" cy="24" r="21" fill="var(--gold)" stroke="#1a1206" stroke-width="3"/>
+        <text x="24" y="32" font-size="20" font-weight="800" text-anchor="middle" fill="#1a1206" font-family="'Spline Sans Mono',monospace">?!</text>
+      </svg>
+      <h3 style="margin:0;">Comodines — cada uno se usa una sola vez</h3>
+    </div>
+    <div id="reglasComodines" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+
+    <div class="btn-row" style="margin-top:22px;">
+      <button class="btn btn-gold" id="btnComenzarPreguntas">¡Entendido, a jugar! →</button>
+    </div>
+  </div>
+</section>
+
 <!-- JUEGO -->
 <section class="screen" id="screen-juego">
   <div class="hud">
@@ -377,20 +441,29 @@ function obtenerDB(){
 }
 
 /* ============ CONSTANTES DE JUEGO ============ */
-const NIVELES = 15;
-const PREMIOS = [100,200,300,500,1000,2000,4000,8000,16000,32000,64000,125000,250000,500000,1000000];
-const SEGUROS = [5,10]; // niveles (1-indexados) que son checkpoint seguro
 const PUNTOS_BASE = 300, PUNTOS_MAX = 1000; // puntuación estilo Kahoot para el modo en línea
 function calcularPuntosKahoot(segundosRestantes, segundosTotales, esCorrecta){
   if(!esCorrecta) return 0;
   const proporcion = Math.max(0, Math.min(1, segundosRestantes/segundosTotales));
   return Math.round(PUNTOS_BASE + (PUNTOS_MAX-PUNTOS_BASE) * proporcion);
 }
-const TRAMOS = [ // qué dificultad corresponde a cada nivel (1-indexado)
-  ...Array(5).fill("basico"),
-  ...Array(5).fill("intermedio"),
-  ...Array(5).fill("aplicado"),
-];
+// Genera una escalera de premios (100 -> 1.000.000) con la longitud que el usuario elija
+function generarPremios(n){
+  const min = 100, max = 1000000;
+  const premios = [];
+  for(let i=0;i<n;i++){
+    const t = n<=1 ? 1 : i/(n-1);
+    const valor = min * Math.pow(max/min, t);
+    premios.push(Math.max(min, Math.round(valor/100)*100));
+  }
+  return premios;
+}
+// Checkpoints "asegurados", aproximadamente a 1/3 y 2/3 de la partida
+function generarSeguros(n){
+  if(n < 6) return [];
+  const a = Math.round(n/3), b = Math.round(2*n/3);
+  return [...new Set([a,b])].filter(v=>v>0 && v<n);
+}
 
 /* ============ GameState ============ */
 const GameState = Object.freeze({
@@ -585,32 +658,59 @@ class Question{
 /* ============ QuestionManager ============ */
 class QuestionManager{
   constructor(pool){
-    this.pool = pool;
-    this.porNivel = { basico:[], intermedio:[], aplicado:[] };
-    for(const p of pool){ this.porNivel[p.nivel]?.push(p); }
+    this.pool = pool; // {area, texto, opciones, correcta, nivel, dificultad, imagen, explicacion}
+    this.areas = [...new Set(pool.map(p=>p.area))].sort((a,b)=>a.localeCompare(b,"es"));
   }
-  nuevaPartida(){
+  _dificultadDe(p){
+    if(typeof p.dificultad === "number") return p.dificultad;
+    return ({basico:3, intermedio:6, aplicado:8})[p.nivel] ?? 5;
+  }
+  /**
+   * Arma una nueva secuencia de dificultad creciente.
+   * @param {number} numPreguntas cantidad deseada (se ajusta si no hay suficientes)
+   * @param {Set<string>|null} areasSeleccionadas si es null/vacío, usa todas las áreas
+   * @returns {{secuencia:Array, advertencia:string|null}}
+   */
+  nuevaPartida(numPreguntas, areasSeleccionadas){
+    const usarTodas = !areasSeleccionadas || areasSeleccionadas.size === 0;
+    let filtradas = usarTodas ? this.pool : this.pool.filter(p=>areasSeleccionadas.has(p.area));
+    let advertencia = null;
+    if(!filtradas.length){ filtradas = this.pool; advertencia = "Las categorías elegidas no tenían preguntas disponibles; se usaron todas."; }
+
+    let n = Math.max(1, Math.floor(numPreguntas) || 1);
+    if(n > filtradas.length){
+      advertencia = `Solo hay ${filtradas.length} preguntas disponibles con esas categorías; la partida usará ${filtradas.length}.`;
+      n = filtradas.length;
+    }
+
+    const ordenadas = [...filtradas].sort((a,b)=>this._dificultadDe(a)-this._dificultadDe(b));
+    this.poolActivo = ordenadas;
     this.usadasTexto = new Set();
     this.secuencia = [];
-    for(let i=0;i<NIVELES;i++){
-      const dificultad = TRAMOS[i];
-      const disponibles = this.porNivel[dificultad].filter(p=>!this.usadasTexto.has(p.texto));
-      const elegida = disponibles.length
-        ? disponibles[Math.floor(Math.random()*disponibles.length)]
-        : this._comodinFallback(dificultad);
-      if(elegida){ this.usadasTexto.add(elegida.texto); }
+    const tam = ordenadas.length / n;
+    for(let i=0;i<n;i++){
+      const desde = Math.floor(i*tam), hasta = Math.max(Math.floor((i+1)*tam), desde+1);
+      const candidatas = ordenadas.slice(desde, hasta).filter(p=>!this.usadasTexto.has(p.texto));
+      const elegida = candidatas.length
+        ? candidatas[Math.floor(Math.random()*candidatas.length)]
+        : this._comodinFallback();
+      if(elegida) this.usadasTexto.add(elegida.texto);
       this.secuencia.push(elegida);
     }
-    return this.secuencia;
+    this.numPreguntas = n;
+    return { secuencia: this.secuencia, advertencia };
   }
-  _comodinFallback(dificultad){
-    // Si un tramo se queda sin preguntas frescas, reutiliza del pool completo evitando romper el juego
-    const cualquiera = this.pool.filter(p=>!this.usadasTexto.has(p.texto));
+  _comodinFallback(){
+    const cualquiera = this.poolActivo.filter(p=>!this.usadasTexto.has(p.texto));
     return cualquiera.length ? cualquiera[Math.floor(Math.random()*cualquiera.length)] : null;
   }
-  otraDelMismoNivel(nivelActualIdx, evitarTexto){
-    const dificultad = TRAMOS[nivelActualIdx];
-    const disponibles = this.porNivel[dificultad].filter(p=>!this.usadasTexto.has(p.texto) && p.texto!==evitarTexto);
+  otraDelMismoNivel(indiceActual, evitarTexto){
+    const actual = this.secuencia[indiceActual];
+    const difActual = this._dificultadDe(actual);
+    let disponibles = this.poolActivo.filter(p=>!this.usadasTexto.has(p.texto) && p.texto!==evitarTexto && Math.abs(this._dificultadDe(p)-difActual)<=1.5);
+    if(!disponibles.length){
+      disponibles = this.poolActivo.filter(p=>!this.usadasTexto.has(p.texto) && p.texto!==evitarTexto);
+    }
     if(!disponibles.length) return null;
     const elegida = disponibles[Math.floor(Math.random()*disponibles.length)];
     this.usadasTexto.add(elegida.texto);
@@ -766,6 +866,8 @@ class Game{
     this.multi = new MultiplayerManager();
     this.modoMultijugador = false;
     this._salaActual = null;
+    this.configPartida = { numPreguntas: 15, categorias: new Set() }; // Set vacío = todas las categorías
+    this.numPreguntas = 15; this.premios = generarPremios(15); this.seguros = generarSeguros(15);
 
     const {preguntas, warnings} = QuestionImporter.importar(BANCOS_DEFECTO);
     this.qm = new QuestionManager(preguntas);
@@ -777,15 +879,30 @@ class Game{
     this._bindConfig();
     this._bindJuego();
     this._bindMultijugador();
+    this._bindConfigPartida();
     this._renderRanking();
     this._renderStats();
+    this._renderCategoriasEn("cpCategorias");
+    this._renderCategoriasEn("mpCategorias");
     document.getElementById("creditAutor").textContent = "Daniel Steven Moran Pizarro";
 
     const params = new URLSearchParams(location.search);
     if(params.get("sala")){
+      const codigo = params.get("sala").toUpperCase();
       this.ui.ir("multijugador");
-      document.getElementById("mpCodigo").value = params.get("sala").toUpperCase();
+      document.getElementById("mpCodigo").value = codigo;
+      this._activarModoSoloUnirse(codigo);
     }
+  }
+
+  _activarModoSoloUnirse(codigo){
+    // Quien abre un enlace de invitación solo debe poder unirse; solo el anfitrión
+    // que generó la sala puede crear otra e iniciar la partida.
+    document.getElementById("mpTitulo").textContent = "Te invitaron a jugar";
+    document.getElementById("mpSubtitulo").textContent = `Vas a unirte a la sala ${codigo}. Escribe tu nombre y entra — el anfitrión es quien inicia la partida cuando todos estén listos.`;
+    document.getElementById("mpCrearBlock").style.display = "none";
+    document.getElementById("mpCodigoLabel").style.display = "none";
+    document.getElementById("mpNombre").focus();
   }
 
   _bindNav(){
@@ -793,7 +910,6 @@ class Game{
       btn.addEventListener("click", ()=>{
         this.audio.boton();
         const destino = btn.dataset.nav;
-        if(destino === "jugar"){ this.modoMultijugador = false; this.multi.detener(); this._iniciarPartida(); return; }
         if(destino === "menu"){
           this.multi.detener();
           this.modoMultijugador = false;
@@ -858,7 +974,10 @@ class Game{
       errBox.textContent = "";
       const nombre = document.getElementById("mpNombre").value.trim() || "Jugador 1";
       try{
-        const secuencia = this.qm.nuevaPartida(); // se genera una vez y se comparte con el rival
+        const numPreguntas = Number(document.getElementById("mpNumPreguntas").value) || 15;
+        const areas = this._leerCategoriasSeleccionadas("mpCategorias");
+        const {secuencia, advertencia} = this.qm.nuevaPartida(numPreguntas, areas.size ? areas : null);
+        if(advertencia) errBox.textContent = "⚠ " + advertencia;
         const codigo = await this.multi.crearSala(nombre, secuencia);
         this._mostrarLobby(codigo);
         this._escucharSala();
@@ -888,7 +1007,7 @@ class Game{
       if(!this.multi.esHost) return;
       await this.multi.marcarIniciada();
       this.modoMultijugador = true;
-      this._iniciarPartida();
+      this._prepararPartida();
     });
   }
 
@@ -916,17 +1035,20 @@ class Game{
           .join("");
       }
       const btnIniciar = document.getElementById("btnIniciarMulti");
-      if(btnIniciar) btnIniciar.disabled = jugadores.length < 2 || !this.multi.esHost;
+      if(btnIniciar){
+        document.getElementById("mpIniciarRow").style.display = this.multi.esHost ? "" : "none";
+        btnIniciar.disabled = jugadores.length < 2;
+      }
       const estadoEl = document.getElementById("mpEstadoRival");
       if(estadoEl){
         estadoEl.textContent = jugadores.length < 2
           ? `${jugadores.length} jugador conectado. Esperando al menos uno más...`
-          : (this.multi.esHost ? `${jugadores.length} jugadores listos. Puedes iniciar cuando quieras.` : "¡Listo! Esperando a que el anfitrión inicie...");
+          : (this.multi.esHost ? `${jugadores.length} jugadores listos. Puedes iniciar cuando quieras.` : "¡Listo! Esperando a que el anfitrión inicie la partida...");
       }
 
       if(!this.multi.esHost && sala.iniciada && !this.modoMultijugador){
         this.modoMultijugador = true;
-        this._iniciarPartida();
+        this._prepararPartida();
       }
 
       // En partida: panel de rivales en vivo
@@ -959,7 +1081,7 @@ class Game{
       <div class="panel" style="padding:12px 16px; flex:1; min-width:220px;">
         <b style="font-family:var(--font-mono); color:var(--gold-light);">🟢 ${this._escapar(j.nombre||"Jugador")}</b>
         <div style="color:var(--text-dim); font-size:.85rem; margin-top:4px;">
-          Pregunta ${Math.min((j.respondidas||0)+1,NIVELES)}/${NIVELES} · ${(j.puntos||0).toLocaleString("es-CO")} pts
+          Pregunta ${Math.min((j.respondidas||0)+1,sala.preguntas?.length||this.numPreguntas)}/${sala.preguntas?.length||this.numPreguntas} · ${(j.puntos||0).toLocaleString("es-CO")} pts
           ${j.estado==="terminado" ? " · Terminó" : ""}
         </div>
       </div>`).join("");
@@ -976,7 +1098,7 @@ class Game{
         <span class="puntos">${(j.puntos||0).toLocaleString("es-CO")}</span>
       </div>`).join("") || "<p>Sin jugadores.</p>";
     const yo = sala?.jugadores?.[this.multi.jugadorId];
-    if(yo) document.getElementById("rmSubtitulo").textContent = `Tu puntaje: ${(yo.puntos||0).toLocaleString("es-CO")} · Aciertos: ${yo.aciertos||0}/${NIVELES}`;
+    if(yo) document.getElementById("rmSubtitulo").textContent = `Tu puntaje: ${(yo.puntos||0).toLocaleString("es-CO")} · Aciertos: ${yo.aciertos||0}/${sala.preguntas?.length||this.numPreguntas}`;
   }
 
   _renderRanking(){
@@ -1006,8 +1128,57 @@ class Game{
 
   _escapar(str){ const d=document.createElement("div"); d.textContent=str; return d.innerHTML; }
 
+  _renderCategoriasEn(containerId){
+    const cont = document.getElementById(containerId);
+    if(!cont) return;
+    cont.innerHTML = this.qm.areas.map(area=>`
+      <label style="justify-content:flex-start; gap:8px; margin:2px 0; font-size:.9rem;">
+        <input type="checkbox" class="cat-check" data-container="${containerId}" value="${this._escapar(area)}" checked> ${this._escapar(area)}
+      </label>`).join("");
+  }
+
+  _leerCategoriasSeleccionadas(containerId){
+    const marcadas = [...document.querySelectorAll(`#${containerId} .cat-check:checked`)].map(el=>el.value);
+    const total = document.querySelectorAll(`#${containerId} .cat-check`).length;
+    // Si están todas marcadas, tratamos como "sin filtro" (Set vacío)
+    return new Set(marcadas.length === total ? [] : marcadas);
+  }
+
+  _bindConfigPartida(){
+    document.getElementById("cpTodas").addEventListener("click", ()=>{
+      document.querySelectorAll("#cpCategorias .cat-check").forEach(el=>el.checked = true);
+    });
+    document.getElementById("cpNinguna").addEventListener("click", ()=>{
+      document.querySelectorAll("#cpCategorias .cat-check").forEach(el=>el.checked = false);
+    });
+    document.getElementById("mpTodas").addEventListener("click", ()=>{
+      document.querySelectorAll("#mpCategorias .cat-check").forEach(el=>el.checked = true);
+    });
+    document.getElementById("mpNinguna").addEventListener("click", ()=>{
+      document.querySelectorAll("#mpCategorias .cat-check").forEach(el=>el.checked = false);
+    });
+    document.getElementById("btnComenzarSolo").addEventListener("click", ()=>{
+      const errBox = document.getElementById("cpError");
+      const seleccion = this._leerCategoriasSeleccionadas("cpCategorias");
+      if(seleccion.size === 0 && document.querySelectorAll("#cpCategorias .cat-check:checked").length === 0){
+        errBox.textContent = "Selecciona al menos una categoría.";
+        return;
+      }
+      errBox.textContent = "";
+      this.configPartida.numPreguntas = Math.max(1, Number(document.getElementById("cpNumPreguntas").value) || 15);
+      this.configPartida.categorias = seleccion;
+      this.modoMultijugador = false;
+      this._prepararPartida();
+    });
+
+    document.getElementById("btnComenzarPreguntas").addEventListener("click", ()=>{
+      this.audio.boton();
+      this._comenzarPreguntas();
+    });
+  }
+
   /* ---------- flujo de partida ---------- */
-  _iniciarPartida(){
+  _prepararPartida(){
     this.player.reset(); this.lifelines.reset();
     if(this.modoMultijugador){
       // El anfitrión ya generó la secuencia al crear la sala (this.qm.secuencia).
@@ -1015,9 +1186,40 @@ class Game{
       if(!this.multi.esHost){
         this.qm.secuencia = (this._salaActual?.preguntas || []).map(p=>({...p}));
       }
+      this.numPreguntas = this.qm.secuencia.length;
     } else {
-      this.qm.nuevaPartida();
+      const areas = this.configPartida.categorias.size ? this.configPartida.categorias : null;
+      const {secuencia, advertencia} = this.qm.nuevaPartida(this.configPartida.numPreguntas, areas);
+      this.numPreguntas = secuencia.length;
+      this.premios = generarPremios(this.numPreguntas);
+      this.seguros = generarSeguros(this.numPreguntas);
+      if(advertencia) console.warn(advertencia);
     }
+    this._mostrarReglas();
+  }
+
+  _mostrarReglas(){
+    const intro = document.getElementById("reglasIntro");
+    intro.textContent = this.modoMultijugador
+      ? `Van a responder ${this.numPreguntas} preguntas de dificultad creciente, cada quien a su propio ritmo. No hay eliminación: fallar solo significa 0 puntos en esa pregunta. Ganas más puntos si respondes rápido y correctamente. Al terminar todos, se arma un marcador de mayor a menor puntaje.`
+      : `Vas a responder ${this.numPreguntas} preguntas de dificultad creciente. Si fallas o se acaba el tiempo, el juego termina y conservas el premio del último nivel asegurado que hayas alcanzado.`;
+
+    const comodines = [
+      { icon:"50:50", titulo:"50/50", texto:"Elimina dos opciones incorrectas de la pregunta actual." },
+      { icon:"👥", titulo:"Consultar al público", texto:"Muestra una votación simulada; la opción correcta suele tener más votos, pero no siempre." },
+      { icon:"🎓", titulo:"Consultar al experto", texto:"El Profesor Ábaco te recomienda una opción. Casi siempre acierta, pero puede equivocarse." },
+      { icon:"🔄", titulo:"Cambiar pregunta", texto:"Sustituye la pregunta actual por otra de dificultad similar." },
+    ];
+    document.getElementById("reglasComodines").innerHTML = comodines.map(c=>`
+      <div class="comodin-card">
+        <div class="icon">${c.icon}</div>
+        <div class="txt"><b>${c.titulo}</b><span>${c.texto}</span></div>
+      </div>`).join("");
+
+    this.ui.ir("reglas");
+  }
+
+  _comenzarPreguntas(){
     this.audio.pantalla();
     this._renderLadder();
     this.ui.ir("juego");
@@ -1027,14 +1229,17 @@ class Game{
 
   _renderLadder(){
     const ladder = document.getElementById("ladder");
-    ladder.innerHTML = PREMIOS.map((p,i)=>{
-      const nivel = i+1; const esSeguro = SEGUROS.includes(nivel);
+    if(this.modoMultijugador){ ladder.style.display = "none"; return; }
+    ladder.style.display = "";
+    ladder.innerHTML = this.premios.map((p,i)=>{
+      const nivel = i+1; const esSeguro = this.seguros.includes(nivel);
       return `<div class="ladder-step" data-nivel="${nivel}">
         <span>${nivel}. ${esSeguro?"🔒 ":""}</span><span>${p.toLocaleString("es-CO")}</span></div>`;
     }).join("");
   }
 
   _actualizarLadder(){
+    if(this.modoMultijugador) return;
     document.querySelectorAll(".ladder-step").forEach(el=>{
       const nivel = Number(el.dataset.nivel);
       el.classList.toggle("done", nivel <= this.player.nivelActual);
@@ -1047,7 +1252,7 @@ class Game{
   _cargarPregunta(){
     const idx = this.player.nivelActual;
     this.preguntaActual = this.qm.secuencia[idx];
-    document.getElementById("hudNivel").textContent = `Pregunta ${idx+1}/${NIVELES}`;
+    document.getElementById("hudNivel").textContent = `Pregunta ${idx+1}/${this.numPreguntas}`;
     if(this.modoMultijugador){
       document.getElementById("hudPremio").textContent = `Puntos: ${this.player.puntos.toLocaleString("es-CO")}`;
       document.getElementById("hudSeguro").style.display = "none";
@@ -1178,10 +1383,10 @@ class Game{
         if(esCorrecta){
           this.player.aciertos++;
           this.player.nivelActual++;
-          this.player.premio = PREMIOS[this.player.nivelActual-1];
-          if(SEGUROS.includes(this.player.nivelActual)) this.player.asegurado = this.player.premio;
+          this.player.premio = this.premios[this.player.nivelActual-1];
+          if(this.seguros.includes(this.player.nivelActual)) this.player.asegurado = this.player.premio;
           this.audio.subirNivel();
-          if(this.player.nivelActual >= NIVELES){ this._finPartida(true); }
+          if(this.player.nivelActual >= this.numPreguntas){ this._finPartida(true); }
           else{ this._cargarPregunta(); }
         } else {
           this.player.errores++;
@@ -1200,7 +1405,7 @@ class Game{
     if(esCorrecta){ this.player.aciertos++; this.audio.subirNivel(); }
     else { this.player.errores++; this.audio.incorrecto(); }
 
-    const terminado = this.player.nivelActual >= NIVELES;
+    const terminado = this.player.nivelActual >= this.numPreguntas;
     this.multi.actualizarProgreso({
       puntos: this.player.puntos, aciertos: this.player.aciertos,
       respondidas: this.player.respondidas, estado: terminado ? "terminado" : "jugando"
@@ -1240,7 +1445,7 @@ class Game{
 
     document.getElementById("goTitulo").textContent = gano ? "🏆 ¡Completaste el reto!" : "Fin del juego";
     document.getElementById("goDetalle").textContent = gano
-      ? `Respondiste correctamente las ${NIVELES} preguntas. Premio final: ${premioFinal.toLocaleString("es-CO")}.`
+      ? `Respondiste correctamente las ${this.numPreguntas} preguntas. Premio final: ${premioFinal.toLocaleString("es-CO")}.`
       : `${porTiempo ? "Se agotó el tiempo. " : "Respuesta incorrecta. "}Conservas el premio asegurado: ${premioFinal.toLocaleString("es-CO")}.`;
 
     gano ? this.audio.victoria() : this.audio.derrota();
