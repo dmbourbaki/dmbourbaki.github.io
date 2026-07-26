@@ -249,6 +249,7 @@
   <button class="btn back-btn" data-nav="menu">← Volver</button>
   <div class="panel slide-up" style="max-width:640px;">
     <h2>🎯 Configura tu partida</h2>
+    <p class="subtitle" id="cpTotalPreguntas" style="text-align:left; margin-top:0;"></p>
     <label>Número de preguntas
       <input type="number" id="cpNumPreguntas" min="3" max="200" value="15" style="width:90px;">
     </label>
@@ -273,6 +274,7 @@
       <label>Tu nombre <input type="text" id="mpNombre" maxlength="24" placeholder="Tu nombre"></label>
 
       <div id="mpCrearBlock">
+        <p class="subtitle" id="mpTotalPreguntas" style="text-align:left; margin-top:0;"></p>
         <label>Número de preguntas <input type="number" id="mpNumPreguntas" min="3" max="200" value="15" style="width:90px;"></label>
         <p class="subtitle" style="text-align:left; margin:10px 0 4px;">Temáticas</p>
         <div class="btn-row" style="justify-content:flex-start; margin-bottom:8px;">
@@ -292,7 +294,10 @@
     <div id="mpLobby" style="display:none;">
       <p>Código de sala: <b id="mpCodigoMostrado" style="font-family:var(--font-mono); color:var(--gold-light);"></b></p>
       <label id="mpEnlaceLabel">Enlace para compartir <input type="text" id="mpEnlace" readonly></label>
-      <div class="btn-row" id="mpCopiarRow"><button class="btn" id="btnCopiarEnlace">Copiar enlace</button></div>
+      <div class="btn-row" id="mpCopiarRow">
+        <button class="btn" id="btnCopiarEnlace">📋 Copiar enlace</button>
+        <button class="btn" id="btnCompartirWhatsapp" style="background:#25D366; color:#0b1a10; border-color:#128C3E;">🟢 Compartir por WhatsApp</button>
+      </div>
       <p id="mpEstadoRival" class="subtitle" style="text-align:left; margin-bottom:4px;">Esperando jugadores...</p>
       <div class="player-chip-list" id="mpJugadoresList"></div>
       <div class="btn-row" id="mpIniciarRow"><button class="btn btn-gold" id="btnIniciarMulti" disabled>Iniciar partida</button></div>
@@ -852,6 +857,8 @@ class QuestionManager{
   constructor(pool){
     this.pool = pool; // {area, texto, opciones, correcta, nivel, dificultad, imagen, explicacion}
     this.areas = [...new Set(pool.map(p=>p.area))].sort((a,b)=>a.localeCompare(b,"es"));
+    this.conteoPorArea = {};
+    for(const area of this.areas){ this.conteoPorArea[area] = pool.filter(p=>p.area===area).length; }
   }
   _dificultadDe(p){
     if(typeof p.dificultad === "number") return p.dificultad;
@@ -1099,6 +1106,9 @@ class Game{
     this._renderCategoriasEn("cpCategorias");
     this._renderCategoriasEn("mpCategorias");
     document.getElementById("menuIconStrip").textContent = this.qm.areas.map(iconoArea).join(" ");
+    const totalTexto = `${this.qm.pool.length} preguntas cargadas en ${this.qm.areas.length} categorías`;
+    document.getElementById("cpTotalPreguntas").textContent = totalTexto;
+    document.getElementById("mpTotalPreguntas").textContent = totalTexto;
     document.getElementById("creditAutor").textContent = "Daniel Steven Moran Pizarro";
 
     const params = new URLSearchParams(location.search);
@@ -1235,7 +1245,14 @@ class Game{
       const valor = document.getElementById("mpEnlace").value;
       try{ await navigator.clipboard.writeText(valor); }
       catch(e){ document.getElementById("mpEnlace").select(); document.execCommand("copy"); }
-      btnCopiar.textContent = "¡Copiado!"; setTimeout(()=>btnCopiar.textContent="Copiar enlace",1500);
+      btnCopiar.textContent = "✅ ¡Copiado!"; setTimeout(()=>btnCopiar.textContent="📋 Copiar enlace",1500);
+    });
+
+    document.getElementById("btnCompartirWhatsapp").addEventListener("click", ()=>{
+      const enlace = document.getElementById("mpEnlace").value;
+      const codigo = document.getElementById("mpCodigoMostrado").textContent;
+      const mensaje = `¡Únete a mi partida de OMAI Trivias! 🧠🎮 Sala ${codigo}: ${enlace}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(mensaje)}`, "_blank");
     });
 
     btnIniciar.addEventListener("click", async ()=>{
@@ -1389,7 +1406,7 @@ class Game{
     if(!cont) return;
     cont.innerHTML = this.qm.areas.map(area=>`
       <label style="justify-content:flex-start; gap:8px; margin:2px 0; font-size:.9rem;">
-        <input type="checkbox" class="cat-check" data-container="${containerId}" value="${this._escapar(area)}" checked> ${iconoArea(area)} ${this._escapar(area)}
+        <input type="checkbox" class="cat-check" data-container="${containerId}" value="${this._escapar(area)}" checked> ${iconoArea(area)} ${this._escapar(area)} <span style="color:var(--text-dim); font-family:var(--font-mono); font-size:.78rem;">(${this.qm.conteoPorArea[area]})</span>
       </label>`).join("");
   }
 
