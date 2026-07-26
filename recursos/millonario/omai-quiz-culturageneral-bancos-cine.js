@@ -13,6 +13,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-01-spielberg.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué director creó la saga de 'Star Wars'?",
@@ -20,6 +21,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-02-star-wars.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué actor interpretó a Jack Dawson en la película 'Titanic' (1997)?",
@@ -27,6 +29,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-03-titanic.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué director dirigió 'Titanic' y también 'Avatar'?",
@@ -34,6 +37,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-04-avatar.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué saga cinematográfica, basada en las novelas de J.R.R. Tolkien, fue dirigida por Peter Jackson?",
@@ -41,6 +45,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-05-senor-de-los-anillos.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué saga de películas está basada en los libros de J.K. Rowling sobre un joven mago?",
@@ -48,6 +53,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-06-harry-potter.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué director estadounidense es conocido por su estilo no lineal en películas como 'Pulp Fiction' y 'Kill Bill'?",
@@ -55,6 +61,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-07-pulp-fiction.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué director es célebre por 'Inception', 'Interstellar' y la trilogía de 'Batman: El Caballero de la Noche'?",
@@ -62,6 +69,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-08-inception.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué película animada de Disney, estrenada en 1994, narra la historia del león Simba?",
@@ -69,6 +77,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-09-rey-leon.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué estudio de animación japonés, fundado por Hayao Miyazaki, es autor de 'El viaje de Chihiro'?",
@@ -76,6 +85,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-10-viaje-de-chihiro.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué director japonés es cofundador de Studio Ghibli y autor de 'Mi vecino Totoro' y 'El viaje de Chihiro'?",
@@ -83,6 +93,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué película de 1972, dirigida por Francis Ford Coppola, narra la historia de la familia mafiosa Corleone?",
@@ -90,6 +101,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-11-el-padrino.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué actor interpretó a Don Vito Corleone en 'El Padrino'?",
@@ -97,6 +109,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué actriz protagonizó 'Lo que el viento se llevó' interpretando a Scarlett O'Hara?",
@@ -104,6 +117,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-12-lo-que-el-viento-se-llevo.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué cineasta y actor británico es célebre por su personaje mudo 'El Vagabundo' en el cine silente?",
@@ -111,6 +125,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-13-charles-chaplin.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué actriz y cantante estadounidense interpretó a Dorothy en 'El mago de Oz' (1939)?",
@@ -118,6 +133,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-14-mago-de-oz.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué director surcoreano ganó el Óscar a Mejor Película en 2020 con 'Parásitos'?",
@@ -125,6 +141,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-15-parasitos.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué película, estrenada en 1977 y dirigida por George Lucas, dio inicio a la saga de 'Star Wars'?",
@@ -132,6 +149,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué animador y creador estadounidense fundó los estudios que llevan su nombre y creó a Mickey Mouse?",
@@ -139,6 +157,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-16-walt-disney.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué actor australiano interpretó a Maximus en la película 'Gladiador' (2000)?",
@@ -146,6 +165,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-17-gladiador.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué director dirigió 'Gladiador', 'Blade Runner' y 'Alien'?",
@@ -153,6 +173,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué icónica saga de superhéroes cinematográficos reúne a personajes como Iron Man, Thor y el Capitán América?",
@@ -160,6 +181,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-18-marvel-avengers.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué actor interpretó al Joker en 'Batman: El Caballero de la Noche' (2008), ganando un Óscar póstumo?",
@@ -167,6 +189,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-19-joker-heath-ledger.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué actor ganó el Óscar por interpretar al Joker en la película en solitario de 2019?",
@@ -174,6 +197,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué actor interpretó a Forrest Gump en la película homónima de 1994?",
@@ -181,6 +205,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-20-forrest-gump.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué actriz interpretó a Rose en 'Titanic' (1997)?",
@@ -188,6 +213,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-21-kate-winslet-titanic.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué director estadounidense es autor de 'Uno de los nuestros' y 'Taxi Driver'?",
@@ -195,6 +221,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-22-taxi-driver.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué actor interpretó al agente 007 James Bond por primera vez en el cine, en 'Dr. No' (1962)?",
@@ -202,6 +229,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-23-james-bond.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué película de terror de 1975, dirigida por Steven Spielberg, popularizó el miedo a los tiburones?",
@@ -209,6 +237,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-24-tiburon.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué película de terror de 1980, dirigida por Stanley Kubrick y basada en una novela de Stephen King, transcurre en un hotel aislado?",
@@ -216,6 +245,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-25-el-resplandor.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué trilogía de películas de ciencia ficción, estrenada a partir de 1999, presenta una realidad simulada por máquinas?",
@@ -223,6 +253,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-26-matrix.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué actor interpretó a Neo en la saga 'Matrix'?",
@@ -230,6 +261,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué película animada de Pixar (2008) narra la historia de un robot que limpia la Tierra tras la partida de la humanidad?",
@@ -237,6 +269,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-27-wall-e.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué estudio de animación estadounidense produjo 'Toy Story', la primera película totalmente animada por computadora?",
@@ -244,6 +277,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-28-toy-story.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué director dirigió la trilogía original de 'El Padrino' y la saga de 'Apocalypse Now'?",
@@ -251,6 +285,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué actor interpretó al Doctor Hannibal Lecter en 'El silencio de los inocentes' (1991)?",
@@ -258,6 +293,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-29-silencio-inocentes.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué saga de películas de terror slasher presenta al asesino enmascarado Michael Myers?",
@@ -265,6 +301,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-30-halloween-michael-myers.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué director dirigió 'Psicosis' (1960), célebre por su escena de la ducha?",
@@ -272,6 +309,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-31-psicosis.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué película de 1941, dirigida y protagonizada por Orson Welles, es considerada una de las mejores de la historia del cine?",
@@ -279,6 +317,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-32-ciudadano-kane.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué película romántica de 1942, ambientada en el norte de África durante la Segunda Guerra Mundial, es célebre por la frase 'Siempre nos quedará París'?",
@@ -286,6 +325,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-33-casablanca.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué actor interpretó a Rocky Balboa en la saga 'Rocky'?",
@@ -293,6 +333,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-34-rocky-balboa.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué actor austro-estadounidense es célebre por su papel como el Terminator en la saga homónima?",
@@ -300,6 +341,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-35-terminator.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué trilogía de ciencia ficción de los años 80, protagonizada por Michael J. Fox, gira en torno a los viajes en el tiempo?",
@@ -307,6 +349,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cine-36-volver-al-futuro.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué franquicia de acción, protagonizada por Vin Diesel, gira en torno a corredores callejeros y familia?",
@@ -314,6 +357,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-37-rapidos-furiosos.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué director mexicano ganó el Óscar a Mejor Director por 'Birdman' y 'El renacido' en años consecutivos (2015 y 2016)?",
@@ -321,6 +365,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-38-alejandro-gonzalez-inarritu.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué director mexicano ganó el Óscar a Mejor Director por 'La forma del agua' (2018)?",
@@ -328,6 +373,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-39-forma-del-agua.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué película animada de Pixar (2017), ambientada en el Día de los Muertos mexicano, sigue a un niño llamado Miguel?",
@@ -335,6 +381,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-40-coco.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué película animada de Disney (2021), ambientada en Colombia, narra la historia de una familia con dones mágicos?",
@@ -342,6 +389,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-41-encanto.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué actor interpretó al Capitán Jack Sparrow en la saga 'Piratas del Caribe'?",
@@ -349,6 +397,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cine-42-jack-sparrow.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué película de ciencia ficción de 1982, dirigida por Ridley Scott y basada en una novela de Philip K. Dick, transcurre en un futuro distópico de Los Ángeles?",
@@ -356,6 +405,7 @@ const BANCOS_CINE = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cine-43-blade-runner.png",
+        dificultad: 6,
       },
     ],
   },

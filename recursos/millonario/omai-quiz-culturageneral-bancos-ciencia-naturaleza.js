@@ -13,6 +13,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-01-elefante-africano.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es el animal más grande que ha existido, incluso más que los dinosaurios?",
@@ -20,6 +21,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-02-ballena-azul.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es el animal terrestre más rápido del mundo en distancias cortas?",
@@ -27,6 +29,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-03-guepardo.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué órgano del cuerpo humano es el encargado de bombear la sangre?",
@@ -34,6 +37,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Cuántos huesos tiene aproximadamente el esqueleto de un ser humano adulto?",
@@ -41,6 +45,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué gas, esencial para la respiración humana, liberan las plantas durante la fotosíntesis?",
@@ -48,6 +53,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-04-fotosintesis.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es el planeta más cercano al Sol?",
@@ -55,6 +61,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-05-mercurio.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el planeta más grande del sistema solar?",
@@ -62,6 +69,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-06-jupiter.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué planeta es conocido por sus vistosos anillos de hielo y roca?",
@@ -69,6 +77,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-07-saturno.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el elemento químico más abundante en el universo?",
@@ -76,6 +85,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Cuál es el símbolo químico del oro?",
@@ -83,6 +93,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cuál es el símbolo químico del agua?",
@@ -90,6 +101,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué científico formuló la teoría de la relatividad?",
@@ -97,6 +109,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-08-einstein.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué científico inglés formuló la ley de la gravitación universal?",
@@ -104,6 +117,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-09-newton-manzana.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué naturalista británico propuso la teoría de la evolución mediante selección natural?",
@@ -111,6 +125,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-10-darwin.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué científica polaco-francesa ganó dos premios Nobel en distintas disciplinas científicas por sus estudios sobre la radiactividad?",
@@ -118,6 +133,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cien-11-marie-curie.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué unidad básica estructural y funcional conforma a todos los seres vivos?",
@@ -125,6 +141,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-12-celula.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la molécula que contiene la información genética de los seres vivos?",
@@ -132,6 +149,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cien-13-adn-doble-helice.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué científicos son reconocidos por haber descrito la estructura de doble hélice del ADN en 1953?",
@@ -139,6 +157,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Cuál es el órgano más grande del cuerpo humano?",
@@ -146,6 +165,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cuántas cámaras tiene el corazón humano?",
@@ -153,6 +173,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué proceso biológico permite a las plantas producir su propio alimento usando luz solar?",
@@ -160,6 +181,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué mamífero marino es considerado el animal con el cerebro más grande en proporción a estudios de inteligencia, junto con los delfines?",
@@ -167,6 +189,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cien-14-cachalote.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué ave no voladora es el ave más grande y pesada del mundo actualmente?",
@@ -174,6 +197,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cien-15-avestruz.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué reptil es el más grande del mundo, capaz de alcanzar más de 6 metros de longitud?",
@@ -181,6 +205,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cien-16-cocodrilo-marino.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cuál es la serpiente más larga del mundo según registros verificados?",
@@ -188,6 +213,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué gran felino es el más grande del mundo, superando incluso al león en tamaño?",
@@ -195,6 +221,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cien-17-tigre-siberiano.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué insecto es responsable de la polinización de gran parte de los cultivos alimentarios del mundo?",
@@ -202,6 +229,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-18-abeja-polinizando.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es el mamífero volador, y el único mamífero capaz de volar de forma activa y sostenida?",
@@ -209,6 +237,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cien-19-murcielago.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué animal es conocido por cambiar de color para camuflarse gracias a células especializadas en su piel llamadas cromatóforos?",
@@ -216,6 +245,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cien-20-camaleon.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué molusco marino, conocido por su inteligencia y capacidad de camuflaje casi instantáneo, tiene tres corazones?",
@@ -223,6 +253,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cien-21-pulpo.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué capa de la atmósfera terrestre contiene la mayor parte del ozono que filtra la radiación ultravioleta del Sol?",
@@ -230,6 +261,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué fenómeno geológico ocurre cuando dos placas tectónicas se desplazan bruscamente liberando energía acumulada?",
@@ -237,6 +269,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué escala se utiliza comúnmente para medir la magnitud de un terremoto?",
@@ -244,6 +277,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es la velocidad aproximada de la luz en el vacío?",
@@ -251,6 +285,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué fuerza fundamental de la naturaleza mantiene a los planetas en órbita alrededor del Sol?",
@@ -258,6 +293,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es el estado de la materia en el que se encuentra la mayor parte del universo visible, incluyendo las estrellas?",
@@ -265,6 +301,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué tipo de estrella masiva colapsa violentamente al final de su vida en una explosión conocida como supernova?",
@@ -272,6 +309,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cien-22-supernova.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama la galaxia en la que se encuentra nuestro sistema solar?",
@@ -279,6 +317,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-cien-23-via-lactea.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es la galaxia más cercana a la Vía Láctea con la que eventualmente colisionará en miles de millones de años?",
@@ -286,6 +325,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-cien-24-andromeda.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué científico británico desarrolló la teoría de la evolución de forma independiente y casi simultánea a Charles Darwin?",
@@ -293,6 +333,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Qué monje austríaco es considerado el padre de la genética moderna por sus experimentos con guisantes?",
@@ -300,6 +341,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cien-25-mendel-guisantes.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué científico escocés descubrió accidentalmente la penicilina en 1928?",
@@ -307,6 +349,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cien-26-fleming-penicilina.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué científico francés desarrolló la vacuna contra la rabia y sentó las bases de la microbiología moderna?",
@@ -314,6 +357,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué médico inglés desarrolló la primera vacuna eficaz, contra la viruela, a finales del siglo XVIII?",
@@ -321,6 +365,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cuál es el hueso más largo del cuerpo humano?",
@@ -328,6 +373,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué parte del cerebro humano es responsable de coordinar el equilibrio y los movimientos musculares finos?",
@@ -335,6 +381,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué tipo de roca se forma a partir del enfriamiento y solidificación del magma o la lava?",
@@ -342,6 +389,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cuál es el mineral más duro conocido en la escala de Mohs?",
@@ -349,6 +397,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cien-27-diamante.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué animal marino invertebrado es famoso por poder regenerar brazos completos e incluso, en algunas especies, un cuerpo entero a partir de un solo brazo?",
@@ -356,6 +405,7 @@ const BANCOS_CIENCIA_NATURALEZA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-cien-28-estrella-de-mar.png",
+        dificultad: 4,
       },
     ],
   },

@@ -13,6 +13,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-anat-01-esqueleto-humano.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es el hueso más largo del cuerpo humano?",
@@ -20,6 +21,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cuál es el hueso más pequeño del cuerpo humano?",
@@ -27,6 +29,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cuántas cámaras tiene el corazón humano?",
@@ -34,6 +37,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-anat-02-corazon-humano.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es el órgano más grande del cuerpo humano?",
@@ -41,6 +45,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué órgano del cuerpo humano es responsable de filtrar la sangre y producir la bilis?",
@@ -48,6 +53,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-anat-03-higado.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué par de órganos del cuerpo humano son responsables de filtrar los desechos de la sangre y producir la orina?",
@@ -55,6 +61,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-anat-04-rinones.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué órgano del sistema respiratorio permite el intercambio de oxígeno y dióxido de carbono con la sangre?",
@@ -62,6 +69,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-anat-05-pulmones.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué músculo, situado bajo los pulmones, es el principal responsable de la respiración al contraerse y relajarse?",
@@ -69,6 +77,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué órgano del cuerpo humano produce insulina, hormona clave para regular la glucosa en sangre?",
@@ -76,6 +85,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué glándula del cuerpo humano, ubicada en el cuello, regula el metabolismo mediante hormonas tiroideas?",
@@ -83,6 +93,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué glándula, ubicada en la base del cerebro, es conocida como la 'glándula maestra' por regular otras glándulas del cuerpo?",
@@ -90,6 +101,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Cuántos pares de costillas tiene normalmente el ser humano?",
@@ -97,6 +109,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué proteína de los glóbulos rojos es responsable de transportar el oxígeno por el cuerpo?",
@@ -104,6 +117,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué tipo de glóbulos sanguíneos son responsables de defender el cuerpo contra infecciones?",
@@ -111,6 +125,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué células sanguíneas son responsables de la coagulación de la sangre para detener hemorragias?",
@@ -118,6 +133,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es el grupo sanguíneo conocido como 'donante universal', compatible con la mayoría de receptores?",
@@ -125,6 +141,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-anat-06-grupos-sanguineos.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es el grupo sanguíneo conocido como 'receptor universal', capaz de recibir sangre de casi cualquier tipo?",
@@ -132,6 +149,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué parte del cerebro humano es responsable de coordinar el equilibrio y los movimientos musculares finos?",
@@ -139,6 +157,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-anat-07-cerebro-cerebelo.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué parte del sistema nervioso conecta el cerebro con el resto del cuerpo y controla reflejos básicos?",
@@ -146,6 +165,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Cuántos pares de nervios craneales tiene el cuerpo humano?",
@@ -153,6 +173,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 8,
       },
       {
         texto: "¿Qué órgano de los sentidos permite la percepción del equilibrio además de la audición?",
@@ -160,6 +181,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-anat-08-oido-humano.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué capa transparente del ojo humano cubre el iris y la pupila, permitiendo el enfoque de la luz?",
@@ -167,6 +189,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-anat-09-ojo-humano.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué capa del ojo humano contiene los fotorreceptores (conos y bastones) que capturan la luz y la convierten en señales nerviosas?",
@@ -174,6 +197,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cuántos dientes tiene normalmente un adulto humano, incluyendo las muelas del juicio?",
@@ -181,6 +205,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué proceso natural del cuerpo humano defiende al organismo de patógenos como virus y bacterias?",
@@ -188,6 +213,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué método médico, desarrollado por Edward Jenner en el siglo XVIII, previene enfermedades exponiendo al cuerpo a una versión debilitada o inactiva de un patógeno?",
@@ -195,6 +221,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-anat-10-vacunacion.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué científico escocés descubrió accidentalmente la penicilina en 1928, dando origen a los antibióticos modernos?",
@@ -202,6 +229,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-anat-11-fleming-penicilina.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué especialidad médica se enfoca en el diagnóstico y tratamiento de enfermedades del corazón?",
@@ -209,6 +237,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué especialidad médica se enfoca en el diagnóstico y tratamiento de enfermedades del sistema nervioso?",
@@ -216,6 +245,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué especialidad médica se dedica al diagnóstico y tratamiento del cáncer?",
@@ -223,6 +253,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué especialidad médica se enfoca en el cuidado de la salud de los niños?",
@@ -230,6 +261,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué técnica de imagenología médica utiliza campos magnéticos y ondas de radio para generar imágenes detalladas del interior del cuerpo, sin radiación ionizante?",
@@ -237,6 +269,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-anat-12-resonancia-magnetica.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué técnica de imagenología médica emplea ondas sonoras de alta frecuencia y es comúnmente usada para monitorear embarazos?",
@@ -244,6 +277,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-anat-13-ecografia.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué tipo de radiación electromagnética, descubierta por Wilhelm Röntgen en 1895, se utiliza para obtener radiografías médicas?",
@@ -251,6 +285,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué órgano hueco y muscular del sistema digestivo recibe el alimento del esófago y comienza el proceso de digestión mediante ácidos y enzimas?",
@@ -258,6 +293,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-anat-14-estomago.png",
+        dificultad: 3,
       },
       {
         texto: "¿En qué órgano del sistema digestivo ocurre principalmente la absorción de nutrientes hacia el torrente sanguíneo?",
@@ -265,6 +301,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cuántos litros de sangre circulan aproximadamente en el cuerpo de un adulto promedio?",
@@ -272,6 +309,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué enfermedad crónica se caracteriza por niveles elevados de glucosa en sangre debido a una producción o uso deficiente de insulina?",
@@ -279,6 +317,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué condición médica se caracteriza por una presión arterial persistentemente elevada, aumentando el riesgo cardiovascular?",
@@ -286,6 +325,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué proceso quirúrgico consiste en trasplantar un órgano sano de un donante a un receptor cuyo órgano ha fallado?",
@@ -293,6 +333,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-anat-15-trasplante-organos.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué médico húngaro del siglo XIX es reconocido por promover el lavado de manos en hospitales, reduciendo drásticamente la mortalidad por infecciones?",
@@ -300,6 +341,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-anat-16-semmelweis-lavado-manos.png",
+        dificultad: 8,
       },
       {
         texto: "¿Qué cirujano británico introdujo técnicas antisépticas en el quirófano en el siglo XIX, reduciendo enormemente las infecciones postoperatorias?",
@@ -307,6 +349,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Cómo se llama el músculo más grande y fuerte del cuerpo humano?",
@@ -314,6 +357,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué proceso fisiológico regula la temperatura corporal humana mediante la producción de sudor?",
@@ -321,6 +365,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué vitamina, sintetizada por el cuerpo al exponerse al sol, es esencial para la absorción de calcio y la salud ósea?",
@@ -328,6 +373,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-anat-17-vitamina-d-sol.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué vitamina, presente en cítricos, previene el escorbuto y es fundamental para el sistema inmunológico?",
@@ -335,6 +381,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué enfermedad infecciosa, causada por el virus SARS-CoV-2, provocó una pandemia mundial declarada en 2020?",
@@ -342,6 +389,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué juramento ético, atribuido tradicionalmente a un médico griego de la Antigüedad, es prestado simbólicamente por médicos al graduarse?",
@@ -349,6 +397,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-anat-18-juramento-hipocratico.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué médico y filósofo persa medieval escribió el 'Canon de medicina', obra que influyó en la medicina europea durante siglos?",
@@ -356,6 +405,7 @@ const BANCOS_ANATOMIA_MEDICINA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-anat-20-avicena.png",
+        dificultad: 8,
       },
     ],
   },

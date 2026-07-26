@@ -13,6 +13,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-01-juegos-olimpicos.png",
+        dificultad: 2,
       },
       {
         texto: "¿En qué ciudad se celebraron los primeros Juegos Olímpicos de la era moderna, en 1896?",
@@ -20,6 +21,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-02-atenas-1896.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuántos jugadores conforman un equipo de fútbol en la cancha (sin contar suplentes)?",
@@ -27,6 +29,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué torneo de fútbol de selecciones nacionales se celebra cada cuatro años y es organizado por la FIFA?",
@@ -34,6 +37,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-03-copa-mundial-fifa.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué selección ha ganado más Copas Mundiales de fútbol en la historia?",
@@ -41,6 +45,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-04-brasil-pentacampeon.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué futbolista argentino ganó la Copa Mundial de 2022 con su selección en Catar?",
@@ -48,6 +53,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-05-messi-mundial-2022.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué futbolista portugués es uno de los máximos goleadores históricos del fútbol, junto a Messi?",
@@ -55,6 +61,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-06-cristiano-ronaldo.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuántos aros forman el símbolo olímpico?",
@@ -62,6 +69,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-07-anillos-olimpicos.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué representan los cinco continentes en el símbolo olímpico?",
@@ -69,6 +77,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Cuántos jugadores conforman un equipo de baloncesto en la cancha por cada lado?",
@@ -76,6 +85,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué liga profesional de baloncesto de Estados Unidos es considerada la más importante del mundo?",
@@ -83,6 +93,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-08-nba-cancha.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué jugador estadounidense de baloncesto, con seis anillos de campeón con los Chicago Bulls, es considerado uno de los mejores de la historia?",
@@ -90,6 +101,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-09-michael-jordan.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué jugador estadounidense de baloncesto es el máximo anotador histórico de la NBA, superando el récord de Kareem Abdul-Jabbar en 2023?",
@@ -97,6 +109,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-10-lebron-james.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuántos jugadores tiene un equipo de béisbol en el campo durante una defensa?",
@@ -104,6 +117,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué liga profesional de béisbol de Estados Unidos y Canadá es la más importante del mundo?",
@@ -111,6 +125,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué tenista suizo ha ganado 20 títulos de Grand Slam, siendo uno de los más laureados de la historia?",
@@ -118,6 +133,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-11-roger-federer.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué tenista español, apodado 'El Rey de la Tierra Batida', ha ganado el Roland Garros en catorce ocasiones?",
@@ -125,6 +141,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-12-rafael-nadal.png",
+        dificultad: 3,
       },
       {
         texto: "¿Cuántos sets se necesitan ganar para vencer un partido de tenis masculino en un Grand Slam (formato al mejor de cinco)?",
@@ -132,6 +149,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué torneo de tenis, disputado sobre césped en Londres, es considerado el más prestigioso del circuito de Grand Slam?",
@@ -139,6 +157,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-13-wimbledon.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué piloto alemán de Fórmula 1 ganó siete campeonatos mundiales, récord igualado luego por Lewis Hamilton?",
@@ -146,6 +165,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-14-michael-schumacher.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué piloto británico de Fórmula 1 igualó el récord de siete campeonatos mundiales con la escudería Mercedes?",
@@ -153,6 +173,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-15-lewis-hamilton.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué piloto brasileño de Fórmula 1, tres veces campeón mundial, falleció trágicamente en 1994 durante el Gran Premio de San Marino?",
@@ -160,6 +181,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-dep-16-ayrton-senna.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué nadador estadounidense ha ganado más medallas olímpicas que cualquier otro atleta en la historia, con 23 medallas de oro?",
@@ -167,6 +189,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-17-michael-phelps.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué atleta jamaicano, ganador de ocho medallas de oro olímpicas, ostenta el récord mundial de los 100 metros planos?",
@@ -174,6 +197,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-18-usain-bolt.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué distancia recorre un corredor en un maratón olímpico?",
@@ -181,6 +205,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-19-maraton.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué ciclista español ganó cinco veces consecutivas el Tour de Francia entre 1991 y 1995?",
@@ -188,6 +213,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-20-miguel-induran.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué colombiano ganó el Tour de Francia en 2019, siendo el primer latinoamericano en lograrlo?",
@@ -195,6 +221,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-21-egan-bernal.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué deporte de raqueta se juega en una cancha dividida por una red y utiliza un volante o 'gallito' en lugar de pelota?",
@@ -202,6 +229,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué deporte de contacto olímpico consiste en derribar al oponente o inmovilizarlo mediante llaves y proyecciones, originario de Japón?",
@@ -209,6 +237,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-22-judo.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué arte marcial coreano, deporte olímpico desde el año 2000, se caracteriza por técnicas de patadas rápidas y altas?",
@@ -216,6 +245,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cuántos jugadores conforman un equipo de voleibol en la cancha por cada lado?",
@@ -223,6 +253,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué deporte olímpico de combate, en el que dos boxeadores se enfrentan con guantes en un ring, tiene asaltos llamados 'rounds'?",
@@ -230,6 +261,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-23-boxeo-ring.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué boxeador estadounidense, tres veces campeón mundial de peso pesado, es célebre por la frase 'flota como mariposa, pica como abeja'?",
@@ -237,6 +269,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-24-muhammad-ali.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué golfista estadounidense, con 15 títulos de majors, es uno de los más dominantes de la historia del golf?",
@@ -244,6 +277,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-25-tiger-woods.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué deporte se juega en una cancha con una red baja, raquetas y una pelota que no debe tocar el suelo, muy popular en América Latina bajo el nombre de 'pádel'?",
@@ -251,6 +285,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué evento ciclista de tres semanas, disputado en Francia cada julio, es la carrera de ciclismo en ruta más prestigiosa del mundo?",
@@ -258,6 +293,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-26-tour-de-francia.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué prenda especial usa el líder de la clasificación general en el Tour de Francia?",
@@ -265,6 +301,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-dep-27-maillot-amarillo.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué torneo de fútbol de clubes, organizado por la UEFA, reúne a los mejores equipos europeos cada temporada?",
@@ -272,6 +309,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-28-champions-league.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué club español ha ganado más veces la Champions League/Copa de Europa en la historia?",
@@ -279,6 +317,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-29-real-madrid.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué futbolista brasileño, tricampeón mundial, es considerado por muchos el mejor futbolista de la historia?",
@@ -286,6 +325,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-30-pele.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué futbolista argentino, campeón mundial en 1986, es considerado junto a Pelé uno de los mejores de la historia?",
@@ -293,6 +333,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-31-diego-maradona.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuántos jugadores integran un equipo de rugby en el campo (formato XV, el más tradicional)?",
@@ -300,6 +341,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué país ha ganado más veces la Copa Mundial de Rugby?",
@@ -307,6 +349,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-dep-32-all-blacks-haka.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué deporte de invierno consiste en deslizarse sobre nieve con esquís, con modalidades como el descenso y el eslalon?",
@@ -314,6 +357,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-dep-33-esqui-alpino.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué deporte de invierno consiste en deslizar piedras de granito sobre una pista de hielo hacia una zona de puntuación circular?",
@@ -321,6 +365,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-dep-34-curling.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué deporte de invierno, muy popular en Canadá, se juega sobre hielo con patines, palos curvos y un disco llamado 'puck'?",
@@ -328,6 +373,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-35-hockey-hielo.png",
+        dificultad: 3,
       },
       {
         texto: "¿Cada cuántos años se celebran los Juegos Olímpicos de invierno?",
@@ -335,6 +381,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué gimnasta estadounidense, con múltiples medallas olímpicas, es considerada la gimnasta más laureada de la historia?",
@@ -342,6 +389,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-dep-36-simone-biles.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué gimnasta rumana logró la primera puntuación perfecta de 10 en unos Juegos Olímpicos, en Montreal 1976?",
@@ -349,6 +397,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-dep-37-nadia-comaneci.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué prueba de atletismo combina diez disciplinas diferentes disputadas en dos días, siendo una de las más exigentes del atletismo?",
@@ -356,6 +405,7 @@ const BANCOS_DEPORTES = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
     ],
   },

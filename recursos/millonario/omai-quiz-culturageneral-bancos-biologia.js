@@ -13,6 +13,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-bio-01-celula.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué tipo de célula carece de núcleo definido, como las bacterias?",
@@ -20,6 +21,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué orgánulo celular es conocido como la 'central energética' de la célula por producir ATP?",
@@ -27,6 +29,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-02-mitocondria.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué molécula contiene la información genética hereditaria de los seres vivos?",
@@ -34,6 +37,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-bio-03-adn.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la estructura en forma de doble hélice que forma el ADN?",
@@ -41,6 +45,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué proceso celular permite que una célula se divida en dos células hijas genéticamente idénticas?",
@@ -48,6 +53,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-04-mitosis.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué proceso de división celular reduce a la mitad el número de cromosomas, generando gametos (óvulos y espermatozoides)?",
@@ -55,6 +61,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué naturalista británico propuso la teoría de la evolución mediante selección natural en 'El origen de las especies' (1859)?",
@@ -62,6 +69,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-bio-05-darwin-origen-especies.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué archipiélago inspiró a Darwin a formular ideas clave sobre la evolución, al observar diferencias entre pinzones de distintas islas?",
@@ -69,6 +77,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-06-pinzones-galapagos.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué monje austríaco es considerado el padre de la genética moderna por sus experimentos de cruces con guisantes?",
@@ -76,6 +85,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-07-mendel-guisantes.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué científicos son reconocidos por describir la estructura de doble hélice del ADN en 1953?",
@@ -83,6 +93,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué científica británica realizó imágenes clave de difracción de rayos X que ayudaron a determinar la estructura del ADN, sin recibir el reconocimiento adecuado en su época?",
@@ -90,6 +101,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-bio-08-rosalind-franklin.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué proceso permite a las plantas producir su propio alimento (glucosa) a partir de luz solar, agua y dióxido de carbono?",
@@ -97,6 +109,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-bio-09-fotosintesis.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué pigmento verde presente en los cloroplastos es esencial para capturar la energía solar durante la fotosíntesis?",
@@ -104,6 +117,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cuántos huesos tiene aproximadamente el esqueleto de un ser humano adulto?",
@@ -111,6 +125,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es el órgano más grande del cuerpo humano?",
@@ -118,6 +133,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cuántas cámaras tiene el corazón humano?",
@@ -125,6 +141,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-10-corazon-humano.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué proteína de los glóbulos rojos transporta el oxígeno por el cuerpo?",
@@ -132,6 +149,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué tipo de glóbulos sanguíneos son responsables de defender el cuerpo contra infecciones?",
@@ -139,6 +157,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué órgano del sistema nervioso coordina el equilibrio y los movimientos musculares finos?",
@@ -146,6 +165,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué reino biológico agrupa a los organismos unicelulares sin núcleo definido, como las bacterias?",
@@ -153,6 +173,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿A qué reino biológico pertenecen los hongos, distinto del vegetal y del animal?",
@@ -160,6 +181,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-11-hongos-fungi.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué mamífero marino es considerado el animal más grande que ha existido en la historia del planeta?",
@@ -167,6 +189,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-bio-12-ballena-azul.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué proceso biológico permite a ciertos animales, como algunas mariposas y aves, migrar largas distancias siguiendo patrones estacionales?",
@@ -174,6 +197,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-bio-13-migracion-mariposas.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama el proceso de transformación que atraviesa una oruga hasta convertirse en mariposa?",
@@ -181,6 +205,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-bio-14-metamorfosis-mariposa.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué relación biológica beneficia a ambas especies involucradas, como la de las abejas y las flores?",
@@ -188,6 +213,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué relación biológica beneficia a una especie mientras perjudica a otra, como la de una tenia y su huésped?",
@@ -195,6 +221,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama el conjunto de todos los seres vivos e interacciones de una región junto con su ambiente físico?",
@@ -202,6 +229,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué proceso natural regula el flujo de energía en un ecosistema, comenzando por organismos productores como las plantas?",
@@ -209,6 +237,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-15-cadena-alimentaria.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué molécula, producida en la respiración celular, funciona como la principal fuente de energía utilizable por las células?",
@@ -216,6 +245,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué microbiólogo francés desarrolló la vacuna contra la rabia y el proceso de pasteurización que lleva su nombre?",
@@ -223,6 +253,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-16-louis-pasteur.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué microbiólogo alemán identificó los agentes causantes de la tuberculosis y el cólera, sentando las bases de la teoría microbiana de las enfermedades?",
@@ -230,6 +261,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-bio-17-robert-koch.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué científico escocés descubrió accidentalmente la penicilina en 1928, dando origen a los antibióticos modernos?",
@@ -237,6 +269,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-18-fleming-penicilina.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué médico inglés desarrolló la primera vacuna eficaz de la historia, contra la viruela, a finales del siglo XVIII?",
@@ -244,6 +277,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-bio-19-edward-jenner.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama la técnica biotecnológica que permite copiar millones de veces un fragmento específico de ADN en el laboratorio?",
@@ -251,6 +285,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Qué oveja, nacida en 1996, fue el primer mamífero clonado exitosamente a partir de una célula adulta?",
@@ -258,6 +293,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-20-oveja-dolly.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué sistema biológico del cuerpo humano es responsable de la defensa contra patógenos como virus y bacterias?",
@@ -265,6 +301,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué glándula del cuerpo humano regula el metabolismo mediante la producción de hormonas tiroideas?",
@@ -272,6 +309,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué órgano del cuerpo humano produce insulina, hormona clave para regular el nivel de glucosa en sangre?",
@@ -279,6 +317,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué mamífero es el único capaz de volar de forma activa y sostenida, gracias a sus alas membranosas?",
@@ -286,6 +325,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-21-murcielago.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué animal es conocido por cambiar de color mediante células especializadas llamadas cromatóforos, usadas para camuflaje y comunicación?",
@@ -293,6 +333,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-22-camaleon.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué molusco marino tiene tres corazones y es célebre por su inteligencia y capacidad de camuflaje casi instantáneo?",
@@ -300,6 +341,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-bio-23-pulpo.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué animal marino invertebrado puede regenerar brazos completos, e incluso, en algunas especies, un cuerpo entero a partir de un solo brazo?",
@@ -307,6 +349,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-24-estrella-de-mar.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué insecto es responsable de la polinización de gran parte de los cultivos alimentarios del mundo?",
@@ -314,6 +357,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-bio-25-abeja-polinizando.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama el conjunto de todos los genes de un organismo, cuya secuenciación completa en humanos se logró en el año 2003?",
@@ -321,6 +365,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama el conjunto visible de características físicas de un organismo, resultado de la interacción entre genes y ambiente?",
@@ -328,6 +373,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Cuántos pares de cromosomas tiene una célula humana normal?",
@@ -335,6 +381,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué proceso permite a ciertos organismos, como los osos, reducir su actividad metabólica durante el invierno para sobrevivir con escasez de alimento?",
@@ -342,6 +389,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-bio-26-oso-hibernando.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué científica estadounidense descubrió los 'genes saltarines' (transposones), un hallazgo que le valió el Premio Nobel en 1983?",
@@ -349,6 +397,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-bio-27-barbara-mcclintock.png",
+        dificultad: 9,
       },
       {
         texto: "¿Qué primatóloga británica es reconocida mundialmente por sus décadas de estudio de campo sobre los chimpancés en Tanzania?",
@@ -356,6 +405,7 @@ const BANCOS_BIOLOGIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-bio-28-jane-goodall.png",
+        dificultad: 5,
       },
     ],
   },

@@ -13,6 +13,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-arte-01-mona-lisa.png",
+        dificultad: 1,
       },
       {
         texto: "¿Quién pintó el techo de la Capilla Sixtina en el Vaticano?",
@@ -20,6 +21,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-arte-02-capilla-sixtina.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué pintor holandés es autor de 'La noche estrellada'?",
@@ -27,6 +29,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-arte-03-noche-estrellada.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué pintor español es autor de 'Guernica', un mural sobre los horrores de la guerra?",
@@ -34,6 +37,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-04-guernica.png",
+        dificultad: 3,
       },
       {
         texto: "¿A qué movimiento artístico pertenece la obra 'Guernica' de Picasso?",
@@ -41,6 +45,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué pintor español, célebre por sus relojes derretidos, es la máxima figura del surrealismo?",
@@ -48,6 +53,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-arte-05-relojes-derretidos.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué pintor holandés del siglo XVII es autor de 'La joven de la perla'?",
@@ -55,6 +61,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-arte-06-joven-de-la-perla.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué escultura de mármol de Miguel Ángel representa a un joven bíblico antes de su combate con un gigante?",
@@ -62,6 +69,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-07-david-miguel-angel.png",
+        dificultad: 3,
       },
       {
         texto: "¿En qué ciudad italiana se conserva la escultura original de 'El David' de Miguel Ángel?",
@@ -69,6 +77,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Quién escribió 'Don Quijote de la Mancha'?",
@@ -76,6 +85,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-arte-08-don-quijote.png",
+        dificultad: 1,
       },
       {
         texto: "¿Quién escribió 'Cien años de soledad'?",
@@ -83,6 +93,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-arte-09-cien-anios-soledad.png",
+        dificultad: 2,
       },
       {
         texto: "¿En qué pueblo ficticio transcurre gran parte de 'Cien años de soledad'?",
@@ -90,6 +101,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué dramaturgo inglés escribió 'Romeo y Julieta' y 'Hamlet'?",
@@ -97,6 +109,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-arte-10-shakespeare.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué escritor ruso es autor de 'Guerra y paz' y 'Ana Karenina'?",
@@ -104,6 +117,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-11-tolstoi.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué novelista ruso escribió 'Crimen y castigo'?",
@@ -111,6 +125,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué escritor argentino, célebre por sus cuentos como 'El Aleph' y 'Ficciones', nunca ganó el Premio Nobel pese a ser candidato recurrente?",
@@ -118,6 +133,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-arte-12-borges.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué poeta y novelista chileno ganó el Premio Nobel de Literatura en 1971?",
@@ -125,6 +141,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-13-pablo-neruda.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué poetisa chilena fue la primera persona latinoamericana en ganar el Premio Nobel de Literatura, en 1945?",
@@ -132,6 +149,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-arte-14-gabriela-mistral.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué novela de Jane Austen narra la historia de Elizabeth Bennet y el señor Darcy?",
@@ -139,6 +157,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué autor francés escribió 'Los miserables' y 'Nuestra Señora de París'?",
@@ -146,6 +165,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-15-victor-hugo.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué novela de Victor Hugo tiene como escenario la Catedral de Notre-Dame de París?",
@@ -153,6 +173,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué escritor colombiano recibió el Premio Nobel de Literatura en 1982?",
@@ -160,6 +181,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-arte-16-garcia-marquez.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué corriente literaria latinoamericana, con García Márquez como su figura más célebre, mezcla lo cotidiano con elementos fantásticos?",
@@ -167,6 +189,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué edificio gótico francés, con sus vitrales y gárgolas, fue gravemente dañado por un incendio en 2019?",
@@ -174,6 +197,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-17-notre-dame.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué arquitecto catalán, aún inconclusa su obra maestra, diseñó la Sagrada Familia en Barcelona?",
@@ -181,6 +205,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-18-sagrada-familia.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué museo parisino alberga la 'Mona Lisa' y la escultura de la Venus de Milo?",
@@ -188,6 +213,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-arte-19-museo-louvre.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué escultura clásica griega, sin brazos, representa a la diosa Afrodita/Venus y se exhibe en el Louvre?",
@@ -195,6 +221,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-arte-20-venus-de-milo.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué movimiento artístico del siglo XIX, con Monet como su exponente clave, buscaba capturar impresiones fugaces de luz y color?",
@@ -202,6 +229,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-21-monet-impresionismo.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué pintor francés es autor de la serie de cuadros 'Los nenúfares'?",
@@ -209,6 +237,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-arte-22-nenufares-monet.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué pintor neerlandés se cortó parte de una oreja y murió en circunstancias trágicas sin haber conocido el éxito en vida?",
@@ -216,6 +245,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué escritor inglés es autor de 'Alicia en el país de las maravillas'?",
@@ -223,6 +253,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-23-alicia-maravillas.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué novelista inglés del siglo XIX es autor de 'Oliver Twist' y 'Cuento de Navidad'?",
@@ -230,6 +261,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué escritor irlandés es autor de 'El retrato de Dorian Gray'?",
@@ -237,6 +269,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-arte-24-dorian-gray.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué novela gótica de Bram Stoker, publicada en 1897, popularizó al conde vampiro más famoso de la literatura?",
@@ -244,6 +277,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-25-dracula.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué escritora inglesa, con apenas 20 años, escribió 'Frankenstein o el moderno Prometeo'?",
@@ -251,6 +285,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-arte-26-frankenstein.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué pintor mexicana, célebre por sus autorretratos y su vínculo con Diego Rivera, es un ícono del arte latinoamericano del siglo XX?",
@@ -258,6 +293,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-arte-27-frida-kahlo.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué muralista mexicano, esposo de Frida Kahlo, es célebre por sus grandes murales de temática social y obrera?",
@@ -265,6 +301,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-28-diego-rivera-mural.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué poema épico atribuido a Homero narra la guerra de Troya?",
@@ -272,6 +309,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-29-iliada.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué poema épico de Homero narra el largo viaje de regreso de Ulises (Odiseo) a su hogar en Ítaca?",
@@ -279,6 +317,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-30-odisea.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué poeta italiano medieval escribió 'La Divina Comedia', un recorrido por el Infierno, el Purgatorio y el Paraíso?",
@@ -286,6 +325,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-31-dante-divina-comedia.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué pintor barroco español es autor de 'Las Meninas'?",
@@ -293,6 +333,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-32-las-meninas.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué pintor español, autor de 'El 3 de mayo de 1808', retrató los horrores de la invasión napoleónica en España?",
@@ -300,6 +341,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-33-goya-3-de-mayo.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué escritor peruano ganó el Premio Nobel de Literatura en 2010?",
@@ -307,6 +349,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-34-vargas-llosa.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué escritor argentino es autor de 'Rayuela', novela que puede leerse en distintos órdenes?",
@@ -314,6 +357,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿A qué estilo arquitectónico pertenecen catedrales como la de Notre-Dame de París, con arcos apuntados y grandes vitrales?",
@@ -321,6 +365,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué pintor renacentista italiano, además de pintar 'La escuela de Atenas', decoró estancias del Vaticano?",
@@ -328,6 +373,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-arte-35-escuela-de-atenas.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué novela de Fiódor Dostoyevski narra el tormento psicológico de un estudiante que comete un asesinato?",
@@ -335,6 +381,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué escritora inglesa del siglo XIX escribió 'Cumbres Borrascosas' bajo el seudónimo de Ellis Bell?",
@@ -342,6 +389,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Qué pintor noruego es autor de 'El grito', una de las imágenes más reconocibles del expresionismo?",
@@ -349,6 +397,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-arte-36-el-grito.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué pintor austríaco es autor de 'El beso', célebre obra dorada del simbolismo?",
@@ -356,6 +405,7 @@ const BANCOS_ARTE_LITERATURA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-arte-37-el-beso-klimt.png",
+        dificultad: 6,
       },
     ],
   },

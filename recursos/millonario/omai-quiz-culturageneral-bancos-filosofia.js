@@ -13,6 +13,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-filo-01-socrates.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo murió el filósofo Sócrates, condenado por corromper a la juventud ateniense?",
@@ -20,6 +21,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-02-muerte-socrates.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué filósofo griego, discípulo de Sócrates, fundó la Academia de Atenas y escribió 'La República'?",
@@ -27,6 +29,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-filo-03-platon.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué alegoría de Platón describe a personas encadenadas viendo sombras en una pared, representando la ignorancia frente al conocimiento verdadero?",
@@ -34,6 +37,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-04-alegoria-caverna.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué filósofo griego, discípulo de Platón y maestro de Alejandro Magno, fundó el Liceo y escribió sobre lógica, ética y política?",
@@ -41,6 +45,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-filo-05-aristoteles.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué obra de Aristóteles trata sobre la ética y la búsqueda de la felicidad (eudaimonía) mediante la virtud?",
@@ -48,6 +53,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué escuela filosófica griega, fundada por Epicuro, defendía que el placer moderado y la ausencia de dolor son el camino hacia la felicidad?",
@@ -55,6 +61,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-06-epicuro.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué escuela filosófica griega, fundada por Zenón de Citio, promovía aceptar lo que no se puede controlar y vivir según la razón y la virtud?",
@@ -62,6 +69,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-07-estoicismo.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué filósofo estoico romano, también emperador, escribió 'Meditaciones' como reflexiones personales de autodisciplina?",
@@ -69,6 +77,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-08-marco-aurelio.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué filósofo presocrático afirmó que 'todo fluye' y que nadie se baña dos veces en el mismo río, subrayando el cambio constante de la realidad?",
@@ -76,6 +85,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-09-heraclito.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué filósofo presocrático sostuvo que la realidad es inmutable y que el cambio percibido por los sentidos es una ilusión?",
@@ -83,6 +93,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Qué filósofo griego, junto con Leucipo, propuso que toda la materia está compuesta de partículas indivisibles llamadas átomos?",
@@ -90,6 +101,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-10-democrito-atomos.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué filósofo francés del siglo XVII es autor de la célebre frase 'Pienso, luego existo' (Cogito ergo sum)?",
@@ -97,6 +109,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-filo-11-descartes-cogito.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué corriente filosófica, defendida por Descartes, sostiene que la razón, y no la experiencia sensorial, es la principal fuente del conocimiento?",
@@ -104,6 +117,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué corriente filosófica, defendida por John Locke y David Hume, sostiene que el conocimiento proviene principalmente de la experiencia sensorial?",
@@ -111,6 +125,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-12-empirismo.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué filósofo inglés del siglo XVII, autor de 'Leviatán', defendió que el estado de naturaleza humana es de 'guerra de todos contra todos'?",
@@ -118,6 +133,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-13-hobbes-leviatan.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué filósofo inglés es considerado el padre del liberalismo político, defendiendo derechos naturales como la vida, la libertad y la propiedad?",
@@ -125,6 +141,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-14-john-locke.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué filósofo ginebrino del siglo XVIII, autor de 'El contrato social', influyó decisivamente en la Revolución Francesa?",
@@ -132,6 +149,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-15-rousseau.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué filósofo alemán del siglo XVIII, autor de 'Crítica de la razón pura', buscó reconciliar el racionalismo y el empirismo?",
@@ -139,6 +157,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-16-kant.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama el principio ético de Kant que establece actuar solo según máximas que uno querría convertir en ley universal?",
@@ -146,6 +165,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 7,
       },
       {
         texto: "¿Qué filósofo alemán del siglo XIX desarrolló la dialéctica (tesis, antítesis, síntesis) como método de comprensión histórica y racional?",
@@ -153,6 +173,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-17-hegel-dialectica.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué filósofo alemán, autor de 'El capital' y 'El manifiesto comunista', desarrolló la teoría del materialismo histórico y la lucha de clases?",
@@ -160,6 +181,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-filo-18-karl-marx.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué filósofo alemán del siglo XIX proclamó 'Dios ha muerto' y desarrolló conceptos como el 'superhombre' y la 'voluntad de poder'?",
@@ -167,6 +189,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-19-nietzsche.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué obra de Nietzsche, escrita en forma de parábola profética, presenta las enseñanzas de un sabio que baja de la montaña?",
@@ -174,6 +197,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué filósofo alemán del siglo XIX es conocido por su visión pesimista de la existencia y su influencia en el budismo occidental?",
@@ -181,6 +205,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué filósofo danés del siglo XIX, considerado precursor del existencialismo, escribió sobre la angustia y la elección individual frente a Dios?",
@@ -188,6 +213,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-20-kierkegaard.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué corriente filosófica del siglo XX, con Sartre como principal exponente, sostiene que 'la existencia precede a la esencia'?",
@@ -195,6 +221,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-21-existencialismo-sartre.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué filósofo y escritor francés del siglo XX, autor de 'El ser y la nada', rechazó el Premio Nobel de Literatura en 1964?",
@@ -202,6 +229,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-22-jean-paul-sartre.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué filósofa y escritora francesa, pareja intelectual de Sartre, escribió 'El segundo sexo', obra fundacional del feminismo moderno?",
@@ -209,6 +237,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-23-simone-de-beauvoir.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué filósofo y escritor franco-argelino, autor de 'El mito de Sísifo' y 'El extranjero', exploró el concepto del absurdo existencial?",
@@ -216,6 +245,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-24-albert-camus.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué filósofa política alemana-estadounidense escribió 'Los orígenes del totalitarismo' y el célebre concepto de la 'banalidad del mal'?",
@@ -223,6 +253,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-25-hannah-arendt.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué rama de la filosofía estudia los principios de la moral y lo que se considera correcto o incorrecto en el comportamiento humano?",
@@ -230,6 +261,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué rama de la filosofía estudia la naturaleza del conocimiento, sus límites y su justificación?",
@@ -237,6 +269,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué rama de la filosofía estudia la naturaleza última de la realidad, el ser y la existencia?",
@@ -244,6 +277,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué rama de la filosofía estudia los principios y métodos del razonamiento válido y correcto?",
@@ -251,6 +285,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué corriente ética sostiene que una acción es correcta si maximiza la felicidad o el bienestar del mayor número de personas?",
@@ -258,6 +293,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué filósofos británicos, Jeremy Bentham y John Stuart Mill, son los principales exponentes clásicos del utilitarismo?",
@@ -265,6 +301,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-26-bentham-mill-utilitarismo.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué filósofo austríaco-británico del siglo XX, autor de 'La sociedad abierta y sus enemigos', propuso el criterio de 'falsabilidad' para distinguir ciencia de pseudociencia?",
@@ -272,6 +309,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-27-karl-popper.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué filósofo austríaco del siglo XX, autor del 'Tractatus Logico-Philosophicus', revolucionó la filosofía del lenguaje?",
@@ -279,6 +317,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-28-wittgenstein.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué filósofo galés-británico, matemático y activista pacifista, escribió 'Historia de la filosofía occidental' y ganó el Premio Nobel de Literatura?",
@@ -286,6 +325,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-29-bertrand-russell.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué filósofo alemán del siglo XX, autor de 'Ser y tiempo', es una figura central de la fenomenología y el existencialismo, pese a su controvertida afiliación al nazismo?",
@@ -293,6 +333,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-30-heidegger.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué filósofo francés del siglo XX, autor de 'Vigilar y castigar' y 'Historia de la sexualidad', analizó las relaciones entre poder, saber y sociedad?",
@@ -300,6 +341,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-31-michel-foucault.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué filósofo indio, líder espiritual y político, defendió la resistencia no violenta (satyagraha) como método de lucha social?",
@@ -307,6 +349,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-filo-32-gandhi.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué filósofo chino, cuyas enseñanzas éticas y sociales conforman una de las tradiciones filosóficas más influyentes de Asia, vivió en el siglo VI-V a.C.?",
@@ -314,6 +357,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-33-confucio.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué filósofo chino es considerado el fundador tradicional del taoísmo y autor atribuido del 'Tao Te Ching'?",
@@ -321,6 +365,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-34-laozi-taoismo.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué príncipe indio, tras alcanzar la iluminación bajo un árbol bodhi, se convirtió en el fundador del budismo?",
@@ -328,6 +373,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-35-buda.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué filósofo hispanomusulmán medieval, nacido en Córdoba, escribió comentarios influyentes sobre Aristóteles que impactaron la filosofía europea?",
@@ -335,6 +381,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-36-averroes.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué filósofo judío sefardí, nacido en Córdoba, escribió 'Guía de perplejos', obra clave del pensamiento judío medieval?",
@@ -342,6 +389,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-37-maimonides.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué filósofo medieval italiano, autor de 'Suma Teológica', integró la filosofía aristotélica con la teología cristiana?",
@@ -349,6 +397,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-filo-38-tomas-de-aquino.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué filósofo y teólogo cristiano de la Antigüedad tardía, autor de 'Confesiones' y 'La ciudad de Dios', influyó profundamente en el pensamiento occidental?",
@@ -356,6 +405,7 @@ const BANCOS_FILOSOFIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-filo-39-san-agustin.png",
+        dificultad: 5,
       },
     ],
   },

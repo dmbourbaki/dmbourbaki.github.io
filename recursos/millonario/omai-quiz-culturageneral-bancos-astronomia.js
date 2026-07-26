@@ -13,6 +13,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-astro-01-mercurio.png",
+        dificultad: 1,
       },
       {
         texto: "¿Cuál es el planeta más caliente del sistema solar, pese a no ser el más cercano al Sol?",
@@ -20,6 +21,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-02-venus.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cuál es el planeta más grande del sistema solar?",
@@ -27,6 +29,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-astro-03-jupiter.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué planeta es conocido por sus vistosos anillos de hielo y roca?",
@@ -34,6 +37,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-astro-04-saturno.png",
+        dificultad: 1,
       },
       {
         texto: "¿Qué planeta, conocido por su color azul intenso debido al metano en su atmósfera, es el más alejado del Sol?",
@@ -41,6 +45,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-05-neptuno.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué planeta gira prácticamente 'de lado' sobre su eje, a diferencia del resto de planetas del sistema solar?",
@@ -48,6 +53,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-06-urano.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué antiguo 'noveno planeta' fue reclasificado como planeta enano por la Unión Astronómica Internacional en 2006?",
@@ -55,6 +61,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-07-pluton.png",
+        dificultad: 3,
       },
       {
         texto: "¿Cómo se llama la galaxia en la que se encuentra nuestro sistema solar?",
@@ -62,6 +69,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-astro-08-via-lactea.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es la galaxia más cercana a la Vía Láctea con la que eventualmente colisionará en miles de millones de años?",
@@ -69,6 +77,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-09-andromeda.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué tipo de estrella masiva colapsa violentamente al final de su vida en una explosión conocida como supernova?",
@@ -76,6 +85,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-10-supernova.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama la región del espacio con un campo gravitacional tan intenso que ni siquiera la luz puede escapar de ella?",
@@ -83,6 +93,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-astro-11-agujero-negro.png",
+        dificultad: 2,
       },
       {
         texto: "¿En qué año llegó el ser humano a la Luna por primera vez, con la misión Apolo 11?",
@@ -90,6 +101,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-astro-12-apolo-11.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué astronauta estadounidense fue la primera persona en pisar la superficie lunar?",
@@ -97,6 +109,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué satélite artificial, lanzado por la Unión Soviética en 1957, fue el primero en orbitar la Tierra?",
@@ -104,6 +117,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-13-sputnik.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué cosmonauta soviético se convirtió en el primer ser humano en viajar al espacio, en 1961?",
@@ -111,6 +125,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-14-yuri-gagarin.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué cosmonauta soviética se convirtió en la primera mujer en viajar al espacio, en 1963?",
@@ -118,6 +133,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-15-valentina-tereshkova.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué telescopio espacial, lanzado en 1990, ha proporcionado imágenes icónicas del universo durante más de tres décadas?",
@@ -125,6 +141,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-16-telescopio-hubble.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué telescopio espacial, lanzado en 2021 como sucesor del Hubble, observa el universo principalmente en luz infrarroja?",
@@ -132,6 +149,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-17-telescopio-james-webb.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama la estación espacial que ha orbitado la Tierra de forma continua desde el año 2000, con participación de varios países?",
@@ -139,6 +157,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-18-estacion-espacial-internacional.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué robot de la NASA, activo desde 2012, ha explorado la superficie de Marte en busca de señales de vida pasada?",
@@ -146,6 +165,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-19-rover-marte.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué gigantesco volcán marciano es la montaña más alta conocida del sistema solar?",
@@ -153,6 +173,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-20-monte-olimpo-marte.png",
+        dificultad: 7,
       },
       {
         texto: "¿Cuál es el satélite natural más grande del sistema solar, orbitando alrededor de Júpiter?",
@@ -160,6 +181,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-21-ganimedes.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué luna de Saturno tiene una atmósfera densa y lagos de metano líquido en su superficie?",
@@ -167,6 +189,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-22-titan-saturno.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué luna de Júpiter es considerada uno de los lugares más prometedores del sistema solar para buscar vida, debido a un océano subterráneo bajo su corteza helada?",
@@ -174,6 +197,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-23-europa-jupiter.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cuánto tiempo tarda la luz del Sol en llegar a la Tierra aproximadamente?",
@@ -181,6 +205,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama la unidad de distancia astronómica equivalente a la distancia que recorre la luz en un año?",
@@ -188,6 +213,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cómo se llama el fenómeno en el que la Luna se interpone entre el Sol y la Tierra, bloqueando total o parcialmente la luz solar?",
@@ -195,6 +221,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-astro-24-eclipse-solar.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama el fenómeno en el que la Tierra se interpone entre el Sol y la Luna, haciendo que esta se oscurezca o tome un tono rojizo?",
@@ -202,6 +229,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-25-eclipse-lunar.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama el fenómeno en el que la Luna llena aparece más grande y brillante de lo habitual por estar en el punto más cercano de su órbita a la Tierra?",
@@ -209,6 +237,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llaman los cuerpos celestes helados que, al acercarse al Sol, desarrollan una cola luminosa de gas y polvo?",
@@ -216,6 +245,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-astro-26-cometa.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama el famoso cometa que puede observarse desde la Tierra aproximadamente cada 76 años?",
@@ -223,6 +253,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-27-cometa-halley.png",
+        dificultad: 4,
       },
       {
         texto: "¿Dónde se ubica principalmente el cinturón de asteroides del sistema solar?",
@@ -230,6 +261,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-28-cinturon-asteroides.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se llama la región helada más allá de la órbita de Neptuno donde se encuentran Plutón y otros objetos transneptunianos?",
@@ -237,6 +269,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué astrónomo italiano del siglo XVII, pionero del uso del telescopio, defendió el modelo heliocéntrico y fue procesado por la Inquisición?",
@@ -244,6 +277,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-29-galileo-telescopio.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué astrónomo polaco propuso en el siglo XVI el modelo heliocéntrico, situando al Sol en el centro del sistema solar?",
@@ -251,6 +285,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-30-copernico.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué astrónomo alemán formuló las tres leyes del movimiento planetario, describiendo las órbitas elípticas de los planetas?",
@@ -258,6 +293,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué astrónoma estadounidense descubrió la relación entre el brillo y el período de las estrellas Cefeidas, clave para medir distancias cósmicas?",
@@ -265,6 +301,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-31-henrietta-leavitt.png",
+        dificultad: 9,
       },
       {
         texto: "¿Qué astrónoma estadounidense aportó evidencia clave sobre la existencia de la materia oscura al estudiar la rotación de galaxias?",
@@ -272,6 +309,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-32-vera-rubin.png",
+        dificultad: 8,
       },
       {
         texto: "¿Cómo se llama la teoría científica que describe el origen del universo a partir de una expansión inicial extremadamente densa y caliente?",
@@ -279,6 +317,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-astro-33-big-bang.png",
+        dificultad: 2,
       },
       {
         texto: "¿Aproximadamente cuántos años tiene el universo según las estimaciones científicas actuales?",
@@ -286,6 +325,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Aproximadamente cuántos años tiene el sistema solar según las estimaciones científicas actuales?",
@@ -293,6 +333,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se llama la sustancia invisible y aún no detectada directamente que representaría gran parte de la masa del universo?",
@@ -300,6 +341,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se llama la fuerza misteriosa que se cree responsable de la expansión acelerada del universo?",
@@ -307,6 +349,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué compañía aeroespacial privada, fundada por Elon Musk, desarrolló el cohete reutilizable Falcon 9 y la nave Dragon?",
@@ -314,6 +357,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-34-spacex-falcon9.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué misión espacial internacional envió una sonda para orbitar y luego aterrizar un módulo en la superficie del cometa 67P, en 2014?",
@@ -321,6 +365,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-35-rosetta-cometa.png",
+        dificultad: 8,
       },
       {
         texto: "¿Qué sonda espacial de la NASA sobrevoló Plutón en 2015, brindando las primeras imágenes cercanas del planeta enano?",
@@ -328,6 +373,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-36-new-horizons-pluton.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué par de sondas espaciales de la NASA, lanzadas en 1977, se han convertido en los objetos hechos por el ser humano más alejados de la Tierra?",
@@ -335,6 +381,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-37-voyager.png",
+        dificultad: 6,
       },
       {
         texto: "¿Cómo se llama la constelación que forma la 'Osa Mayor', reconocible por su forma de cucharón?",
@@ -342,6 +389,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-38-osa-mayor.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué constelación, visible en el cielo de invierno del hemisferio norte, es reconocible por su 'cinturón' de tres estrellas alineadas?",
@@ -349,6 +397,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-astro-39-constelacion-orion.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama la estrella más brillante del cielo nocturno visto desde la Tierra?",
@@ -356,6 +405,7 @@ const BANCOS_ASTRONOMIA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-astro-40-sirio.png",
+        dificultad: 6,
       },
     ],
   },

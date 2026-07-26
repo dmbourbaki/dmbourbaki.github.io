@@ -13,6 +13,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-fisi-01-newton-manzana.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuáles son las tres leyes fundamentales del movimiento formuladas por Isaac Newton?",
@@ -20,6 +21,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué científico alemán formuló la teoría de la relatividad, revolucionando la comprensión del espacio y el tiempo?",
@@ -27,6 +29,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-fisi-02-einstein-relatividad.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cuál es la ecuación más famosa de Einstein, que relaciona masa y energía?",
@@ -34,6 +37,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Cuál es la velocidad aproximada de la luz en el vacío?",
@@ -41,6 +45,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué fuerza fundamental de la naturaleza mantiene a los planetas en órbita alrededor del Sol?",
@@ -48,6 +53,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué astrónomo italiano del siglo XVII, pionero del uso del telescopio, defendió el modelo heliocéntrico y fue procesado por la Inquisición?",
@@ -55,6 +61,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-fisi-03-galileo-telescopio.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué astrónomo polaco propuso en el siglo XVI el modelo heliocéntrico, situando al Sol y no a la Tierra en el centro del sistema solar?",
@@ -62,6 +69,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-fisi-04-copernico-heliocentrismo.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué astrónomo alemán formuló las tres leyes del movimiento planetario, describiendo las órbitas elípticas de los planetas?",
@@ -69,6 +77,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué físico alemán es considerado el fundador de la teoría cuántica al introducir en 1900 la idea de que la energía se emite en paquetes discretos?",
@@ -76,6 +85,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-05-max-planck.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué físico danés propuso un modelo del átomo con electrones orbitando en niveles de energía cuantizados?",
@@ -83,6 +93,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-06-niels-bohr.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué físico alemán formuló el 'principio de incertidumbre', un pilar fundamental de la mecánica cuántica?",
@@ -90,6 +101,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué físico austriaco propuso el famoso experimento mental del gato encerrado en una caja, para ilustrar paradojas de la mecánica cuántica?",
@@ -97,6 +109,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-07-gato-schrodinger.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué físico inglés en silla de ruedas, célebre por sus estudios sobre agujeros negros, escribió 'Una breve historia del tiempo'?",
@@ -104,6 +117,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-fisi-08-stephen-hawking.png",
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la región del espacio con un campo gravitacional tan intenso que ni siquiera la luz puede escapar de ella?",
@@ -111,6 +125,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-fisi-09-agujero-negro.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué unidad del Sistema Internacional se utiliza para medir la fuerza?",
@@ -118,6 +133,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué unidad del Sistema Internacional se utiliza para medir la energía?",
@@ -125,6 +141,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué unidad del Sistema Internacional se utiliza para medir la potencia?",
@@ -132,6 +149,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué unidad del Sistema Internacional se utiliza para medir la temperatura en la escala absoluta?",
@@ -139,6 +157,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿A qué temperatura, en grados Celsius, corresponde el cero absoluto (0 kelvin)?",
@@ -146,6 +165,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué ley física establece que la energía no se crea ni se destruye, solo se transforma?",
@@ -153,6 +173,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué rama de la física estudia el calor, la temperatura y la transferencia de energía entre sistemas?",
@@ -160,6 +181,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué físico escocés unificó la electricidad, el magnetismo y la óptica en una sola teoría del electromagnetismo en el siglo XIX?",
@@ -167,6 +189,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-10-maxwell-electromagnetismo.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué científico inglés del siglo XIX descubrió la inducción electromagnética, sentando las bases de generadores y motores eléctricos?",
@@ -174,6 +197,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-11-michael-faraday.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué ingeniero e inventor serbio-estadounidense desarrolló el sistema de corriente alterna, en rivalidad con Thomas Edison?",
@@ -181,6 +205,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-fisi-12-nikola-tesla.png",
+        dificultad: 4,
       },
       {
         texto: "¿Qué inventor estadounidense es célebre por patentar la bombilla incandescente comercialmente viable y fundar General Electric?",
@@ -188,6 +213,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: "cg-fisi-13-thomas-edison-bombilla.png",
+        dificultad: 2,
       },
       {
         texto: "¿Qué físico escocés inventó una máquina de vapor mejorada en el siglo XVIII, cuyo apellido dio nombre a la unidad de potencia (watt)?",
@@ -195,6 +221,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-14-james-watt.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué fenómeno óptico separa la luz blanca en los colores del arcoíris al atravesar un prisma?",
@@ -202,6 +229,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-fisi-15-prisma-arcoiris.png",
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama el fenómeno por el cual la luz cambia de dirección al pasar de un medio a otro con diferente densidad, como del aire al agua?",
@@ -209,6 +237,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Cómo se llama el fenómeno por el cual la luz rebota al chocar con una superficie, como en un espejo?",
@@ -216,6 +245,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué tipo de onda electromagnética, con longitud de onda más corta que la luz visible, es responsable de las quemaduras solares?",
@@ -223,6 +253,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué tipo de onda electromagnética, con longitud de onda mayor que la luz visible, se asocia comúnmente con la percepción del calor?",
@@ -230,6 +261,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué científico alemán descubrió en 1895 un tipo de radiación electromagnética capaz de atravesar tejidos blandos, usada hoy en radiografías médicas?",
@@ -237,6 +269,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-16-rayos-x-roentgen.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se llama la unidad básica de materia que ya no se puede dividir mediante procesos químicos ordinarios?",
@@ -244,6 +277,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué principio físico, formulado por el matemático griego Arquímedes, explica por qué los barcos flotan?",
@@ -251,6 +285,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: "cg-fisi-17-arquimedes-flotacion.png",
+        dificultad: 3,
       },
       {
         texto: "¿Qué principio físico explica cómo se genera la sustentación de un avión, relacionando velocidad y presión de un fluido?",
@@ -258,6 +293,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-18-bernoulli-avion.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué ley física establece que la presión aplicada a un fluido en un recipiente cerrado se transmite igualmente en todas direcciones?",
@@ -265,6 +301,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué partícula subatómica sin masa, portadora de la fuerza electromagnética, viaja a la velocidad de la luz?",
@@ -272,6 +309,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 6,
       },
       {
         texto: "¿Qué partícula subatómica, apodada popularmente la 'partícula de Dios', fue confirmada experimentalmente en el CERN en 2012?",
@@ -279,6 +317,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-19-boson-higgs-cern.png",
+        dificultad: 6,
       },
       {
         texto: "¿Qué gran acelerador de partículas, ubicado en la frontera entre Suiza y Francia, es operado por el CERN?",
@@ -286,6 +325,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-20-lhc-cern.png",
+        dificultad: 5,
       },
       {
         texto: "¿Cómo se llama la energía asociada al movimiento de un objeto?",
@@ -293,6 +333,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Cómo se llama la energía almacenada que un objeto posee debido a su posición o estado, como el agua en lo alto de una represa?",
@@ -300,6 +341,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 2,
       },
       {
         texto: "¿Qué proceso físico libera enormes cantidades de energía al dividir el núcleo de un átomo pesado, como el uranio?",
@@ -307,6 +349,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: null,
+        dificultad: 5,
       },
       {
         texto: "¿Qué proceso físico, que ocurre naturalmente en el núcleo del Sol, combina núcleos atómicos ligeros para formar núcleos más pesados liberando energía?",
@@ -314,6 +357,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-21-fusion-nuclear-sol.png",
+        dificultad: 5,
       },
       {
         texto: "¿Qué físico francés descubrió la radiactividad natural en 1896 al observar cómo unas sales de uranio velaban placas fotográficas?",
@@ -321,6 +365,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-22-henri-becquerel.png",
+        dificultad: 7,
       },
       {
         texto: "¿Qué instrumento óptico permite observar objetos astronómicos lejanos ampliando su imagen mediante lentes o espejos?",
@@ -328,6 +373,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "basico",
         imagen: null,
+        dificultad: 1,
       },
       {
         texto: "¿Qué instrumento científico se utiliza para registrar y medir la intensidad de los terremotos?",
@@ -335,6 +381,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué instrumento se utiliza para medir la presión atmosférica?",
@@ -342,6 +389,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 3,
       },
       {
         texto: "¿Qué instrumento científico mide la velocidad del viento?",
@@ -349,6 +397,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "intermedio",
         imagen: null,
+        dificultad: 4,
       },
       {
         texto: "¿Qué físico italiano construyó el primer reactor nuclear autosostenido del mundo en 1942, en el marco del Proyecto Manhattan?",
@@ -356,6 +405,7 @@ const BANCOS_FISICA = [
         correcta: 0,
         nivel: "aplicado",
         imagen: "cg-fisi-23-enrico-fermi.png",
+        dificultad: 7,
       },
     ],
   },
