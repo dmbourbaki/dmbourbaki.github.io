@@ -124,6 +124,7 @@
   .ladder{
     display:flex; flex-direction:column-reverse; gap:5px; min-width:190px;
     background:var(--panel); border:2px solid var(--panel-border); border-radius:var(--radius); padding:10px;
+    max-height:320px; overflow-y:auto;
   }
   .ladder-step{font-family:var(--font-mono); font-weight:700; font-size:.82rem; padding:7px 10px; border-radius:8px; color:var(--text-dim); display:flex; justify-content:space-between; background:var(--bg2);}
   .ladder-step.current{background:var(--gold); color:#1a1206; animation:pop .4s ease; box-shadow:2px 2px 0 rgba(0,0,0,.3);}
@@ -693,23 +694,19 @@ class MusicManager{
     const el = this._elemento();
     this.progreso = 0;
     this._pistaActual = pista;
-    const cambioDePista = el.getAttribute("src") !== pista;
-    const arrancar = ()=>{
+    if(el.getAttribute("src") !== pista){
+      if(this._fadeHandle){ clearInterval(this._fadeHandle); this._fadeHandle = null; }
+      el.volume = 0; // corta instantáneo antes de cambiar de pista, para evitar un "blip" al saltar de una canción a otra
       el.src = pista;
-      el.playbackRate = 1.0;
-      el.play().catch((err)=>{
-        console.warn("OMAI Trivias: la reproducción de música fue bloqueada o falló:", err?.message || err);
-      });
-      this.activa = true;
-      this._fadeA(this._volumenBase(), 1500);
-    };
-    if(cambioDePista && el.volume > 0){
-      // había algo sonando -> baja el volumen antes de cambiar de pista, para que no se corte en seco
-      this._fadeA(0, 400);
-      setTimeout(arrancar, 420);
-    } else {
-      arrancar();
     }
+    el.playbackRate = 1.0;
+    el.play().catch((err)=>{
+      console.warn("OMAI Trivias: la reproducción de música fue bloqueada o falló:", err?.message || err);
+      const btn = document.getElementById("btnMuteFlotante");
+      if(btn) btn.textContent = "⚠️";
+    });
+    this.activa = true;
+    this._fadeA(this._volumenBase(), 900);
   }
 
   /** Música tranquila del menú y pantallas fuera de partida — siempre la misma pista */
@@ -1116,14 +1113,19 @@ class Game{
 
     // Los navegadores exigen una interacción real del usuario para poder reproducir audio;
     // en cuanto ocurre la primera (clic, toque o tecla), arrancamos la música ambiente ya mismo,
-    // sin esperar a que empiece una partida.
+    // sin esperar a que empiece una partida. Se escuchan varios tipos de evento porque no todos
+    // los navegadores móviles cuentan "pointerdown" como gesto válido para permitir el audio.
     const arrancarMusicaAmbiente = ()=>{
       if(!this.music.activa) this.music.iniciarMenu();
       document.removeEventListener("pointerdown", arrancarMusicaAmbiente);
       document.removeEventListener("keydown", arrancarMusicaAmbiente);
+      document.removeEventListener("click", arrancarMusicaAmbiente);
+      document.removeEventListener("touchend", arrancarMusicaAmbiente);
     };
     document.addEventListener("pointerdown", arrancarMusicaAmbiente, {once:true});
     document.addEventListener("keydown", arrancarMusicaAmbiente, {once:true});
+    document.addEventListener("click", arrancarMusicaAmbiente, {once:true});
+    document.addEventListener("touchend", arrancarMusicaAmbiente, {once:true});
   }
 
   _activarModoSoloUnirse(codigo){
@@ -1511,6 +1513,16 @@ class Game{
     }).join("");
   }
 
+  _centrarPregunta(){
+    // En celular, tras cada transición el navegador puede quedar desplazado hacia la escalera
+    // o el HUD; esto siempre reencuadra la tarjeta de la pregunta arriba, donde debe estar.
+    const panel = document.querySelector(".question-area");
+    if(!panel) return;
+    requestAnimationFrame(()=>{
+      panel.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+  }
+
   _actualizarLadder(){
     if(this.modoMultijugador) return;
     document.querySelectorAll(".ladder-step").forEach(el=>{
@@ -1564,6 +1576,7 @@ class Game{
       this.timer = new Timer(document.getElementById("timerBar"), this.settings.data.tiempo,
         null, ()=>this._responder(-1, true));
       this.timer.start();
+      this._centrarPregunta();
     };
 
     if(idx > 0 && this.settings.data.animaciones){
