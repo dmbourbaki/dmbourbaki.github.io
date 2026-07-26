@@ -649,16 +649,22 @@ class MusicManager{
     this.activa = false;
     this.progreso = 0;
     this._fadeHandle = null;
+    this._pistaActual = null;
+    this.PISTA_MENU = "audio/fondo-intro.mp3";
+    this.PISTAS_JUEGO = [
+      "audio/pista_1.mp3","audio/pista_2.mp3","audio/pista_3.mp3","audio/pista_4.mp3","audio/pista_5.mp3",
+      "audio/pista_6.mp3","audio/pista_7.mp3","audio/pista_8.mp3","audio/pista_9.mp3",
+    ];
   }
 
   _elemento(){
     if(!this.audioEl){
-      const el = new Audio("audio/fondo-intro.mp3");
+      const el = new Audio();
       el.loop = true;
       el.preload = "auto";
       el.volume = 0;
       el.addEventListener("error", ()=>{
-        console.warn("OMAI Trivias: no se pudo cargar 'audio/fondo-intro.mp3'. Verifica que el archivo exista exactamente en esa ruta, junto a index.html.");
+        console.warn(`OMAI Trivias: no se pudo cargar '${this._pistaActual}'. Verifica que el archivo exista exactamente en esa ruta, dentro de la carpeta audio/.`);
         const btn = document.getElementById("btnMuteFlotante");
         if(btn) btn.textContent = "⚠️";
       });
@@ -682,16 +688,37 @@ class MusicManager{
     }, duracionMs/pasos);
   }
 
-  iniciar(){
+  _reproducir(pista){
     if(!this.settings.data.musica){ this.detener(); return; }
     const el = this._elemento();
     this.progreso = 0;
-    el.playbackRate = 1.0;
-    el.play().catch((err)=>{
-      console.warn("OMAI Trivias: la reproducción de música fue bloqueada o falló:", err?.message || err);
-    });
-    this.activa = true;
-    this._fadeA(this._volumenBase(), 1500);
+    this._pistaActual = pista;
+    const cambioDePista = el.getAttribute("src") !== pista;
+    const arrancar = ()=>{
+      el.src = pista;
+      el.playbackRate = 1.0;
+      el.play().catch((err)=>{
+        console.warn("OMAI Trivias: la reproducción de música fue bloqueada o falló:", err?.message || err);
+      });
+      this.activa = true;
+      this._fadeA(this._volumenBase(), 1500);
+    };
+    if(cambioDePista && el.volume > 0){
+      // había algo sonando -> baja el volumen antes de cambiar de pista, para que no se corte en seco
+      this._fadeA(0, 400);
+      setTimeout(arrancar, 420);
+    } else {
+      arrancar();
+    }
+  }
+
+  /** Música tranquila del menú y pantallas fuera de partida — siempre la misma pista */
+  iniciarMenu(){ this._reproducir(this.PISTA_MENU); }
+
+  /** Música de una partida — se elige al azar entre las pistas disponibles, para variar entre juegos */
+  iniciarJuego(){
+    const pista = this.PISTAS_JUEGO[Math.floor(Math.random()*this.PISTAS_JUEGO.length)];
+    this._reproducir(pista);
   }
 
   /** progreso: 0 (recién empieza) a 1 (última pregunta) — sube apenas el volumen y el ritmo, sin exagerar */
@@ -1091,7 +1118,7 @@ class Game{
     // en cuanto ocurre la primera (clic, toque o tecla), arrancamos la música ambiente ya mismo,
     // sin esperar a que empiece una partida.
     const arrancarMusicaAmbiente = ()=>{
-      if(!this.music.activa) this.music.iniciar();
+      if(!this.music.activa) this.music.iniciarMenu();
       document.removeEventListener("pointerdown", arrancarMusicaAmbiente);
       document.removeEventListener("keydown", arrancarMusicaAmbiente);
     };
@@ -1120,6 +1147,7 @@ class Game{
           document.getElementById("mpSetup").style.display = "block";
           document.getElementById("mpLobby").style.display = "none";
           document.getElementById("mpError").textContent = "";
+          this.music.iniciarMenu();
         }
         this.audio.pantalla();
         this.ui.ir(destino === "menu" ? "menu" : destino);
@@ -1128,7 +1156,7 @@ class Game{
     document.getElementById("btnSalirJuego").addEventListener("click", ()=>{
       if(confirm("¿Seguro que deseas salir? Perderás el progreso de esta partida.")){
         this.timer?.stop();
-        this.music.actualizarIntensidad(0); // vuelve a un ambiente tranquilo, sin apagar la música
+        this.music.iniciarMenu();
         if(this.modoMultijugador){ this.multi.detener(); this.modoMultijugador = false; }
         this.ui.ir("menu");
       }
@@ -1161,9 +1189,11 @@ class Game{
         if(key === "musica"){
           document.getElementById("btnMuteFlotante").textContent = s.musica ? "🔊" : "🔇";
           if(s.musica){
-            this.music.iniciar();
             if(this.ui.screens.juego.classList.contains("active")){
+              this.music.iniciarJuego();
               this.music.actualizarIntensidad(this.player.nivelActual / Math.max(1,this.numPreguntas-1));
+            } else {
+              this.music.iniciarMenu();
             }
           } else { this.music.detener(); }
         }
@@ -1357,9 +1387,11 @@ class Game{
       const cfgToggle = document.getElementById("cfgMusica");
       if(cfgToggle) cfgToggle.dataset.on = String(this.settings.data.musica);
       if(this.settings.data.musica){
-        this.music.iniciar();
         if(this.ui.screens.juego.classList.contains("active")){
+          this.music.iniciarJuego();
           this.music.actualizarIntensidad(this.player.nivelActual / Math.max(1,this.numPreguntas-1));
+        } else {
+          this.music.iniciarMenu();
         }
       } else {
         this.music.detener();
@@ -1464,7 +1496,7 @@ class Game{
     this.audio.pantalla();
     this._renderLadder();
     this.ui.ir("juego");
-    this.music.iniciar();
+    this.music.iniciarJuego();
     this._cargarPregunta();
   }
 
