@@ -138,7 +138,12 @@
   .timer-bar.warn{background:linear-gradient(90deg,var(--danger),#ff8a8a); animation:glowPulse 1s infinite;}
   .q-category{font-family:var(--font-mono); font-size:.8rem; color:var(--gold-light); text-transform:uppercase; letter-spacing:.08em; font-weight:700;}
   .q-text{font-family:var(--font-display); font-size:1.35rem; line-height:1.35; font-weight:700;}
-  .q-image{width:100%; max-height:220px; object-fit:cover; border-radius:12px; border:2px solid var(--panel-border); display:block;}
+  .q-image{width:100%; max-height:220px; object-fit:cover; border-radius:12px; border:2px solid var(--panel-border); display:block; transition:opacity .3s ease; min-height:120px;}
+  .q-image.cargando{
+    background:linear-gradient(90deg, var(--bg2) 25%, var(--panel-border) 50%, var(--bg2) 75%);
+    background-size:200% 100%; animation:skeletonPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes skeletonPulse{0%{background-position:200% 0;} 100%{background-position:-200% 0;}}
   .options{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
   @media (max-width:560px){.options{grid-template-columns:1fr;}}
   .option{
@@ -570,11 +575,40 @@ class AudioManager{
   constructor(settings){
     this.settings = settings;
     this.ctx = null;
+    this.limitador = null;
   }
   ensureCtx(){
     if(!this.ctx){ this.ctx = new (window.AudioContext||window.webkitAudioContext)(); }
     if(this.ctx.state === "suspended") this.ctx.resume();
     return this.ctx;
+  }
+  /** Salida compartida con un limitador — evita que la suma de música + efectos sature y "se raje" */
+  salidaMaestra(){
+    const ctx = this.ensureCtx();
+    if(!this.limitador){
+      this.limitador = ctx.createDynamicsCompressor();
+      this.limitador.threshold.value = -28;
+      this.limitador.knee.value = 6;
+      this.limitador.ratio.value = 20;
+      this.limitador.attack.value = 0.001;
+      this.limitador.release.value = 0.15;
+
+      // Saturador suave final: garantiza matemáticamente que la señal nunca pase de ±1
+      // (evita el "clipping" digital duro que suena a estática/micrófono roto),
+      // pase lo que pase con la suma de música + efectos aguas arriba.
+      const saturador = ctx.createWaveShaper();
+      const curva = new Float32Array(1024);
+      for(let i=0;i<1024;i++){
+        const x = (i/1023)*2 - 1;
+        curva[i] = Math.tanh(x*1.5);
+      }
+      saturador.curve = curva;
+      saturador.oversample = "4x";
+
+      this.limitador.connect(saturador);
+      saturador.connect(ctx.destination);
+    }
+    return this.limitador;
   }
   tone(freq, dur, type="sine", delay=0, gainMax=0.2){
     if(!this.settings.data.sonidos) return;
@@ -583,7 +617,7 @@ class AudioManager{
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = type; osc.frequency.value = freq;
-    osc.connect(gain); gain.connect(ctx.destination);
+    osc.connect(gain); gain.connect(this.salidaMaestra());
     const t0 = ctx.currentTime + delay;
     gain.gain.setValueAtTime(0, t0);
     gain.gain.linearRampToValueAtTime(vol, t0+0.02);
@@ -630,7 +664,7 @@ class MusicManager{
     });
   }
 
-  _volumenBase(){ return (this.settings.data.volumen/100) * 0.09; }
+  _volumenBase(){ return (this.settings.data.volumen/100) * 0.065; }
 
   iniciar(){
     this.detener();
@@ -642,27 +676,20 @@ class MusicManager{
     const ahora = ctx.currentTime;
 
     const master = ctx.createGain(); master.gain.value = 0;
-    master.connect(ctx.destination);
+    master.connect(this.audio.salidaMaestra());
     master.gain.linearRampToValueAtTime(this._volumenBase(), ahora + 2.2); // entra suave, sin golpe
 
-    // Eco/espacio suave (delay con feedback moderado) -> sensación de ambiente, no de caja seca
-    const delay = ctx.createDelay(1.0); delay.delayTime.value = 0.32;
-    const feedback = ctx.createGain(); feedback.gain.value = 0.3;
-    delay.connect(feedback); feedback.connect(delay);
-    delay.connect(master);
-
     // Filtro que se va "abriendo" con el progreso -> más brillo, nunca tapado ni sordo
-    const filtro = ctx.createBiquadFilter(); filtro.type = "lowpass"; filtro.frequency.value = 900; filtro.Q.value = 0.3;
-    filtro.connect(master); filtro.connect(delay);
+    const filtro = ctx.createBiquadFilter(); filtro.type = "lowpass"; filtro.frequency.value = 900; filtro.Q.value = 0.2;
+    filtro.connect(master);
 
-    // Colchón armónico: raíz + tercera + quinta, con "chorus" MUY leve (no un batido audible)
-    const gPad = ctx.createGain(); gPad.gain.value = 0.5;
-    const frecuencias = [raiz, raiz*tercia, raiz*1.4983];
-    const osciladoresPad = frecuencias.map((f,i)=>{
+    // Colchón armónico simple: raíz + quinta, solo onda seno (limpia, sin armónicos ásperos), sin chorus/detune
+    const gPad = ctx.createGain(); gPad.gain.value = 0.4;
+    const frecuencias = [raiz, raiz*1.4983];
+    const osciladoresPad = frecuencias.map(f=>{
       const o = ctx.createOscillator();
-      o.type = i===2 ? "triangle" : "sine";
+      o.type = "sine";
       o.frequency.value = f;
-      o.detune.value = (i-1)*3; // chorus sutil, no zumbido
       o.connect(gPad);
       o.start(ahora);
       return o;
@@ -671,11 +698,11 @@ class MusicManager{
 
     // Respiración lenta del colchón (nunca estático, pero sin efecto "wah-wah")
     const lfo = ctx.createOscillator(); lfo.type = "sine"; lfo.frequency.value = 0.06;
-    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.12;
+    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.08;
     lfo.connect(lfoGain); lfoGain.connect(gPad.gain);
     lfo.start(ahora);
 
-    this.nodes = {ctx, master, delay, feedback, filtro, gPad, osciladoresPad, lfo, lfoGain, raiz};
+    this.nodes = {ctx, master, filtro, gPad, osciladoresPad, lfo, lfoGain, raiz};
     this.activa = true;
 
     this.pulsoPaso = 0; this._direccion = 1;
@@ -686,8 +713,7 @@ class MusicManager{
     if(this.pulsoHandle) clearInterval(this.pulsoHandle);
     const raiz = this.nodes.raiz;
     const escala = this.motivo.escala.map(semitonos => raiz*2*Math.pow(2, semitonos/12));
-    const intervaloMs = Math.max(260, 640 - this.progreso*380);
-    const conPan = typeof this.nodes.ctx.createStereoPanner === "function";
+    const intervaloMs = Math.max(280, 660 - this.progreso*380);
     this.pulsoHandle = setInterval(()=>{
       if(!this.activa || !this.nodes.ctx) return;
       const ctx = this.nodes.ctx;
@@ -695,20 +721,13 @@ class MusicManager{
       const idx = Math.abs((this.pulsoPaso*this._direccion) % escala.length);
       const nota = escala[idx];
       this.pulsoPaso++;
-      const osc = ctx.createOscillator(); osc.type = "triangle"; osc.frequency.value = nota;
+      const osc = ctx.createOscillator(); osc.type = "sine"; osc.frequency.value = nota;
       const g = ctx.createGain();
-      osc.connect(g);
-      const enviar = (destino)=>{
-        if(conPan){
-          const pan = ctx.createStereoPanner(); pan.pan.value = (this.pulsoPaso%2===0 ? -1 : 1) * 0.3;
-          g.connect(pan); pan.connect(destino);
-        } else { g.connect(destino); }
-      };
-      enviar(this.nodes.filtro); g.connect(this.nodes.delay);
+      osc.connect(g); g.connect(this.nodes.filtro);
       const t0 = ctx.currentTime;
-      const vol = 0.22 + this.progreso*0.22;
+      const vol = 0.16 + this.progreso*0.16;
       g.gain.setValueAtTime(0, t0);
-      g.gain.linearRampToValueAtTime(vol, t0+0.03);
+      g.gain.linearRampToValueAtTime(vol, t0+0.04);
       g.gain.exponentialRampToValueAtTime(0.001, t0+0.5);
       osc.start(t0); osc.stop(t0+0.55);
     }, intervaloMs);
@@ -720,9 +739,9 @@ class MusicManager{
     this.progreso = Math.max(0, Math.min(1, progreso));
     const {ctx,master,filtro,lfo} = this.nodes;
     const t = ctx.currentTime, RAMP = 1.8;
-    master.gain.linearRampToValueAtTime(this._volumenBase() * (1 + this.progreso*0.55), t+RAMP);
-    filtro.frequency.linearRampToValueAtTime(900 + this.progreso*2600, t+RAMP);
-    lfo.frequency.linearRampToValueAtTime(0.06 + this.progreso*0.12, t+RAMP);
+    master.gain.linearRampToValueAtTime(this._volumenBase() * (1 + this.progreso*0.4), t+RAMP);
+    filtro.frequency.linearRampToValueAtTime(900 + this.progreso*2200, t+RAMP);
+    lfo.frequency.linearRampToValueAtTime(0.06 + this.progreso*0.1, t+RAMP);
     this._programarPulso();
   }
 
@@ -1545,12 +1564,8 @@ class Game{
       const p = this.preguntaActual;
       document.getElementById("qCategoria").textContent = `${iconoArea(p.area)} ${p.area} · Nivel ${p.nivel}`;
       document.getElementById("qTexto").textContent = p.texto;
-      const img = document.getElementById("qImagen");
-      if(p.imagen){
-        img.src = `imagenes/${p.imagen}`;
-        img.style.display = "block";
-        img.onerror = ()=>{ img.style.display = "none"; };
-      } else { img.removeAttribute("src"); img.style.display = "none"; }
+      this._cargarImagenPregunta(p);
+      this._precargarSiguienteImagen(idx);
 
       const cont = document.getElementById("qOpciones");
       this._ordenOpciones = this._mezclarIndices(p.opciones.length);
@@ -1581,6 +1596,51 @@ class Game{
       }, 200);
     } else {
       render();
+    }
+  }
+
+  _cargarImagenPregunta(p){
+    const img = document.getElementById("qImagen");
+    if(this._imgTimeoutId){ clearTimeout(this._imgTimeoutId); this._imgTimeoutId = null; }
+    img.onload = null; img.onerror = null;
+
+    if(!p.imagen){
+      img.removeAttribute("src");
+      img.style.display = "none";
+      img.classList.remove("cargando");
+      return;
+    }
+
+    img.classList.add("cargando");
+    img.style.opacity = "0";
+    img.style.display = "block";
+
+    img.onload = ()=>{
+      img.classList.remove("cargando");
+      img.style.opacity = "1";
+      if(this._imgTimeoutId){ clearTimeout(this._imgTimeoutId); this._imgTimeoutId = null; }
+    };
+    img.onerror = ()=>{
+      img.style.display = "none";
+      img.classList.remove("cargando");
+      if(this._imgTimeoutId){ clearTimeout(this._imgTimeoutId); this._imgTimeoutId = null; }
+    };
+    img.src = `imagenes/${p.imagen}`;
+
+    // Si en 6s no ha cargado (archivo muy pesado, red lenta, imagen rota), se oculta:
+    // la pantalla nunca debe quedar "pegada" esperando una imagen.
+    this._imgTimeoutId = setTimeout(()=>{
+      img.removeAttribute("src");
+      img.style.display = "none";
+      img.classList.remove("cargando");
+    }, 6000);
+  }
+
+  _precargarSiguienteImagen(idxActual){
+    const siguiente = this.qm.secuencia[idxActual+1];
+    if(siguiente?.imagen){
+      const pre = new Image();
+      pre.src = `imagenes/${siguiente.imagen}`;
     }
   }
 
