@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reto OMAI — Cultura General</title>
+<title>OMAI Trivias — Cultura General</title>
 <style>
   :root{
     --bg:#0a0f1e;
@@ -184,6 +184,11 @@
   }
   .comodin-card .txt b{display:block; font-size:.9rem; margin-bottom:2px;}
   .comodin-card .txt span{font-size:.8rem; color:var(--text-dim);}
+
+  .prize-reveal{
+    font-family:var(--font-mono); font-weight:800; font-size:2.6rem; color:var(--gold-light);
+    margin:10px 0; animation:pop .5s cubic-bezier(.2,.9,.3,1) both;
+  }
 </style>
 </head>
 <body>
@@ -192,17 +197,18 @@
 <!-- MENU -->
 <section class="screen active" id="screen-menu">
   <div class="fade-in" style="text-align:center;">
-    <h1 class="title">Reto OMAI</h1>
+    <h1 class="title">OMAI Trivias</h1>
     <p class="subtitle">Cultura General · Observatorio de Matemáticas Avanzadas para Ingeniería</p>
+    <div id="menuIconStrip" style="font-size:1.4rem; letter-spacing:4px; margin:10px 0 -4px; opacity:.75;"></div>
   </div>
   <nav class="menu-list slide-up">
-    <button class="btn btn-gold" data-nav="config-partida">Jugar</button>
-    <button class="btn" data-nav="multijugador">Jugar en línea</button>
-    <button class="btn" data-nav="config">Configuración</button>
-    <button class="btn" data-nav="ranking">Ranking</button>
-    <button class="btn" data-nav="stats">Estadísticas</button>
-    <button class="btn" data-nav="ayuda">Ayuda</button>
-    <button class="btn" data-nav="creditos">Créditos</button>
+    <button class="btn btn-gold" data-nav="config-partida">🎯 Jugar</button>
+    <button class="btn" data-nav="multijugador">🌐 Jugar en línea</button>
+    <button class="btn" data-nav="config">⚙️ Configuración</button>
+    <button class="btn" data-nav="ranking">🏆 Ranking</button>
+    <button class="btn" data-nav="stats">📊 Estadísticas</button>
+    <button class="btn" data-nav="ayuda">❓ Ayuda</button>
+    <button class="btn" data-nav="creditos">✨ Créditos</button>
   </nav>
   <div class="warn-box" id="importWarnings"></div>
 </section>
@@ -211,7 +217,7 @@
 <section class="screen" id="screen-config-partida">
   <button class="btn back-btn" data-nav="menu">← Volver</button>
   <div class="panel slide-up" style="max-width:640px;">
-    <h2>Configura tu partida</h2>
+    <h2>🎯 Configura tu partida</h2>
     <label>Número de preguntas
       <input type="number" id="cpNumPreguntas" min="3" max="200" value="15" style="width:90px;">
     </label>
@@ -230,7 +236,7 @@
 <section class="screen" id="screen-multijugador">
   <button class="btn back-btn" data-nav="menu">← Volver</button>
   <div class="panel slide-up" style="max-width:560px;">
-    <h2 id="mpTitulo">Jugar en línea</h2>
+    <h2 id="mpTitulo">🌐 Jugar en línea</h2>
     <p class="subtitle" style="margin-top:0; text-align:left;" id="mpSubtitulo">Todos responden las mismas preguntas a su propio ritmo. Nadie queda eliminado por fallar — al final se arma un marcador por puntos, de mayor a menor.</p>
     <div id="mpSetup">
       <label>Tu nombre <input type="text" id="mpNombre" maxlength="24" placeholder="Tu nombre"></label>
@@ -280,7 +286,7 @@
 <section class="screen" id="screen-config">
   <button class="btn back-btn" data-nav="menu">← Volver</button>
   <div class="panel slide-up">
-    <h2>Configuración</h2>
+    <h2>⚙️ Configuración</h2>
     <label>Tiempo por pregunta (s)
       <input type="range" id="cfgTiempo" min="10" max="60" step="5" value="30">
       <span id="cfgTiempoVal">30</span>
@@ -304,7 +310,7 @@
 <section class="screen" id="screen-ranking">
   <button class="btn back-btn" data-nav="menu">← Volver</button>
   <div class="panel slide-up" style="max-width:720px;">
-    <h2>Ranking — Top 20</h2>
+    <h2>🏆 Ranking — Top 20</h2>
     <div style="max-height:50vh; overflow:auto;">
       <table id="rankingTable"><thead><tr><th>#</th><th>Nombre</th><th>Premio</th><th>Aciertos</th><th>Fecha</th></tr></thead><tbody></tbody></table>
     </div>
@@ -318,7 +324,7 @@
 <section class="screen" id="screen-stats">
   <button class="btn back-btn" data-nav="menu">← Volver</button>
   <div class="panel slide-up" style="max-width:720px;">
-    <h2>Estadísticas</h2>
+    <h2>📊 Estadísticas</h2>
     <div class="stat-grid" id="statsGrid"></div>
   </div>
 </section>
@@ -327,7 +333,7 @@
 <section class="screen" id="screen-ayuda">
   <button class="btn back-btn" data-nav="menu">← Volver</button>
   <div class="panel slide-up" style="max-width:680px;">
-    <h2>Ayuda</h2>
+    <h2>❓ Ayuda</h2>
     <h3>¿Cómo se juega?</h3>
     <p>Responde 15 preguntas de dificultad creciente. Cada acierto te hace subir un escalón en la tabla de premios. Tienes un tiempo límite por pregunta.</p>
     <h3>Comodines</h3>
@@ -341,8 +347,8 @@
 <section class="screen" id="screen-creditos">
   <button class="btn back-btn" data-nav="menu">← Volver</button>
   <div class="panel slide-up" style="text-align:center;">
-    <h2>Créditos</h2>
-    <p>Reto OMAI — Cultura General<br>Versión 1.0</p>
+    <h2>✨ Créditos</h2>
+    <p>OMAI Trivias — Cultura General<br>Versión 1.0</p>
     <p>Autor: <span id="creditAutor">Daniel Steven Moran Pizarro</span></p>
     <footer class="credit">© 2026 Daniel Steven Moran Pizarro, todos los derechos reservados</footer>
   </div>
@@ -351,7 +357,7 @@
 <!-- REGLAS (tutorial antes de empezar) -->
 <section class="screen" id="screen-reglas">
   <div class="panel slide-up" style="max-width:640px;">
-    <h2>Antes de empezar...</h2>
+    <h2>📜 Antes de empezar...</h2>
     <p class="subtitle" id="reglasIntro" style="text-align:left; margin-top:0;"></p>
 
     <div style="display:flex; align-items:center; gap:10px; margin:18px 0 10px;">
@@ -401,6 +407,7 @@
 <section class="screen" id="screen-gameover">
   <div class="panel slide-up" style="text-align:center;">
     <h2 id="goTitulo">Fin del juego</h2>
+    <div class="prize-reveal" id="goPremio"></div>
     <p id="goDetalle"></p>
     <label style="justify-content:center;">Nombre para el ranking
       <input type="text" id="goNombre" maxlength="24" placeholder="Tu nombre">
@@ -441,6 +448,31 @@ function obtenerDB(){
 }
 
 /* ============ CONSTANTES DE JUEGO ============ */
+// Emoticones temáticos por categoría, para hacer la interfaz más visual y reconocible
+const ICONOS_AREA = {
+  "Anatomía y Medicina": "🩺",
+  "Arte y Literatura": "🎨",
+  "Astronomía y Espacio": "🔭",
+  "Biología": "🧬",
+  "Ciencia y Naturaleza": "🔬",
+  "Cine": "🎬",
+  "Historia Universal": "🏛️",
+  "Geografía": "🌍",
+  "Música": "🎵",
+  "Mitología": "⚡",
+  "Matemáticas": "➗",
+  "Química": "⚗️",
+  "Física": "⚛️",
+  "Tecnología e Informática": "💻",
+  "Deportes": "⚽",
+  "Filosofía": "🧠",
+  "Gastronomía": "🍽️",
+  "Idiomas y Lingüística": "🗣️",
+  "Naturaleza y Animales": "🐾",
+  "Videojuegos": "🎮",
+};
+function iconoArea(area){ return ICONOS_AREA[area] || "❓"; }
+
 const PUNTOS_BASE = 300, PUNTOS_MAX = 1000; // puntuación estilo Kahoot para el modo en línea
 function calcularPuntosKahoot(segundosRestantes, segundosTotales, esCorrecta){
   if(!esCorrecta) return 0;
@@ -524,12 +556,16 @@ class AudioManager{
   }
   boton(){ this.tone(600,0.08,"square",0,0.12); }
   pantalla(){ this.tone(300,0.25,"sine",0,0.1); this.tone(450,0.25,"sine",0.05,0.08); }
-  correcto(){
-    [523,659,784,1046,1318].forEach((f,i)=>this.tone(f,0.28,"triangle",i*0.08,0.18));
-    [1568,1976].forEach((f,i)=>this.tone(f,0.18,"sine",0.4+i*0.06,0.1));
+  incorrecto(progreso=0){
+    this.tone(220 - progreso*45, 0.4+progreso*0.25, "sawtooth", 0, 0.18+progreso*0.08);
+    this.tone(160 - progreso*35, 0.5+progreso*0.25, "sawtooth", 0.1, 0.16+progreso*0.08);
+    if(progreso > 0.5){ this.tone(90, 0.6, "sawtooth", 0.22, 0.15); } // golpe grave extra en niveles avanzados
   }
-  incorrecto(){ this.tone(220,0.4,"sawtooth",0,0.18); this.tone(160,0.5,"sawtooth",0.1,0.16); }
-  subirNivel(){ this.tone(784,0.15,"sine",0,0.15); this.tone(1046,0.25,"sine",0.12,0.15); }
+  subirNivel(progreso=0){
+    const notas = [784, 1046, ...[1318,1568,1976,2349,2637].slice(0, Math.round(progreso*5))];
+    notas.forEach((f,i)=>this.tone(f, 0.16+progreso*0.14, "sine", i*0.09, 0.15+progreso*0.1));
+    if(progreso > 0.55){ this.tone(3136, 0.35, "triangle", notas.length*0.09, 0.13); } // brillo final en preguntas altas
+  }
   comodin(){ this.tone(880,0.15,"sine",0,0.12); this.tone(440,0.15,"sine",0.1,0.1); }
   victoria(){ [523,659,784,1046,1318,1568].forEach((f,i)=>this.tone(f,0.35,"triangle",i*0.12,0.2)); }
   derrota(){ [400,340,280,220].forEach((f,i)=>this.tone(f,0.4,"sawtooth",i*0.18,0.16)); }
@@ -537,15 +573,16 @@ class AudioManager{
 
 /* ============ MusicManager (música de fondo con Web Audio, sin archivos) ============ */
 class MusicManager{
-  constructor(audioManager, settings){ this.audio = audioManager; this.settings = settings; this.nodes = []; this.activa = false; }
+  constructor(audioManager, settings){ this.audio = audioManager; this.settings = settings; this.nodes = {}; this.activa = false; this.progreso = 0; }
 
   _limpiar(){
-    this.nodes.forEach(n=>{ try{ n.stop && n.stop(); }catch(e){} try{ n.disconnect && n.disconnect(); }catch(e){} });
-    this.nodes = [];
+    Object.values(this.nodes).forEach(n=>{ try{ n.stop && n.stop(); }catch(e){} try{ n.disconnect && n.disconnect(); }catch(e){} });
+    this.nodes = {};
   }
 
-  suspenso(){
+  iniciar(){
     this.detener();
+    this.progreso = 0;
     if(!this.settings.data.musica) return;
     const ctx = this.audio.ensureCtx();
     const master = ctx.createGain();
@@ -559,7 +596,7 @@ class MusicManager{
     const g3 = ctx.createGain(); g3.gain.value = 0.35;
     const gDrone = ctx.createGain(); gDrone.gain.value = 0.7;
 
-    // LFO que pulsa el volumen lentamente, como un latido de suspenso
+    // LFO que pulsa el volumen, como un latido de suspenso -> se acelera con el progreso
     const lfo = ctx.createOscillator(); lfo.type = "sine"; lfo.frequency.value = 0.18;
     const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.25;
     lfo.connect(lfoGain); lfoGain.connect(gDrone.gain);
@@ -568,11 +605,25 @@ class MusicManager{
     gDrone.connect(master); g3.connect(master);
 
     o1.start(); o2.start(); o3.start(); lfo.start();
-    this.nodes = [o1,o2,o3,lfo,master,gDrone,g3,lfoGain];
+    this.nodes = {ctx,o1,o2,o3,lfo,master,gDrone,g3,lfoGain};
     this.activa = true;
   }
 
-  detener(){ this._limpiar(); this.activa = false; }
+  /** progreso: 0 (recién empieza) a 1 (última pregunta) — sube el tono, el pulso y el volumen */
+  actualizarIntensidad(progreso){
+    if(!this.activa || !this.settings.data.musica || !this.nodes.ctx) return;
+    this.progreso = Math.max(0, Math.min(1, progreso));
+    const {ctx,o1,o2,o3,lfo,master} = this.nodes;
+    const t = ctx.currentTime, RAMP = 1.4;
+    const volBase = (this.settings.data.volumen/100) * 0.045;
+    lfo.frequency.linearRampToValueAtTime(0.18 + this.progreso*0.95, t+RAMP);
+    master.gain.linearRampToValueAtTime(volBase * (1 + this.progreso*0.9), t+RAMP);
+    o1.frequency.linearRampToValueAtTime(55 + this.progreso*15, t+RAMP);
+    o2.frequency.linearRampToValueAtTime(55.6 + this.progreso*16, t+RAMP);
+    o3.frequency.linearRampToValueAtTime(110.3 + this.progreso*32, t+RAMP);
+  }
+
+  detener(){ this._limpiar(); this.activa = false; this.progreso = 0; }
 }
 
 /* ============ Effects (partículas de fondo, canvas) ============ */
@@ -884,6 +935,7 @@ class Game{
     this._renderStats();
     this._renderCategoriasEn("cpCategorias");
     this._renderCategoriasEn("mpCategorias");
+    document.getElementById("menuIconStrip").textContent = this.qm.areas.map(iconoArea).join(" ");
     document.getElementById("creditAutor").textContent = "Daniel Steven Moran Pizarro";
 
     const params = new URLSearchParams(location.search);
@@ -1133,7 +1185,7 @@ class Game{
     if(!cont) return;
     cont.innerHTML = this.qm.areas.map(area=>`
       <label style="justify-content:flex-start; gap:8px; margin:2px 0; font-size:.9rem;">
-        <input type="checkbox" class="cat-check" data-container="${containerId}" value="${this._escapar(area)}" checked> ${this._escapar(area)}
+        <input type="checkbox" class="cat-check" data-container="${containerId}" value="${this._escapar(area)}" checked> ${iconoArea(area)} ${this._escapar(area)}
       </label>`).join("");
   }
 
@@ -1223,8 +1275,8 @@ class Game{
     this.audio.pantalla();
     this._renderLadder();
     this.ui.ir("juego");
+    this.music.iniciar();
     this._cargarPregunta();
-    this.music.suspenso();
   }
 
   _renderLadder(){
@@ -1253,6 +1305,7 @@ class Game{
     const idx = this.player.nivelActual;
     this.preguntaActual = this.qm.secuencia[idx];
     document.getElementById("hudNivel").textContent = `Pregunta ${idx+1}/${this.numPreguntas}`;
+    this.music.actualizarIntensidad(idx / Math.max(1,this.numPreguntas-1));
     if(this.modoMultijugador){
       document.getElementById("hudPremio").textContent = `Puntos: ${this.player.puntos.toLocaleString("es-CO")}`;
       document.getElementById("hudSeguro").style.display = "none";
@@ -1264,7 +1317,7 @@ class Game{
     this._actualizarLadder();
 
     const p = this.preguntaActual;
-    document.getElementById("qCategoria").textContent = `${p.area} · Nivel ${p.nivel}`;
+    document.getElementById("qCategoria").textContent = `${iconoArea(p.area)} ${p.area} · Nivel ${p.nivel}`;
     document.getElementById("qTexto").textContent = p.texto;
     const img = document.getElementById("qImagen");
     if(p.imagen){
@@ -1385,12 +1438,12 @@ class Game{
           this.player.nivelActual++;
           this.player.premio = this.premios[this.player.nivelActual-1];
           if(this.seguros.includes(this.player.nivelActual)) this.player.asegurado = this.player.premio;
-          this.audio.subirNivel();
+          this.audio.subirNivel(this.player.nivelActual / this.numPreguntas);
           if(this.player.nivelActual >= this.numPreguntas){ this._finPartida(true); }
           else{ this._cargarPregunta(); }
         } else {
           this.player.errores++;
-          this.audio.incorrecto();
+          this.audio.incorrecto(this.player.nivelActual / this.numPreguntas);
           this._finPartida(false, porTiempo);
         }
       }, 1400);
@@ -1401,9 +1454,10 @@ class Game{
   _avanzarMultijugador(esCorrecta, segundosRestantes, segundosTotales){
     const puntosGanados = calcularPuntosKahoot(segundosRestantes, segundosTotales, esCorrecta);
     this.player.puntos += puntosGanados;
+    const progreso = this.player.nivelActual / this.numPreguntas;
     this.player.nivelActual++;
-    if(esCorrecta){ this.player.aciertos++; this.audio.subirNivel(); }
-    else { this.player.errores++; this.audio.incorrecto(); }
+    if(esCorrecta){ this.player.aciertos++; this.audio.subirNivel(progreso); }
+    else { this.player.errores++; this.audio.incorrecto(progreso); }
 
     const terminado = this.player.nivelActual >= this.numPreguntas;
     this.multi.actualizarProgreso({
@@ -1443,13 +1497,22 @@ class Game{
 
     this._ultimoResultado = { premio: premioFinal, aciertos: this.player.aciertos, errores: this.player.errores, tiempoSeg };
 
-    document.getElementById("goTitulo").textContent = gano ? "🏆 ¡Completaste el reto!" : "Fin del juego";
+    document.getElementById("goTitulo").textContent = gano ? "🏆 ¡Completaste OMAI Trivias!" : "Fin del juego";
+    document.getElementById("goPremio").textContent = `$${premioFinal.toLocaleString("es-CO")}`;
+    const nivelSeguro = this._nivelSeguroAlcanzado();
     document.getElementById("goDetalle").textContent = gano
-      ? `Respondiste correctamente las ${this.numPreguntas} preguntas. Premio final: ${premioFinal.toLocaleString("es-CO")}.`
-      : `${porTiempo ? "Se agotó el tiempo. " : "Respuesta incorrecta. "}Conservas el premio asegurado: ${premioFinal.toLocaleString("es-CO")}.`;
+      ? `Respondiste correctamente las ${this.numPreguntas} preguntas. ¡Esto es lo que te ganaste!`
+      : `${porTiempo ? "Se agotó el tiempo. " : "Respuesta incorrecta. "}${nivelSeguro > 0
+          ? `Como ya habías asegurado el nivel ${nivelSeguro}, te quedas con este premio de todas formas.`
+          : "No alcanzaste a asegurar ningún nivel esta vez — ¡vuelve a intentarlo!"}`;
 
     gano ? this.audio.victoria() : this.audio.derrota();
     this.ui.ir("gameover");
+  }
+
+  _nivelSeguroAlcanzado(){
+    const alcanzados = this.seguros.filter(n=>n<=this.player.nivelActual);
+    return alcanzados.length ? Math.max(...alcanzados) : 0;
   }
 }
 
