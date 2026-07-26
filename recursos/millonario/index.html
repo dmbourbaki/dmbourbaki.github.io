@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OMAI Trivias — Cultura General</title>
+<meta name="description" content="Pon a prueba tu cultura general en 20 categorías: ciencia, historia, arte, videojuegos y más. Juega solo con escalera de premios, o compite en línea con tus amigos.">
+
+<!-- Vista previa al compartir el enlace (WhatsApp, Facebook, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="OMAI Trivias — Cultura General">
+<meta property="og:description" content="Pon a prueba tu cultura general en 20 categorías: ciencia, historia, arte, videojuegos y más. Juega solo o compite en línea con tus amigos.">
+<meta property="og:image" content="https://dmbourbaki.github.io/recursos/millonario/og-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://dmbourbaki.github.io/recursos/millonario/index.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OMAI Trivias — Cultura General">
+<meta name="twitter:description" content="Pon a prueba tu cultura general en 20 categorías. Juega solo o compite en línea con tus amigos.">
+<meta name="twitter:image" content="https://dmbourbaki.github.io/recursos/millonario/og-preview.png">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='22' fill='%23f0a72e' stroke='%231a1206' stroke-width='3'/%3E%3Ctext x='24' y='33' font-size='22' font-weight='800' text-anchor='middle' fill='%231a1206' font-family='monospace'%3E%3F!%3C/text%3E%3C/svg%3E">
 <style>
   :root{
     --bg:#0a0f1e;
@@ -592,54 +608,70 @@ class MusicManager{
   constructor(audioManager, settings){
     this.audio = audioManager; this.settings = settings;
     this.nodes = {}; this.activa = false; this.progreso = 0;
-    this.pulsoHandle = null; this.pulsoPaso = 0;
-    // Distintos "ambientes" musicales — se elige uno al azar por partida, para que no suene igual siempre
+    this.pulsoHandle = null; this.pulsoPaso = 0; this._direccion = 1;
+    // Distintos "ambientes" musicales — se elige uno al azar por partida, para que no suene igual siempre.
+    // tercia: 1.1892 = tercera menor, 1.2599 = tercera mayor (temperamento igual)
     this.MOTIVOS = [
-      { nombre:"tension",   raiz:110,   escala:[0,3,5,7,10] },
-      { nombre:"mistico",   raiz:98,    escala:[0,2,3,7,9]  },
-      { nombre:"electrico", raiz:130.8, escala:[0,3,5,6,7,10] },
-      { nombre:"ancestral", raiz:87.3,  escala:[0,2,4,7,9]  },
+      { nombre:"tension",   raiz:130.81, tercia:1.1892, escala:[0,3,5,7,10] },
+      { nombre:"mistico",   raiz:116.54, tercia:1.1892, escala:[0,2,3,7,9]  },
+      { nombre:"electrico", raiz:146.83, tercia:1.1892, escala:[0,3,5,6,7,10] },
+      { nombre:"calido",    raiz:110.00, tercia:1.2599, escala:[0,2,4,7,9]  },
     ];
   }
 
-  _limpiar(){
-    Object.values(this.nodes).forEach(n=>{ try{ n.stop && n.stop(); }catch(e){} try{ n.disconnect && n.disconnect(); }catch(e){} });
-    this.nodes = {};
-    if(this.pulsoHandle){ clearInterval(this.pulsoHandle); this.pulsoHandle = null; }
+  _limpiar(nodos){
+    Object.values(nodos).forEach(n=>{
+      if(Array.isArray(n)){ n.forEach(x=>{ try{ x.stop && x.stop(); }catch(e){} try{ x.disconnect && x.disconnect(); }catch(e){} }); return; }
+      try{ n.stop && n.stop(); }catch(e){} try{ n.disconnect && n.disconnect(); }catch(e){}
+    });
   }
 
-  _volumenBase(){ return (this.settings.data.volumen/100) * 0.11; }
+  _volumenBase(){ return (this.settings.data.volumen/100) * 0.09; }
 
   iniciar(){
     this.detener();
     this.progreso = 0;
     if(!this.settings.data.musica) return;
     this.motivo = this.MOTIVOS[Math.floor(Math.random()*this.MOTIVOS.length)];
-    const raiz = this.motivo.raiz;
+    const {raiz, tercia} = this.motivo;
     const ctx = this.audio.ensureCtx();
+    const ahora = ctx.currentTime;
 
-    // Filtro que se va "abriendo" (más brillante) a medida que avanzas -> sensación cinematográfica
-    const filtro = ctx.createBiquadFilter(); filtro.type = "lowpass"; filtro.frequency.value = 480; filtro.Q.value = 0.7;
-    const master = ctx.createGain(); master.gain.value = this._volumenBase();
-    filtro.connect(master); master.connect(ctx.destination);
+    const master = ctx.createGain(); master.gain.value = 0;
+    master.connect(ctx.destination);
+    master.gain.linearRampToValueAtTime(this._volumenBase(), ahora + 2.2); // entra suave, sin golpe
 
-    // Drone con leve "batido" entre osciladores desafinados -> tensión de fondo
-    const o1 = ctx.createOscillator(); o1.type = "sine"; o1.frequency.value = raiz;
-    const o2 = ctx.createOscillator(); o2.type = "sine"; o2.frequency.value = raiz*1.007;
-    const o3 = ctx.createOscillator(); o3.type = "triangle"; o3.frequency.value = raiz*2;
-    const g3 = ctx.createGain(); g3.gain.value = 0.28;
-    const gDrone = ctx.createGain(); gDrone.gain.value = 0.5;
+    // Eco/espacio suave (delay con feedback moderado) -> sensación de ambiente, no de caja seca
+    const delay = ctx.createDelay(1.0); delay.delayTime.value = 0.32;
+    const feedback = ctx.createGain(); feedback.gain.value = 0.3;
+    delay.connect(feedback); feedback.connect(delay);
+    delay.connect(master);
 
-    // LFO que pulsa el volumen del drone, como un latido -> se acelera con el progreso
-    const lfo = ctx.createOscillator(); lfo.type = "sine"; lfo.frequency.value = 0.2;
-    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.2;
-    lfo.connect(lfoGain); lfoGain.connect(gDrone.gain);
+    // Filtro que se va "abriendo" con el progreso -> más brillo, nunca tapado ni sordo
+    const filtro = ctx.createBiquadFilter(); filtro.type = "lowpass"; filtro.frequency.value = 900; filtro.Q.value = 0.3;
+    filtro.connect(master); filtro.connect(delay);
 
-    o1.connect(gDrone); o2.connect(gDrone); o3.connect(g3);
-    gDrone.connect(filtro); g3.connect(filtro);
+    // Colchón armónico: raíz + tercera + quinta, con "chorus" MUY leve (no un batido audible)
+    const gPad = ctx.createGain(); gPad.gain.value = 0.5;
+    const frecuencias = [raiz, raiz*tercia, raiz*1.4983];
+    const osciladoresPad = frecuencias.map((f,i)=>{
+      const o = ctx.createOscillator();
+      o.type = i===2 ? "triangle" : "sine";
+      o.frequency.value = f;
+      o.detune.value = (i-1)*3; // chorus sutil, no zumbido
+      o.connect(gPad);
+      o.start(ahora);
+      return o;
+    });
+    gPad.connect(filtro);
 
-    o1.start(); o2.start(); o3.start(); lfo.start();
-    this.nodes = {ctx,o1,o2,o3,lfo,master,gDrone,g3,lfoGain,filtro,raiz};
+    // Respiración lenta del colchón (nunca estático, pero sin efecto "wah-wah")
+    const lfo = ctx.createOscillator(); lfo.type = "sine"; lfo.frequency.value = 0.06;
+    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.12;
+    lfo.connect(lfoGain); lfoGain.connect(gPad.gain);
+    lfo.start(ahora);
+
+    this.nodes = {ctx, master, delay, feedback, filtro, gPad, osciladoresPad, lfo, lfoGain, raiz};
     this.activa = true;
 
     this.pulsoPaso = 0; this._direccion = 1;
@@ -650,12 +682,11 @@ class MusicManager{
     if(this.pulsoHandle) clearInterval(this.pulsoHandle);
     const raiz = this.nodes.raiz;
     const escala = this.motivo.escala.map(semitonos => raiz*2*Math.pow(2, semitonos/12));
-    const intervaloMs = Math.max(230, 600 - this.progreso*370);
+    const intervaloMs = Math.max(260, 640 - this.progreso*380);
     const conPan = typeof this.nodes.ctx.createStereoPanner === "function";
     this.pulsoHandle = setInterval(()=>{
       if(!this.activa || !this.nodes.ctx) return;
       const ctx = this.nodes.ctx;
-      // Recorre la escala de subida y bajada (no siempre en el mismo orden) -> más musical
       if(this.pulsoPaso>0 && this.pulsoPaso % escala.length === 0) this._direccion *= -1;
       const idx = Math.abs((this.pulsoPaso*this._direccion) % escala.length);
       const nota = escala[idx];
@@ -663,35 +694,49 @@ class MusicManager{
       const osc = ctx.createOscillator(); osc.type = "triangle"; osc.frequency.value = nota;
       const g = ctx.createGain();
       osc.connect(g);
-      if(conPan){
-        const pan = ctx.createStereoPanner(); pan.pan.value = (this.pulsoPaso%2===0 ? -1 : 1) * 0.35;
-        g.connect(pan); pan.connect(this.nodes.filtro);
-      } else { g.connect(this.nodes.filtro); }
+      const enviar = (destino)=>{
+        if(conPan){
+          const pan = ctx.createStereoPanner(); pan.pan.value = (this.pulsoPaso%2===0 ? -1 : 1) * 0.3;
+          g.connect(pan); pan.connect(destino);
+        } else { g.connect(destino); }
+      };
+      enviar(this.nodes.filtro); g.connect(this.nodes.delay);
       const t0 = ctx.currentTime;
-      const vol = 0.45 + this.progreso*0.35;
+      const vol = 0.22 + this.progreso*0.22;
       g.gain.setValueAtTime(0, t0);
-      g.gain.linearRampToValueAtTime(vol, t0+0.02);
-      g.gain.exponentialRampToValueAtTime(0.001, t0+0.4);
-      osc.start(t0); osc.stop(t0+0.45);
+      g.gain.linearRampToValueAtTime(vol, t0+0.03);
+      g.gain.exponentialRampToValueAtTime(0.001, t0+0.5);
+      osc.start(t0); osc.stop(t0+0.55);
     }, intervaloMs);
   }
 
-  /** progreso: 0 (recién empieza) a 1 (última pregunta) — sube el tono, el pulso, el brillo y el volumen */
+  /** progreso: 0 (recién empieza) a 1 (última pregunta) — sube el brillo, el pulso y el volumen, con suavidad */
   actualizarIntensidad(progreso){
     if(!this.activa || !this.settings.data.musica || !this.nodes.ctx) return;
     this.progreso = Math.max(0, Math.min(1, progreso));
-    const {ctx,o1,o2,o3,lfo,master,filtro,raiz} = this.nodes;
-    const t = ctx.currentTime, RAMP = 1.4;
-    lfo.frequency.linearRampToValueAtTime(0.2 + this.progreso*1.1, t+RAMP);
-    master.gain.linearRampToValueAtTime(this._volumenBase() * (1 + this.progreso*0.9), t+RAMP);
-    filtro.frequency.linearRampToValueAtTime(480 + this.progreso*3600, t+RAMP);
-    o1.frequency.linearRampToValueAtTime(raiz + this.progreso*20, t+RAMP);
-    o2.frequency.linearRampToValueAtTime(raiz*1.007 + this.progreso*22, t+RAMP);
-    o3.frequency.linearRampToValueAtTime(raiz*2 + this.progreso*40, t+RAMP);
+    const {ctx,master,filtro,lfo} = this.nodes;
+    const t = ctx.currentTime, RAMP = 1.8;
+    master.gain.linearRampToValueAtTime(this._volumenBase() * (1 + this.progreso*0.55), t+RAMP);
+    filtro.frequency.linearRampToValueAtTime(900 + this.progreso*2600, t+RAMP);
+    lfo.frequency.linearRampToValueAtTime(0.06 + this.progreso*0.12, t+RAMP);
     this._programarPulso();
   }
 
-  detener(){ this._limpiar(); this.activa = false; this.progreso = 0; }
+  detener(){
+    const nodosViejos = this.nodes;
+    if(nodosViejos.master && nodosViejos.ctx){
+      try{
+        const t = nodosViejos.ctx.currentTime;
+        nodosViejos.master.gain.cancelScheduledValues(t);
+        nodosViejos.master.gain.setValueAtTime(nodosViejos.master.gain.value, t);
+        nodosViejos.master.gain.linearRampToValueAtTime(0, t+0.4); // sale suave, sin corte seco
+      }catch(e){}
+    }
+    if(this.pulsoHandle){ clearInterval(this.pulsoHandle); this.pulsoHandle = null; }
+    this.nodes = {}; // libre de inmediato para que iniciar() pueda arrancar sin pisarse con este cierre
+    this.activa = false; this.progreso = 0;
+    setTimeout(()=>this._limpiar(nodosViejos), 450);
+  }
 }
 
 /* ============ Effects (partículas de fondo, canvas) ============ */
