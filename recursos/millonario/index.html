@@ -74,10 +74,6 @@
   @keyframes screenEnter{from{opacity:0; transform:translateY(14px) scale(.985)} to{opacity:1; transform:translateY(0) scale(1)}}
   @keyframes screenExit{from{opacity:1; transform:translateY(0) scale(1)} to{opacity:0; transform:translateY(-12px) scale(.98)}}
   @keyframes optionEnter{from{opacity:0; transform:translateY(16px) scale(.94)} to{opacity:1; transform:translateY(0) scale(1)}}
-  @keyframes shakeX{
-    10%,90%{transform:translateX(-3px)} 20%,80%{transform:translateX(5px)}
-    30%,50%,70%{transform:translateX(-7px)} 40%,60%{transform:translateX(7px)}
-  }
   @keyframes correctPulse{
     0%{box-shadow:0 0 0 rgba(51,209,126,0);}
     40%{box-shadow:0 0 32px rgba(51,209,126,.85);}
@@ -86,7 +82,6 @@
   .screen.active{ animation:screenEnter .4s cubic-bezier(.2,.9,.3,1) both; }
   .screen.screen-exit{ animation:screenExit .2s ease both; }
   .option{ animation:optionEnter .38s cubic-bezier(.2,.9,.3,1) both; }
-  .question-area.shake{ animation:shakeX .5s ease; }
 
   h1,h2,h3{font-family:var(--font-display); font-weight:600; margin:0;}
   .title{font-size:2.6rem; color:var(--gold-light); letter-spacing:.5px; text-align:center;}
@@ -136,8 +131,8 @@
   .ladder-step.done{color:#0d3320; background:var(--success);}
 
   .question-area{flex:1; min-width:280px; max-width:640px; display:flex; flex-direction:column; gap:14px;}
-  .question-area.q-fade-out{ transition:opacity .18s ease, transform .18s ease; opacity:0; transform:translateY(-8px) scale(.99); }
-  .question-area.q-fade-in{ animation:screenEnter .45s cubic-bezier(.2,.9,.3,1) both; }
+  .q-fade-out{ transition:opacity .2s ease, transform .2s ease; opacity:0; transform:translateY(-6px) scale(.995); }
+  .q-fade-in{ animation:screenEnter .45s cubic-bezier(.2,.9,.3,1) both; }
   .timer-wrap{width:100%; height:10px; background:rgba(154,164,184,.2); border-radius:6px; overflow:hidden; border:1px solid var(--panel-border);}
   .timer-bar{height:100%; width:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); transition:width 1s linear, background .3s ease;}
   .timer-bar.warn{background:linear-gradient(90deg,var(--danger),#ff8a8a); animation:glowPulse 1s infinite;}
@@ -239,7 +234,7 @@
   </div>
   <nav class="menu-list slide-up">
     <button class="btn btn-gold" data-nav="config-partida">🎯 Jugar</button>
-    <button class="btn" data-nav="multijugador">🌐 Jugar en línea</button>
+    <button class="btn" data-nav="multijugador">🌐 Multijugador</button>
     <button class="btn" data-nav="config">⚙️ Configuración</button>
     <button class="btn" data-nav="ranking">🏆 Ranking</button>
     <button class="btn" data-nav="stats">📊 Estadísticas</button>
@@ -272,7 +267,7 @@
 <section class="screen" id="screen-multijugador">
   <button class="btn back-btn" data-nav="menu">← Volver</button>
   <div class="panel slide-up" style="max-width:560px;">
-    <h2 id="mpTitulo">🌐 Jugar en línea</h2>
+    <h2 id="mpTitulo">🌐 Multijugador</h2>
     <p class="subtitle" style="margin-top:0; text-align:left;" id="mpSubtitulo">Todos responden las mismas preguntas a su propio ritmo. Nadie queda eliminado por fallar — al final se arma un marcador por puntos, de mayor a menor.</p>
     <div id="mpSetup">
       <label>Tu nombre <input type="text" id="mpNombre" maxlength="24" placeholder="Tu nombre"></label>
@@ -998,16 +993,23 @@ class UIManager{
     if(!destino || destino.classList.contains("active")) return;
     const actual = Object.values(this.screens).find(s=>s.classList.contains("active"));
 
-    if(!actual || !this.settings?.data?.animaciones){
-      Object.values(this.screens).forEach(s=>s.classList.remove("active","screen-exit"));
+    const activar = ()=>{
+      destino.style.animation = ""; // libera un posible "animation:none" de una entrada anterior
       destino.classList.add("active");
+      destino.addEventListener("animationend", ()=>{ destino.style.animation = "none"; }, {once:true});
+    };
+
+    if(!actual || !this.settings?.data?.animaciones){
+      Object.values(this.screens).forEach(s=>{ s.classList.remove("active","screen-exit"); s.style.animation = ""; });
+      activar();
       return;
     }
 
     actual.classList.add("screen-exit");
     setTimeout(()=>{
       actual.classList.remove("active","screen-exit");
-      destino.classList.add("active");
+      actual.style.animation = "";
+      activar();
     }, 200);
   }
 }
@@ -1106,6 +1108,17 @@ class Game{
       document.getElementById("mpCodigo").value = codigo;
       this._activarModoSoloUnirse(codigo);
     }
+
+    // Los navegadores exigen una interacción real del usuario para poder reproducir audio;
+    // en cuanto ocurre la primera (clic, toque o tecla), arrancamos la música ambiente ya mismo,
+    // sin esperar a que empiece una partida.
+    const arrancarMusicaAmbiente = ()=>{
+      if(!this.music.activa) this.music.iniciar();
+      document.removeEventListener("pointerdown", arrancarMusicaAmbiente);
+      document.removeEventListener("keydown", arrancarMusicaAmbiente);
+    };
+    document.addEventListener("pointerdown", arrancarMusicaAmbiente, {once:true});
+    document.addEventListener("keydown", arrancarMusicaAmbiente, {once:true});
   }
 
   _activarModoSoloUnirse(codigo){
@@ -1137,7 +1150,7 @@ class Game{
     document.getElementById("btnSalirJuego").addEventListener("click", ()=>{
       if(confirm("¿Seguro que deseas salir? Perderás el progreso de esta partida.")){
         this.timer?.stop();
-        this.music.detener();
+        this.music.actualizarIntensidad(0); // vuelve a un ambiente tranquilo, sin apagar la música
         if(this.modoMultijugador){ this.multi.detener(); this.modoMultijugador = false; }
         this.ui.ir("menu");
       }
@@ -1170,8 +1183,8 @@ class Game{
         if(key === "musica"){
           document.getElementById("btnMuteFlotante").textContent = s.musica ? "🔊" : "🔇";
           if(s.musica){
+            this.music.iniciar();
             if(this.ui.screens.juego.classList.contains("active")){
-              this.music.iniciar();
               this.music.actualizarIntensidad(this.player.nivelActual / Math.max(1,this.numPreguntas-1));
             }
           } else { this.music.detener(); }
@@ -1359,8 +1372,8 @@ class Game{
       const cfgToggle = document.getElementById("cfgMusica");
       if(cfgToggle) cfgToggle.dataset.on = String(this.settings.data.musica);
       if(this.settings.data.musica){
+        this.music.iniciar();
         if(this.ui.screens.juego.classList.contains("active")){
-          this.music.iniciar();
           this.music.actualizarIntensidad(this.player.nivelActual / Math.max(1,this.numPreguntas-1));
         }
       } else {
@@ -1495,22 +1508,23 @@ class Game{
   _cargarPregunta(){
     const idx = this.player.nivelActual;
     this.preguntaActual = this.qm.secuencia[idx];
-    document.getElementById("hudNivel").textContent = `Pregunta ${idx+1}/${this.numPreguntas}`;
-    this.music.actualizarIntensidad(idx / Math.max(1,this.numPreguntas-1));
-    const hudPremio = document.getElementById("hudPremio");
-    if(this.modoMultijugador){
-      hudPremio.textContent = `Puntos: ${this.player.puntos.toLocaleString("es-CO")}`;
-      document.getElementById("hudSeguro").style.display = "none";
-    } else {
-      hudPremio.textContent = `Premio: ${this.player.premio.toLocaleString("es-CO")}`;
-      document.getElementById("hudSeguro").style.display = "";
-      document.getElementById("hudSeguro").textContent = `Asegurado: ${this.player.asegurado.toLocaleString("es-CO")}`;
-    }
-    if(idx > 0){ hudPremio.classList.remove("pop-badge"); void hudPremio.offsetWidth; hudPremio.classList.add("pop-badge"); }
-    this._actualizarLadder();
+    const pantalla = document.getElementById("screen-juego");
 
-    const panel = document.querySelector(".question-area");
     const render = ()=>{
+      document.getElementById("hudNivel").textContent = `Pregunta ${idx+1}/${this.numPreguntas}`;
+      this.music.actualizarIntensidad(idx / Math.max(1,this.numPreguntas-1));
+      const hudPremio = document.getElementById("hudPremio");
+      if(this.modoMultijugador){
+        hudPremio.textContent = `Puntos: ${this.player.puntos.toLocaleString("es-CO")}`;
+        document.getElementById("hudSeguro").style.display = "none";
+      } else {
+        hudPremio.textContent = `Premio: ${this.player.premio.toLocaleString("es-CO")}`;
+        document.getElementById("hudSeguro").style.display = "";
+        document.getElementById("hudSeguro").textContent = `Asegurado: ${this.player.asegurado.toLocaleString("es-CO")}`;
+      }
+      if(idx > 0){ hudPremio.classList.remove("pop-badge"); void hudPremio.offsetWidth; hudPremio.classList.add("pop-badge"); }
+      this._actualizarLadder();
+
       const p = this.preguntaActual;
       document.getElementById("qCategoria").textContent = `${iconoArea(p.area)} ${p.area} · Nivel ${p.nivel}`;
       document.getElementById("qTexto").textContent = p.texto;
@@ -1540,13 +1554,14 @@ class Game{
     };
 
     if(idx > 0 && this.settings.data.animaciones){
-      panel.classList.add("q-fade-out");
+      pantalla.style.animation = "none"; // libera la entrada de pantalla para que la transición de opacidad no compita con ella
+      pantalla.classList.add("q-fade-out");
       setTimeout(()=>{
-        panel.classList.remove("q-fade-out");
+        pantalla.classList.remove("q-fade-out");
         render();
-        panel.classList.add("q-fade-in");
-        setTimeout(()=>panel.classList.remove("q-fade-in"), 450);
-      }, 180);
+        pantalla.classList.add("q-fade-in");
+        setTimeout(()=>pantalla.classList.remove("q-fade-in"), 460);
+      }, 200);
     } else {
       render();
     }
@@ -1642,9 +1657,6 @@ class Game{
       }
       if(esCorrecta){
         this.effects.burst();
-      } else {
-        const area = document.querySelector(".question-area");
-        area?.classList.remove("shake"); void area?.offsetWidth; area?.classList.add("shake");
       }
       if(p.explicacion){
         const panel = document.getElementById("sidePanel");
@@ -1693,7 +1705,7 @@ class Game{
   }
 
   _finMultijugador(){
-    this.music.detener();
+    this.music.actualizarIntensidad(0);
     const tiempoSeg = Math.round((Date.now()-this.player.inicio)/1000);
     const comodinesUsados = Object.values(this.lifelines.usados).filter(Boolean).length;
     this.stats.registrarPartida({
@@ -1707,7 +1719,7 @@ class Game{
   }
 
   _finPartida(gano, porTiempo=false){
-    this.music.detener();
+    this.music.actualizarIntensidad(0);
     const tiempoSeg = Math.round((Date.now()-this.player.inicio)/1000);
     const comodinesUsados = Object.values(this.lifelines.usados).filter(Boolean).length;
     const premioFinal = gano ? this.player.premio : this.player.asegurado;
