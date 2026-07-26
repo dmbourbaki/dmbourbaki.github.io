@@ -643,122 +643,64 @@ class AudioManager{
 
 /* ============ MusicManager (música de fondo con Web Audio, sin archivos) ============ */
 class MusicManager{
-  constructor(audioManager, settings){
-    this.audio = audioManager; this.settings = settings;
-    this.nodes = {}; this.activa = false; this.progreso = 0;
-    this.pulsoHandle = null; this.pulsoPaso = 0; this._direccion = 1;
-    // Distintos "ambientes" musicales — se elige uno al azar por partida, para que no suene igual siempre.
-    // tercia: 1.1892 = tercera menor, 1.2599 = tercera mayor (temperamento igual)
-    this.MOTIVOS = [
-      { nombre:"tension",   raiz:130.81, tercia:1.1892, escala:[0,3,5,7,10] },
-      { nombre:"mistico",   raiz:116.54, tercia:1.1892, escala:[0,2,3,7,9]  },
-      { nombre:"electrico", raiz:146.83, tercia:1.1892, escala:[0,3,5,6,7,10] },
-      { nombre:"calido",    raiz:110.00, tercia:1.2599, escala:[0,2,4,7,9]  },
-    ];
+  constructor(settings){
+    this.settings = settings;
+    this.audioEl = null;
+    this.activa = false;
+    this.progreso = 0;
+    this._fadeHandle = null;
   }
 
-  _limpiar(nodos){
-    Object.values(nodos).forEach(n=>{
-      if(Array.isArray(n)){ n.forEach(x=>{ try{ x.stop && x.stop(); }catch(e){} try{ x.disconnect && x.disconnect(); }catch(e){} }); return; }
-      try{ n.stop && n.stop(); }catch(e){} try{ n.disconnect && n.disconnect(); }catch(e){}
-    });
+  _elemento(){
+    if(!this.audioEl){
+      const el = new Audio("audio/fondo-intro.mp3");
+      el.loop = true;
+      el.preload = "auto";
+      el.volume = 0;
+      this.audioEl = el;
+    }
+    return this.audioEl;
   }
 
-  _volumenBase(){ return (this.settings.data.volumen/100) * 0.065; }
+  _volumenBase(){ return (this.settings.data.volumen/100) * 0.55; }
+
+  _fadeA(objetivo, duracionMs){
+    const el = this.audioEl;
+    if(!el) return;
+    if(this._fadeHandle) clearInterval(this._fadeHandle);
+    const inicio = el.volume, pasos = 24, delta = objetivo - inicio;
+    let paso = 0;
+    this._fadeHandle = setInterval(()=>{
+      paso++;
+      el.volume = Math.max(0, Math.min(1, inicio + delta * (paso/pasos)));
+      if(paso >= pasos){ clearInterval(this._fadeHandle); this._fadeHandle = null; }
+    }, duracionMs/pasos);
+  }
 
   iniciar(){
-    this.detener();
+    if(!this.settings.data.musica){ this.detener(); return; }
+    const el = this._elemento();
     this.progreso = 0;
-    if(!this.settings.data.musica) return;
-    this.motivo = this.MOTIVOS[Math.floor(Math.random()*this.MOTIVOS.length)];
-    const {raiz, tercia} = this.motivo;
-    const ctx = this.audio.ensureCtx();
-    const ahora = ctx.currentTime;
-
-    const master = ctx.createGain(); master.gain.value = 0;
-    master.connect(this.audio.salidaMaestra());
-    master.gain.linearRampToValueAtTime(this._volumenBase(), ahora + 2.2); // entra suave, sin golpe
-
-    // Filtro que se va "abriendo" con el progreso -> más brillo, nunca tapado ni sordo
-    const filtro = ctx.createBiquadFilter(); filtro.type = "lowpass"; filtro.frequency.value = 900; filtro.Q.value = 0.2;
-    filtro.connect(master);
-
-    // Colchón armónico simple: raíz + quinta, solo onda seno (limpia, sin armónicos ásperos), sin chorus/detune
-    const gPad = ctx.createGain(); gPad.gain.value = 0.4;
-    const frecuencias = [raiz, raiz*1.4983];
-    const osciladoresPad = frecuencias.map(f=>{
-      const o = ctx.createOscillator();
-      o.type = "sine";
-      o.frequency.value = f;
-      o.connect(gPad);
-      o.start(ahora);
-      return o;
-    });
-    gPad.connect(filtro);
-
-    // Respiración lenta del colchón (nunca estático, pero sin efecto "wah-wah")
-    const lfo = ctx.createOscillator(); lfo.type = "sine"; lfo.frequency.value = 0.06;
-    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.08;
-    lfo.connect(lfoGain); lfoGain.connect(gPad.gain);
-    lfo.start(ahora);
-
-    this.nodes = {ctx, master, filtro, gPad, osciladoresPad, lfo, lfoGain, raiz};
+    el.playbackRate = 1.0;
+    el.play().catch(()=>{ /* el navegador puede pedir un gesto previo; se reintenta la próxima vez que se llame */ });
     this.activa = true;
-
-    this.pulsoPaso = 0; this._direccion = 1;
-    this._programarPulso();
+    this._fadeA(this._volumenBase(), 1500);
   }
 
-  _programarPulso(){
-    if(this.pulsoHandle) clearInterval(this.pulsoHandle);
-    const raiz = this.nodes.raiz;
-    const escala = this.motivo.escala.map(semitonos => raiz*2*Math.pow(2, semitonos/12));
-    const intervaloMs = Math.max(280, 660 - this.progreso*380);
-    this.pulsoHandle = setInterval(()=>{
-      if(!this.activa || !this.nodes.ctx) return;
-      const ctx = this.nodes.ctx;
-      if(this.pulsoPaso>0 && this.pulsoPaso % escala.length === 0) this._direccion *= -1;
-      const idx = Math.abs((this.pulsoPaso*this._direccion) % escala.length);
-      const nota = escala[idx];
-      this.pulsoPaso++;
-      const osc = ctx.createOscillator(); osc.type = "sine"; osc.frequency.value = nota;
-      const g = ctx.createGain();
-      osc.connect(g); g.connect(this.nodes.filtro);
-      const t0 = ctx.currentTime;
-      const vol = 0.16 + this.progreso*0.16;
-      g.gain.setValueAtTime(0, t0);
-      g.gain.linearRampToValueAtTime(vol, t0+0.04);
-      g.gain.exponentialRampToValueAtTime(0.001, t0+0.5);
-      osc.start(t0); osc.stop(t0+0.55);
-    }, intervaloMs);
-  }
-
-  /** progreso: 0 (recién empieza) a 1 (última pregunta) — sube el brillo, el pulso y el volumen, con suavidad */
+  /** progreso: 0 (recién empieza) a 1 (última pregunta) — sube apenas el volumen y el ritmo, sin exagerar */
   actualizarIntensidad(progreso){
-    if(!this.activa || !this.settings.data.musica || !this.nodes.ctx) return;
+    if(!this.activa || !this.audioEl || !this.settings.data.musica) return;
     this.progreso = Math.max(0, Math.min(1, progreso));
-    const {ctx,master,filtro,lfo} = this.nodes;
-    const t = ctx.currentTime, RAMP = 1.8;
-    master.gain.linearRampToValueAtTime(this._volumenBase() * (1 + this.progreso*0.4), t+RAMP);
-    filtro.frequency.linearRampToValueAtTime(900 + this.progreso*2200, t+RAMP);
-    lfo.frequency.linearRampToValueAtTime(0.06 + this.progreso*0.1, t+RAMP);
-    this._programarPulso();
+    this._fadeA(Math.min(1, this._volumenBase() * (1 + this.progreso*0.3)), 1200);
+    this.audioEl.playbackRate = 1.0 + this.progreso*0.06; // aceleración sutil, casi imperceptible
   }
 
   detener(){
-    const nodosViejos = this.nodes;
-    if(nodosViejos.master && nodosViejos.ctx){
-      try{
-        const t = nodosViejos.ctx.currentTime;
-        nodosViejos.master.gain.cancelScheduledValues(t);
-        nodosViejos.master.gain.setValueAtTime(nodosViejos.master.gain.value, t);
-        nodosViejos.master.gain.linearRampToValueAtTime(0, t+0.4); // sale suave, sin corte seco
-      }catch(e){}
-    }
-    if(this.pulsoHandle){ clearInterval(this.pulsoHandle); this.pulsoHandle = null; }
-    this.nodes = {}; // libre de inmediato para que iniciar() pueda arrancar sin pisarse con este cierre
     this.activa = false; this.progreso = 0;
-    setTimeout(()=>this._limpiar(nodosViejos), 450);
+    if(!this.audioEl) return;
+    this._fadeA(0, 500);
+    const el = this.audioEl;
+    setTimeout(()=>{ try{ el.pause(); }catch(e){} }, 550);
   }
 }
 
@@ -1095,7 +1037,7 @@ class Game{
   constructor(){
     this.settings = new Settings(); this.settings.apply();
     this.audio = new AudioManager(this.settings);
-    this.music = new MusicManager(this.audio, this.settings);
+    this.music = new MusicManager(this.settings);
     this.ui = new UIManager(this.settings);
     this.effects = new Effects(document.getElementById("bgCanvas"), this.settings);
     this.stats = new Statistics();
