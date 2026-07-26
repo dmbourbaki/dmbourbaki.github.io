@@ -6,17 +6,20 @@
 <title>Reto OMAI — Cultura General</title>
 <style>
   :root{
-    --bg:#0a0f1c;
-    --bg2:#0f1729;
-    --panel:rgba(18,26,46,0.72);
-    --panel-border:rgba(184,134,47,0.35);
-    --gold:#b8862f;
-    --gold-light:#e0b45c;
-    --text:#eef1f7;
-    --text-dim:#9aa4b8;
-    --danger:#e05656;
-    --success:#3ec17c;
+    --bg:#0a0f1e;
+    --bg2:#111a33;
+    --panel:#141f3d;
+    --panel-border:#2a3a63;
+    --gold:#f0a72e;
+    --gold-light:#ffcf6b;
+    --text:#f5f7fb;
+    --text-dim:#9aa8c7;
+    --danger:#ff5c6c;
+    --success:#33d17e;
+    --blue:#4fc3f7;
+    --violet:#b28dff;
     --radius:18px;
+    --pop-shadow:4px 4px 0 rgba(0,0,0,.35);
     --font-display:'Fraunces','Georgia','Times New Roman',serif;
     --font-mono:'Spline Sans Mono','JetBrains Mono',Consolas,monospace;
     --font-body:'Inter Tight','Inter',system-ui,-apple-system,sans-serif;
@@ -24,14 +27,14 @@
   }
   html[data-theme="light"]{
     --bg:#eef1f7; --bg2:#e2e7f2;
-    --panel:rgba(255,255,255,0.75);
-    --panel-border:rgba(184,134,47,0.5);
+    --panel:#ffffff;
+    --panel-border:#d8c08a;
     --text:#141a2b; --text-dim:#4a5468;
   }
   *{box-sizing:border-box;}
   html,body{height:100%;}
   body{
-    margin:0; background:var(--bg); color:var(--text);
+    margin:0; background:radial-gradient(120% 140% at 15% 0%, #16224a 0%, var(--bg) 55%); color:var(--text);
     font-family:var(--font-body); font-size:calc(16px * var(--scale));
     overflow-x:hidden; min-height:100vh;
     transition:background .4s ease, color .4s ease;
@@ -57,87 +60,119 @@
   .title{font-size:2.6rem; color:var(--gold-light); letter-spacing:.5px; text-align:center;}
   .subtitle{color:var(--text-dim); text-align:center; margin-top:-8px; font-family:var(--font-mono); font-size:.95rem;}
   .panel{
-    background:var(--panel); border:1px solid var(--panel-border); border-radius:var(--radius);
-    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 8px 32px rgba(0,0,0,.35);
+    background:var(--panel); border:2px solid var(--panel-border); border-radius:var(--radius);
+    box-shadow:var(--pop-shadow);
     padding:28px; max-width:640px; width:100%;
   }
   .btn{
-    font-family:var(--font-body); font-weight:600; font-size:1rem; color:var(--text);
-    background:linear-gradient(180deg, rgba(184,134,47,.22), rgba(184,134,47,.08));
-    border:1px solid var(--panel-border); border-radius:12px; padding:14px 22px;
-    cursor:pointer; transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
-    min-height:48px;
+    font-family:var(--font-body); font-weight:800; font-size:1rem; color:var(--text);
+    background:var(--bg2);
+    border:2px solid var(--panel-border); border-radius:12px; padding:14px 22px;
+    cursor:pointer; transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+    min-height:48px; box-shadow:3px 3px 0 rgba(0,0,0,.3);
   }
-  .btn:hover{transform:translateY(-2px); box-shadow:0 6px 18px rgba(184,134,47,.25); background:rgba(184,134,47,.28);}
-  .btn:active{transform:translateY(0);}
+  .btn:hover{transform:translate(-1px,-1px); box-shadow:5px 5px 0 rgba(0,0,0,.35); background:#1a2750;}
+  .btn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 rgba(0,0,0,.3);}
   .btn:focus-visible{outline:3px solid var(--gold-light); outline-offset:2px;}
-  .btn-gold{background:linear-gradient(180deg, var(--gold-light), var(--gold)); color:#161014; border:none;}
-  .btn-danger{background:rgba(224,86,86,.18); border-color:rgba(224,86,86,.5);}
+  .btn-gold{background:var(--gold); color:#1a1206; border-color:#8a5f18;}
+  .btn-gold:hover{background:var(--gold-light);}
+  .btn-danger{background:rgba(255,92,108,.16); border-color:var(--danger);}
   .btn-row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center;}
   .menu-list{display:flex; flex-direction:column; gap:12px; width:100%; max-width:340px;}
   label{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:12px 0; font-size:.95rem;}
   input[type="range"]{width:160px; accent-color:var(--gold);}
-  select{background:var(--bg2); color:var(--text); border:1px solid var(--panel-border); border-radius:8px; padding:6px 10px;}
-  .toggle{position:relative; width:46px; height:26px; border-radius:14px; background:rgba(154,164,184,.3); cursor:pointer; border:1px solid var(--panel-border);}
+  select{background:var(--bg2); color:var(--text); border:2px solid var(--panel-border); border-radius:8px; padding:6px 10px;}
+  .toggle{position:relative; width:46px; height:26px; border-radius:14px; background:rgba(154,164,184,.3); cursor:pointer; border:2px solid var(--panel-border);}
   .toggle[data-on="true"]{background:var(--gold);}
-  .toggle::after{content:""; position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:50%; background:#fff; transition:left .2s ease;}
-  .toggle[data-on="true"]::after{left:22px;}
+  .toggle::after{content:""; position:absolute; top:1px; left:1px; width:20px; height:20px; border-radius:50%; background:#fff; transition:left .2s ease;}
+  .toggle[data-on="true"]::after{left:21px;}
   .back-btn{position:fixed; top:18px; left:18px; z-index:5;}
 
   /* JUEGO */
   #screen-juego{justify-content:flex-start; padding-top:18px;}
   .hud{width:100%; max-width:980px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;}
-  .hud-badge{font-family:var(--font-mono); font-size:.85rem; padding:6px 12px; border:1px solid var(--panel-border); border-radius:10px; background:var(--panel);}
+  .hud-badge{font-family:var(--font-mono); font-weight:700; font-size:.85rem; padding:6px 12px; border:2px solid var(--panel-border); border-radius:10px; background:var(--panel);}
   .game-wrap{display:flex; gap:20px; width:100%; max-width:980px; margin-top:14px; flex-wrap:wrap-reverse; justify-content:center;}
   .ladder{
-    display:flex; flex-direction:column-reverse; gap:4px; min-width:190px;
-    background:var(--panel); border:1px solid var(--panel-border); border-radius:var(--radius); padding:10px;
+    display:flex; flex-direction:column-reverse; gap:5px; min-width:190px;
+    background:var(--panel); border:2px solid var(--panel-border); border-radius:var(--radius); padding:10px;
   }
-  .ladder-step{font-family:var(--font-mono); font-size:.82rem; padding:6px 10px; border-radius:8px; color:var(--text-dim); display:flex; justify-content:space-between;}
-  .ladder-step.current{background:var(--gold); color:#161014; font-weight:700; animation:pop .4s ease;}
-  .ladder-step.safe{color:var(--gold-light); border-left:3px solid var(--gold-light);}
-  .ladder-step.done{color:var(--success);}
+  .ladder-step{font-family:var(--font-mono); font-weight:700; font-size:.82rem; padding:7px 10px; border-radius:8px; color:var(--text-dim); display:flex; justify-content:space-between; background:var(--bg2);}
+  .ladder-step.current{background:var(--gold); color:#1a1206; animation:pop .4s ease; box-shadow:2px 2px 0 rgba(0,0,0,.3);}
+  .ladder-step.safe{color:var(--gold-light); border:2px solid var(--gold-light);}
+  .ladder-step.done{color:#0d3320; background:var(--success);}
 
   .question-area{flex:1; min-width:280px; max-width:640px; display:flex; flex-direction:column; gap:14px;}
   .timer-wrap{width:100%; height:10px; background:rgba(154,164,184,.2); border-radius:6px; overflow:hidden; border:1px solid var(--panel-border);}
   .timer-bar{height:100%; width:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); transition:width 1s linear, background .3s ease;}
   .timer-bar.warn{background:linear-gradient(90deg,var(--danger),#ff8a8a); animation:glowPulse 1s infinite;}
-  .q-category{font-family:var(--font-mono); font-size:.8rem; color:var(--gold-light); text-transform:uppercase; letter-spacing:.08em;}
-  .q-text{font-family:var(--font-display); font-size:1.35rem; line-height:1.35;}
-  .q-image{width:100%; max-height:220px; object-fit:cover; border-radius:12px; border:1px solid var(--panel-border); display:block;}
-  .options{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .q-category{font-family:var(--font-mono); font-size:.8rem; color:var(--gold-light); text-transform:uppercase; letter-spacing:.08em; font-weight:700;}
+  .q-text{font-family:var(--font-display); font-size:1.35rem; line-height:1.35; font-weight:700;}
+  .q-image{width:100%; max-height:220px; object-fit:cover; border-radius:12px; border:2px solid var(--panel-border); display:block;}
+  .options{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
   @media (max-width:560px){.options{grid-template-columns:1fr;}}
   .option{
-    text-align:left; padding:14px 16px; border-radius:12px; border:1px solid var(--panel-border);
-    background:var(--panel); cursor:pointer; font-size:.98rem; display:flex; gap:10px; align-items:flex-start;
-    transition:transform .12s ease, background .12s ease, border-color .12s ease;
+    text-align:left; padding:14px 16px; border-radius:14px; border:3px solid var(--opt-color, var(--panel-border));
+    background:var(--bg2); cursor:pointer; font-size:1rem; font-weight:700; display:flex; gap:12px; align-items:center;
+    color:var(--text); box-shadow:3px 3px 0 rgba(0,0,0,.3);
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
   }
-  .option:hover:not(.locked){transform:translateY(-2px); border-color:var(--gold-light);}
-  .option .k{font-family:var(--font-mono); color:var(--gold-light); font-weight:700;}
-  .option.selected{border-color:var(--gold-light); background:rgba(184,134,47,.18);}
+  .options .option:nth-child(1){--opt-color:var(--gold-light);}
+  .options .option:nth-child(2){--opt-color:var(--blue);}
+  .options .option:nth-child(3){--opt-color:#ff8f9c;}
+  .options .option:nth-child(4){--opt-color:var(--violet);}
+  .option:hover:not(.locked){transform:translate(-2px,-2px); box-shadow:5px 5px 0 rgba(0,0,0,.35);}
+  .option .k{
+    font-family:var(--font-mono); font-weight:800; flex-shrink:0; width:30px; height:30px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--opt-color, var(--gold-light)); color:#141017;
+  }
+  .option.selected{background:#1a2750; box-shadow:5px 5px 0 rgba(0,0,0,.35); transform:translate(-2px,-2px);}
   .option.correct{animation:correctFlash .8s ease forwards; border-color:var(--success);}
   .option.wrong{animation:wrongFlash .8s ease forwards; border-color:var(--danger);}
   .option.disabled-5050{opacity:.15; pointer-events:none;}
   .option.locked{pointer-events:none;}
   .lifelines{display:flex; gap:10px; flex-wrap:wrap;}
-  .lifeline-btn{width:52px; height:52px; border-radius:50%; border:1px solid var(--panel-border); background:var(--panel); cursor:pointer; font-family:var(--font-mono); font-weight:700; color:var(--gold-light); font-size:.85rem;}
+  .lifeline-btn{width:52px; height:52px; border-radius:50%; border:2px solid var(--panel-border); background:var(--bg2); cursor:pointer; font-family:var(--font-mono); font-weight:800; color:var(--gold-light); font-size:.85rem; box-shadow:2px 2px 0 rgba(0,0,0,.3);}
+  .lifeline-btn:hover:not(:disabled){transform:translate(-1px,-1px); box-shadow:3px 3px 0 rgba(0,0,0,.35);}
   .lifeline-btn:disabled{opacity:.25; cursor:not-allowed;}
   .side-panel{min-width:200px; max-width:230px; display:flex; flex-direction:column; gap:12px;}
-  .expert-box, .audience-box{background:var(--panel); border:1px solid var(--panel-border); border-radius:var(--radius); padding:14px; font-size:.85rem;}
+  .expert-box, .audience-box{background:var(--panel); border:2px solid var(--panel-border); border-radius:var(--radius); padding:14px; font-size:.85rem;}
   .audience-bar-row{display:flex; align-items:center; gap:8px; margin:6px 0;}
   .audience-bar-track{flex:1; height:14px; background:rgba(154,164,184,.2); border-radius:7px; overflow:hidden;}
   .audience-bar-fill{height:100%; background:var(--gold); transition:width .8s ease;}
 
   table{width:100%; border-collapse:collapse; font-size:.88rem;}
-  th,td{padding:8px 6px; text-align:left; border-bottom:1px solid var(--panel-border);}
-  th{color:var(--gold-light); font-family:var(--font-mono); font-weight:600;}
+  th,td{padding:8px 6px; text-align:left; border-bottom:2px solid var(--panel-border);}
+  th{color:var(--gold-light); font-family:var(--font-mono); font-weight:700;}
   .stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; width:100%;}
-  .stat-card{background:var(--bg2); border:1px solid var(--panel-border); border-radius:12px; padding:14px; text-align:center;}
+  .stat-card{background:var(--bg2); border:2px solid var(--panel-border); border-radius:12px; padding:14px; text-align:center;}
   .stat-card b{display:block; font-size:1.4rem; color:var(--gold-light); font-family:var(--font-mono);}
   .warn-box{font-size:.8rem; color:var(--text-dim); font-family:var(--font-mono); max-height:90px; overflow:auto; margin-top:6px;}
   footer.credit{font-family:var(--font-mono); font-size:.72rem; color:var(--text-dim); margin-top:6px; text-align:center;}
-  input[type="text"]{background:var(--bg2); color:var(--text); border:1px solid var(--panel-border); border-radius:8px; padding:10px 12px; font-family:var(--font-body); font-size:1rem;}
+  input[type="text"]{background:var(--bg2); color:var(--text); border:2px solid var(--panel-border); border-radius:8px; padding:10px 12px; font-family:var(--font-body); font-size:1rem;}
+
+  /* Lista de jugadores conectados (lobby multijugador) */
+  .player-chip-list{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0;}
+  .player-chip{
+    font-family:var(--font-mono); font-weight:700; font-size:.82rem; padding:6px 12px; border-radius:20px;
+    background:var(--bg2); border:2px solid var(--gold-light); color:var(--gold-light);
+    display:flex; align-items:center; gap:6px;
+  }
+  .player-chip .dot{width:8px; height:8px; border-radius:50%; background:var(--success);}
+  .player-chip.host::after{content:"HOST"; font-size:.6rem; opacity:.7; margin-left:2px;}
+
+  /* Marcador estilo Kahoot (jugadores en vivo durante partida, y ranking final) */
+  .leaderboard{display:flex; flex-direction:column; gap:8px; width:100%; max-width:520px;}
+  .leaderboard-row{
+    display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:12px;
+    background:var(--bg2); border:2px solid var(--panel-border); box-shadow:2px 2px 0 rgba(0,0,0,.3);
+  }
+  .leaderboard-row.me{border-color:var(--gold-light);}
+  .leaderboard-row .rank{font-family:var(--font-mono); font-weight:800; color:var(--gold-light); width:28px;}
+  .leaderboard-row .nombre{flex:1; font-weight:700;}
+  .leaderboard-row .puntos{font-family:var(--font-mono); font-weight:800; color:var(--gold-light);}
+  .leaderboard-row .estado-tag{font-size:.7rem; font-family:var(--font-mono); color:var(--text-dim);}
 </style>
 </head>
 <body>
@@ -164,9 +199,9 @@
 <!-- MULTIJUGADOR -->
 <section class="screen" id="screen-multijugador">
   <button class="btn back-btn" data-nav="menu">← Volver</button>
-  <div class="panel slide-up" style="max-width:520px;">
-    <h2>Jugar en línea (competitivo)</h2>
-    <p class="subtitle" style="margin-top:0; text-align:left;">Ambos juegan las mismas 15 preguntas en su propia escalera. Verás el progreso de tu rival en vivo.</p>
+  <div class="panel slide-up" style="max-width:560px;">
+    <h2>Jugar en línea</h2>
+    <p class="subtitle" style="margin-top:0; text-align:left;">Todos responden las mismas 15 preguntas a su propio ritmo. Nadie queda eliminado por fallar — al final se arma un marcador por puntos, de mayor a menor.</p>
     <div id="mpSetup">
       <label>Tu nombre <input type="text" id="mpNombre" maxlength="24" placeholder="Tu nombre"></label>
       <div class="btn-row"><button class="btn btn-gold" id="btnCrearSala">Crear sala y generar enlace</button></div>
@@ -178,10 +213,23 @@
       <p>Código de sala: <b id="mpCodigoMostrado" style="font-family:var(--font-mono); color:var(--gold-light);"></b></p>
       <label>Enlace para compartir <input type="text" id="mpEnlace" readonly></label>
       <div class="btn-row"><button class="btn" id="btnCopiarEnlace">Copiar enlace</button></div>
-      <p id="mpEstadoRival" class="subtitle" style="text-align:left;">Esperando al rival...</p>
+      <p id="mpEstadoRival" class="subtitle" style="text-align:left; margin-bottom:4px;">Esperando jugadores...</p>
+      <div class="player-chip-list" id="mpJugadoresList"></div>
       <div class="btn-row"><button class="btn btn-gold" id="btnIniciarMulti" disabled>Iniciar partida</button></div>
     </div>
     <div class="warn-box" id="mpError"></div>
+  </div>
+</section>
+
+<!-- RESULTADOS MULTIJUGADOR (estilo Kahoot) -->
+<section class="screen" id="screen-resultados-multi">
+  <div class="panel slide-up" style="max-width:560px; text-align:center;">
+    <h2>🏁 Resultados</h2>
+    <p class="subtitle" id="rmSubtitulo" style="margin-top:0;">Tu puntaje: 0</p>
+    <div class="leaderboard" id="rmLeaderboard" style="margin:16px auto 0;"></div>
+    <div class="btn-row" style="margin-top:20px;">
+      <button class="btn" data-nav="menu">Menú principal</button>
+    </div>
   </div>
 </section>
 
@@ -332,6 +380,12 @@ function obtenerDB(){
 const NIVELES = 15;
 const PREMIOS = [100,200,300,500,1000,2000,4000,8000,16000,32000,64000,125000,250000,500000,1000000];
 const SEGUROS = [5,10]; // niveles (1-indexados) que son checkpoint seguro
+const PUNTOS_BASE = 300, PUNTOS_MAX = 1000; // puntuación estilo Kahoot para el modo en línea
+function calcularPuntosKahoot(segundosRestantes, segundosTotales, esCorrecta){
+  if(!esCorrecta) return 0;
+  const proporcion = Math.max(0, Math.min(1, segundosRestantes/segundosTotales));
+  return Math.round(PUNTOS_BASE + (PUNTOS_MAX-PUNTOS_BASE) * proporcion);
+}
 const TRAMOS = [ // qué dificultad corresponde a cada nivel (1-indexado)
   ...Array(5).fill("basico"),
   ...Array(5).fill("intermedio"),
@@ -397,12 +451,55 @@ class AudioManager{
   }
   boton(){ this.tone(600,0.08,"square",0,0.12); }
   pantalla(){ this.tone(300,0.25,"sine",0,0.1); this.tone(450,0.25,"sine",0.05,0.08); }
-  correcto(){ [523,659,784,1046].forEach((f,i)=>this.tone(f,0.25,"triangle",i*0.09,0.18)); }
+  correcto(){
+    [523,659,784,1046,1318].forEach((f,i)=>this.tone(f,0.28,"triangle",i*0.08,0.18));
+    [1568,1976].forEach((f,i)=>this.tone(f,0.18,"sine",0.4+i*0.06,0.1));
+  }
   incorrecto(){ this.tone(220,0.4,"sawtooth",0,0.18); this.tone(160,0.5,"sawtooth",0.1,0.16); }
   subirNivel(){ this.tone(784,0.15,"sine",0,0.15); this.tone(1046,0.25,"sine",0.12,0.15); }
   comodin(){ this.tone(880,0.15,"sine",0,0.12); this.tone(440,0.15,"sine",0.1,0.1); }
-  victoria(){ [523,659,784,1046,1318].forEach((f,i)=>this.tone(f,0.35,"triangle",i*0.13,0.2)); }
+  victoria(){ [523,659,784,1046,1318,1568].forEach((f,i)=>this.tone(f,0.35,"triangle",i*0.12,0.2)); }
   derrota(){ [400,340,280,220].forEach((f,i)=>this.tone(f,0.4,"sawtooth",i*0.18,0.16)); }
+}
+
+/* ============ MusicManager (música de fondo con Web Audio, sin archivos) ============ */
+class MusicManager{
+  constructor(audioManager, settings){ this.audio = audioManager; this.settings = settings; this.nodes = []; this.activa = false; }
+
+  _limpiar(){
+    this.nodes.forEach(n=>{ try{ n.stop && n.stop(); }catch(e){} try{ n.disconnect && n.disconnect(); }catch(e){} });
+    this.nodes = [];
+  }
+
+  suspenso(){
+    this.detener();
+    if(!this.settings.data.musica) return;
+    const ctx = this.audio.ensureCtx();
+    const master = ctx.createGain();
+    master.gain.value = (this.settings.data.volumen/100) * 0.045;
+    master.connect(ctx.destination);
+
+    // Drone grave con leve "batido" entre dos osciladores desafinados -> tensión
+    const o1 = ctx.createOscillator(); o1.type = "sine"; o1.frequency.value = 55;
+    const o2 = ctx.createOscillator(); o2.type = "sine"; o2.frequency.value = 55.6;
+    const o3 = ctx.createOscillator(); o3.type = "triangle"; o3.frequency.value = 110.3;
+    const g3 = ctx.createGain(); g3.gain.value = 0.35;
+    const gDrone = ctx.createGain(); gDrone.gain.value = 0.7;
+
+    // LFO que pulsa el volumen lentamente, como un latido de suspenso
+    const lfo = ctx.createOscillator(); lfo.type = "sine"; lfo.frequency.value = 0.18;
+    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.25;
+    lfo.connect(lfoGain); lfoGain.connect(gDrone.gain);
+
+    o1.connect(gDrone); o2.connect(gDrone); o3.connect(g3);
+    gDrone.connect(master); g3.connect(master);
+
+    o1.start(); o2.start(); o3.start(); lfo.start();
+    this.nodes = [o1,o2,o3,lfo,master,gDrone,g3,lfoGain];
+    this.activa = true;
+  }
+
+  detener(){ this._limpiar(); this.activa = false; }
 }
 
 /* ============ Effects (partículas de fondo, canvas) ============ */
@@ -586,7 +683,7 @@ class Player{
   constructor(){ this.reset(); }
   reset(){
     this.nivelActual = 0; // índice 0-based
-    this.premio = 0; this.asegurado = 0;
+    this.premio = 0; this.asegurado = 0; this.puntos = 0;
     this.respondidas = 0; this.aciertos = 0; this.errores = 0;
     this.inicio = Date.now();
   }
@@ -621,7 +718,7 @@ class MultiplayerManager{
     await set(ref(database, `retoOmaiSalas/${this.codigo}`), {
       creada: Date.now(), iniciada: false,
       preguntas: secuenciaPreguntas.map(p=>({texto:p.texto, opciones:p.opciones, correcta:p.correcta, nivel:p.nivel, imagen:p.imagen||null})),
-      jugadores: { [this.jugadorId]: { nombre, nivel:0, premio:0, aciertos:0, estado:"esperando" } }
+      jugadores: { [this.jugadorId]: { nombre, puntos:0, nivel:0, aciertos:0, respondidas:0, estado:"esperando", entro: Date.now() } }
     });
     return this.codigo;
   }
@@ -631,7 +728,7 @@ class MultiplayerManager{
     const snap = await get(ref(database, `retoOmaiSalas/${codigo}`));
     if(!snap.exists()) throw new Error("Esa sala no existe. Verifica el código.");
     this.codigo = codigo; this.esHost = false; this.jugadorId = this._generarIdJugador();
-    await set(ref(database, `retoOmaiSalas/${codigo}/jugadores/${this.jugadorId}`), { nombre, nivel:0, premio:0, aciertos:0, estado:"esperando" });
+    await set(ref(database, `retoOmaiSalas/${codigo}/jugadores/${this.jugadorId}`), { nombre, puntos:0, nivel:0, aciertos:0, respondidas:0, estado:"esperando", entro: Date.now() });
     return snap.val();
   }
 
@@ -645,10 +742,10 @@ class MultiplayerManager{
     this.unsub = onValue(ref(database, `retoOmaiSalas/${this.codigo}`), (snap)=>callback(snap.val()));
   }
 
-  async actualizarProgreso({nivel, premio, aciertos, estado}){
+  async actualizarProgreso(campos){
     if(!this.codigo || !this.jugadorId) return;
     const database = obtenerDB();
-    await update(ref(database, `retoOmaiSalas/${this.codigo}/jugadores/${this.jugadorId}`), {nivel, premio, aciertos, estado});
+    await update(ref(database, `retoOmaiSalas/${this.codigo}/jugadores/${this.jugadorId}`), campos);
   }
 
   detener(){ this.unsub?.(); this.unsub = null; }
@@ -659,6 +756,7 @@ class Game{
   constructor(){
     this.settings = new Settings(); this.settings.apply();
     this.audio = new AudioManager(this.settings);
+    this.music = new MusicManager(this.audio, this.settings);
     this.ui = new UIManager();
     this.effects = new Effects(document.getElementById("bgCanvas"), this.settings);
     this.stats = new Statistics();
@@ -698,6 +796,7 @@ class Game{
         if(destino === "jugar"){ this.modoMultijugador = false; this.multi.detener(); this._iniciarPartida(); return; }
         if(destino === "menu"){
           this.multi.detener();
+          this.modoMultijugador = false;
           document.getElementById("mpSetup").style.display = "block";
           document.getElementById("mpLobby").style.display = "none";
           document.getElementById("mpError").textContent = "";
@@ -709,6 +808,7 @@ class Game{
     document.getElementById("btnSalirJuego").addEventListener("click", ()=>{
       if(confirm("¿Seguro que deseas salir? Perderás el progreso de esta partida.")){
         this.timer?.stop();
+        this.music.detener();
         if(this.modoMultijugador){ this.multi.detener(); this.modoMultijugador = false; }
         this.ui.ir("menu");
       }
@@ -806,33 +906,77 @@ class Game{
       if(!sala) return;
       this._salaActual = sala;
       const jugadores = Object.entries(sala.jugadores || {});
-      document.getElementById("btnIniciarMulti").disabled = jugadores.length < 2 || !this.multi.esHost;
-      document.getElementById("mpEstadoRival").textContent = jugadores.length < 2
-        ? "Esperando al rival..."
-        : (this.multi.esHost ? "¡Rival conectado! Puedes iniciar la partida." : "¡Listo! Esperando a que el anfitrión inicie...");
+
+      // Pantalla de espera (lobby)
+      const listaEl = document.getElementById("mpJugadoresList");
+      if(listaEl){
+        listaEl.innerHTML = jugadores
+          .sort((a,b)=>(a[1].entro||0)-(b[1].entro||0))
+          .map(([id,j])=>`<span class="player-chip${id===this._hostId(sala)?" host":""}"><span class="dot"></span>${this._escapar(j.nombre||"Jugador")}</span>`)
+          .join("");
+      }
+      const btnIniciar = document.getElementById("btnIniciarMulti");
+      if(btnIniciar) btnIniciar.disabled = jugadores.length < 2 || !this.multi.esHost;
+      const estadoEl = document.getElementById("mpEstadoRival");
+      if(estadoEl){
+        estadoEl.textContent = jugadores.length < 2
+          ? `${jugadores.length} jugador conectado. Esperando al menos uno más...`
+          : (this.multi.esHost ? `${jugadores.length} jugadores listos. Puedes iniciar cuando quieras.` : "¡Listo! Esperando a que el anfitrión inicie...");
+      }
 
       if(!this.multi.esHost && sala.iniciada && !this.modoMultijugador){
         this.modoMultijugador = true;
         this._iniciarPartida();
       }
+
+      // En partida: panel de rivales en vivo
       this._actualizarRivalPanel(sala);
+      // En pantalla de resultados: marcador tipo Kahoot
+      if(this.ui.screens["resultados-multi"]?.classList.contains("active")){
+        this._renderLeaderboardMulti(sala);
+      }
     });
+  }
+
+  _hostId(sala){
+    // El host es quien tiene el timestamp "entro" más antiguo
+    const entries = Object.entries(sala.jugadores || {});
+    if(!entries.length) return null;
+    return entries.reduce((a,b)=> (a[1].entro||0) <= (b[1].entro||0) ? a : b)[0];
   }
 
   _actualizarRivalPanel(sala){
     const panel = document.getElementById("rivalPanel");
-    if(!this.modoMultijugador || !sala?.jugadores){ panel.style.display = "none"; return; }
+    if(!this.modoMultijugador || !this.ui.screens.juego.classList.contains("active") || !sala?.jugadores){
+      panel.style.display = "none"; return;
+    }
     const otros = Object.entries(sala.jugadores).filter(([id])=>id !== this.multi.jugadorId);
     if(!otros.length){ panel.style.display = "none"; return; }
     panel.style.display = "flex"; panel.style.flexWrap = "wrap"; panel.style.gap = "12px";
-    panel.innerHTML = otros.map(([id,j])=>`
+    panel.innerHTML = otros
+      .sort((a,b)=>(b[1].puntos||0)-(a[1].puntos||0))
+      .map(([id,j])=>`
       <div class="panel" style="padding:12px 16px; flex:1; min-width:220px;">
-        <b style="font-family:var(--font-mono); color:var(--gold-light);">🟢 ${this._escapar(j.nombre||"Rival")}</b>
+        <b style="font-family:var(--font-mono); color:var(--gold-light);">🟢 ${this._escapar(j.nombre||"Jugador")}</b>
         <div style="color:var(--text-dim); font-size:.85rem; margin-top:4px;">
-          Nivel ${j.nivel||0}/${NIVELES} · Premio ${(j.premio||0).toLocaleString("es-CO")}
-          ${j.estado==="terminado" ? " · Terminó su partida" : ""}
+          Pregunta ${Math.min((j.respondidas||0)+1,NIVELES)}/${NIVELES} · ${(j.puntos||0).toLocaleString("es-CO")} pts
+          ${j.estado==="terminado" ? " · Terminó" : ""}
         </div>
       </div>`).join("");
+  }
+
+  _renderLeaderboardMulti(sala){
+    const jugadores = Object.entries(sala?.jugadores || {}).sort((a,b)=>(b[1].puntos||0)-(a[1].puntos||0));
+    const medallas = ["🥇","🥈","🥉"];
+    document.getElementById("rmLeaderboard").innerHTML = jugadores.map(([id,j],i)=>`
+      <div class="leaderboard-row${id===this.multi.jugadorId?" me":""}">
+        <span class="rank">${medallas[i]||("#"+(i+1))}</span>
+        <span class="nombre">${this._escapar(j.nombre||"Jugador")}${id===this.multi.jugadorId?" (tú)":""}</span>
+        <span class="estado-tag">${j.estado==="terminado"?"Terminó":"Jugando..."}</span>
+        <span class="puntos">${(j.puntos||0).toLocaleString("es-CO")}</span>
+      </div>`).join("") || "<p>Sin jugadores.</p>";
+    const yo = sala?.jugadores?.[this.multi.jugadorId];
+    if(yo) document.getElementById("rmSubtitulo").textContent = `Tu puntaje: ${(yo.puntos||0).toLocaleString("es-CO")} · Aciertos: ${yo.aciertos||0}/${NIVELES}`;
   }
 
   _renderRanking(){
@@ -878,6 +1022,7 @@ class Game{
     this._renderLadder();
     this.ui.ir("juego");
     this._cargarPregunta();
+    this.music.suspenso();
   }
 
   _renderLadder(){
@@ -902,9 +1047,15 @@ class Game{
   _cargarPregunta(){
     const idx = this.player.nivelActual;
     this.preguntaActual = this.qm.secuencia[idx];
-    document.getElementById("hudNivel").textContent = `Nivel ${idx+1}/${NIVELES}`;
-    document.getElementById("hudPremio").textContent = `Premio: ${this.player.premio.toLocaleString("es-CO")}`;
-    document.getElementById("hudSeguro").textContent = `Asegurado: ${this.player.asegurado.toLocaleString("es-CO")}`;
+    document.getElementById("hudNivel").textContent = `Pregunta ${idx+1}/${NIVELES}`;
+    if(this.modoMultijugador){
+      document.getElementById("hudPremio").textContent = `Puntos: ${this.player.puntos.toLocaleString("es-CO")}`;
+      document.getElementById("hudSeguro").style.display = "none";
+    } else {
+      document.getElementById("hudPremio").textContent = `Premio: ${this.player.premio.toLocaleString("es-CO")}`;
+      document.getElementById("hudSeguro").style.display = "";
+      document.getElementById("hudSeguro").textContent = `Asegurado: ${this.player.asegurado.toLocaleString("es-CO")}`;
+    }
     this._actualizarLadder();
 
     const p = this.preguntaActual;
@@ -997,6 +1148,8 @@ class Game{
   }
 
   _responder(idxElegido, porTiempo=false){
+    const segundosRestantes = this.timer.restante;
+    const segundosTotales = this.timer.total;
     this.timer.stop();
     document.querySelectorAll("#qOpciones .option").forEach(b=>b.classList.add("locked"));
     const p = this.preguntaActual;
@@ -1017,15 +1170,17 @@ class Game{
         panel.insertAdjacentHTML("beforeend", `<div class="expert-box"><b>Explicación</b><p>${this._escapar(p.explicacion)}</p></div>`);
       }
       setTimeout(()=>{
+        if(this.modoMultijugador){
+          this._avanzarMultijugador(esCorrecta, segundosRestantes, segundosTotales);
+          return;
+        }
+        // ---- Modo solo: estilo Millonario clásico, con eliminación ----
         if(esCorrecta){
           this.player.aciertos++;
           this.player.nivelActual++;
           this.player.premio = PREMIOS[this.player.nivelActual-1];
           if(SEGUROS.includes(this.player.nivelActual)) this.player.asegurado = this.player.premio;
           this.audio.subirNivel();
-          if(this.modoMultijugador){
-            this.multi.actualizarProgreso({nivel:this.player.nivelActual, premio:this.player.premio, aciertos:this.player.aciertos, estado:"jugando"});
-          }
           if(this.player.nivelActual >= NIVELES){ this._finPartida(true); }
           else{ this._cargarPregunta(); }
         } else {
@@ -1037,14 +1192,43 @@ class Game{
     }, 900);
   }
 
+  /* ---------- Modo en línea: estilo Kahoot, sin eliminación ---------- */
+  _avanzarMultijugador(esCorrecta, segundosRestantes, segundosTotales){
+    const puntosGanados = calcularPuntosKahoot(segundosRestantes, segundosTotales, esCorrecta);
+    this.player.puntos += puntosGanados;
+    this.player.nivelActual++;
+    if(esCorrecta){ this.player.aciertos++; this.audio.subirNivel(); }
+    else { this.player.errores++; this.audio.incorrecto(); }
+
+    const terminado = this.player.nivelActual >= NIVELES;
+    this.multi.actualizarProgreso({
+      puntos: this.player.puntos, aciertos: this.player.aciertos,
+      respondidas: this.player.respondidas, estado: terminado ? "terminado" : "jugando"
+    });
+
+    if(terminado){ this._finMultijugador(); }
+    else { this._cargarPregunta(); }
+  }
+
+  _finMultijugador(){
+    this.music.detener();
+    const tiempoSeg = Math.round((Date.now()-this.player.inicio)/1000);
+    const comodinesUsados = Object.values(this.lifelines.usados).filter(Boolean).length;
+    this.stats.registrarPartida({
+      respondidas: this.player.respondidas, aciertos: this.player.aciertos,
+      comodines: comodinesUsados, tiempoSeg, premio: 0
+    });
+    this._renderStats();
+    this.audio.victoria();
+    this.ui.ir("resultados-multi");
+    if(this._salaActual) this._renderLeaderboardMulti(this._salaActual);
+  }
+
   _finPartida(gano, porTiempo=false){
+    this.music.detener();
     const tiempoSeg = Math.round((Date.now()-this.player.inicio)/1000);
     const comodinesUsados = Object.values(this.lifelines.usados).filter(Boolean).length;
     const premioFinal = gano ? this.player.premio : this.player.asegurado;
-
-    if(this.modoMultijugador){
-      this.multi.actualizarProgreso({nivel:this.player.nivelActual, premio:premioFinal, aciertos:this.player.aciertos, estado:"terminado"});
-    }
 
     this.stats.registrarPartida({
       respondidas: this.player.respondidas, aciertos: this.player.aciertos,
