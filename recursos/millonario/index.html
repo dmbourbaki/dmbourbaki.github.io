@@ -151,6 +151,7 @@
   </div>
   <nav class="menu-list slide-up">
     <button class="btn btn-gold" data-nav="jugar">Jugar</button>
+    <button class="btn" data-nav="multijugador">Jugar en línea</button>
     <button class="btn" data-nav="config">Configuración</button>
     <button class="btn" data-nav="ranking">Ranking</button>
     <button class="btn" data-nav="stats">Estadísticas</button>
@@ -158,6 +159,30 @@
     <button class="btn" data-nav="creditos">Créditos</button>
   </nav>
   <div class="warn-box" id="importWarnings"></div>
+</section>
+
+<!-- MULTIJUGADOR -->
+<section class="screen" id="screen-multijugador">
+  <button class="btn back-btn" data-nav="menu">← Volver</button>
+  <div class="panel slide-up" style="max-width:520px;">
+    <h2>Jugar en línea (competitivo)</h2>
+    <p class="subtitle" style="margin-top:0; text-align:left;">Ambos juegan las mismas 15 preguntas en su propia escalera. Verás el progreso de tu rival en vivo.</p>
+    <div id="mpSetup">
+      <label>Tu nombre <input type="text" id="mpNombre" maxlength="24" placeholder="Tu nombre"></label>
+      <div class="btn-row"><button class="btn btn-gold" id="btnCrearSala">Crear sala y generar enlace</button></div>
+      <div style="margin:14px 0; text-align:center; color:var(--text-dim); font-family:var(--font-mono);">— o —</div>
+      <label>Código de sala <input type="text" id="mpCodigo" maxlength="4" placeholder="Ej: ABCD" style="text-transform:uppercase;"></label>
+      <div class="btn-row"><button class="btn" id="btnUnirseSala">Unirme a una sala</button></div>
+    </div>
+    <div id="mpLobby" style="display:none;">
+      <p>Código de sala: <b id="mpCodigoMostrado" style="font-family:var(--font-mono); color:var(--gold-light);"></b></p>
+      <label>Enlace para compartir <input type="text" id="mpEnlace" readonly></label>
+      <div class="btn-row"><button class="btn" id="btnCopiarEnlace">Copiar enlace</button></div>
+      <p id="mpEstadoRival" class="subtitle" style="text-align:left;">Esperando al rival...</p>
+      <div class="btn-row"><button class="btn btn-gold" id="btnIniciarMulti" disabled>Iniciar partida</button></div>
+    </div>
+    <div class="warn-box" id="mpError"></div>
+  </div>
 </section>
 
 <!-- CONFIG -->
@@ -257,6 +282,7 @@
     </div>
     <aside class="side-panel" id="sidePanel"></aside>
   </div>
+  <aside class="side-panel" id="rivalPanel" style="display:none; max-width:640px; width:100%;"></aside>
 </section>
 
 <!-- GAMEOVER -->
@@ -276,6 +302,31 @@
 
 <script type="module">
 import { BANCOS_DEFECTO } from "./omai-quiz-culturageneral-bancos-default.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, update, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+/* ============ Config de Firebase (multijugador en línea) ============
+   Valores tomados del proyecto Firebase "omai-quiz" (el mismo que usa tu
+   OMAI-Quiz de Firebase). Las salas de este juego se guardan bajo el nodo
+   "retoOmaiSalas" en esa misma Realtime Database, sin interferir con las
+   salas normales del quiz (que usan el nodo "salas"). */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
+  authDomain: "omai-quiz.firebaseapp.com",
+  databaseURL: "https://omai-quiz-default-rtdb.firebaseio.com",
+  projectId: "omai-quiz",
+  storageBucket: "omai-quiz.firebasestorage.app",
+  messagingSenderId: "44663231333",
+  appId: "1:44663231333:web:4467c56d21bca45a82878c",
+};
+let _dbInstance = null;
+function obtenerDB(){
+  if(!_dbInstance){
+    const app = initializeApp(FIREBASE_CONFIG);
+    _dbInstance = getDatabase(app);
+  }
+  return _dbInstance;
+}
 
 /* ============ CONSTANTES DE JUEGO ============ */
 const NIVELES = 15;
@@ -553,6 +604,56 @@ class UIManager{
   }
 }
 
+/* ============ MultiplayerManager (salas en tiempo real vía Firebase) ============ */
+class MultiplayerManager{
+  constructor(){ this.codigo = null; this.jugadorId = null; this.esHost = false; this.unsub = null; }
+
+  _generarCodigo(){
+    const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    let c = ""; for(let i=0;i<4;i++) c += letras[Math.floor(Math.random()*letras.length)];
+    return c;
+  }
+  _generarIdJugador(){ return "j" + Math.random().toString(36).slice(2,10); }
+
+  async crearSala(nombre, secuenciaPreguntas){
+    const database = obtenerDB();
+    this.codigo = this._generarCodigo(); this.jugadorId = this._generarIdJugador(); this.esHost = true;
+    await set(ref(database, `retoOmaiSalas/${this.codigo}`), {
+      creada: Date.now(), iniciada: false,
+      preguntas: secuenciaPreguntas.map(p=>({texto:p.texto, opciones:p.opciones, correcta:p.correcta, nivel:p.nivel, imagen:p.imagen||null})),
+      jugadores: { [this.jugadorId]: { nombre, nivel:0, premio:0, aciertos:0, estado:"esperando" } }
+    });
+    return this.codigo;
+  }
+
+  async unirseSala(codigo, nombre){
+    const database = obtenerDB();
+    const snap = await get(ref(database, `retoOmaiSalas/${codigo}`));
+    if(!snap.exists()) throw new Error("Esa sala no existe. Verifica el código.");
+    this.codigo = codigo; this.esHost = false; this.jugadorId = this._generarIdJugador();
+    await set(ref(database, `retoOmaiSalas/${codigo}/jugadores/${this.jugadorId}`), { nombre, nivel:0, premio:0, aciertos:0, estado:"esperando" });
+    return snap.val();
+  }
+
+  marcarIniciada(){
+    const database = obtenerDB();
+    return update(ref(database, `retoOmaiSalas/${this.codigo}`), { iniciada:true });
+  }
+
+  escuchar(callback){
+    const database = obtenerDB();
+    this.unsub = onValue(ref(database, `retoOmaiSalas/${this.codigo}`), (snap)=>callback(snap.val()));
+  }
+
+  async actualizarProgreso({nivel, premio, aciertos, estado}){
+    if(!this.codigo || !this.jugadorId) return;
+    const database = obtenerDB();
+    await update(ref(database, `retoOmaiSalas/${this.codigo}/jugadores/${this.jugadorId}`), {nivel, premio, aciertos, estado});
+  }
+
+  detener(){ this.unsub?.(); this.unsub = null; }
+}
+
 /* ============ Game (orquestador principal) ============ */
 class Game{
   constructor(){
@@ -564,6 +665,9 @@ class Game{
     this.ranking = new Ranking();
     this.lifelines = new LifelineManager();
     this.player = new Player();
+    this.multi = new MultiplayerManager();
+    this.modoMultijugador = false;
+    this._salaActual = null;
 
     const {preguntas, warnings} = QuestionImporter.importar(BANCOS_DEFECTO);
     this.qm = new QuestionManager(preguntas);
@@ -574,9 +678,16 @@ class Game{
     this._bindNav();
     this._bindConfig();
     this._bindJuego();
+    this._bindMultijugador();
     this._renderRanking();
     this._renderStats();
     document.getElementById("creditAutor").textContent = "Daniel Steven Moran Pizarro";
+
+    const params = new URLSearchParams(location.search);
+    if(params.get("sala")){
+      this.ui.ir("multijugador");
+      document.getElementById("mpCodigo").value = params.get("sala").toUpperCase();
+    }
   }
 
   _bindNav(){
@@ -584,14 +695,22 @@ class Game{
       btn.addEventListener("click", ()=>{
         this.audio.boton();
         const destino = btn.dataset.nav;
-        if(destino === "jugar"){ this._iniciarPartida(); return; }
+        if(destino === "jugar"){ this.modoMultijugador = false; this.multi.detener(); this._iniciarPartida(); return; }
+        if(destino === "menu"){
+          this.multi.detener();
+          document.getElementById("mpSetup").style.display = "block";
+          document.getElementById("mpLobby").style.display = "none";
+          document.getElementById("mpError").textContent = "";
+        }
         this.audio.pantalla();
         this.ui.ir(destino === "menu" ? "menu" : destino);
       });
     });
     document.getElementById("btnSalirJuego").addEventListener("click", ()=>{
       if(confirm("¿Seguro que deseas salir? Perderás el progreso de esta partida.")){
-        this.timer?.stop(); this.ui.ir("menu");
+        this.timer?.stop();
+        if(this.modoMultijugador){ this.multi.detener(); this.modoMultijugador = false; }
+        this.ui.ir("menu");
       }
     });
     window.addEventListener("keydown",(e)=>{
@@ -628,6 +747,94 @@ class Game{
     document.getElementById("cfgEscala").addEventListener("change",(e)=>{ s.escala = Number(e.target.value); this.settings.save(); this.settings.apply(); });
   }
 
+  _bindMultijugador(){
+    const btnCrear = document.getElementById("btnCrearSala");
+    const btnUnirse = document.getElementById("btnUnirseSala");
+    const btnCopiar = document.getElementById("btnCopiarEnlace");
+    const btnIniciar = document.getElementById("btnIniciarMulti");
+    const errBox = document.getElementById("mpError");
+
+    btnCrear.addEventListener("click", async ()=>{
+      errBox.textContent = "";
+      const nombre = document.getElementById("mpNombre").value.trim() || "Jugador 1";
+      try{
+        const secuencia = this.qm.nuevaPartida(); // se genera una vez y se comparte con el rival
+        const codigo = await this.multi.crearSala(nombre, secuencia);
+        this._mostrarLobby(codigo);
+        this._escucharSala();
+      }catch(e){ errBox.textContent = "No se pudo crear la sala. Revisa tu configuración de Firebase. (" + e.message + ")"; }
+    });
+
+    btnUnirse.addEventListener("click", async ()=>{
+      errBox.textContent = "";
+      const nombre = document.getElementById("mpNombre").value.trim() || "Jugador 2";
+      const codigo = document.getElementById("mpCodigo").value.trim().toUpperCase();
+      if(!codigo){ errBox.textContent = "Escribe un código de sala."; return; }
+      try{
+        await this.multi.unirseSala(codigo, nombre);
+        this._mostrarLobby(codigo);
+        this._escucharSala();
+      }catch(e){ errBox.textContent = e.message; }
+    });
+
+    btnCopiar.addEventListener("click", async ()=>{
+      const valor = document.getElementById("mpEnlace").value;
+      try{ await navigator.clipboard.writeText(valor); }
+      catch(e){ document.getElementById("mpEnlace").select(); document.execCommand("copy"); }
+      btnCopiar.textContent = "¡Copiado!"; setTimeout(()=>btnCopiar.textContent="Copiar enlace",1500);
+    });
+
+    btnIniciar.addEventListener("click", async ()=>{
+      if(!this.multi.esHost) return;
+      await this.multi.marcarIniciada();
+      this.modoMultijugador = true;
+      this._iniciarPartida();
+    });
+  }
+
+  _mostrarLobby(codigo){
+    document.getElementById("mpSetup").style.display = "none";
+    document.getElementById("mpLobby").style.display = "block";
+    document.getElementById("mpCodigoMostrado").textContent = codigo;
+    const url = new URL(location.href);
+    url.searchParams.set("sala", codigo);
+    document.getElementById("mpEnlace").value = url.toString();
+  }
+
+  _escucharSala(){
+    this.multi.escuchar((sala)=>{
+      if(!sala) return;
+      this._salaActual = sala;
+      const jugadores = Object.entries(sala.jugadores || {});
+      document.getElementById("btnIniciarMulti").disabled = jugadores.length < 2 || !this.multi.esHost;
+      document.getElementById("mpEstadoRival").textContent = jugadores.length < 2
+        ? "Esperando al rival..."
+        : (this.multi.esHost ? "¡Rival conectado! Puedes iniciar la partida." : "¡Listo! Esperando a que el anfitrión inicie...");
+
+      if(!this.multi.esHost && sala.iniciada && !this.modoMultijugador){
+        this.modoMultijugador = true;
+        this._iniciarPartida();
+      }
+      this._actualizarRivalPanel(sala);
+    });
+  }
+
+  _actualizarRivalPanel(sala){
+    const panel = document.getElementById("rivalPanel");
+    if(!this.modoMultijugador || !sala?.jugadores){ panel.style.display = "none"; return; }
+    const otros = Object.entries(sala.jugadores).filter(([id])=>id !== this.multi.jugadorId);
+    if(!otros.length){ panel.style.display = "none"; return; }
+    panel.style.display = "flex"; panel.style.flexWrap = "wrap"; panel.style.gap = "12px";
+    panel.innerHTML = otros.map(([id,j])=>`
+      <div class="panel" style="padding:12px 16px; flex:1; min-width:220px;">
+        <b style="font-family:var(--font-mono); color:var(--gold-light);">🟢 ${this._escapar(j.nombre||"Rival")}</b>
+        <div style="color:var(--text-dim); font-size:.85rem; margin-top:4px;">
+          Nivel ${j.nivel||0}/${NIVELES} · Premio ${(j.premio||0).toLocaleString("es-CO")}
+          ${j.estado==="terminado" ? " · Terminó su partida" : ""}
+        </div>
+      </div>`).join("");
+  }
+
   _renderRanking(){
     const tbody = document.querySelector("#rankingTable tbody");
     tbody.innerHTML = this.ranking.data.map((r,i)=>`
@@ -658,7 +865,15 @@ class Game{
   /* ---------- flujo de partida ---------- */
   _iniciarPartida(){
     this.player.reset(); this.lifelines.reset();
-    this.qm.nuevaPartida();
+    if(this.modoMultijugador){
+      // El anfitrión ya generó la secuencia al crear la sala (this.qm.secuencia).
+      // El invitado toma la misma secuencia de preguntas desde Firebase para que sea justo.
+      if(!this.multi.esHost){
+        this.qm.secuencia = (this._salaActual?.preguntas || []).map(p=>({...p}));
+      }
+    } else {
+      this.qm.nuevaPartida();
+    }
     this.audio.pantalla();
     this._renderLadder();
     this.ui.ir("juego");
@@ -808,6 +1023,9 @@ class Game{
           this.player.premio = PREMIOS[this.player.nivelActual-1];
           if(SEGUROS.includes(this.player.nivelActual)) this.player.asegurado = this.player.premio;
           this.audio.subirNivel();
+          if(this.modoMultijugador){
+            this.multi.actualizarProgreso({nivel:this.player.nivelActual, premio:this.player.premio, aciertos:this.player.aciertos, estado:"jugando"});
+          }
           if(this.player.nivelActual >= NIVELES){ this._finPartida(true); }
           else{ this._cargarPregunta(); }
         } else {
@@ -823,6 +1041,10 @@ class Game{
     const tiempoSeg = Math.round((Date.now()-this.player.inicio)/1000);
     const comodinesUsados = Object.values(this.lifelines.usados).filter(Boolean).length;
     const premioFinal = gano ? this.player.premio : this.player.asegurado;
+
+    if(this.modoMultijugador){
+      this.multi.actualizarProgreso({nivel:this.player.nivelActual, premio:premioFinal, aciertos:this.player.aciertos, estado:"terminado"});
+    }
 
     this.stats.registrarPartida({
       respondidas: this.player.respondidas, aciertos: this.player.aciertos,
