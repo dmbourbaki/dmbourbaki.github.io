@@ -657,6 +657,11 @@ class MusicManager{
       el.loop = true;
       el.preload = "auto";
       el.volume = 0;
+      el.addEventListener("error", ()=>{
+        console.warn("OMAI Trivias: no se pudo cargar 'audio/fondo-intro.mp3'. Verifica que el archivo exista exactamente en esa ruta, junto a index.html.");
+        const btn = document.getElementById("btnMuteFlotante");
+        if(btn) btn.textContent = "⚠️";
+      });
       this.audioEl = el;
     }
     return this.audioEl;
@@ -682,7 +687,9 @@ class MusicManager{
     const el = this._elemento();
     this.progreso = 0;
     el.playbackRate = 1.0;
-    el.play().catch(()=>{ /* el navegador puede pedir un gesto previo; se reintenta la próxima vez que se llame */ });
+    el.play().catch((err)=>{
+      console.warn("OMAI Trivias: la reproducción de música fue bloqueada o falló:", err?.message || err);
+    });
     this.activa = true;
     this._fadeA(this._volumenBase(), 1500);
   }
