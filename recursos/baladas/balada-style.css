@@ -1,0 +1,313 @@
+:root{
+  --paper:#efe6d2;
+  --paper-dark:#e4d8bc;
+  --wine:#4a1620;
+  --wine-deep:#330e15;
+  --gold:#b6903f;
+  --gold-bright:#d4af5c;
+  --ink:#241a12;
+  --ink-soft:#5a4a3a;
+  --rose:#a4564a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--wine-deep);
+  color:var(--ink);
+  font-family:'Lora',serif;
+  min-height:100vh;
+}
+
+/* ── back-to-index nav ─────────────────────────── */
+.back-nav{
+  display:block;
+  padding:16px 24px;
+  background:var(--wine-deep);
+  border-bottom:1px solid rgba(214,180,110,.25);
+}
+.back-nav a{
+  color:var(--gold-bright);
+  text-decoration:none;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.78rem;
+  letter-spacing:.05em;
+}
+.back-nav a:hover{ text-decoration:underline; }
+
+/* ── cover / book header ───────────────────────── */
+header.cover{
+  padding:70px 24px 50px;
+  text-align:center;
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(212,175,92,.18), transparent 60%),
+    var(--wine-deep);
+  border-bottom:4px double var(--gold);
+  position:relative;
+}
+header.cover::before{
+  content:"";
+  position:absolute; inset:14px;
+  border:1px solid rgba(214,180,110,.35);
+  pointer-events:none;
+}
+header.cover h1{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;
+  font-size:clamp(2.2rem,6vw,3.6rem);
+  color:var(--gold-bright);
+  letter-spacing:.03em;
+}
+header.cover .subtitle{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:1.15rem;
+  color:#e7d9b9;
+  margin-top:10px;
+  letter-spacing:.02em;
+}
+header.cover .rule{
+  width:70px;height:1px;background:var(--gold);
+  margin:22px auto;
+  opacity:.6;
+}
+header.cover .note{
+  max-width:480px;
+  margin:0 auto;
+  font-size:.85rem;
+  color:#cbb98f;
+  font-family:'IBM Plex Mono',monospace;
+  letter-spacing:.02em;
+}
+
+/* ── artist portrait header ────────────────────── */
+header.artist-hero{
+  padding:56px 24px 44px;
+  text-align:center;
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(212,175,92,.16), transparent 60%),
+    var(--wine-deep);
+  border-bottom:4px double var(--gold);
+}
+.portrait{
+  width:150px;height:150px;border-radius:50%;
+  margin:0 auto 22px;
+  background:
+    repeating-radial-gradient(circle at center, #111 0 2px, #1c1c1c 3px 6px);
+  box-shadow:0 8px 26px rgba(0,0,0,.45), inset 0 0 0 3px #000;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.portrait img{
+  width:66%;height:66%;object-fit:cover;border-radius:50%;
+  box-shadow:inset 0 0 0 6px var(--wine-deep);
+}
+.portrait .placeholder{
+  width:66%;height:66%;border-radius:50%;
+  background:var(--gold);
+  box-shadow:inset 0 0 0 6px var(--wine-deep);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem;color:var(--wine-deep);font-weight:700;
+}
+header.artist-hero h1{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;
+  font-size:clamp(2.1rem,5.5vw,3.2rem);
+  color:var(--gold-bright);
+  letter-spacing:.02em;
+}
+header.artist-hero .years{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.78rem;
+  color:#cbb98f;
+  letter-spacing:.08em;
+  margin-top:8px;
+  text-transform:uppercase;
+}
+header.artist-hero .tagline{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:1.25rem;
+  color:#e7d9b9;
+  margin-top:14px;
+}
+
+main{max-width:760px;margin:0 auto;padding:10px 20px 80px}
+
+/* ── book index: artist cards ──────────────────── */
+.artist-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:26px;
+  margin:40px 0;
+}
+.artist-card{
+  background:var(--paper);
+  padding:28px 24px;
+  text-align:center;
+  box-shadow:0 14px 32px rgba(0,0,0,.35);
+  border:1px solid rgba(90,60,30,.15);
+  text-decoration:none;
+  color:var(--ink);
+  display:block;
+  transition:transform .25s ease;
+  position:relative;
+}
+.artist-card:hover{ transform:translateY(-4px); }
+.artist-card .vinyl-mini{
+  width:90px;height:90px;border-radius:50%;
+  margin:0 auto 16px;
+  background:repeating-radial-gradient(circle at center, #111 0 2px, #1c1c1c 3px 6px);
+  box-shadow:0 6px 16px rgba(0,0,0,.4), inset 0 0 0 2px #000;
+  display:flex;align-items:center;justify-content:center;
+}
+.artist-card .vinyl-mini::before{
+  content:"";
+  width:30px;height:30px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:inset 0 0 0 7px var(--paper);
+}
+.artist-card h3{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;
+  font-size:1.5rem;
+  color:var(--wine);
+}
+.artist-card p{
+  font-style:italic;
+  color:var(--ink-soft);
+  font-size:.92rem;
+  margin-top:6px;
+}
+.artist-card .enter{
+  display:inline-block;
+  margin-top:14px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.7rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--rose);
+}
+
+/* ── each song / content entry ─────────────────── */
+.entry{
+  background:var(--paper);
+  margin:36px 0;
+  padding:34px 30px 30px;
+  position:relative;
+  box-shadow:0 18px 40px rgba(0,0,0,.35);
+  border:1px solid rgba(90,60,30,.15);
+}
+.entry::after{
+  content:"";
+  position:absolute; right:0; bottom:0;
+  width:0;height:0;
+  border-style:solid;
+  border-width:0 0 26px 26px;
+  border-color:transparent transparent var(--paper-dark) transparent;
+  filter:drop-shadow(-2px -2px 3px rgba(0,0,0,.15));
+}
+
+.chapter-lead{ font-size:1.02rem; line-height:1.7; margin-bottom:16px; }
+.chapter-lead::first-letter{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.8rem;
+  color:var(--wine);
+  float:left;
+  line-height:.8;
+  padding:4px 8px 0 0;
+  font-weight:600;
+}
+
+.entry h2{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;
+  font-size:1.7rem;
+  color:var(--wine);
+  border-bottom:2px solid var(--gold);
+  padding-bottom:8px;
+  margin-bottom:16px;
+}
+.entry h3{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;
+  font-size:1.3rem;
+  color:var(--rose);
+  margin:22px 0 10px;
+}
+.entry p{
+  font-size:1rem;
+  line-height:1.7;
+  margin-bottom:14px;
+}
+.entry ul{
+  margin:0 0 16px 22px;
+  line-height:1.7;
+}
+.entry blockquote{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:1.2rem;
+  color:var(--wine);
+  border-left:3px solid var(--gold);
+  padding-left:18px;
+  margin:20px 0;
+}
+
+/* ── turntable (spotify embed frame) ───────────── */
+.turntable{
+  background:var(--ink);
+  border-radius:10px;
+  padding:10px;
+  margin:24px 0;
+  box-shadow:inset 0 0 0 1px rgba(214,180,110,.25), 0 10px 24px rgba(0,0,0,.35);
+}
+.turntable-label{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:2px 6px 8px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.68rem;
+  color:var(--gold-bright);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.turntable iframe{
+  border-radius:8px;
+  display:block;
+  width:100%;
+}
+
+/* ── photo gallery placeholder ─────────────────── */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+  margin:20px 0;
+}
+.gallery .frame{
+  aspect-ratio:1;
+  background:var(--paper-dark);
+  border:1px dashed var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.68rem;
+  color:var(--ink-soft);
+  text-align:center;
+  padding:8px;
+  overflow:hidden;
+}
+.gallery .frame img{ width:100%; height:100%; object-fit:cover; }
+
+footer.book-footer{
+  text-align:center;
+  padding:40px 20px 70px;
+  color:#cbb98f;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.75rem;
+  letter-spacing:.03em;
+}
+footer.book-footer a{color:var(--gold-bright)}
+
+@media (max-width:600px){
+  .entry{ padding:26px 20px 22px; }
+}
