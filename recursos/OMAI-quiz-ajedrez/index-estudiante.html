@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OMAI-Quiz Ajedrez — Estudiante</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    --void: #08090c; --abyss: #0f1116; --panel: #15181f; --panel-2: #1b1f29;
+    --gold: #c9a04d; --gold-bright: #e8c273; --gold-dim: #7a6438;
+    --cyan: #4dc9c9; --rose: #c96b7a; --grass: #7ac97a; --violet: #9a7ac9;
+    --good: #7ac97a; --bad: #c96b6b;
+    --line: #262b36; --line-soft: #1b1e27;
+    --ink: #eceef2; --ink-soft: #a7acb9; --ink-faint: #6b7080;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--void); }
+  body {
+    margin: 0; background: var(--void); color: var(--ink);
+    font-family: "Inter Tight", sans-serif; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 16px; padding-top: 60px; position: relative;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.05;
+    background-image: linear-gradient(45deg, var(--gold) 25%, transparent 25%),
+                       linear-gradient(-45deg, var(--gold) 25%, transparent 25%);
+    background-size: 40px 40px;
+  }
+  body > * { position: relative; z-index: 1; }
+  #barra-sala {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: none; align-items: center; justify-content: center;
+    background: var(--panel); border-bottom: 1px solid var(--line);
+    padding: 8px; font-family: "Spline Sans Mono", monospace; font-size: 14px; color: var(--gold-bright);
+  }
+  #barra-sala b { font-size: 17px; letter-spacing: 0.08em; margin-left: 6px; }
+  .eyebrow {
+    font-family: "Spline Sans Mono", monospace; font-size: 11px; letter-spacing: 0.12em;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 8px; text-align: center;
+  }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 28px; max-width: 420px; width: 100%; text-align: center; box-shadow: 0 12px 32px rgba(0,0,0,0.35); }
+  input:not([type="checkbox"]) {
+    width: 100%; padding: 14px; font-size: 18px; border-radius: 10px;
+    border: 1px solid var(--line-soft); background: var(--abyss); color: var(--ink);
+    margin: 12px 0; font-family: "Inter Tight", sans-serif;
+  }
+  input:not([type="checkbox"]):focus { outline: none; border-color: var(--gold-dim); }
+  input[type="checkbox"] { width: 16px; height: 16px; flex: none; margin: 0; accent-color: var(--gold); }
+  .btn { width: 100%; font-weight: 600; font-size: 17px; background: var(--gold); color: var(--void); border: none; border-radius: 10px; padding: 16px; cursor: pointer; transition: background 0.15s ease; }
+  .btn:hover:not(:disabled) { background: var(--gold-bright); }
+  .btn:disabled { background: var(--line); color: var(--ink-faint); }
+  .puntos-actuales { font-family: "Spline Sans Mono", monospace; color: var(--gold-bright); font-size: 14px; }
+  .pregunta-texto { font-family: "Fraunces", serif; font-size: 19px; line-height: 1.3; margin: 12px 0; color: var(--ink); }
+  .pregunta-imagen { max-width: 72%; margin: 8px auto; display: block; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); line-height: 0; }
+  .pregunta-imagen svg, .pregunta-imagen img { width: 100%; height: auto; display: block; max-height: 220px; object-fit: contain; }
+  .opciones-col { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+  .opcion-btn { padding: 20px 16px; border-radius: 12px; font-size: 16px; font-weight: 500; border: none; color: #08090c; cursor: pointer; text-align: left; transition: transform 0.1s ease, opacity 0.15s ease; }
+  .opcion-btn:active:not(:disabled) { transform: scale(0.98); }
+  .opcion-btn:nth-child(1) { background: var(--cyan); }
+  .opcion-btn:nth-child(2) { background: var(--rose); }
+  .opcion-btn:nth-child(3) { background: var(--grass); }
+  .opcion-btn:nth-child(4) { background: var(--violet); }
+  .opcion-btn:disabled { opacity: 0.4; }
+  .opcion-btn.elegida { outline: 4px solid var(--gold-bright); }
+  .estado-msg { color: var(--ink-soft); margin-top: 20px; }
+  .resultado-correcta, .resultado-incorrecta {
+    display: inline-flex; align-items: center; gap: 8px; font-family: "Fraunces", serif;
+    font-weight: 700; font-size: 21px; padding: 12px 22px; border-radius: 999px; margin: 4px 0;
+  }
+  .resultado-correcta { background: rgba(122,201,122,0.16); color: var(--good); border: 2px solid var(--good); }
+  .resultado-incorrecta { background: rgba(201,107,107,0.16); color: var(--bad); border: 2px solid var(--bad); }
+
+  .opcion-btn { position: relative; }
+  .opcion-btn.opcion-correcta { outline: 4px solid var(--good); animation: pulso-correcta 0.6s ease; }
+  .opcion-btn.opcion-correcta::after { content: "\2713"; position: absolute; top: 6px; right: 12px; font-size: 20px; font-weight: 800; color: #0a2b12; }
+  .opcion-btn.opcion-incorrecta { outline: 4px solid var(--bad); opacity: 0.7; animation: sacude-incorrecta 0.45s ease; }
+  .opcion-btn.opcion-incorrecta::after { content: "\2717"; position: absolute; top: 6px; right: 12px; font-size: 20px; font-weight: 800; color: #2b0a08; }
+  @keyframes pulso-correcta {
+    0% { transform: scale(1); } 40% { transform: scale(1.06); box-shadow: 0 0 0 8px rgba(122,201,122,0.25); } 100% { transform: scale(1); }
+  }
+  @keyframes sacude-incorrecta {
+    0%, 100% { transform: translateX(0); } 20% { transform: translateX(-7px); }
+    40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); }
+  }
+
+  @keyframes reveal-circular {
+    from { clip-path: circle(0% at 50% 38%); opacity: 0; }
+    to   { clip-path: circle(150% at 50% 38%); opacity: 1; }
+  }
+  .animar-entrada { animation: reveal-circular 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+  #cronometro-estudiante.urgente { color: var(--bad); }
+  .estrella-confeti { position: absolute; top: -5%; font-size: 20px; animation: caer-confeti linear forwards; }
+  @keyframes caer-confeti {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
+  }
+
+  /* Veredicto grande estilo "programa de TV" para respuestas incorrectas */
+  .capa-veredicto {
+    position: fixed; inset: 0; z-index: 80; pointer-events: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .capa-veredicto.mostrar-mal { animation: flash-mal 0.7s ease forwards; }
+  @keyframes flash-mal {
+    0% { background: rgba(201,107,107,0); }
+    18% { background: rgba(201,107,107,0.5); }
+    100% { background: rgba(201,107,107,0); }
+  }
+  .marca-x {
+    position: relative; width: 46vw; height: 46vw; max-width: 220px; max-height: 220px;
+    opacity: 0; transform: scale(0.3) rotate(-18deg);
+  }
+  .marca-x.animar { animation: pop-x 0.75s cubic-bezier(.3,1.7,.4,1) forwards; }
+  .marca-x::before, .marca-x::after {
+    content: ""; position: absolute; top: 50%; left: 50%; width: 100%; height: 15%;
+    background: var(--bad); border-radius: 999px; box-shadow: 0 0 30px rgba(201,107,107,0.75);
+  }
+  .marca-x::before { transform: translate(-50%, -50%) rotate(45deg); }
+  .marca-x::after { transform: translate(-50%, -50%) rotate(-45deg); }
+  @keyframes pop-x {
+    0% { opacity: 0; transform: scale(0.3) rotate(-18deg); }
+    55% { opacity: 1; transform: scale(1.2) rotate(5deg); }
+    75% { transform: scale(0.9) rotate(0deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  /* Responsive: en pantallas más anchas (PC), tarjetas más amplias */
+  @media (min-width: 700px) {
+    .card { max-width: 560px; padding: 36px; }
+    .card.card-ancha { max-width: 680px; }
+  }
+
+  .btn-modo {
+    width: 100%; padding: 20px; border-radius: 12px; border: 1px solid var(--line-soft);
+    background: var(--abyss); color: var(--ink); font-size: 16px; font-weight: 600;
+    cursor: pointer; margin-bottom: 14px; text-align: left; transition: border-color 0.15s ease;
+  }
+  .btn-modo small { display:block; color: var(--ink-soft); font-weight: 400; font-size: 13px; margin-top: 4px; }
+  .btn-modo:hover { border-color: var(--gold); }
+  .link-volver { color: var(--ink-soft); font-size: 13px; cursor: pointer; display: inline-block; margin-bottom: 12px; }
+  .link-volver:hover { color: var(--gold-bright); }
+
+  .lista-bancos-repaso { text-align: left; margin: 14px 0; border: 1px solid var(--line-soft); border-radius: 10px; padding: 4px 12px; max-height: 260px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--abyss); }
+  .banco-item-repaso { display: flex; align-items: center; gap: 10px; padding: 9px 0; font-size: 14px; border-bottom: 1px solid var(--line-soft); }
+  .banco-item-repaso:last-child { border-bottom: none; }
+  .banco-item-repaso .conteo { color: var(--ink-faint); font-size: 12px; }
+  .campo-config-repaso { text-align: left; margin: 14px 0; }
+  .campo-config-repaso label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+
+  .btn-secundario-repaso {
+    background: transparent; border: 1px solid var(--line-soft); color: var(--ink-soft);
+    font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 8px;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .btn-secundario-repaso:hover { border-color: var(--gold-dim); color: var(--gold-bright); }
+
+  .avatar-espera {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--gold-dim);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
+    font-family: "Fraunces", serif; font-size: 24px; font-weight: 700; color: var(--void);
+  }
+  .nombre-espera { font-family: "Fraunces", serif; font-size: 20px; margin: 0 0 6px; }
+  .puntos-espera { color: var(--gold-bright); }
+  .dots-espera { display: inline-flex; gap: 4px; margin-left: 4px; }
+  .dots-espera span {
+    width: 5px; height: 5px; border-radius: 50%; background: var(--gold);
+    animation: dot-pulso 1.2s ease-in-out infinite;
+  }
+  .dots-espera span:nth-child(2) { animation-delay: 0.2s; }
+  .dots-espera span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dot-pulso {
+    0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="barra-sala">Sala: <b id="barra-codigo"></b></div>
+  <button id="btn-musica-est" style="position:fixed; top:10px; right:12px; z-index:65; background:var(--panel); border:1px solid var(--line-soft); color:var(--gold-bright); border-radius:8px; padding:6px 12px; cursor:pointer; font-size:15px;">🔊 Música</button>
+  <div class="eyebrow"><span id="link-cambiar-rol-est" style="cursor:pointer; color:var(--ink-soft);">← Cambiar de rol</span> · OMAI-Quiz · Ajedrez</div>
+
+  <div class="card" id="vista-modo-inicial">
+    <p>¿Qué quieres hacer?</p>
+    <button class="btn-modo" id="btn-elegir-sala">
+      🏫 Unirme a una sala con mi profesor
+      <small>Necesitas el código que te dé el docente.</small>
+    </button>
+    <button class="btn-modo" id="btn-elegir-repaso">
+      📚 Modo de repaso individual
+      <small>Practica solo, a tu ritmo, eligiendo tema, tiempo y número de preguntas.</small>
+    </button>
+  </div>
+
+  <div class="card" id="vista-unirse" style="display:none;">
+    <div class="link-volver" id="link-volver-unirse">← Volver</div>
+    <p>Ingresa el código de la sala y tu nombre. Puedes entrar en cualquier momento, aunque el quiz ya haya empezado.</p>
+    <input id="input-codigo" placeholder="Código (ej. AB12)" maxlength="4" style="text-transform:uppercase" />
+    <input id="input-nombre" placeholder="Tu nombre" maxlength="24" />
+    <button class="btn" id="btn-unirse">Entrar</button>
+    <p class="estado-msg" id="mensaje-error"></p>
+  </div>
+
+  <div class="card" id="vista-esperando" style="display:none;">
+    <div class="avatar-espera" id="avatar-espera">?</div>
+    <p class="nombre-espera">¡Listo, <span id="nombre-mostrado"></span>!</p>
+    <p class="estado-msg">Esperando a que el profesor inicie el quiz<span class="dots-espera"><span></span><span></span><span></span></span></p>
+  </div>
+
+  <div class="card" id="vista-pregunta" style="display:none;">
+    <div class="eyebrow" id="contador-pregunta"></div>
+    <div id="cronometro-estudiante" style="font-family:'Spline Sans Mono',monospace; font-size:32px; color:var(--gold-bright); margin-bottom:8px;">20</div>
+    <div class="pregunta-texto" id="texto-pregunta"></div>
+    <div id="pregunta-imagen" class="pregunta-imagen" style="display:none;"></div>
+    <div class="opciones-col" id="opciones-col"></div>
+  </div>
+
+  <div class="card" id="vista-resultado" style="display:none;">
+    <div id="resultado-texto"></div>
+    <p class="puntos-actuales" id="puntos-totales"></p>
+    <p class="estado-msg">Esperando la siguiente pregunta…</p>
+  </div>
+
+  <div id="capa-confeti" style="position:fixed; inset:0; pointer-events:none; z-index:70; overflow:hidden; display:none;"></div>
+  <div id="capa-veredicto" class="capa-veredicto" style="display:none;"><div id="marca-veredicto"></div></div>
+
+  <div class="card" id="vista-final" style="display:none;">
+    <h2 style="font-family:'Fraunces',serif;color:var(--gold-bright);">Quiz terminado</h2>
+    <div id="mi-animal-final" style="font-size:48px; margin-bottom:8px;"></div>
+    <p class="puntos-actuales" id="puntos-finales"></p>
+    <p id="posicion-final" style="color:var(--ink-soft)"></p>
+    <button class="btn" id="btn-volver-inicio-final" style="margin-top:16px;">Volver al inicio</button>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-config" style="display:none;">
+    <div class="link-volver" id="link-volver-repaso">← Volver</div>
+    <p><b>Modo de repaso individual</b></p>
+    <p style="color:var(--ink-soft); font-size:14px;">Elige de qué temas quieres practicar.</p>
+    <div class="lista-bancos-repaso" id="lista-bancos-repaso">Cargando bancos…</div>
+
+    <div class="campo-config-repaso">
+      <label for="input-num-preguntas-repaso">Número de preguntas (máximo 20)</label>
+      <input type="number" id="input-num-preguntas-repaso" min="1" max="20" value="10" />
+    </div>
+    <div class="campo-config-repaso">
+      <label for="input-tiempo-repaso">Tiempo por pregunta (segundos)</label>
+      <input type="number" id="input-tiempo-repaso" min="5" value="20" />
+    </div>
+
+    <button class="btn" id="btn-comenzar-repaso">Comenzar repaso</button>
+    <p class="estado-msg" id="mensaje-error-repaso"></p>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-pregunta" style="display:none;">
+    <div class="eyebrow" id="contador-repaso"></div>
+    <div id="cronometro-repaso" style="font-family:'Spline Sans Mono',monospace; font-size:32px; color:var(--gold-bright); margin-bottom:8px;">20</div>
+    <div class="pregunta-texto" id="texto-pregunta-repaso"></div>
+    <div id="pregunta-imagen-repaso" class="pregunta-imagen" style="display:none;"></div>
+    <div class="opciones-col" id="opciones-col-repaso"></div>
+    <button class="btn-secundario-repaso" id="btn-terminar-repaso">Terminar repaso ya</button>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-resultado" style="display:none;">
+    <div id="resultado-texto-repaso"></div>
+    <p class="puntos-actuales" id="marcador-repaso"></p>
+    <button class="btn" id="btn-siguiente-repaso">Siguiente pregunta</button>
+    <button class="btn-secundario-repaso" id="btn-terminar-repaso2">Terminar repaso ya</button>
+  </div>
+
+  <div class="card card-ancha" id="vista-repaso-final" style="display:none;">
+    <h2 style="font-family:'Fraunces',serif;color:var(--gold-bright);">Repaso terminado</h2>
+    <p class="puntos-actuales" id="resumen-repaso-final" style="font-size:22px;"></p>
+    <button class="btn" id="btn-repetir-repaso">Repetir con la misma configuración</button>
+    <button class="btn-secundario-repaso" id="btn-otro-tema-repaso">Elegir otro tema</button>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { ESTADOS, unirseASala, enviarRespuesta, escucharSala, ranking } from "./omai-quiz-app.js";
+  import { BANCOS_DEFECTO } from "./omai-quiz-ajedrez-bancos-default.js";
+  import { renderTableroSVG } from "./fen-render-web.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
+    authDomain: "omai-quiz.firebaseapp.com",
+    databaseURL: "https://omai-quiz-default-rtdb.firebaseio.com",
+    projectId: "omai-quiz",
+    storageBucket: "omai-quiz.firebasestorage.app",
+    messagingSenderId: "44663231333",
+    appId: "1:44663231333:web:4467c56d21bca45a82878c",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  let codigoSala = null;
+  let jugadorId = null;
+  let idxPreguntaMostrada = -1;
+  let inicioPreguntaServidor = null;
+  let yaRespondio = false;
+
+  const params = new URLSearchParams(location.search);
+  if (params.get("sala")) {
+    document.getElementById("input-codigo").value = params.get("sala").toUpperCase();
+  }
+
+  function renderizarKatex(el) {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(el, {
+        delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }],
+        throwOnError: false,
+      });
+    }
+  }
+
+  // ---------- Cronómetro local + beep de alerta (últimos 10s) ----------
+  let audioCtx = null;
+  let timerInterval = null;
+  let salaActualCache = null;
+  let ultimoSegundoConBeep = null;
+
+  function asegurarAudioContext() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+  }
+
+  function reproducirBeep(urgente) {
+    asegurarAudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "square";
+    osc.frequency.value = urgente ? 880 : 660;
+    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.12);
+  }
+
+  // ---------- Música de fondo por fases (igual que el docente, para que suene para todos) ----------
+  let musicaActiva = true;
+  let musicaTimer = null;
+  let pasoActual = 0;
+  let faseMusicalActual = null;
+  const PISTAS = {
+    arpegio: { notas: [261.63, 329.63, 392.00, 329.63, 261.63, 392.00, 440.00, 392.00], tempo: 260, onda: "triangle" },
+    lobby: { notas: [196.00, 246.94, 293.66, 246.94], tempo: 480, onda: "sine" },
+    final: { notas: [392.00, 493.88, 587.33, 493.88, 392.00, 587.33, 659.25, 587.33], tempo: 150, onda: "square" },
+  };
+
+  function tocarNota(freq, duracion, onda) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = onda;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.13, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duracion);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duracion);
+  }
+  function iniciarMusica(clavePista) {
+    clearInterval(musicaTimer);
+    const p = PISTAS[clavePista];
+    musicaTimer = setInterval(() => {
+      tocarNota(p.notas[pasoActual % p.notas.length], p.tempo / 1000 * 1.3, p.onda);
+      pasoActual++;
+    }, p.tempo);
+  }
+  function actualizarFaseMusical(estado) {
+    const nuevaFase = estado === ESTADOS.TERMINADO ? "final" : (estado === ESTADOS.ESPERANDO ? "lobby" : "juego");
+    if (nuevaFase === faseMusicalActual) return;
+    faseMusicalActual = nuevaFase;
+    if (!musicaActiva) return;
+    iniciarMusica(nuevaFase === "juego" ? "arpegio" : nuevaFase);
+  }
+  document.getElementById("btn-musica-est").onclick = () => {
+    asegurarAudioContext();
+    musicaActiva = !musicaActiva;
+    document.getElementById("btn-musica-est").textContent = musicaActiva ? "🔊 Música" : "🔈 Música";
+    if (musicaActiva && faseMusicalActual) iniciarMusica(faseMusicalActual === "juego" ? "arpegio" : faseMusicalActual);
+    else clearInterval(musicaTimer);
+  };
+
+  // ---------- Fanfarria de bongos al iniciar (idéntica a la del docente) ----------
+  function ruidoBlanco(duracionSeg) {
+    const tam = Math.floor(audioCtx.sampleRate * duracionSeg);
+    const buffer = audioCtx.createBuffer(1, tam, audioCtx.sampleRate);
+    const datos = buffer.getChannelData(0);
+    for (let i = 0; i < tam; i++) datos[i] = Math.random() * 2 - 1;
+    return buffer;
+  }
+  function golpeBongo(offsetSeg, frecuenciaFiltro) {
+    const fuente = audioCtx.createBufferSource();
+    fuente.buffer = ruidoBlanco(0.15);
+    const filtro = audioCtx.createBiquadFilter();
+    filtro.type = "bandpass";
+    filtro.frequency.value = frecuenciaFiltro;
+    filtro.Q.value = 1.1;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.35, audioCtx.currentTime + offsetSeg);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + offsetSeg + 0.16);
+    fuente.connect(filtro).connect(gain).connect(audioCtx.destination);
+    fuente.start(audioCtx.currentTime + offsetSeg);
+  }
+  function reproducirFanfarreInicio() {
+    if (!musicaActiva) return;
+    asegurarAudioContext();
+    [[0, 180], [0.12, 340], [0.24, 180], [0.36, 340], [0.44, 340], [0.56, 500]]
+      .forEach(([t, f]) => golpeBongo(t, f));
+    [523.25, 659.25, 783.99, 1046.50].forEach((freq) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.001, audioCtx.currentTime + 0.7);
+      gain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 0.76);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.6);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime + 0.7);
+      osc.stop(audioCtx.currentTime + 1.6);
+    });
+  }
+
+  // ---------- Reacciones estilo "programa de TV" al responder (sonido + confeti / X grande) ----------
+  function reproducirSonidoCorrecto() {
+    asegurarAudioContext();
+    [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+      const t = audioCtx.currentTime + i * 0.085;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.linearRampToValueAtTime(0.16, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.32);
+    });
+  }
+
+  function reproducirSonidoIncorrecto() {
+    asegurarAudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(65, audioCtx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.45);
+  }
+
+  function estallarConfetiCorrecto() {
+    const capa = document.getElementById("capa-confeti");
+    capa.style.display = "block";
+    for (let i = 0; i < 28; i++) {
+      const estrella = document.createElement("div");
+      estrella.className = "estrella-confeti";
+      estrella.textContent = EMOJIS_CONFETI_EST[Math.floor(Math.random() * EMOJIS_CONFETI_EST.length)];
+      estrella.style.left = `${Math.random() * 100}%`;
+      const duracion = 1.3 + Math.random() * 1.1;
+      estrella.style.animationDuration = `${duracion}s`;
+      estrella.style.fontSize = `${14 + Math.random() * 14}px`;
+      capa.appendChild(estrella);
+      setTimeout(() => estrella.remove(), duracion * 1000 + 200);
+    }
+    setTimeout(() => { if (!confetiEstudianteActivo) capa.style.display = "none"; }, 2000);
+  }
+
+  function mostrarMarcaIncorrecta() {
+    const capa = document.getElementById("capa-veredicto");
+    const marca = document.getElementById("marca-veredicto");
+    capa.classList.remove("mostrar-mal");
+    marca.innerHTML = '<div class="marca-x"></div>';
+    capa.style.display = "flex";
+    void capa.offsetWidth;
+    capa.classList.add("mostrar-mal");
+    requestAnimationFrame(() => marca.querySelector(".marca-x").classList.add("animar"));
+    setTimeout(() => {
+      capa.style.display = "none";
+      capa.classList.remove("mostrar-mal");
+      marca.innerHTML = "";
+    }, 900);
+  }
+
+  function reaccionarARespuesta(esCorrecta) {
+    if (esCorrecta) {
+      reproducirSonidoCorrecto();
+      estallarConfetiCorrecto();
+    } else {
+      reproducirSonidoIncorrecto();
+      mostrarMarcaIncorrecta();
+    }
+  }
+
+  let estadoAnteriorEst = null;
+
+  function actualizarCronometroEstudiante() {
+    if (!salaActualCache || salaActualCache.estado !== ESTADOS.PREGUNTA_ACTIVA) return;
+    const limite = (salaActualCache.tiempoLimiteBase || 20) + (salaActualCache.tiempoExtra || 0);
+    const transcurrido = (Date.now() - inicioPreguntaServidor) / 1000;
+    const restante = Math.max(0, Math.ceil(limite - transcurrido));
+    const el = document.getElementById("cronometro-estudiante");
+    if (el) {
+      el.textContent = restante;
+      el.classList.toggle("urgente", restante <= 10);
+    }
+    if (restante <= 10 && restante >= 1 && restante !== ultimoSegundoConBeep) {
+      ultimoSegundoConBeep = restante;
+      reproducirBeep(restante <= 3);
+    }
+    if (restante <= 0) clearInterval(timerInterval);
+  }
+
+  document.getElementById("btn-unirse").onclick = async () => {
+    const codigo = document.getElementById("input-codigo").value.trim().toUpperCase();
+    const nombre = document.getElementById("input-nombre").value.trim();
+    const errorEl = document.getElementById("mensaje-error");
+    errorEl.textContent = "";
+    if (!codigo || !nombre) { errorEl.textContent = "Completa el código y tu nombre."; return; }
+    asegurarAudioContext();
+    try {
+      jugadorId = await unirseASala(db, codigo, nombre);
+      codigoSala = codigo;
+      document.getElementById("nombre-mostrado").textContent = nombre;
+      document.getElementById("avatar-espera").textContent = nombre.trim().charAt(0).toUpperCase() || "?";
+      document.getElementById("barra-codigo").textContent = codigo;
+      document.getElementById("barra-sala").style.display = "flex";
+      mostrarVista("vista-esperando");
+      escucharSala(db, codigoSala, renderizar);
+      faseMusicalActual = "lobby";
+      if (musicaActiva) iniciarMusica("lobby");
+    } catch (e) {
+      errorEl.textContent = e.message;
+    }
+  };
+
+  function renderizar(sala) {
+    if (!sala) return;
+    salaActualCache = sala;
+    actualizarFaseMusical(sala.estado);
+    if (estadoAnteriorEst === ESTADOS.ESPERANDO && sala.estado === ESTADOS.PREGUNTA_ACTIVA) {
+      reproducirFanfarreInicio();
+    }
+    estadoAnteriorEst = sala.estado;
+    if (sala.estado === ESTADOS.PREGUNTA_ACTIVA) {
+      if (sala.preguntaActual !== idxPreguntaMostrada) {
+        idxPreguntaMostrada = sala.preguntaActual;
+        yaRespondio = false;
+        ultimoSegundoConBeep = null;
+        inicioPreguntaServidor = sala.inicioPregunta || Date.now();
+        mostrarPregunta(sala);
+        clearInterval(timerInterval);
+        timerInterval = setInterval(actualizarCronometroEstudiante, 250);
+      }
+      actualizarCronometroEstudiante();
+    } else {
+      clearInterval(timerInterval);
+    }
+    if (sala.estado === ESTADOS.RESULTADOS) mostrarResultado(sala);
+    if (sala.estado === ESTADOS.TERMINADO) {
+      const rankingFinal = ranking(sala);
+      const posicion = rankingFinal.findIndex((j) => j.id === jugadorId) + 1;
+      const yo = rankingFinal.find((j) => j.id === jugadorId);
+      document.getElementById("mi-animal-final").textContent = yo?.animal || "🎓";
+      document.getElementById("puntos-finales").textContent = `${yo?.puntos ?? 0} puntos`;
+      document.getElementById("posicion-final").textContent = posicion > 0 ? `Puesto ${posicion} de ${rankingFinal.length}` : "";
+      mostrarVista("vista-final");
+      mostrarConfetiEstudiante();
+    }
+  }
+
+  let ordenOpcionesActual = [0, 1, 2, 3];
+
+  function mezclarOrdenOpciones() {
+    const orden = [0, 1, 2, 3];
+    for (let i = orden.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [orden[i], orden[j]] = [orden[j], orden[i]];
+    }
+    return orden;
+  }
+
+  function mostrarPregunta(sala) {
+    mostrarVista("vista-pregunta");
+    animarEntradaTarjeta("vista-pregunta");
+    const p = sala.preguntas[sala.preguntaActual];
+    document.getElementById("contador-pregunta").textContent = `Pregunta ${(sala.indicesUsados || []).length} de ${sala.preguntas.length}`;
+    document.getElementById("texto-pregunta").textContent = p.texto;
+    const imgEl = document.getElementById("pregunta-imagen");
+    if (p.fen) {
+      imgEl.innerHTML = renderTableroSVG(p.fen, p.resaltar || [], p.flechas || []);
+      imgEl.style.display = "block";
+    } else if (p.imagen) {
+      imgEl.innerHTML = `<img src="${p.imagen}" alt="" />`;
+      imgEl.style.display = "block";
+    } else {
+      imgEl.innerHTML = "";
+      imgEl.style.display = "none";
+    }
+
+    // Cada estudiante ve las opciones en un orden aleatorio propio, para evitar copia.
+    ordenOpcionesActual = mezclarOrdenOpciones();
+
+    const cont = document.getElementById("opciones-col");
+    cont.innerHTML = "";
+    ordenOpcionesActual.forEach((indiceReal, posicionLocal) => {
+      const btn = document.createElement("button");
+      btn.className = "opcion-btn";
+      btn.textContent = p.opciones[indiceReal];
+      btn.onclick = () => responder(indiceReal, btn);
+      cont.appendChild(btn);
+    });
+    renderizarKatex(document.getElementById("vista-pregunta"));
+  }
+
+  async function responder(opcionIdx, btnEl) {
+    if (yaRespondio) return;
+    yaRespondio = true;
+    document.querySelectorAll(".opcion-btn").forEach((b) => (b.disabled = true));
+    btnEl.classList.add("elegida");
+    const tiempoSegundos = (Date.now() - inicioPreguntaServidor) / 1000;
+    try {
+      await enviarRespuesta(db, codigoSala, idxPreguntaMostrada, jugadorId, opcionIdx, tiempoSegundos);
+    } catch (e) { /* doble click: se ignora */ }
+  }
+
+  let ultimaPreguntaConReaccion = -1;
+  function mostrarResultado(sala) {
+    mostrarVista("vista-resultado");
+    const idx = sala.preguntaActual;
+    const respuestaJugador = (sala.respuestas[idx] || {})[jugadorId];
+    const pregunta = sala.preguntas[idx];
+    const el = document.getElementById("resultado-texto");
+
+    if (!respuestaJugador) {
+      el.innerHTML = `<span class="resultado-incorrecta">No respondiste a tiempo</span>`;
+    } else if (respuestaJugador.opcion === pregunta.correcta) {
+      el.innerHTML = `<span class="resultado-correcta">¡Correcto! ✓</span>`;
+    } else {
+      el.innerHTML = `<span class="resultado-incorrecta">Incorrecto ✗</span><br/><small>Tu respuesta: <span id="resp-tuya"></span></small><br/><small>La correcta era: <span id="resp-correcta"></span></small>`;
+    }
+    if (ultimaPreguntaConReaccion !== idx) {
+      ultimaPreguntaConReaccion = idx;
+      reaccionarARespuesta(!!respuestaJugador && respuestaJugador.opcion === pregunta.correcta);
+    }
+    const miPuntaje = (sala.jugadores[jugadorId] || {}).puntos || 0;
+    document.getElementById("puntos-totales").textContent = `${miPuntaje} puntos totales`;
+    renderizarKatex(el);
+    const spanCorrecta = document.getElementById("resp-correcta");
+    if (spanCorrecta) {
+      spanCorrecta.textContent = pregunta.opciones[pregunta.correcta];
+      renderizarKatex(spanCorrecta);
+    }
+    const spanTuya = document.getElementById("resp-tuya");
+    if (spanTuya && respuestaJugador) {
+      spanTuya.textContent = pregunta.opciones[respuestaJugador.opcion];
+      renderizarKatex(spanTuya);
+    }
+  }
+
+  function mostrarVista(id) {
+    ["vista-modo-inicial", "vista-unirse", "vista-esperando", "vista-pregunta", "vista-resultado", "vista-final",
+     "vista-repaso-config", "vista-repaso-pregunta", "vista-repaso-resultado", "vista-repaso-final"]
+      .forEach((v) => document.getElementById(v).style.display = v === id ? "block" : "none");
+  }
+
+  function animarEntradaTarjeta(id) {
+    const el = document.getElementById(id);
+    el.classList.remove("animar-entrada");
+    void el.offsetWidth; // fuerza reflow para poder repetir la animación en cada pregunta
+    el.classList.add("animar-entrada");
+  }
+
+  // ============================================================
+  // Selección de modo (sala con profesor vs. repaso individual)
+  // ============================================================
+  document.getElementById("btn-elegir-sala").onclick = () => mostrarVista("vista-unirse");
+  document.getElementById("btn-elegir-repaso").onclick = () => {
+    asegurarAudioContext();
+    mostrarVista("vista-repaso-config");
+    renderizarListaBancosRepaso();
+    faseMusicalActual = "lobby";
+    if (musicaActiva) iniciarMusica("lobby");
+  };
+  document.getElementById("link-volver-unirse").onclick = () => { clearInterval(musicaTimer); mostrarVista("vista-modo-inicial"); };
+  document.getElementById("link-volver-repaso").onclick = () => { clearInterval(musicaTimer); mostrarVista("vista-modo-inicial"); };
+  document.getElementById("link-cambiar-rol-est").onclick = () => {
+    if (confirm("¿Seguro que quieres salir y cambiar de rol?")) {
+      window.location.href = "index.html";
+    }
+  };
+  document.getElementById("btn-volver-inicio-final").onclick = () => { window.location.reload(); };
+
+  // ============================================================
+  // MODO DE REPASO INDIVIDUAL (100% local, sin necesitar sala ni profesor)
+  // ============================================================
+  let repasoPreguntas = [];
+  let repasoIndicesUsados = [];
+  let repasoIdxActual = -1;
+  let repasoTiempoBase = 20;
+  let repasoCorrectas = 0;
+  let repasoRespondidas = 0;
+  let repasoOrdenOpciones = [0, 1, 2, 3];
+  let repasoYaRespondio = false;
+  let repasoTimerInterval = null;
+  let repasoInicioPregunta = null;
+  let repasoUltimoSegundoBeep = null;
+  let repasoConfigUsada = null; // para "repetir con la misma configuración"
+
+  function renderizarListaBancosRepaso() {
+    const cont = document.getElementById("lista-bancos-repaso");
+    let html = `<div class="banco-item-repaso">
+      <input type="checkbox" id="chk-todos-repaso" checked />
+      <label for="chk-todos-repaso"><b>Seleccionar todos</b></label>
+    </div><hr style="border-color:var(--line-soft)"/>`;
+
+    const areasEnOrden = [];
+    const bancosPorArea = {};
+    BANCOS_DEFECTO.forEach((b, i) => {
+      const area = b.area || "Otros";
+      if (!bancosPorArea[area]) { bancosPorArea[area] = []; areasEnOrden.push(area); }
+      bancosPorArea[area].push({ ...b, idx: i });
+    });
+
+    areasEnOrden.forEach((area) => {
+      html += `<div style="margin-top:10px; margin-bottom:4px; font-family:'Spline Sans Mono',monospace; font-size:11px; letter-spacing:0.08em; color:var(--gold); text-transform:uppercase;">${area}</div>`;
+      bancosPorArea[area].forEach((b) => {
+        html += `<div class="banco-item-repaso">
+          <input type="checkbox" class="chk-banco-repaso" data-idx="${b.idx}" checked />
+          <label>${b.nombre} <span class="conteo">(${b.preguntas.length})</span></label>
+        </div>`;
+      });
+    });
+
+    cont.innerHTML = html;
+    document.getElementById("chk-todos-repaso").onclick = (e) => {
+      document.querySelectorAll(".chk-banco-repaso").forEach((c) => (c.checked = e.target.checked));
+    };
+  }
+
+  document.getElementById("input-num-preguntas-repaso").addEventListener("input", (e) => {
+    let v = parseInt(e.target.value, 10) || 1;
+    if (v > 20) v = 20;
+    if (v < 1) v = 1;
+    e.target.value = v;
+  });
+
+  function obtenerPreguntasCombinadasRepaso() {
+    const seleccionados = [...document.querySelectorAll(".chk-banco-repaso:checked")].map((c) => parseInt(c.dataset.idx, 10));
+    let combinado = [];
+    seleccionados.forEach((idx) => {
+      const area = BANCOS_DEFECTO[idx].area || "Otros";
+      combinado = combinado.concat(BANCOS_DEFECTO[idx].preguntas.map((p) => ({ ...p, area })));
+    });
+    return combinado;
+  }
+
+  function mezclarYTomarLocal(arreglo, n) {
+    const copia = [...arreglo];
+    for (let i = copia.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copia[i], copia[j]] = [copia[j], copia[i]];
+    }
+    return copia.slice(0, Math.min(n, copia.length));
+  }
+
+  document.getElementById("btn-comenzar-repaso").onclick = () => {
+    asegurarAudioContext();
+    const combinado = obtenerPreguntasCombinadasRepaso();
+    const errEl = document.getElementById("mensaje-error-repaso");
+    if (combinado.length === 0) {
+      errEl.textContent = "Selecciona al menos un tema.";
+      return;
+    }
+    errEl.textContent = "";
+    let n = parseInt(document.getElementById("input-num-preguntas-repaso").value, 10) || 10;
+    if (n > 20) n = 20;
+    repasoTiempoBase = parseInt(document.getElementById("input-tiempo-repaso").value, 10) || 20;
+    repasoConfigUsada = { combinado, n, tiempo: repasoTiempoBase };
+    iniciarRepasoConConfig(repasoConfigUsada);
+  };
+
+  function iniciarRepasoConConfig(cfg) {
+    repasoPreguntas = mezclarYTomarLocal(cfg.combinado, cfg.n);
+    repasoIndicesUsados = [];
+    repasoCorrectas = 0;
+    repasoRespondidas = 0;
+    repasoTiempoBase = cfg.tiempo;
+    faseMusicalActual = "juego";
+    if (musicaActiva) iniciarMusica("arpegio");
+    reproducirFanfarreInicio();
+    avanzarPreguntaRepasoAleatoria();
+  }
+
+  document.getElementById("btn-repetir-repaso").onclick = () => {
+    if (repasoConfigUsada) iniciarRepasoConConfig(repasoConfigUsada);
+  };
+  document.getElementById("btn-otro-tema-repaso").onclick = () => {
+    mostrarVista("vista-repaso-config");
+    faseMusicalActual = "lobby";
+    if (musicaActiva) iniciarMusica("lobby");
+  };
+
+  function candidatosRepaso() {
+    const candidatos = [];
+    for (let i = 0; i < repasoPreguntas.length; i++) if (!repasoIndicesUsados.includes(i)) candidatos.push(i);
+    return candidatos;
+  }
+
+  function avanzarPreguntaRepasoAleatoria() {
+    const candidatos = candidatosRepaso();
+    if (candidatos.length === 0) {
+      mostrarRepasoFinal();
+      return;
+    }
+    const elegido = candidatos[Math.floor(Math.random() * candidatos.length)];
+    activarPreguntaRepaso(elegido);
+  }
+
+  function activarPreguntaRepaso(idx) {
+    repasoIndicesUsados.push(idx);
+    repasoIdxActual = idx;
+    repasoYaRespondio = false;
+    repasoUltimoSegundoBeep = null;
+    repasoInicioPregunta = Date.now();
+    mostrarPreguntaRepaso();
+    clearInterval(repasoTimerInterval);
+    repasoTimerInterval = setInterval(actualizarCronometroRepaso, 250);
+  }
+
+  function mostrarPreguntaRepaso() {
+    mostrarVista("vista-repaso-pregunta");
+    animarEntradaTarjeta("vista-repaso-pregunta");
+    const p = repasoPreguntas[repasoIdxActual];
+    document.getElementById("contador-repaso").textContent =
+      (p.area ? p.area + " · " : "") + `Pregunta ${repasoIndicesUsados.length} de ${repasoPreguntas.length}`;
+    document.getElementById("texto-pregunta-repaso").textContent = p.texto;
+    const imgEl = document.getElementById("pregunta-imagen-repaso");
+    if (p.fen) {
+      imgEl.innerHTML = renderTableroSVG(p.fen, p.resaltar || [], p.flechas || []);
+      imgEl.style.display = "block";
+    } else if (p.imagen) {
+      imgEl.innerHTML = `<img src="${p.imagen}" alt="" />`;
+      imgEl.style.display = "block";
+    } else {
+      imgEl.innerHTML = "";
+      imgEl.style.display = "none";
+    }
+
+    repasoOrdenOpciones = mezclarOrdenOpciones();
+    const cont = document.getElementById("opciones-col-repaso");
+    cont.innerHTML = "";
+    repasoOrdenOpciones.forEach((indiceReal) => {
+      const btn = document.createElement("button");
+      btn.className = "opcion-btn";
+      btn.textContent = p.opciones[indiceReal];
+      btn.onclick = () => responderRepaso(indiceReal, btn);
+      cont.appendChild(btn);
+    });
+    renderizarKatex(document.getElementById("vista-repaso-pregunta"));
+  }
+
+  function actualizarCronometroRepaso() {
+    const transcurrido = (Date.now() - repasoInicioPregunta) / 1000;
+    const restante = Math.max(0, Math.ceil(repasoTiempoBase - transcurrido));
+    const el = document.getElementById("cronometro-repaso");
+    el.textContent = restante;
+    el.classList.toggle("urgente", restante <= 10);
+    if (restante <= 10 && restante >= 1 && restante !== repasoUltimoSegundoBeep) {
+      repasoUltimoSegundoBeep = restante;
+      reproducirBeep(restante <= 3);
+    }
+    if (restante <= 0 && !repasoYaRespondio) {
+      clearInterval(repasoTimerInterval);
+      mostrarResultadoRepaso(null); // se acabó el tiempo, sin respuesta
+    }
+  }
+
+  function responderRepaso(opcionIdx, btnEl) {
+    if (repasoYaRespondio) return;
+    repasoYaRespondio = true;
+    clearInterval(repasoTimerInterval);
+    const p = repasoPreguntas[repasoIdxActual];
+    const botones = document.querySelectorAll("#opciones-col-repaso .opcion-btn");
+    botones.forEach((b, i) => {
+      b.disabled = true;
+      if (repasoOrdenOpciones[i] === p.correcta) b.classList.add("opcion-correcta");
+    });
+    if (opcionIdx === p.correcta) {
+      btnEl.classList.add("elegida");
+    } else {
+      btnEl.classList.add("opcion-incorrecta");
+    }
+    reaccionarARespuesta(opcionIdx === p.correcta);
+    setTimeout(() => mostrarResultadoRepaso(opcionIdx), 650);
+  }
+
+  function mostrarResultadoRepaso(opcionElegida) {
+    mostrarVista("vista-repaso-resultado");
+    repasoRespondidas++;
+    const p = repasoPreguntas[repasoIdxActual];
+    const el = document.getElementById("resultado-texto-repaso");
+    if (opcionElegida === null) {
+      reaccionarARespuesta(false);
+      el.innerHTML = `<span class="resultado-incorrecta">Se acabó el tiempo</span><br/><small>La correcta era: <span id="resp-correcta-repaso"></span></small>`;
+    } else if (opcionElegida === p.correcta) {
+      repasoCorrectas++;
+      el.innerHTML = `<span class="resultado-correcta">¡Correcto! ✓</span>`;
+    } else {
+      el.innerHTML = `<span class="resultado-incorrecta">Incorrecto ✗</span><br/><small>Tu respuesta: <span id="resp-tuya-repaso"></span></small><br/><small>La correcta era: <span id="resp-correcta-repaso"></span></small>`;
+    }
+    document.getElementById("marcador-repaso").textContent = `${repasoCorrectas} de ${repasoRespondidas} correctas`;
+    renderizarKatex(el);
+    const spanCorrecta = document.getElementById("resp-correcta-repaso");
+    if (spanCorrecta) { spanCorrecta.textContent = p.opciones[p.correcta]; renderizarKatex(spanCorrecta); }
+    const spanTuya = document.getElementById("resp-tuya-repaso");
+    if (spanTuya && opcionElegida !== null) { spanTuya.textContent = p.opciones[opcionElegida]; renderizarKatex(spanTuya); }
+
+    const esUltima = candidatosRepaso().length === 0;
+    document.getElementById("btn-siguiente-repaso").textContent = esUltima ? "Ver resumen final" : "Siguiente pregunta";
+  }
+
+  document.getElementById("btn-siguiente-repaso").onclick = () => avanzarPreguntaRepasoAleatoria();
+  document.getElementById("btn-terminar-repaso").onclick = () => mostrarRepasoFinal();
+  document.getElementById("btn-terminar-repaso2").onclick = () => mostrarRepasoFinal();
+
+  function mostrarRepasoFinal() {
+    clearInterval(repasoTimerInterval);
+    mostrarVista("vista-repaso-final");
+    document.getElementById("resumen-repaso-final").textContent = `${repasoCorrectas} de ${repasoRespondidas} correctas`;
+    faseMusicalActual = "final";
+    if (musicaActiva) iniciarMusica("final");
+    mostrarConfetiEstudiante();
+  }
+
+  let confetiEstudianteActivo = false;
+  const EMOJIS_CONFETI_EST = ["⭐", "✨", "🌟", "🎉"];
+  function mostrarConfetiEstudiante() {
+    if (confetiEstudianteActivo) return;
+    confetiEstudianteActivo = true;
+    const capa = document.getElementById("capa-confeti");
+    capa.style.display = "block";
+    const intervalo = setInterval(() => {
+      const estrella = document.createElement("div");
+      estrella.className = "estrella-confeti";
+      estrella.textContent = EMOJIS_CONFETI_EST[Math.floor(Math.random() * EMOJIS_CONFETI_EST.length)];
+      estrella.style.left = `${Math.random() * 100}%`;
+      const duracion = 3 + Math.random() * 2;
+      estrella.style.animationDuration = `${duracion}s`;
+      estrella.style.fontSize = `${14 + Math.random() * 14}px`;
+      capa.appendChild(estrella);
+      setTimeout(() => estrella.remove(), duracion * 1000 + 200);
+    }, 200);
+    setTimeout(() => clearInterval(intervalo), 8000); // celebración breve, no infinita en el celular
+  }
+</script>
+</body>
+</html>

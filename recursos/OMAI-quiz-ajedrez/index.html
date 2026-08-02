@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>OMAI-Quiz Ajedrez</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --void: #08090c; --panel: #171a22;
+    --gold: #c9a04d; --gold-bright: #e8c273; --gold-dim: #7a6438;
+    --grass: #7ac97a;
+    --line: #2a2f3b;
+    --ink: #f1f2f6; --ink-soft: #a7acb9;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; height: 100%; background: var(--void); color: var(--ink);
+    font-family: "Inter Tight", sans-serif;
+  }
+  body {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 24px; padding-top: env(safe-area-inset-top, 24px);
+    padding-bottom: env(safe-area-inset-bottom, 24px);
+  }
+  .tablero-motivo {
+    position: fixed; inset: 0; opacity: 0.05; z-index: 0; pointer-events: none;
+    background-image: linear-gradient(45deg, var(--gold) 25%, transparent 25%),
+                       linear-gradient(-45deg, var(--gold) 25%, transparent 25%);
+    background-size: 40px 40px;
+  }
+  .marca { text-align: center; margin-bottom: 32px; position: relative; z-index: 1; }
+  .marca .corona { font-size: 40px; margin-bottom: 8px; }
+  .marca .eyebrow { font-family: "Spline Sans Mono", monospace; font-size: 11px; letter-spacing: 0.16em; color: var(--gold); text-transform: uppercase; }
+  .marca h2 { font-family: "Fraunces", serif; font-size: 26px; margin: 6px 0 0; font-weight: 700; }
+
+  a.tarjeta-rol {
+    display: block; text-decoration: none; color: inherit; position: relative; z-index: 1;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 18px;
+    padding: 22px; margin-bottom: 14px; overflow: hidden;
+  }
+  a.tarjeta-rol.docente { border-color: var(--gold-dim); }
+  a.tarjeta-rol .tag {
+    display: inline-block; font-family: "Spline Sans Mono", monospace; font-size: 10px;
+    letter-spacing: 0.08em; padding: 3px 8px; border-radius: 6px; margin-bottom: 10px;
+  }
+  .tag.libre { background: rgba(122,201,122,0.15); color: var(--grass); }
+  .tag.pro { background: rgba(201,160,77,0.18); color: var(--gold-bright); }
+  a.tarjeta-rol h3 { font-family: "Fraunces", serif; font-size: 20px; margin: 0 0 4px; }
+  a.tarjeta-rol p { color: var(--ink-soft); font-size: 13px; margin: 0; line-height: 1.5; }
+</style>
+</head>
+<body>
+  <div class="tablero-motivo"></div>
+  <div class="marca">
+    <div class="corona">&#9822;</div>
+    <div class="eyebrow">OMAI &middot; Ajedrez</div>
+    <h2>&iquest;Qui&eacute;n eres hoy?</h2>
+  </div>
+
+  <a class="tarjeta-rol" href="index-estudiante.html">
+    <span class="tag libre">Siempre gratis</span>
+    <h3>Soy estudiante</h3>
+    <p>&Uacute;nete a una sala con el c&oacute;digo de tu docente y compite en vivo.</p>
+  </a>
+
+  <a class="tarjeta-rol docente" href="index-docente.html">
+    <span class="tag pro">3 salas/mes gratis</span>
+    <h3>Soy docente</h3>
+    <p>Crea salas, arma tus bancos de preguntas y sigue el progreso de tu clase.</p>
+  </a>
+</body>
+</html>
