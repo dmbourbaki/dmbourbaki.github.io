@@ -11,7 +11,10 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-  background:var(--wine-deep);
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(212,175,92,.05), transparent 55%),
+    radial-gradient(ellipse at 85% 100%, rgba(212,175,92,.04), transparent 55%),
+    var(--wine-deep);
   color:var(--ink);
   font-family:'Lora',serif;
   min-height:100vh;
@@ -32,6 +35,26 @@ body{
   letter-spacing:.05em;
 }
 .back-nav a:hover{ text-decoration:underline; }
+
+/* ── vinyl groove divider ──────────────────────── */
+.groove-divider{
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  margin:8px auto 30px;
+  color:var(--gold-bright);
+  opacity:.75;
+}
+.groove-divider::before,
+.groove-divider::after{
+  content:"";
+  height:1px; width:70px;
+  background:linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.groove-divider .disc{
+  width:22px;height:22px;border-radius:50%;
+  background:repeating-radial-gradient(circle at center, #1c1c1c 0 1.4px, #2a2a2a 2px 3.4px);
+  box-shadow:0 0 0 2px var(--gold-bright), inset 0 0 0 6px var(--wine-deep);
+  flex:none;
+}
 
 /* ── cover / book header ───────────────────────── */
 header.cover{
@@ -86,13 +109,25 @@ header.artist-hero{
     radial-gradient(ellipse at 50% -10%, rgba(212,175,92,.16), transparent 60%),
     var(--wine-deep);
   border-bottom:4px double var(--gold);
+  position:relative;
+  overflow:hidden;
 }
+header.artist-hero::before,
+header.artist-hero::after{
+  content:"♫";
+  position:absolute; top:18px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.6rem;
+  color:rgba(212,175,92,.14);
+}
+header.artist-hero::before{ left:6%; transform:rotate(-12deg); }
+header.artist-hero::after{ right:6%; transform:rotate(12deg); }
 .portrait{
   width:150px;height:150px;border-radius:50%;
   margin:0 auto 22px;
   background:
     repeating-radial-gradient(circle at center, #111 0 2px, #1c1c1c 3px 6px);
-  box-shadow:0 8px 26px rgba(0,0,0,.45), inset 0 0 0 3px #000;
+  box-shadow:0 8px 26px rgba(0,0,0,.45), inset 0 0 0 3px #000, 0 0 0 4px var(--gold-bright);
   position:relative;
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
@@ -132,7 +167,7 @@ header.artist-hero .tagline{
   margin-top:14px;
 }
 
-main{max-width:760px;margin:0 auto;padding:10px 20px 80px}
+main{max-width:1080px;margin:0 auto;padding:10px 24px 80px}
 
 /* ── book index: artist cards ──────────────────── */
 .artist-grid{
@@ -142,7 +177,9 @@ main{max-width:760px;margin:0 auto;padding:10px 20px 80px}
   margin:40px 0;
 }
 .artist-card{
-  background:var(--paper);
+  background:
+    radial-gradient(circle at 90% 10%, rgba(74,22,32,.05), transparent 45%),
+    var(--paper);
   padding:28px 24px;
   text-align:center;
   box-shadow:0 14px 32px rgba(0,0,0,.35);
@@ -152,6 +189,12 @@ main{max-width:760px;margin:0 auto;padding:10px 20px 80px}
   display:block;
   transition:transform .25s ease;
   position:relative;
+}
+.artist-card::before{
+  content:"";
+  position:absolute; inset:6px;
+  border:1px solid rgba(164,86,74,.25);
+  pointer-events:none;
 }
 .artist-card:hover{ transform:translateY(-4px); }
 .artist-card .vinyl-mini{
@@ -191,82 +234,127 @@ main{max-width:760px;margin:0 auto;padding:10px 20px 80px}
 
 /* ── each song / content entry ─────────────────── */
 .entry{
-  background:var(--paper);
+  background:
+    repeating-linear-gradient(0deg, rgba(90,60,30,.025) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at 100% 0%, rgba(74,22,32,.05), transparent 55%),
+    var(--paper);
   margin:36px 0;
-  padding:34px 30px 30px;
+  padding:46px 64px 40px;
   position:relative;
-  box-shadow:0 18px 40px rgba(0,0,0,.35);
-  border:1px solid rgba(90,60,30,.15);
+  box-shadow:0 18px 44px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.25);
+  border:1px solid rgba(90,60,30,.18);
+}
+.entry::before{
+  content:"";
+  position:absolute; inset:14px;
+  border:1px solid rgba(164,86,74,.3);
+  pointer-events:none;
 }
 .entry::after{
   content:"";
   position:absolute; right:0; bottom:0;
   width:0;height:0;
   border-style:solid;
-  border-width:0 0 26px 26px;
+  border-width:0 0 30px 30px;
   border-color:transparent transparent var(--paper-dark) transparent;
   filter:drop-shadow(-2px -2px 3px rgba(0,0,0,.15));
 }
+.entry .corner-stamp{
+  position:absolute; top:16px; right:22px;
+  width:48px;height:48px;border-radius:50%;
+  background:repeating-radial-gradient(circle at center, #1c1c1c 0 2px, #262626 3px 5px);
+  box-shadow:0 0 0 2px var(--gold-bright), 0 4px 10px rgba(0,0,0,.35);
+  opacity:.85;
+}
+.entry .corner-stamp::before{
+  content:"♪";
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--gold-bright); font-size:1.1rem;
+}
 
-.chapter-lead{ font-size:1.02rem; line-height:1.7; margin-bottom:16px; }
+.chapter-lead{ font-size:1.05rem; line-height:1.75; margin-bottom:16px; }
 .chapter-lead::first-letter{
   font-family:'Cormorant Garamond',serif;
-  font-size:2.8rem;
+  font-size:3rem;
   color:var(--wine);
   float:left;
   line-height:.8;
-  padding:4px 8px 0 0;
+  padding:6px 10px 0 0;
   font-weight:600;
 }
 
 .entry h2{
   font-family:'Cormorant Garamond',serif;
   font-weight:600;
-  font-size:1.7rem;
+  font-size:1.85rem;
   color:var(--wine);
   border-bottom:2px solid var(--gold);
-  padding-bottom:8px;
-  margin-bottom:16px;
+  padding-bottom:10px;
+  margin:34px 0 18px;
+  display:flex; align-items:center; gap:10px;
+}
+.entry h2:first-of-type{ margin-top:6px; }
+.entry h2::before{
+  content:"";
+  width:16px;height:16px;border-radius:50%;
+  background:repeating-radial-gradient(circle at center, #1c1c1c 0 1.2px, #2a2a2a 1.8px 3px);
+  box-shadow:0 0 0 2px var(--gold);
+  flex:none;
 }
 .entry h3{
   font-family:'Cormorant Garamond',serif;
   font-weight:600;
-  font-size:1.3rem;
+  font-size:1.35rem;
   color:var(--rose);
-  margin:22px 0 10px;
+  margin:24px 0 10px;
+  padding-left:14px;
+  border-left:3px solid var(--gold);
 }
 .entry p{
-  font-size:1rem;
-  line-height:1.7;
-  margin-bottom:14px;
+  font-size:1.04rem;
+  line-height:1.8;
+  margin-bottom:15px;
+  max-width:76ch;
 }
 .entry ul{
   margin:0 0 16px 22px;
-  line-height:1.7;
+  line-height:1.8;
+  max-width:76ch;
 }
 .entry blockquote{
   font-family:'Cormorant Garamond',serif;
   font-style:italic;
-  font-size:1.2rem;
+  font-size:1.25rem;
   color:var(--wine);
   border-left:3px solid var(--gold);
-  padding-left:18px;
-  margin:20px 0;
+  padding-left:20px;
+  margin:22px 0;
+  max-width:70ch;
 }
 
 /* ── turntable (spotify embed frame) ───────────── */
 .turntable{
   background:var(--ink);
   border-radius:10px;
-  padding:10px;
-  margin:24px 0;
-  box-shadow:inset 0 0 0 1px rgba(214,180,110,.25), 0 10px 24px rgba(0,0,0,.35);
+  padding:12px;
+  margin:26px 0;
+  max-width:640px;
+  box-shadow:inset 0 0 0 1px rgba(214,180,110,.25), 0 10px 26px rgba(0,0,0,.4);
+  position:relative;
+}
+.turntable::before{
+  content:"";
+  position:absolute; inset:4px;
+  border:1px solid rgba(214,180,110,.15);
+  border-radius:8px;
+  pointer-events:none;
 }
 .turntable-label{
   display:flex; justify-content:space-between; align-items:center;
   padding:2px 6px 8px;
   font-family:'IBM Plex Mono',monospace;
-  font-size:.68rem;
+  font-size:.7rem;
   color:var(--gold-bright);
   letter-spacing:.08em;
   text-transform:uppercase;
@@ -280,14 +368,18 @@ main{max-width:760px;margin:0 auto;padding:10px 20px 80px}
 /* ── photo gallery placeholder ─────────────────── */
 .gallery{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:16px;
   margin:20px 0;
 }
 .gallery .frame{
   aspect-ratio:1;
-  background:var(--paper-dark);
-  border:1px dashed var(--ink-soft);
+  background:
+    linear-gradient(135deg, rgba(90,60,30,.06), transparent 60%),
+    var(--paper-dark);
+  border:1px solid rgba(90,60,30,.4);
+  outline:6px solid var(--paper);
+  outline-offset:-6px;
   display:flex;align-items:center;justify-content:center;
   font-family:'IBM Plex Mono',monospace;
   font-size:.68rem;
@@ -295,7 +387,11 @@ main{max-width:760px;margin:0 auto;padding:10px 20px 80px}
   text-align:center;
   padding:8px;
   overflow:hidden;
+  position:relative;
+  box-shadow:0 6px 14px rgba(0,0,0,.2);
+  transform:rotate(-1deg);
 }
+.gallery .frame:nth-child(even){ transform:rotate(1deg); }
 .gallery .frame img{ width:100%; height:100%; object-fit:cover; }
 
 footer.book-footer{
@@ -308,6 +404,11 @@ footer.book-footer{
 }
 footer.book-footer a{color:var(--gold-bright)}
 
+@media (max-width:800px){
+  .entry{ padding:32px 26px 28px; }
+  .entry::before{ inset:10px; }
+}
 @media (max-width:600px){
   .entry{ padding:26px 20px 22px; }
+  .entry .corner-stamp{ display:none; }
 }
