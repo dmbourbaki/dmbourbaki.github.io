@@ -10,6 +10,10 @@
   --rose:#c17a3f;
 }
 *{margin:0;padding:0;box-sizing:border-box}
+@keyframes vinylSpin{ to{ transform:rotate(360deg); } }
+@media (prefers-reduced-motion:reduce){
+  .portrait::before, .artist-card .vinyl-mini, .entry .corner-stamp{ animation:none !important; }
+}
 body{
   background:
     radial-gradient(ellipse at 15% 0%, rgba(212,175,92,.05), transparent 55%),
@@ -125,13 +129,23 @@ header.artist-hero::after{ right:6%; transform:rotate(12deg); }
 .portrait{
   width:150px;height:150px;border-radius:50%;
   margin:0 auto 22px;
-  background:
-    repeating-radial-gradient(circle at center, #111 0 2px, #1c1c1c 3px 6px);
   box-shadow:0 8px 26px rgba(0,0,0,.45), inset 0 0 0 3px #000, 0 0 0 4px var(--gold-bright);
   position:relative;
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
 }
+.portrait::before{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:50%;
+  background:
+    repeating-radial-gradient(circle at center, #111 0 2px, #1c1c1c 3px 6px),
+    linear-gradient(115deg, transparent 42%, rgba(255,255,255,.10) 50%, transparent 58%);
+  animation:vinylSpin 7s linear infinite;
+  z-index:0;
+}
+.portrait img,
+.portrait .placeholder{ position:relative; z-index:1; }
 .portrait img{
   width:66%;height:66%;object-fit:cover;border-radius:50%;
   box-shadow:inset 0 0 0 6px var(--wine-deep);
@@ -210,10 +224,14 @@ main{max-width:1080px;margin:0 auto;padding:10px 24px 80px}
 .artist-card .vinyl-mini{
   width:90px;height:90px;border-radius:50%;
   margin:0 auto 16px;
-  background:repeating-radial-gradient(circle at center, #111 0 2px, #1c1c1c 3px 6px);
+  background:
+    repeating-radial-gradient(circle at center, #111 0 2px, #1c1c1c 3px 6px),
+    linear-gradient(115deg, transparent 42%, rgba(255,255,255,.12) 50%, transparent 58%);
   box-shadow:0 6px 16px rgba(0,0,0,.4), inset 0 0 0 2px #000;
   display:flex;align-items:center;justify-content:center;
+  animation:vinylSpin 5s linear infinite;
 }
+.artist-card:hover .vinyl-mini{ animation-duration:1.2s; }
 .artist-card .vinyl-mini::before{
   content:"";
   width:30px;height:30px;border-radius:50%;
@@ -275,6 +293,7 @@ main{max-width:1080px;margin:0 auto;padding:10px 24px 80px}
   background:repeating-radial-gradient(circle at center, #1c1c1c 0 2px, #262626 3px 5px);
   box-shadow:0 0 0 2px var(--gold-bright), 0 4px 10px rgba(0,0,0,.35);
   opacity:.85;
+  animation:vinylSpin 9s linear infinite;
 }
 .entry .corner-stamp::before{
   content:"♪";
@@ -441,7 +460,64 @@ main{max-width:1080px;margin:0 auto;padding:10px 24px 80px}
   padding:4px 10px;
 }
 
-footer.book-footer{
+/* ── collage de cantantes en la portada ────────── */
+.collage{
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end;
+  gap:0 -14px;
+  margin:36px 0 8px;
+  padding:0 10px;
+}
+.collage-disc{
+  width:108px;height:108px;border-radius:50%;
+  margin:0 -16px 10px;
+  position:relative;
+  flex:none;
+  box-shadow:0 10px 26px rgba(0,0,0,.5), 0 0 0 4px var(--wine-deep), 0 0 0 6px var(--gold-bright);
+  transition:transform .35s cubic-bezier(.2,.9,.3,1), z-index 0s;
+  cursor:pointer;
+}
+.collage-disc:nth-child(odd){ transform:rotate(-6deg) translateY(6px); }
+.collage-disc:nth-child(even){ transform:rotate(6deg) translateY(-4px); }
+.collage-disc:hover{ transform:rotate(0deg) translateY(-10px) scale(1.12); z-index:5; }
+.collage-disc::before{
+  content:"";
+  position:absolute; inset:0; border-radius:50%;
+  background:
+    repeating-radial-gradient(circle at center, #111 0 2px, #1c1c1c 3px 6px),
+    linear-gradient(115deg, transparent 42%, rgba(255,255,255,.10) 50%, transparent 58%);
+  animation:vinylSpin 6s linear infinite;
+}
+.collage-disc img{
+  position:absolute; inset:0; margin:auto;
+  width:70%; height:70%; object-fit:cover; border-radius:50%;
+  box-shadow:0 0 0 5px var(--wine-deep), inset 0 0 12px rgba(0,0,0,.35);
+  z-index:1;
+}
+.collage-disc .disc-placeholder{
+  position:absolute; inset:0; margin:auto;
+  width:70%; height:70%; border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 0 5px var(--wine-deep);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cormorant Garamond',serif; font-weight:700; font-size:1.1rem;
+  color:var(--wine-deep);
+  z-index:1;
+}
+.collage-caption{
+  text-align:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.7rem;
+  letter-spacing:.06em;
+  color:#cbb98f;
+  opacity:.65;
+  margin-bottom:18px;
+}
+@media (prefers-reduced-motion:reduce){
+  .collage-disc::before{ animation:none !important; }
+}
+@media (max-width:600px){
+  .collage-disc{ width:78px; height:78px; margin:0 -10px 8px; }
+}
   text-align:center;
   padding:40px 20px 70px;
   color:#cbb98f;
