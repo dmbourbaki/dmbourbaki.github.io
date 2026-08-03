@@ -40,3 +40,37 @@
   tag.async = true;
   document.head.appendChild(tag);
 })();
+
+/* Baladas de Siempre — lightbox de galería
+   Al hacer clic en una foto de la galería, se muestra en grande sobre un fondo oscuro. */
+document.addEventListener('DOMContentLoaded', function () {
+  var overlay = document.createElement('div');
+  overlay.className = 'lightbox-overlay';
+  overlay.innerHTML = '<button class="lightbox-close" aria-label="Cerrar">&times;</button><img src="" alt="">';
+  document.body.appendChild(overlay);
+
+  var overlayImg = overlay.querySelector('img');
+
+  function closeLightbox() {
+    overlay.classList.remove('active');
+    overlayImg.src = '';
+  }
+
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay || e.target.classList.contains('lightbox-close')) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  document.querySelectorAll('.gallery .frame img').forEach(function (img) {
+    img.addEventListener('click', function () {
+      overlayImg.src = img.src;
+      overlayImg.alt = img.alt || '';
+      overlay.classList.add('active');
+    });
+  });
+});

@@ -135,6 +135,8 @@ header.artist-hero::after{ right:6%; transform:rotate(12deg); }
 .portrait img{
   width:66%;height:66%;object-fit:cover;border-radius:50%;
   box-shadow:inset 0 0 0 6px var(--wine-deep);
+  -webkit-mask-image: radial-gradient(circle, black 52%, rgba(0,0,0,.55) 68%, transparent 82%);
+  mask-image: radial-gradient(circle, black 52%, rgba(0,0,0,.55) 68%, transparent 82%);
 }
 .portrait .placeholder{
   width:66%;height:66%;border-radius:50%;
@@ -143,6 +145,14 @@ header.artist-hero::after{ right:6%; transform:rotate(12deg); }
   display:flex;align-items:center;justify-content:center;
   font-family:'Cormorant Garamond',serif;
   font-size:2rem;color:var(--wine-deep);font-weight:700;
+}
+header.artist-hero .ai-credit{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.66rem;
+  color:#cbb98f;
+  opacity:.55;
+  margin-top:12px;
+  letter-spacing:.04em;
 }
 header.artist-hero h1{
   font-family:'Cormorant Garamond',serif;
@@ -390,9 +400,46 @@ main{max-width:1080px;margin:0 auto;padding:10px 24px 80px}
   position:relative;
   box-shadow:0 6px 14px rgba(0,0,0,.2);
   transform:rotate(-1deg);
+  cursor:zoom-in;
+  transition:transform .2s ease;
 }
+.gallery .frame:hover{ transform:rotate(0deg) scale(1.02); }
 .gallery .frame:nth-child(even){ transform:rotate(1deg); }
-.gallery .frame img{ width:100%; height:100%; object-fit:cover; }
+.gallery .frame:nth-child(even):hover{ transform:rotate(0deg) scale(1.02); }
+.gallery .frame img{ width:100%; height:100%; object-fit:cover; cursor:zoom-in; }
+.gallery .ai-credit{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.7rem;
+  color:var(--ink-soft);
+  opacity:.7;
+  margin-top:14px;
+}
+
+/* ── lightbox ───────────────────────────────────── */
+.lightbox-overlay{
+  display:none;
+  position:fixed; inset:0;
+  background:rgba(15,8,6,.92);
+  z-index:9999;
+  align-items:center; justify-content:center;
+  padding:30px;
+}
+.lightbox-overlay.active{ display:flex; }
+.lightbox-overlay img{
+  max-width:92vw; max-height:88vh;
+  border-radius:4px;
+  box-shadow:0 24px 60px rgba(0,0,0,.6), 0 0 0 8px var(--paper);
+}
+.lightbox-close{
+  position:absolute; top:22px; right:30px;
+  color:var(--gold-bright);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:2rem;
+  line-height:1;
+  cursor:pointer;
+  background:none;border:none;
+  padding:4px 10px;
+}
 
 footer.book-footer{
   text-align:center;
