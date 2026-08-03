@@ -17,6 +17,12 @@
       IFrameAPI.createController(el, options, function (EmbedController) {
         controllers.push(EmbedController);
 
+        if (turntable.getAttribute('data-autoplay') === 'true') {
+          EmbedController.addListener('ready', function () {
+            try { EmbedController.play(); } catch (err) { /* el navegador puede bloquear el autoplay */ }
+          });
+        }
+
         EmbedController.addListener('playback_update', function (e) {
           if (e && e.data && e.data.isPaused === false) {
             controllers.forEach(function (other) {
