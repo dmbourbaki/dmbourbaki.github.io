@@ -12,7 +12,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 @keyframes vinylSpin{ to{ transform:rotate(360deg); } }
 @media (prefers-reduced-motion:reduce){
-  .portrait::before, .artist-card .vinyl-mini, .entry .corner-stamp{ animation:none !important; }
+  .portrait::before, .artist-card .vinyl-mini::before, .entry .corner-stamp{ animation:none !important; }
 }
 body{
   background:
@@ -222,17 +222,29 @@ main{max-width:1080px;margin:0 auto;padding:10px 24px 80px}
 .artist-card .vinyl-mini{
   width:90px;height:90px;border-radius:50%;
   margin:0 auto 16px;
+  position:relative;
+  box-shadow:0 6px 16px rgba(0,0,0,.4), inset 0 0 0 2px #000;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.artist-card .vinyl-mini::before{
+  content:"";
+  position:absolute; inset:0;
   background:
     repeating-radial-gradient(circle at center, #111 0 2px, #1c1c1c 3px 6px),
     linear-gradient(115deg, transparent 42%, rgba(255,255,255,.12) 50%, transparent 58%);
-  box-shadow:0 6px 16px rgba(0,0,0,.4), inset 0 0 0 2px #000;
-  display:flex;align-items:center;justify-content:center;
   animation:vinylSpin 5s linear infinite;
+  z-index:0;
 }
-.artist-card:hover .vinyl-mini{ animation-duration:1.2s; }
-.artist-card .vinyl-mini::before{
-  content:"";
-  width:30px;height:30px;border-radius:50%;
+.artist-card:hover .vinyl-mini::before{ animation-duration:1.2s; }
+.artist-card .vinyl-mini img,
+.artist-card .vinyl-mini .mini-placeholder{ position:relative; z-index:1; }
+.artist-card .vinyl-mini img{
+  width:68%; height:68%; object-fit:cover; border-radius:50%;
+  box-shadow:0 0 0 4px var(--wine-deep);
+}
+.artist-card .vinyl-mini .mini-placeholder{
+  width:30px; height:30px; border-radius:50%;
   background:var(--gold);
   box-shadow:inset 0 0 0 7px var(--paper);
 }
