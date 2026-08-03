@@ -5,7 +5,16 @@
   var controllers = [];
 
   function initControllers(IFrameAPI) {
-    var containers = document.querySelectorAll('.spotify-embed-container');
+    var containers = Array.prototype.slice.call(document.querySelectorAll('.spotify-embed-container'));
+
+    // El reproductor marcado con autoplay se crea PRIMERO, para que no tenga
+    // que esperar a que se carguen todos los demás reproductores de la página.
+    containers.sort(function (a, b) {
+      var aAuto = a.closest('.turntable').getAttribute('data-autoplay') === 'true' ? 0 : 1;
+      var bAuto = b.closest('.turntable').getAttribute('data-autoplay') === 'true' ? 0 : 1;
+      return aAuto - bAuto;
+    });
+
     containers.forEach(function (el) {
       var turntable = el.closest('.turntable');
       if (!turntable) return;
