@@ -1,4 +1,4 @@
-/* Baladas de Siempre — control de reproducción exclusiva entre reproductores de Spotify
+/* El Libro de la Balada — control de reproducción exclusiva entre reproductores de Spotify
    Usa la Spotify iFrame API oficial para pausar automáticamente los demás
    reproductores en cuanto uno empieza a sonar. */
 (function () {
@@ -56,7 +56,7 @@
   document.head.appendChild(tag);
 })();
 
-/* Baladas de Siempre — lightbox de galería
+/* El Libro de la Balada — lightbox de galería
    Al hacer clic en una foto de la galería, se muestra en grande sobre un fondo oscuro. */
 document.addEventListener('DOMContentLoaded', function () {
   var overlay = document.createElement('div');
