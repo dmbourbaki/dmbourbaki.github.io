@@ -33,7 +33,7 @@
   }
   h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 34px; margin: 0 0 28px 0; color: var(--ink); text-align: center; }
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 4px 24px rgba(30,40,80,0.06); padding: 36px; max-width: 720px; width: 100%; text-align: center; }
-  #vista-pregunta { max-width: 1180px; text-align: left; }
+  #vista-pregunta { max-width: 1420px; text-align: left; }
   .btn {
     font-family: "Inter Tight", sans-serif; font-weight: 600; font-size: 16px;
     background: var(--gold); color: var(--void); border: none; border-radius: 10px;
@@ -65,18 +65,18 @@
   .campo-config label { display:block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
   /* ---- Vista de pregunta: 60% texto/opciones · 40% imagen ---- */
   .pregunta-layout { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
-  .pregunta-col-texto { flex: 1 1 56%; min-width: 320px; }
-  .pregunta-col-imagen { flex: 1 1 38%; min-width: 260px; display: flex; align-items: center; justify-content: center; }
+  .pregunta-col-texto { flex: 1 1 36%; min-width: 300px; }
+  .pregunta-col-imagen { flex: 1 1 58%; min-width: 320px; display: flex; align-items: center; justify-content: center; }
   @media (max-width: 860px) {
     .pregunta-layout { flex-direction: column; }
     .pregunta-col-imagen { order: -1; width: 100%; }
   }
-  .pregunta-texto { font-family: "Fraunces", serif; font-size: 25px; margin: 16px 0; color: var(--ink); }
+  .pregunta-texto { font-family: "Fraunces", serif; font-size: 24px; margin: 16px 0; color: var(--ink); }
   .pregunta-imagen-wrap {
     width: 100%; background: var(--abyss); border: 1px solid var(--line-soft); border-radius: 12px;
-    padding: 10px; display: flex; align-items: center; justify-content: center; min-height: 160px;
+    padding: 10px; display: flex; align-items: center; justify-content: center; min-height: 200px;
   }
-  .pregunta-imagen { max-width: 100%; max-height: 520px; border-radius: 8px; display: block; }
+  .pregunta-imagen { max-width: 100%; max-height: 720px; border-radius: 8px; display: block; }
   .pregunta-imagen-vacia { color: var(--ink-faint); font-size: 13px; font-family: "Spline Sans Mono", monospace; text-align: center; padding: 30px 10px; }
   .opciones-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
   .opcion { border-radius: 10px; padding: 16px; font-size: 16px; text-align: left; border: 1px solid var(--line-soft); color: var(--ink); }
@@ -228,13 +228,52 @@
   </div>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { getDatabase, ref, set, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
   import {
-    ESTADOS, TIEMPO_LIMITE_BASE, crearSala, existeSala, iniciarSiguientePregunta,
+    ESTADOS, TIEMPO_LIMITE_BASE, existeSala,
     agregarTiempoExtra, cerrarPreguntaYCalcular, escucharSala, ranking,
     finalizarJuegoYaConRanking, activarPreguntaPorIndice,
   } from "./omai-quiz-app.js";
   import { BANCOS_SABERPRO } from "./omai-quiz-saberpro-bancos-razonamiento-cuantitativo.js";
+  // Esta actividad se usa con retroalimentación en vivo, así que las preguntas
+  // deben salir SIEMPRE en el mismo orden del banco (no aleatorio como en Cultura General).
+  // Por eso creamos la sala aquí directamente, sin usar crearSala() de omai-quiz-app.js
+  // (que sí mezcla las preguntas al azar).
+  function generarCodigoSalaLocal() {
+    const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    let codigo = "";
+    for (let i = 0; i < 4; i++) codigo += letras[Math.floor(Math.random() * letras.length)];
+    return codigo;
+  }
+  async function crearSalaEnOrden(dbRef, bancoPreguntas, numPreguntas, tiempoLimiteSegundos) {
+    const codigo = generarCodigoSalaLocal();
+    const preguntasElegidas = bancoPreguntas.slice(0, Math.min(numPreguntas, bancoPreguntas.length));
+    const salaRef = ref(dbRef, `salas/${codigo}`);
+    await set(salaRef, {
+      estado: ESTADOS.ESPERANDO,
+      preguntaActual: -1,
+      preguntas: preguntasElegidas,
+      jugadores: {},
+      respuestas: {},
+      indicesUsados: [],
+      tiempoLimiteBase: tiempoLimiteSegundos || TIEMPO_LIMITE_BASE,
+      tiempoExtra: 0,
+      creada: Date.now(),
+    });
+    return codigo;
+  }
+  // Avanza siempre a la pregunta no usada de MENOR índice (es decir, la siguiente
+  // en el orden original del banco), en vez de escoger al azar entre las restantes.
+  async function siguientePreguntaEnOrden() {
+    if (!salaActualCache || !codigoActual) return;
+    const candidatos = candidatosDeSala(salaActualCache);
+    if (candidatos.length === 0) {
+      await update(ref(db, `salas/${codigoActual}`), { estado: ESTADOS.TERMINADO });
+      return;
+    }
+    const siguienteIdx = Math.min(...candidatos);
+    await activarPreguntaPorIndice(db, codigoActual, siguienteIdx);
+  }
   const firebaseConfig = {
     apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
     authDomain: "omai-quiz.firebaseapp.com",
@@ -475,10 +514,13 @@
     }, 4100);
   };
   // ---------- KaTeX ----------
+  // Solo se activa modo matemático con $$...$$; el delimitador $...$ se desactiva
+  // a propósito porque las preguntas usan "$" para valores en pesos (p. ej. $594.000)
+  // y KaTeX los interpretaba como fórmulas, arruinando el texto.
   function renderizarKatex(el) {
     if (window.renderMathInElement) {
       window.renderMathInElement(el, {
-        delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }],
+        delimiters: [{ left: "$$", right: "$$", display: true }],
         throwOnError: false,
       });
     }
@@ -553,7 +595,7 @@
     let n = parseInt(document.getElementById("input-num-preguntas").value, 10) || bancoPreguntas.length;
     if (n > bancoPreguntas.length) n = bancoPreguntas.length;
     const tiempo = parseInt(document.getElementById("input-tiempo-pregunta").value, 10) || 30;
-    const codigo = await crearSala(db, bancoPreguntas, n, tiempo);
+    const codigo = await crearSalaEnOrden(db, bancoPreguntas, n, tiempo);
     document.getElementById("vista-espera").style.display = "block";
     document.getElementById("input-ruleta-max").value = n;
     dibujarRueda(n);
@@ -572,9 +614,9 @@
     }
     activarSala(codigo);
   };
-  document.getElementById("btn-iniciar").onclick = () => iniciarSiguientePregunta(db, codigoActual);
+  document.getElementById("btn-iniciar").onclick = () => siguientePreguntaEnOrden();
   document.getElementById("btn-cerrar-pregunta").onclick = () => cerrarPreguntaYCalcular(db, codigoActual);
-  document.getElementById("btn-siguiente").onclick = () => iniciarSiguientePregunta(db, codigoActual);
+  document.getElementById("btn-siguiente").onclick = () => siguientePreguntaEnOrden();
   let ultimaPreguntaRenderizada = -1;
   let yaAutoCerradaEstaPregunta = false;
   let estadoAnterior = null;

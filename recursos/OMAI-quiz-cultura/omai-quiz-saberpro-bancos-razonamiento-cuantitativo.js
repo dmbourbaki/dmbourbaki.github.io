@@ -25,7 +25,7 @@ const BANCOS_SABERPRO = [
         ],
         correcta: 1,
         nivel: "intermedio",
-        imagen: null,
+        imagen: "imgs_saberpro/img26b.png",
       },
       {
         texto: "En 2013 el presupuesto de inversión en salud fue de 3,65 billones de pesos, de los cuales a mayo se habían ejecutado 1,66 billones (45,5%). La gráfica muestra el % de ejecución acumulada mes a mes en 2013. ¿Cuál gráfica representa correctamente el % promedio de ejecución (2002-2012) mes a mes?",
@@ -37,7 +37,7 @@ const BANCOS_SABERPRO = [
         ],
         correcta: 0,
         nivel: "intermedio",
-        imagen: "imgs_saberpro/img08.png",
+        imagen: "imgs_saberpro/img08b.png",
       },
       {
         texto: "Un colegio registra los inscritos por actividad extraescolar según el número de sesiones semanales, y limita cada grupo de \"Deportes\" a máximo 20 estudiantes por profesor. El total de inscritos en Deportes es 60 + 40 + 20 = 120. ¿Cuál gráfica representa la cantidad de profesores necesarios en función del número de inscritos en Deportes?",
@@ -49,7 +49,7 @@ const BANCOS_SABERPRO = [
         ],
         correcta: 0,
         nivel: "aplicado",
-        imagen: "imgs_saberpro/img11.png",
+        imagen: "imgs_saberpro/img10.png",
       },
       {
         texto: "Una empresa de mensajería cobra el envío de un paquete con un cargo fijo de recolección/gestión más un cargo variable según el peso (kg): 1 kg = $7.500, 2 kg = $10.000, 4 kg = $15.000, 6 kg = $20.000. Si un cliente envía un paquete de 8 kg (mismo esquema de cobro), ¿cuál es el costo total?",
@@ -87,7 +87,7 @@ const BANCOS_SABERPRO = [
         ],
         correcta: 1,
         nivel: "aplicado",
-        imagen: null,
+        imagen: "imgs_saberpro/img16.png",
       },
       {
         texto: "Recordando la eficiencia de las 4 ESP en la atención de reclamos antes de 24 horas (Energía 2/3, Acueducto 5/6, Telefonía 9/10, Gas 3/5), los usuarios pueden identificar cuál empresa es más eficiente. ¿Qué NO se puede determinar con la información suministrada?",
@@ -111,7 +111,7 @@ const BANCOS_SABERPRO = [
         ],
         correcta: 3,
         nivel: "intermedio",
-        imagen: null,
+        imagen: "imgs_saberpro/img19.png",
       },
       {
         texto: "El consumo eléctrico promedio mensual de la nevera es de 100 kWh y el del horno microondas es de 25 kWh. Un estudiante afirma: \"el consumo del microondas corresponde al 25% del consumo de la nevera\". Esta afirmación es:",
@@ -123,7 +123,7 @@ const BANCOS_SABERPRO = [
         ],
         correcta: 3,
         nivel: "intermedio",
-        imagen: null,
+        imagen: "imgs_saberpro/img21.png",
       },
       {
         texto: "Una universidad ofrece descuentos sucesivos sobre la matrícula: 18% por pertenecer a un semillero de investigación; luego, sobre el valor restante, 12% adicional por promedio ≥ 4,5; y finalmente, sobre ese nuevo valor, 5% por pronto pago. La matrícula es de $8.400.000 y un estudiante cumple las tres condiciones. Un funcionario afirma: \"como los descuentos son 18%, 12% y 5%, el descuento total es del 35% sobre el valor inicial\". ¿Cuál afirmación es correcta?",
