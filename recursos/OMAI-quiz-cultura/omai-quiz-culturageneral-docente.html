@@ -34,6 +34,7 @@
   }
   h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 36px; margin: 0 0 28px 0; color: var(--ink); text-align: center; }
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 4px 24px rgba(30,40,80,0.06); padding: 36px; max-width: 720px; width: 100%; text-align: center; }
+  #vista-pregunta { max-width: 900px; }
   .btn {
     font-family: "Inter Tight", sans-serif; font-weight: 600; font-size: 16px;
     background: var(--gold); color: var(--void); border: none; border-radius: 10px;
@@ -55,19 +56,16 @@
   #barra-sala .info-codigo b { font-size: 20px; letter-spacing: 0.08em; }
   #mini-qr { display: inline-flex; background: #fff; border-radius: 6px; padding: 4px; margin-left: 10px; vertical-align: middle; border: 1px solid var(--line); box-shadow: 0 2px 8px rgba(30,40,80,0.08); }
   #mini-qr img, #mini-qr canvas { display: block; width: 46px; height: 46px; }
-
   .codigo-grande { font-family: "Spline Sans Mono", monospace; font-size: 56px; letter-spacing: 0.1em; color: var(--gold-deep); margin: 16px 0; }
   #qrcode-grande { display: inline-block; margin: 16px 0; padding: 16px; background: #fff; border-radius: 12px; border: 1px solid var(--line); box-shadow: 0 4px 16px rgba(30,40,80,0.08); }
   .lista-jugadores { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 20px; }
   .chip { background: var(--abyss); border: 1px solid var(--line-soft); border-radius: 999px; padding: 6px 14px; font-size: 14px; color: var(--ink-soft); }
-
   .lista-bancos { text-align: left; margin: 16px 0; border: 1px solid var(--line-soft); border-radius: 10px; padding: 14px; }
   .banco-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
   .banco-item label { font-size: 14px; color: var(--ink); }
   .banco-item .conteo { color: var(--ink-faint); font-size: 12px; }
-
   .pregunta-texto { font-family: "Fraunces", serif; font-size: 26px; margin: 20px 0; color: var(--ink); }
-  .pregunta-imagen { max-width: 100%; max-height: 260px; border-radius: 10px; margin: 12px auto; display: block; }
+  .pregunta-imagen { max-width: 100%; max-height: 480px; border-radius: 10px; margin: 12px auto; display: block; }
   .opciones-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
   .opcion { border-radius: 10px; padding: 16px; font-size: 16px; text-align: left; border: 1px solid var(--line-soft); color: var(--ink); }
   .opcion:nth-child(1) { background: rgba(77,201,201,0.12); border-color: var(--cyan); }
@@ -75,19 +73,16 @@
   .opcion:nth-child(3) { background: rgba(122,201,122,0.12); border-color: var(--grass); }
   .opcion:nth-child(4) { background: rgba(154,122,201,0.12); border-color: var(--violet); }
   .contador-respuestas { font-family: "Spline Sans Mono", monospace; color: var(--ink-soft); margin: 8px 0; }
-
   #cronometro {
     font-family: "Spline Sans Mono", monospace; font-size: 40px; color: var(--gold-deep);
     margin: 8px 0 16px 0;
   }
   #cronometro.urgente { color: var(--bad); }
-
   .ranking-row { display: flex; justify-content: space-between; padding: 10px 16px; background: var(--abyss); border-radius: 8px; margin-bottom: 8px; font-size: 16px; }
   .ranking-row.top1 { border: 1px solid var(--gold); }
   .config-note { font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--bad); margin-top: 20px; }
   .campo-config { text-align: left; margin: 16px 0; }
   .campo-config label { display:block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
-
   /* Podio estilo olímpico */
   #podio-final { display: flex; align-items: flex-end; justify-content: center; gap: 14px; margin: 28px 0 12px 0; }
   .podio-puesto { display: flex; flex-direction: column; align-items: center; width: 140px; }
@@ -101,7 +96,6 @@
   .podio-1 .podio-bloque { height: 130px; background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep)); color: #08090c; }
   .podio-2 .podio-bloque { height: 95px; background: linear-gradient(180deg, #cfd4dc, #8890a0); color: #08090c; }
   .podio-3 .podio-bloque { height: 65px; background: linear-gradient(180deg, #d99a63, #9a6435); color: #08090c; }
-
   /* Confeti / estrellas */
   #capa-confeti { position: fixed; inset: 0; pointer-events: none; z-index: 70; overflow: hidden; display: none; }
   .estrella-confeti {
@@ -111,9 +105,8 @@
     0% { transform: translateY(0) rotate(0deg); opacity: 1; }
     100% { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
   }
-
   #panel-ruleta {
-    position: fixed; bottom: 24px; right: 24px; z-index: 60; display: block;
+    position: fixed; bottom: 24px; right: 24px; z-index: 60; display: none;
     background: var(--panel); border: 1px solid var(--gold); border-radius: 16px;
     padding: 20px; width: 280px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
   }
@@ -127,7 +120,6 @@
   #panel-ruleta input { width: 70px; text-align: center; }
   #ruleta-info { color: var(--ink-soft); font-size: 12px; margin-top: 10px; word-break: break-word; }
   #ruleta-resultado { font-family:'Spline Sans Mono',monospace; font-size: 28px; color: var(--gold-deep); margin-top: 6px; }
-
   .franja-simbolos {
     font-size: 20px; letter-spacing: 10px; margin: -14px 0 26px 0;
     color: var(--ink-faint); opacity: 0.55; text-align: center; user-select: none;
@@ -149,11 +141,9 @@
       <button class="btn-secundario" id="btn-musica">🔊 Música: on</button>
     </div>
   </div>
-
   <div class="eyebrow">OMAI-Quiz · Cultura General</div>
   <h1>OMAI-Quiz — Docente</h1>
   <div class="franja-simbolos" aria-hidden="true">🧬 π ⚛️ ∑ 🔭 √ 🌍 ∞ 🧪 Ω 🪐 Δ</div>
-
   <div id="panel-ruleta">
     <div class="eyebrow">🎡 Ruleta (sin repetir)</div>
     <input type="number" id="input-ruleta-max" min="1" value="10" />
@@ -165,17 +155,14 @@
     <button class="btn" id="btn-girar-ruleta" style="width:100%; margin-top:10px;">Girar (elige la siguiente pregunta)</button>
     <p id="ruleta-info"></p>
   </div>
-
   <div class="card" id="vista-inicio">
     <p>Elige de qué bancos temáticos quieres sacar preguntas.</p>
     <div class="lista-bancos" id="lista-bancos">Cargando bancos disponibles…</div>
-
     <div class="campo-config" style="text-align:left;">
       <label>Opción avanzada (no obligatoria): agregar un banco adicional desde un .txt, solo para esta sesión</label>
       <input type="file" id="input-archivo-banco" accept=".txt" />
       <p id="mensaje-carga-archivo" class="config-note" style="display:none;"></p>
     </div>
-
     <div class="campo-config">
       <label for="input-num-preguntas">Número de preguntas para esta partida</label>
       <input type="number" id="input-num-preguntas" min="1" value="10" />
@@ -199,7 +186,6 @@
     </div>
     <p class="config-note" id="reconectar-error" style="color:var(--bad); display:none;"></p>
   </div>
-
   <div class="card" id="vista-espera" style="display:none;">
     <div class="eyebrow">Código de sala</div>
     <div class="codigo-grande" id="texto-codigo"></div>
@@ -209,7 +195,6 @@
     <br/>
     <button class="btn" id="btn-iniciar" disabled>Esperando jugadores…</button>
   </div>
-
   <div class="card" id="vista-pregunta" style="display:none;">
     <div class="eyebrow" id="contador-pregunta"></div>
     <div id="cronometro">20</div>
@@ -220,23 +205,19 @@
     <div class="contador-respuestas" id="contador-respuestas"></div>
     <button class="btn" id="btn-cerrar-pregunta">Cerrar pregunta y ver resultados</button>
   </div>
-
   <div class="card" id="vista-resultados" style="display:none;">
     <div class="eyebrow">Ranking</div>
     <div id="ranking-lista"></div>
     <br/>
     <button class="btn" id="btn-siguiente">Siguiente pregunta</button>
   </div>
-
   <div id="capa-confeti"></div>
-
   <div class="card" id="vista-final" style="display:none; max-width: 820px; position: relative; overflow: visible;">
     <div class="eyebrow">Quiz terminado</div>
     <h2 style="font-family:'Fraunces',serif; color:var(--gold-deep);">🏆 Ranking final</h2>
     <div id="podio-final"></div>
     <div id="ranking-final" style="margin-top:24px;"></div>
   </div>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -247,7 +228,6 @@
     activarPreguntaPorIndice, candidatosDisponibles,
   } from "./omai-quiz-app.js";
   import { BANCOS_DEFECTO } from "./omai-quiz-culturageneral-bancos-default.js";
-
   const firebaseConfig = {
     apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
     authDomain: "omai-quiz.firebaseapp.com",
@@ -257,11 +237,9 @@
     messagingSenderId: "44663231333",
     appId: "1:44663231333:web:4467c56d21bca45a82878c",
   };
-
   let db;
   let codigoActual = null;
   let bancosDisponibles = BANCOS_DEFECTO.map((b) => ({ id: b.id, nombre: b.nombre, area: b.area || "Otros", preguntas: b.preguntas }));
-
   const esConfigPlaceholder = firebaseConfig.apiKey === "TU_API_KEY";
   if (esConfigPlaceholder) {
     document.getElementById("config-warning").style.display = "block";
@@ -270,9 +248,7 @@
     const app = initializeApp(firebaseConfig);
     db = getDatabase(app);
   }
-
   renderizarListaBancos();
-
   function renderizarListaBancos() {
     const contenedor = document.getElementById("lista-bancos");
     if (bancosDisponibles.length === 0) {
@@ -283,7 +259,6 @@
       <input type="checkbox" id="chk-todos" checked />
       <label for="chk-todos"><b>Seleccionar todos</b></label>
     </div><hr style="border-color:var(--line-soft)"/>`;
-
     // Agrupar por área, preservando el orden en que aparecen los bancos.
     const areasEnOrden = [];
     const bancosPorArea = {};
@@ -292,7 +267,6 @@
       if (!bancosPorArea[area]) { bancosPorArea[area] = []; areasEnOrden.push(area); }
       bancosPorArea[area].push({ ...b, idx: i });
     });
-
     areasEnOrden.forEach((area) => {
       html += `<div style="margin-top:10px; margin-bottom:4px; font-family:'Spline Sans Mono',monospace; font-size:12px; letter-spacing:0.08em; color:var(--gold); text-transform:uppercase;">${area}</div>`;
       bancosPorArea[area].forEach((b) => {
@@ -302,14 +276,11 @@
         </div>`;
       });
     });
-
     contenedor.innerHTML = html;
-
     document.getElementById("chk-todos").onclick = (e) => {
       document.querySelectorAll(".chk-banco").forEach((c) => (c.checked = e.target.checked));
     };
   }
-
   document.getElementById("input-archivo-banco").addEventListener("change", async (e) => {
     const archivo = e.target.files[0];
     if (!archivo) return;
@@ -327,16 +298,13 @@
     msgEl.textContent = `Se agregaron ${preguntas.length} preguntas` + (errores.length ? ` (${errores.length} bloques con errores fueron ignorados)` : "") + `. Este banco solo dura esta sesión (no queda guardado). Para hacerlo permanente, pide que se agregue directamente a omai-quiz-culturageneral-bancos-default.js.`;
     renderizarListaBancos();
   });
-
   function obtenerPreguntasCombinadas() {
     const seleccionados = [...document.querySelectorAll(".chk-banco:checked")].map((c) => parseInt(c.dataset.idx, 10));
     let combinado = [];
     seleccionados.forEach((idx) => { combinado = combinado.concat(bancosDisponibles[idx].preguntas); });
     return combinado;
   }
-
   // (los bancos por defecto ya se renderizaron arriba, al cargar la página)
-
   // ---------- Música ----------
   let audioCtx = null;
   let musicaActiva = true;
@@ -352,7 +320,6 @@
   };
   let pistaActual = "arpegio"; // pista elegida por el docente para la fase "durante el juego"
   let faseMusicalActual = null; // 'lobby' | 'juego' | 'final'
-
   function tocarNota(freq, duracion, onda) {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
@@ -390,7 +357,6 @@
     if (musicaActiva && faseMusicalActual === "juego") iniciarMusica(pistaActual);
   };
   actualizarBotonMusica();
-
   // Cambia automáticamente de pista según la fase de la partida:
   // antes de empezar (lobby), durante las preguntas (la elegida por el docente), y al final (victoria).
   function actualizarFaseMusical(estado) {
@@ -401,7 +367,6 @@
     const clave = nuevaFase === "juego" ? pistaActual : nuevaFase;
     iniciarMusica(clave);
   }
-
   // ---------- Fanfarria de bongos al iniciar el juego ----------
   function ruidoBlanco(duracionSeg) {
     const tam = Math.floor(audioCtx.sampleRate * duracionSeg);
@@ -442,14 +407,12 @@
       osc.stop(audioCtx.currentTime + 1.6);
     });
   }
-
   // ---------- Ruleta circular animada: elige y activa la siguiente pregunta ----------
   // Los segmentos de la rueda SIEMPRE representan solo las preguntas que aún no
   // han salido; al usarse una, la rueda se redibuja más pequeña automáticamente.
   let girando = false;
   const coloresRueda = ["#4dc9c9", "#c96b7a", "#7ac97a", "#9a7ac9", "#c9a04d", "#6b8fc9"];
   let ultimoConteoCandidatos = null;
-
   function candidatosDeSala(sala) {
     if (!sala) return [];
     const total = sala.preguntas.length;
@@ -458,7 +421,6 @@
     for (let i = 0; i < total; i++) if (!usados.has(i)) candidatos.push(i);
     return candidatos;
   }
-
   function dibujarRueda(cantidadSegmentos) {
     const n = Math.max(1, cantidadSegmentos);
     const cx = 110, cy = 110, r = 100;
@@ -478,7 +440,6 @@
     }
     document.getElementById("ruleta-svg").innerHTML = html;
   }
-
   // Redibuja la rueda para que coincida con las preguntas restantes reales,
   // pero nunca mientras está girando (para no cortar la animación).
   function sincronizarRuedaConSala() {
@@ -495,15 +456,12 @@
       requestAnimationFrame(() => { svg.style.transition = "transform 4s cubic-bezier(0.12, 0.72, 0.15, 1)"; });
     }
   }
-
   let rotacionAcumulada = 0;
   dibujarRueda(parseInt(document.getElementById("input-ruleta-max").value, 10) || 10);
-
   document.getElementById("btn-toggle-ruleta").onclick = () => {
     const panel = document.getElementById("panel-ruleta");
     panel.style.display = panel.style.display === "none" ? "block" : "none";
   };
-
   function reproducirTickRuleta() {
     asegurarAudioContext();
     const osc = audioCtx.createOscillator();
@@ -516,7 +474,6 @@
     osc.start();
     osc.stop(audioCtx.currentTime + 0.06);
   }
-
   function reproducirCampanadaRuleta() {
     asegurarAudioContext();
     [523.25, 659.25, 783.99].forEach((freq, i) => {
@@ -531,7 +488,6 @@
       osc.stop(audioCtx.currentTime + i * 0.08 + 0.4);
     });
   }
-
   document.getElementById("btn-girar-ruleta").onclick = () => {
     if (girando) return;
     const infoEl = document.getElementById("ruleta-info");
@@ -556,14 +512,12 @@
     const posicion = Math.floor(Math.random() * candidatos.length); // posición dentro de los restantes
     const elegidoIdx = candidatos[posicion]; // índice real en el arreglo de preguntas
     const numeroProgreso = (salaActualCache.indicesUsados || []).length + 1; // "Pregunta X de N" que verán todos
-
     const anguloSeg = 360 / candidatos.length;
     const anguloObjetivo = 360 - (posicion * anguloSeg + anguloSeg / 2);
     const vueltasExtra = 5 * 360;
     rotacionAcumulada += vueltasExtra + anguloObjetivo - (rotacionAcumulada % 360);
     const svg = document.getElementById("ruleta-svg");
     svg.style.transform = `rotate(${rotacionAcumulada}deg)`;
-
     let t = 0;
     const totalTicks = 26;
     for (let i = 0; i < totalTicks; i++) {
@@ -571,7 +525,6 @@
       t += espaciado;
       setTimeout(reproducirTickRuleta, t);
     }
-
     setTimeout(async () => {
       document.getElementById("ruleta-resultado").textContent = numeroProgreso;
       infoEl.textContent = `¡Pregunta #${numeroProgreso} activada para todos!`;
@@ -582,7 +535,6 @@
       // la próxima vez que se abra el panel o se llame a sincronizarRuedaConSala().
     }, 4100);
   };
-
   // ---------- KaTeX ----------
   function renderizarKatex(el) {
     if (window.renderMathInElement) {
@@ -592,16 +544,13 @@
       });
     }
   }
-
   // ---------- Cronómetro ----------
   let timerInterval = null;
   let salaActualCache = null;
-
   function iniciarCronometroLocal() {
     clearInterval(timerInterval);
     timerInterval = setInterval(() => actualizarCronometro(), 250);
   }
-
   function actualizarCronometro() {
     if (!salaActualCache || salaActualCache.estado !== ESTADOS.PREGUNTA_ACTIVA) return;
     const limite = (salaActualCache.tiempoLimiteBase || TIEMPO_LIMITE_BASE) + (salaActualCache.tiempoExtra || 0);
@@ -619,16 +568,13 @@
       cerrarPreguntaYCalcular(db, codigoActual); // auto-calificar; queda pausado en resultados para retroalimentación
     }
   }
-
   document.getElementById("btn-mas-tiempo").onclick = () => agregarTiempoExtra(db, codigoActual, 10);
-
   document.getElementById("btn-finalizar-juego").onclick = () => {
     if (!codigoActual) return;
     if (confirm("¿Seguro que quieres finalizar el juego ya y mostrar el ranking final?")) {
       finalizarJuegoYaConRanking(db, codigoActual);
     }
   };
-
   // ---------- Beep de alerta (últimos 10 segundos, uno por segundo) ----------
   let ultimoSegundoConBeep = null;
   function reproducirBeep(urgente) {
@@ -643,33 +589,26 @@
     osc.start();
     osc.stop(audioCtx.currentTime + 0.12);
   }
-
   // ---------- Flujo principal ----------
   function activarSala(codigo) {
     codigoActual = codigo;
     document.getElementById("vista-inicio").style.display = "none";
     document.getElementById("texto-codigo").textContent = codigo;
-
     const urlEstudiante = `${location.origin}${location.pathname.replace("docente", "estudiante")}?sala=${codigo}`;
     document.getElementById("qrcode-grande").innerHTML = "";
     document.getElementById("mini-qr").innerHTML = "";
     new QRCode(document.getElementById("qrcode-grande"), { text: urlEstudiante, width: 200, height: 200 });
     new QRCode(document.getElementById("mini-qr"), { text: urlEstudiante, width: 46, height: 46 });
-
     document.getElementById("barra-codigo").textContent = codigo;
     document.getElementById("barra-sala").style.display = "flex";
-
     asegurarAudioContext(); // el primer snapshot de la sala fijará la pista correcta (lobby/juego/final)
-
     escucharSala(db, codigo, renderizar);
   }
-
   document.getElementById("input-num-preguntas").addEventListener("input", (e) => {
     const n = parseInt(e.target.value, 10) || 1;
     document.getElementById("input-ruleta-max").value = n;
     dibujarRueda(n);
   });
-
   document.getElementById("btn-crear-sala").onclick = async () => {
     const n = parseInt(document.getElementById("input-num-preguntas").value, 10) || 10;
     const tiempo = parseInt(document.getElementById("input-tiempo-pregunta").value, 10) || 20;
@@ -684,7 +623,6 @@
     dibujarRueda(n);
     activarSala(codigo);
   };
-
   document.getElementById("btn-reconectar").onclick = async () => {
     const codigo = document.getElementById("input-codigo-reconectar").value.trim().toUpperCase();
     const errorEl = document.getElementById("reconectar-error");
@@ -698,15 +636,12 @@
     }
     activarSala(codigo);
   };
-
   document.getElementById("btn-iniciar").onclick = () => iniciarSiguientePregunta(db, codigoActual);
   document.getElementById("btn-cerrar-pregunta").onclick = () => cerrarPreguntaYCalcular(db, codigoActual);
   document.getElementById("btn-siguiente").onclick = () => iniciarSiguientePregunta(db, codigoActual);
-
   let ultimaPreguntaRenderizada = -1;
   let yaAutoCerradaEstaPregunta = false;
   let estadoAnterior = null;
-
   function renderizar(s) {
     if (!s) return;
     salaActualCache = s;
@@ -717,7 +652,6 @@
     }
     estadoAnterior = s.estado;
     const numJugadores = Object.keys(s.jugadores || {}).length;
-
     if (s.estado === ESTADOS.ESPERANDO) {
       mostrarVista("vista-espera");
       document.getElementById("btn-iniciar").disabled = numJugadores === 0;
@@ -726,7 +660,6 @@
       document.getElementById("lista-jugadores").innerHTML = Object.values(s.jugadores || {})
         .map((j) => `<div class="chip">${j.animal || "🎓"} ${j.nombre}</div>`).join("");
     }
-
     if (s.estado === ESTADOS.PREGUNTA_ACTIVA) {
       mostrarVista("vista-pregunta");
       const idx = s.preguntaActual;
@@ -755,7 +688,6 @@
     } else {
       clearInterval(timerInterval);
     }
-
     if (s.estado === ESTADOS.RESULTADOS) {
       mostrarVista("vista-resultados");
       const idx = s.preguntaActual;
@@ -764,7 +696,6 @@
         .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""}"><span>${i + 1}. ${j.animal || "🎓"} ${j.nombre}</span><span>${j.puntos} pts</span></div>`).join("");
       document.getElementById("btn-siguiente").textContent = (s.indicesUsados || []).length >= s.preguntas.length ? "Ver ranking final" : "Siguiente pregunta";
     }
-
     if (s.estado === ESTADOS.TERMINADO) {
       mostrarVista("vista-final");
       const rankingFinal = ranking(s);
@@ -777,12 +708,10 @@
       ocultarConfeti();
     }
   }
-
   function mostrarVista(id) {
     ["vista-inicio", "vista-espera", "vista-pregunta", "vista-resultados", "vista-final"]
       .forEach((v) => document.getElementById(v).style.display = v === id ? "block" : "none");
   }
-
   // ---------- Podio estilo olímpico (2-1-3) ----------
   function renderizarPodio(rankingFinal) {
     const cont = document.getElementById("podio-final");
@@ -800,11 +729,9 @@
       </div>`;
     }).join("");
   }
-
   // ---------- Confeti / estrellas ----------
   let confetiInterval = null;
   const EMOJIS_CONFETI = ["⭐", "✨", "🌟", "🎉"];
-
   function mostrarConfeti() {
     const capa = document.getElementById("capa-confeti");
     if (confetiInterval) return; // ya está activo
@@ -821,7 +748,6 @@
       setTimeout(() => estrella.remove(), duracion * 1000 + 200);
     }, 180);
   }
-
   function ocultarConfeti() {
     if (!confetiInterval) return;
     clearInterval(confetiInterval);
