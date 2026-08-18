@@ -13,7 +13,7 @@ const BANCOS_SABERPRO = [
         opciones: ["El 9 de abril de 2012.", "El 11 de abril de 2012.", "El 16 de abril de 2012.", "El 22 de abril de 2012."],
         correcta: 2,
         nivel: "basico",
-        imagen: "imgs_saberpro/sp-01-dolar-abril2012.png",
+        imagen: "imgs_saberpro/img05.png",
       },
       {
         texto: "Un buzo desciende a 30 metros y permanece en el fondo durante 90 minutos. Las tablas de buceo indican paradas de descompresión obligatorias durante el ascenso (velocidad de ascenso constante: 9 m/min). ¿Cuál gráfica representa mejor la profundidad del buzo en función del tiempo, durante todo el recorrido (descenso, fondo y ascenso)?",
@@ -37,7 +37,7 @@ const BANCOS_SABERPRO = [
         ],
         correcta: 0,
         nivel: "intermedio",
-        imagen: "imgs_saberpro/sp-03-presupuesto-salud.png",
+        imagen: "imgs_saberpro/img08.png",
       },
       {
         texto: "Un colegio registra los inscritos por actividad extraescolar según el número de sesiones semanales, y limita cada grupo de \"Deportes\" a máximo 20 estudiantes por profesor. El total de inscritos en Deportes es 60 + 40 + 20 = 120. ¿Cuál gráfica representa la cantidad de profesores necesarios en función del número de inscritos en Deportes?",
@@ -49,14 +49,14 @@ const BANCOS_SABERPRO = [
         ],
         correcta: 0,
         nivel: "aplicado",
-        imagen: "imgs_saberpro/sp-04-colegio-deportes.png",
+        imagen: "imgs_saberpro/img11.png",
       },
       {
         texto: "Una empresa de mensajería cobra el envío de un paquete con un cargo fijo de recolección/gestión más un cargo variable según el peso (kg): 1 kg = $7.500, 2 kg = $10.000, 4 kg = $15.000, 6 kg = $20.000. Si un cliente envía un paquete de 8 kg (mismo esquema de cobro), ¿cuál es el costo total?",
         opciones: ["$20.000.", "$22.500.", "$25.000.", "$27.500."],
         correcta: 2,
         nivel: "basico",
-        imagen: "imgs_saberpro/sp-05-paqueteria.png",
+        imagen: "imgs_saberpro/img24b.png",
       },
       {
         texto: "En una red de mercadeo, las comisiones se determinan de acuerdo con el nivel que ocupa cada integrante dentro de la red. Cada vendedor recibe el 5% de sus propias ventas (nivel 1), el 4% de las ventas de las personas que inscribió directamente (nivel 2), y el 3%, 2% y 1% de las ventas correspondientes a los niveles 3, 4 y 5, respectivamente. Pedro tiene a David como su único inscrito directo. Durante este mes, Pedro realizó ventas por $6.000.000 y David realizó ventas por $5.000.000. No se registraron ventas de otros integrantes en la red de Pedro. ¿A qué corresponde la comisión total que Pedro recibe este mes por las ventas realizadas por él y por los integrantes de su red?",
@@ -68,14 +68,14 @@ const BANCOS_SABERPRO = [
         ],
         correcta: 2,
         nivel: "intermedio",
-        imagen: "imgs_saberpro/sp-06-red-mercadeo.png",
+        imagen: "imgs_saberpro/img14.png",
       },
       {
         texto: "Para cuatro empresas de servicios públicos (ESP) se midió la eficiencia en la atención de reclamos: la proporción de reclamos atendidos antes de 24 horas sobre el total recibidos. Energía = 2/3, Acueducto = 5/6, Telefonía = 9/10, Gas = 3/5. ¿Cuál es la eficiencia promedio de las 4 ESP?",
         opciones: ["72%.", "75%.", "79%.", "80%."],
         correcta: 1,
         nivel: "intermedio",
-        imagen: "imgs_saberpro/sp-07-eficiencia-esp.png",
+        imagen: "imgs_saberpro/img15.png",
       },
       {
         texto: "Una ciudad de 893.944 habitantes cuenta con diferentes estrategias para la gestión y aprovechamiento de los residuos sólidos que se generan diariamente. Por cada 100 habitantes, la ciudad genera entre 55 y 75 kg de basura al día. Un 60% de esa basura es de tipo orgánico y se quiere reducir. ¿Entre qué valores está la cantidad de basura orgánica que se produce al día en la ciudad?",
@@ -99,7 +99,7 @@ const BANCOS_SABERPRO = [
         ],
         correcta: 0,
         nivel: "basico",
-        imagen: "imgs_saberpro/sp-07-eficiencia-esp.png",
+        imagen: "imgs_saberpro/img15.png",
       },
       {
         texto: "Un futuro se firmó el 10 de abril de 2012 (valor del dólar ese día: $1.782) para intercambiar 500 libras de café a 1,5 USD cada una. El comprador calculó: $1.782 ÷ 1,5 = $1.188 (valor libra de café); $1.188 × 500 = $594.000 (valor de compra). El valor de compra en pesos NO es correcto porque:",
