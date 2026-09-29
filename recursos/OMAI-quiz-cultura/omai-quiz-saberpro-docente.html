@@ -11,6 +11,8 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- ExcelJS: solo se usa en esta página (docente) para generar el Excel final -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <style>
   :root {
     --void: #f7f9fd; --abyss: #ffffff; --panel: #ffffff;
@@ -90,14 +92,32 @@
     margin: 8px 0 16px 0;
   }
   #cronometro.urgente { color: var(--bad); }
-  .ranking-row { display: flex; justify-content: space-between; padding: 10px 16px; background: var(--abyss); border-radius: 8px; margin-bottom: 8px; font-size: 16px; }
+  .ranking-row { display: flex; justify-content: space-between; gap: 12px; padding: 10px 16px; background: var(--abyss); border-radius: 8px; margin-bottom: 8px; font-size: 16px; text-align: left; }
   .ranking-row.top1 { border: 1px solid var(--gold); }
   .config-note { font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--bad); margin-top: 20px; }
+  /* Flechas de cambio de posición */
+  .flecha { display: inline-block; width: 1.3em; text-align: center; font-weight: 700; }
+  .flecha.sube { color: var(--good); }
+  .flecha.baja { color: var(--bad); }
+  .flecha.igual { color: var(--ink-faint); }
+  /* Distribución de respuestas */
+  .dist-wrap { margin: 4px 0 24px 0; padding: 16px 12px 12px; border: 1px solid var(--line-soft); border-radius: 12px; background: var(--abyss); }
+  .dist-titulo { font-family: "Spline Sans Mono", monospace; font-size: 12px; letter-spacing: 0.12em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+  .dist-barras { display: flex; align-items: flex-end; justify-content: center; gap: 18px; height: 210px; }
+  .dist-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; width: 84px; height: 100%; }
+  .dist-num { font-family: "Spline Sans Mono", monospace; font-weight: 600; font-size: 18px; color: var(--ink-soft); margin-bottom: 4px; min-height: 26px; white-space: nowrap; }
+  .dist-col.ok .dist-num { color: var(--good); }
+  .dist-chulo { color: var(--good); font-size: 22px; font-weight: 700; }
+  .dist-barra { width: 100%; background: #b9c2d6; border-radius: 8px 8px 0 0; min-height: 3px; transition: height 0.5s ease; }
+  .dist-col.ok .dist-barra { background: var(--good); }
+  .dist-letra { font-family: "Fraunces", serif; font-weight: 700; font-size: 20px; margin-top: 6px; }
+  .dist-pct { font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--ink-faint); }
+  .dist-pie { font-size: 14px; color: var(--ink-soft); margin-top: 12px; }
   /* Podio estilo olímpico */
   #podio-final { display: flex; align-items: flex-end; justify-content: center; gap: 14px; margin: 28px 0 12px 0; }
   .podio-puesto { display: flex; flex-direction: column; align-items: center; width: 140px; }
   .podio-animal { font-size: 44px; margin-bottom: 4px; }
-  .podio-nombre { font-weight: 600; font-size: 15px; color: var(--ink); text-align:center; }
+  .podio-nombre { font-weight: 600; font-size: 15px; color: var(--ink); text-align:center; word-break: break-word; }
   .podio-puntos { font-family: "Spline Sans Mono", monospace; color: var(--gold-deep); font-size: 13px; margin-bottom: 8px; }
   .podio-bloque {
     width: 100%; border-radius: 10px 10px 0 0; display: flex; align-items: flex-start;
@@ -189,10 +209,10 @@
     <div class="eyebrow">Código de sala</div>
     <div class="codigo-grande" id="texto-codigo"></div>
     <div id="qrcode-grande"></div>
-    <p style="color:var(--ink-soft)">Los estudiantes escanean el QR o entran con el código. Pueden unirse en cualquier momento.</p>
+    <p style="color:var(--ink-soft)">Los estudiantes escanean el QR o entran con el código. Pueden unirse en cualquier momento, incluso con el quiz ya iniciado.</p>
     <div class="lista-jugadores" id="lista-jugadores"></div>
     <br/>
-    <button class="btn" id="btn-iniciar" disabled>Esperando jugadores…</button>
+    <button class="btn" id="btn-iniciar">Iniciar quiz</button>
   </div>
   <div class="card" id="vista-pregunta" style="display:none;">
     <div class="eyebrow" id="contador-pregunta"></div>
@@ -214,6 +234,7 @@
     <button class="btn" id="btn-cerrar-pregunta" style="margin-top:16px;">Cerrar pregunta y ver resultados</button>
   </div>
   <div class="card" id="vista-resultados" style="display:none;">
+    <div id="dist-resultados"></div>
     <div class="eyebrow">Ranking</div>
     <div id="ranking-lista"></div>
     <br/>
@@ -225,6 +246,9 @@
     <h2 style="font-family:'Fraunces',serif; color:var(--gold-deep);">🏆 Ranking final</h2>
     <div id="podio-final"></div>
     <div id="ranking-final" style="margin-top:24px;"></div>
+    <hr style="border-color: var(--line-soft); margin: 28px 0 20px;" />
+    <button class="btn" id="btn-descargar-excel">📥 Descargar Excel con todas las respuestas</button>
+    <p style="color:var(--ink-faint); font-size:12px; margin-top:8px;">Este botón solo existe en la página del docente.</p>
   </div>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -235,10 +259,106 @@
     finalizarJuegoYaConRanking, activarPreguntaPorIndice,
   } from "./omai-quiz-app.js";
   import { BANCOS_SABERPRO } from "./omai-quiz-saberpro-bancos-razonamiento-cuantitativo.js";
-  // Esta actividad se usa con retroalimentación en vivo, así que las preguntas
-  // deben salir SIEMPRE en el mismo orden del banco (no aleatorio como en Cultura General).
-  // Por eso creamos la sala aquí directamente, sin usar crearSala() de omai-quiz-app.js
-  // (que sí mezcla las preguntas al azar).
+
+  // ---------- Utilidades compartidas ----------
+  const LETRAS = ["A", "B", "C", "D", "E", "F"];
+  function esc(t) {
+    return String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+  // Índice (0-based) de la opción correcta de una pregunta. Prueba varios nombres de campo habituales.
+  function indiceCorrecto(p) {
+    if (!p) return null;
+    const c = p.correcta ?? p.correct ?? p.respuestaCorrecta ?? p.respuesta ?? p.indiceCorrecto
+      ?? p.indiceCorrecta ?? p.correctaIdx ?? p.claveCorrecta ?? p.clave ?? p.answer;
+    if (typeof c === "number") return c;
+    if (typeof c === "string") {
+      const t = c.trim();
+      if (t.length === 1 && LETRAS.indexOf(t.toUpperCase()) >= 0) return LETRAS.indexOf(t.toUpperCase());
+      const i = (p.opciones || []).findIndex((o) => String(o).trim() === t);
+      if (i >= 0) return i;
+      if (/^\d+$/.test(t)) return parseInt(t, 10);
+    }
+    return null;
+  }
+  // Opción elegida por un jugador en una pregunta (0-based) o null.
+  function opcionElegida(s, idx, id) {
+    const e = s.eleccion && s.eleccion[idx] && s.eleccion[idx][id];
+    if (e != null) return typeof e === "object" ? (typeof e.o === "number" ? e.o : null) : e;
+    const r = s.respuestas && s.respuestas[idx] && s.respuestas[idx][id];
+    if (r == null) return null;
+    if (typeof r === "number") return r;
+    const v = r.opcion ?? r.idxOpcion ?? r.respuesta ?? r.eleccion ?? r.indice ?? r.opcionElegida ?? r.o;
+    return typeof v === "number" ? v : null;
+  }
+  function tiempoElegido(s, idx, id) {
+    const e = s.eleccion && s.eleccion[idx] && s.eleccion[idx][id];
+    return e && typeof e === "object" && typeof e.t === "number" ? e.t : null;
+  }
+  function idsQueRespondieron(s, idx) {
+    const a = Object.keys((s.eleccion && s.eleccion[idx]) || {});
+    const b = Object.keys((s.respuestas && s.respuestas[idx]) || {});
+    return [...new Set([...a, ...b])];
+  }
+  function conteoOpciones(s, idx) {
+    const p = s.preguntas[idx];
+    const cuentas = new Array(p.opciones.length).fill(0);
+    idsQueRespondieron(s, idx).forEach((id) => {
+      const o = opcionElegida(s, idx, id);
+      if (o != null && o >= 0 && o < cuentas.length) cuentas[o]++;
+    });
+    return cuentas;
+  }
+  // Diagrama de barras con la proporción por letra y chulo verde en la correcta.
+  function htmlDistribucion(s, idx, numJugadores, miId) {
+    const p = s.preguntas[idx];
+    if (!p) return "";
+    const cuentas = conteoOpciones(s, idx);
+    const total = cuentas.reduce((a, b) => a + b, 0);
+    const correcta = indiceCorrecto(p);
+    const cols = cuentas.map((c, i) => {
+      const pct = total ? Math.round((100 * c) / total) : 0;
+      const alto = Math.round(pct * 1.45);
+      const ok = i === correcta;
+      return `<div class="dist-col ${ok ? "ok" : ""}">
+        <div class="dist-num">${ok ? '<span class="dist-chulo">✔</span> ' : ""}${c}</div>
+        <div class="dist-barra" style="height:${alto}px"></div>
+        <div class="dist-letra">${LETRAS[i]}</div>
+        <div class="dist-pct">${pct}%</div>
+      </div>`;
+    }).join("");
+    const acertaron = correcta != null ? cuentas[correcta] : null;
+    const sin = Math.max(0, numJugadores - total);
+    let pie = `${total} de ${numJugadores} respondieron`;
+    if (acertaron != null) pie += ` · ${acertaron} acertaron${total ? ` (${Math.round((100 * acertaron) / total)}%)` : ""}`;
+    if (sin > 0) pie += ` · ${sin} sin responder`;
+    let mio = "";
+    if (miId) {
+      const o = opcionElegida(s, idx, miId);
+      if (o == null) mio = `<div class="dist-pie"><b>No alcanzaste a responder.</b></div>`;
+      else if (correcta == null) mio = `<div class="dist-pie">Tu respuesta: <b>${LETRAS[o]}</b></div>`;
+      else mio = `<div class="dist-pie">Tu respuesta: <b>${LETRAS[o]}</b> ${o === correcta ? "✔ ¡Correcta!" : `✘ (la correcta era ${LETRAS[correcta]})`}</div>`;
+    }
+    return `<div class="dist-wrap"><div class="dist-titulo">Respuestas de la pregunta</div>
+      <div class="dist-barras">${cols}</div><div class="dist-pie">${pie}</div>${mio}</div>`;
+  }
+  // Posiciones con empates (mismo puntaje = misma posición).
+  function posiciones(rk) {
+    const pos = {};
+    rk.forEach((j, i) => {
+      const primero = rk.findIndex((x) => x.puntos === j.puntos);
+      pos[j.id] = primero + 1;
+    });
+    return pos;
+  }
+  function flecha(id, posActual, hist) {
+    const prev = hist && hist.prev && hist.prev[id];
+    if (prev == null) return '<span class="flecha"></span>';
+    if (posActual < prev) return '<span class="flecha sube" title="Subió">▲</span>';
+    if (posActual > prev) return '<span class="flecha baja" title="Bajó">▼</span>';
+    return '<span class="flecha igual" title="Se mantiene">–</span>';
+  }
+
+  // ---------- Sala en orden ----------
   function generarCodigoSalaLocal() {
     const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ";
     let codigo = "";
@@ -262,8 +382,6 @@
     });
     return codigo;
   }
-  // Avanza siempre a la pregunta no usada de MENOR índice (es decir, la siguiente
-  // en el orden original del banco), en vez de escoger al azar entre las restantes.
   async function siguientePreguntaEnOrden() {
     if (!salaActualCache || !codigoActual) return;
     const candidatos = candidatosDeSala(salaActualCache);
@@ -295,6 +413,7 @@
     const app = initializeApp(firebaseConfig);
     db = getDatabase(app);
   }
+
   // ---------- Música ----------
   let audioCtx = null;
   let musicaActiva = true;
@@ -355,6 +474,7 @@
     const clave = nuevaFase === "juego" ? pistaActual : nuevaFase;
     iniciarMusica(clave);
   }
+
   // ---------- Fanfarria de bongos al iniciar el juego ----------
   function ruidoBlanco(duracionSeg) {
     const tam = Math.floor(audioCtx.sampleRate * duracionSeg);
@@ -393,6 +513,7 @@
       osc.stop(audioCtx.currentTime + 1.6);
     });
   }
+
   // ---------- Ruleta circular animada ----------
   let girando = false;
   const coloresRueda = ["#4dc9c9", "#c96b7a", "#7ac97a", "#9a7ac9", "#c9a04d", "#6b8fc9"];
@@ -513,10 +634,9 @@
       await activarPreguntaPorIndice(db, codigoActual, elegidoIdx);
     }, 4100);
   };
+
   // ---------- KaTeX ----------
-  // Solo se activa modo matemático con $$...$$; el delimitador $...$ se desactiva
-  // a propósito porque las preguntas usan "$" para valores en pesos (p. ej. $594.000)
-  // y KaTeX los interpretaba como fórmulas, arruinando el texto.
+  // Solo $$...$$ activa modo matemático; "$" se usa para pesos (p. ej. $594.000).
   function renderizarKatex(el) {
     if (window.renderMathInElement) {
       window.renderMathInElement(el, {
@@ -525,6 +645,7 @@
       });
     }
   }
+
   // ---------- Cronómetro ----------
   let timerInterval = null;
   let salaActualCache = null;
@@ -556,6 +677,7 @@
       finalizarJuegoYaConRanking(db, codigoActual);
     }
   };
+
   // ---------- Beep de alerta ----------
   let ultimoSegundoConBeep = null;
   function reproducirBeep(urgente) {
@@ -570,9 +692,11 @@
     osc.start();
     osc.stop(audioCtx.currentTime + 0.12);
   }
+
   // ---------- Flujo principal ----------
   function activarSala(codigo) {
     codigoActual = codigo;
+    ultimaClaveHist = null;
     document.getElementById("vista-inicio").style.display = "none";
     document.getElementById("texto-codigo").textContent = codigo;
     const urlEstudiante = `${location.origin}${location.pathname.replace("saberpro-docente", "saberpro-estudiante")}?sala=${codigo}`;
@@ -617,6 +741,22 @@
   document.getElementById("btn-iniciar").onclick = () => siguientePreguntaEnOrden();
   document.getElementById("btn-cerrar-pregunta").onclick = () => cerrarPreguntaYCalcular(db, codigoActual);
   document.getElementById("btn-siguiente").onclick = () => siguientePreguntaEnOrden();
+
+  // ---------- Historial de ranking (para las flechas ▲▼) ----------
+  // Al mostrar los resultados de cada pregunta, el docente guarda en Firebase las posiciones
+  // actuales (cur) y las de la pregunta anterior (prev). Así estudiantes y docente ven lo mismo.
+  let ultimaClaveHist = null;
+  function asegurarHistorial(s, rk) {
+    const clave = String((s.indicesUsados || []).length);
+    if (s.rankHist && s.rankHist.clave === clave) return s.rankHist;
+    const nuevo = { clave, prev: (s.rankHist && s.rankHist.cur) || {}, cur: posiciones(rk) };
+    if (ultimaClaveHist !== clave) {
+      ultimaClaveHist = clave;
+      set(ref(db, `salas/${codigoActual}/rankHist`), nuevo).catch(() => {});
+    }
+    return nuevo;
+  }
+
   let ultimaPreguntaRenderizada = -1;
   let yaAutoCerradaEstaPregunta = false;
   let estadoAnterior = null;
@@ -632,11 +772,12 @@
     const numJugadores = Object.keys(s.jugadores || {}).length;
     if (s.estado === ESTADOS.ESPERANDO) {
       mostrarVista("vista-espera");
-      document.getElementById("btn-iniciar").disabled = numJugadores === 0;
+      // El docente puede iniciar cuando quiera; los estudiantes pueden entrar después.
+      document.getElementById("btn-iniciar").disabled = false;
       document.getElementById("btn-iniciar").textContent =
-        numJugadores === 0 ? "Esperando jugadores…" : `Iniciar quiz (${numJugadores} jugadores)`;
+        numJugadores === 0 ? "Iniciar quiz (aún sin jugadores)" : `Iniciar quiz (${numJugadores} jugadores)`;
       document.getElementById("lista-jugadores").innerHTML = Object.values(s.jugadores || {})
-        .map((j) => `<div class="chip">${j.animal || "🎓"} ${j.nombre}</div>`).join("");
+        .map((j) => `<div class="chip">${j.animal || "🎓"} ${esc(j.nombre)}</div>`).join("");
     }
     if (s.estado === ESTADOS.PREGUNTA_ACTIVA) {
       mostrarVista("vista-pregunta");
@@ -678,8 +819,11 @@
     if (s.estado === ESTADOS.RESULTADOS) {
       mostrarVista("vista-resultados");
       const rankingActual = ranking(s);
+      const hist = asegurarHistorial(s, rankingActual);
+      const pos = posiciones(rankingActual);
+      document.getElementById("dist-resultados").innerHTML = htmlDistribucion(s, s.preguntaActual, numJugadores, null);
       document.getElementById("ranking-lista").innerHTML = rankingActual
-        .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""}"><span>${i + 1}. ${j.animal || "🎓"} ${j.nombre}</span><span>${j.puntos} pts</span></div>`).join("");
+        .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""}"><span>${flecha(j.id, pos[j.id], hist)} ${i + 1}. ${j.animal || "🎓"} ${esc(j.nombre)}</span><span>${j.puntos} pts</span></div>`).join("");
       document.getElementById("btn-siguiente").textContent = (s.indicesUsados || []).length >= s.preguntas.length ? "Ver ranking final" : "Siguiente pregunta";
     }
     if (s.estado === ESTADOS.TERMINADO) {
@@ -688,7 +832,7 @@
       renderizarPodio(rankingFinal);
       const resto = rankingFinal.slice(3);
       document.getElementById("ranking-final").innerHTML = resto
-        .map((j, i) => `<div class="ranking-row"><span>${i + 4}. ${j.animal || "🎓"} ${j.nombre}</span><span>${j.puntos} pts</span></div>`).join("");
+        .map((j, i) => `<div class="ranking-row"><span>${i + 4}. ${j.animal || "🎓"} ${esc(j.nombre)}</span><span>${j.puntos} pts</span></div>`).join("");
       mostrarConfeti();
     } else {
       ocultarConfeti();
@@ -708,7 +852,7 @@
       const claseAltura = `podio-${i + 1}`;
       return `<div class="podio-puesto ${claseAltura}">
         <div class="podio-animal">${j.animal || "🎓"}</div>
-        <div class="podio-nombre">${j.nombre}</div>
+        <div class="podio-nombre">${esc(j.nombre)}</div>
         <div class="podio-puntos">${j.puntos} pts</div>
         <div class="podio-bloque">${medallas[i]}</div>
       </div>`;
@@ -739,6 +883,194 @@
     document.getElementById("capa-confeti").innerHTML = "";
     document.getElementById("capa-confeti").style.display = "none";
   }
+
+  // ---------- Excel final (solo docente) ----------
+  const REL_VERDE = { type: "pattern", pattern: "solid", fgColor: { argb: "FFC6EFCE" } };
+  const REL_ROJO = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFFC7CE" } };
+  const REL_AZUL = { type: "pattern", pattern: "solid", fgColor: { argb: "FF14304F" } };
+  const REL_GRIS = { type: "pattern", pattern: "solid", fgColor: { argb: "FFE9EDF5" } };
+  const BORDE = { top: { style: "thin", color: { argb: "FFD0D6E2" } }, left: { style: "thin", color: { argb: "FFD0D6E2" } }, bottom: { style: "thin", color: { argb: "FFD0D6E2" } }, right: { style: "thin", color: { argb: "FFD0D6E2" } } };
+
+  async function descargarExcel() {
+    const s = salaActualCache;
+    if (!s) return;
+    if (!window.ExcelJS) { alert("La librería de Excel aún no carga. Espera unos segundos e inténtalo de nuevo."); return; }
+    const perfiles = s.perfiles || {};
+    const preguntas = s.preguntas;
+    const nP = preguntas.length;
+    const claves = preguntas.map(indiceCorrecto);
+    const rk = ranking(s);
+    const pos = posiciones(rk);
+    const nMaxOpc = Math.max(...preguntas.map((p) => p.opciones.length));
+    const wb = new ExcelJS.Workbook();
+    wb.creator = "OMAI-Quiz";
+    wb.created = new Date();
+
+    // ===== Hoja 1: Respuestas =====
+    const ws = wb.addWorksheet("Respuestas");
+    const col0 = 6; // primera columna de preguntas (F)
+    const L = (n) => ws.getColumn(n).letter;
+    const nCols = col0 + nP + 3; // + Respondidas, Aciertos, %, Puntos
+    ws.mergeCells(1, 1, 1, Math.max(nCols, 10));
+    ws.getCell(1, 1).value = "OMAI-Quiz Saber Pro — Razonamiento Cuantitativo · Respuestas por estudiante";
+    ws.getCell(1, 1).font = { bold: true, size: 14, color: { argb: "FFFFFFFF" } };
+    ws.getCell(1, 1).fill = REL_AZUL;
+    ws.getRow(1).height = 26;
+    ws.getCell(2, 1).value = `Sala ${codigoActual} · ${new Date().toLocaleString("es-CO")} · ${rk.length} estudiantes · ${nP} preguntas · Verde = acierto, rojo = error, vacío = sin responder`;
+    ws.getCell(2, 1).font = { italic: true, color: { argb: "FF5B6577" } };
+
+    let r = 4;
+    ["competencia", "contenido", "grado"].filter((k) => preguntas.some((p) => p[k] != null && p[k] !== "")).forEach((k) => {
+      ws.getCell(r, col0 - 1).value = k.charAt(0).toUpperCase() + k.slice(1);
+      ws.getCell(r, col0 - 1).font = { bold: true };
+      ws.getCell(r, col0 - 1).alignment = { horizontal: "right" };
+      preguntas.forEach((p, i) => {
+        const c = ws.getCell(r, col0 + i);
+        c.value = p[k] ?? "";
+        c.alignment = { horizontal: "center" };
+        c.fill = REL_GRIS; c.border = BORDE;
+      });
+      r++;
+    });
+    const filaClave = r++;
+    ws.getCell(filaClave, col0 - 1).value = "Clave";
+    ws.getCell(filaClave, col0 - 1).font = { bold: true };
+    ws.getCell(filaClave, col0 - 1).alignment = { horizontal: "right" };
+    claves.forEach((c, i) => {
+      const cell = ws.getCell(filaClave, col0 + i);
+      cell.value = c != null ? LETRAS[c] : "?";
+      cell.font = { bold: true };
+      cell.alignment = { horizontal: "center" };
+      cell.fill = REL_GRIS; cell.border = BORDE;
+    });
+    const filaHead = r++;
+    const encabezados = ["Puesto", "Nombre completo", "Ciudad", "Correo", "Nombre en el juego"];
+    preguntas.forEach((_, i) => encabezados.push(`P${i + 1}`));
+    encabezados.push("Respondidas", "Aciertos", "% acierto", "Puntos");
+    encabezados.forEach((h, i) => {
+      const c = ws.getCell(filaHead, i + 1);
+      c.value = h;
+      c.font = { bold: true, color: { argb: "FFFFFFFF" } };
+      c.fill = REL_AZUL;
+      c.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+      c.border = BORDE;
+    });
+    const cResp = col0 + nP, cAc = cResp + 1, cPct = cResp + 2, cPts = cResp + 3;
+    rk.forEach((j) => {
+      const fila = r++;
+      const pf = perfiles[j.id] || {};
+      ws.getCell(fila, 1).value = pos[j.id];
+      ws.getCell(fila, 2).value = pf.nombreCompleto || j.nombre;
+      ws.getCell(fila, 3).value = pf.ciudad || "";
+      ws.getCell(fila, 4).value = pf.correo || "";
+      ws.getCell(fila, 5).value = j.nombre;
+      let resp = 0, ac = 0;
+      preguntas.forEach((_, i) => {
+        const cell = ws.getCell(fila, col0 + i);
+        const o = opcionElegida(s, i, j.id);
+        cell.alignment = { horizontal: "center" };
+        cell.border = BORDE;
+        if (o != null && o >= 0) {
+          resp++;
+          cell.value = LETRAS[o];
+          if (claves[i] != null) {
+            if (o === claves[i]) { ac++; cell.fill = REL_VERDE; } else cell.fill = REL_ROJO;
+          }
+        }
+      });
+      const rango = `${L(col0)}${fila}:${L(col0 + nP - 1)}${fila}`;
+      const rangoClave = `$${L(col0)}$${filaClave}:$${L(col0 + nP - 1)}$${filaClave}`;
+      ws.getCell(fila, cResp).value = { formula: `COUNTA(${rango})`, result: resp };
+      ws.getCell(fila, cAc).value = { formula: `SUMPRODUCT(--(${rango}=${rangoClave}),--(${rango}<>""))`, result: ac };
+      ws.getCell(fila, cPct).value = { formula: `${L(cAc)}${fila}/${nP}`, result: nP ? ac / nP : 0 };
+      ws.getCell(fila, cPct).numFmt = "0%";
+      ws.getCell(fila, cPts).value = j.puntos;
+      for (let c = 1; c <= 5; c++) ws.getCell(fila, c).border = BORDE;
+      for (let c = cResp; c <= cPts; c++) { ws.getCell(fila, c).border = BORDE; ws.getCell(fila, c).alignment = { horizontal: "center" }; }
+      ws.getCell(fila, 1).alignment = { horizontal: "center" };
+    });
+    ws.getColumn(1).width = 8;
+    ws.getColumn(2).width = 34;
+    ws.getColumn(3).width = 16;
+    ws.getColumn(4).width = 28;
+    ws.getColumn(5).width = 30;
+    for (let i = 0; i < nP; i++) ws.getColumn(col0 + i).width = 5.5;
+    [cResp, cAc, cPct, cPts].forEach((c) => (ws.getColumn(c).width = 12));
+    ws.getRow(filaHead).height = 30;
+    ws.views = [{ state: "frozen", xSplit: 2, ySplit: filaHead }];
+
+    // ===== Hoja 2: Análisis por ítem =====
+    const wa = wb.addWorksheet("Análisis por ítem");
+    const hA = ["Pregunta", "Enunciado", "Clave"];
+    for (let k = 0; k < nMaxOpc; k++) hA.push(`Eligieron ${LETRAS[k]}`);
+    hA.push("Sin responder", "Acertaron", "% acierto", "Tiempo prom. (s)");
+    hA.forEach((h, i) => {
+      const c = wa.getCell(1, i + 1);
+      c.value = h; c.font = { bold: true, color: { argb: "FFFFFFFF" } }; c.fill = REL_AZUL;
+      c.alignment = { horizontal: "center", vertical: "middle", wrapText: true }; c.border = BORDE;
+    });
+    preguntas.forEach((p, i) => {
+      const fila = i + 2;
+      const cuentas = conteoOpciones(s, i);
+      const total = cuentas.reduce((a, b) => a + b, 0);
+      const tiempos = rk.map((j) => tiempoElegido(s, i, j.id)).filter((t) => t != null);
+      wa.getCell(fila, 1).value = `P${i + 1}`;
+      wa.getCell(fila, 2).value = p.texto;
+      wa.getCell(fila, 2).alignment = { wrapText: true, vertical: "top" };
+      wa.getCell(fila, 3).value = claves[i] != null ? LETRAS[claves[i]] : "?";
+      for (let k = 0; k < nMaxOpc; k++) {
+        const c = wa.getCell(fila, 4 + k);
+        c.value = k < cuentas.length ? cuentas[k] : "";
+        if (k === claves[i]) c.fill = REL_VERDE;
+      }
+      const base = 4 + nMaxOpc;
+      wa.getCell(fila, base).value = Math.max(0, rk.length - total);
+      wa.getCell(fila, base + 1).value = claves[i] != null ? cuentas[claves[i]] : "";
+      wa.getCell(fila, base + 2).value = claves[i] != null && rk.length ? cuentas[claves[i]] / rk.length : "";
+      wa.getCell(fila, base + 2).numFmt = "0%";
+      wa.getCell(fila, base + 3).value = tiempos.length ? Math.round((tiempos.reduce((a, b) => a + b, 0) / tiempos.length) * 10) / 10 : "";
+      for (let c = 1; c <= base + 3; c++) { wa.getCell(fila, c).border = BORDE; if (c !== 2) wa.getCell(fila, c).alignment = { horizontal: "center", vertical: "top" }; }
+    });
+    wa.getColumn(1).width = 10; wa.getColumn(2).width = 70; wa.getColumn(3).width = 8;
+    for (let c = 4; c <= 4 + nMaxOpc + 3; c++) wa.getColumn(c).width = 13;
+    wa.getRow(1).height = 30;
+    wa.views = [{ state: "frozen", ySplit: 1 }];
+    // % acierto de la columna "acertaron" se calcula sobre el total de estudiantes en la sala.
+
+    // ===== Hoja 3: Banco de preguntas =====
+    const wq = wb.addWorksheet("Banco de preguntas");
+    const hQ = ["Pregunta", "Enunciado"];
+    for (let k = 0; k < nMaxOpc; k++) hQ.push(`Opción ${LETRAS[k]}`);
+    hQ.push("Clave");
+    hQ.forEach((h, i) => {
+      const c = wq.getCell(1, i + 1);
+      c.value = h; c.font = { bold: true, color: { argb: "FFFFFFFF" } }; c.fill = REL_AZUL; c.border = BORDE;
+      c.alignment = { horizontal: "center", vertical: "middle" };
+    });
+    preguntas.forEach((p, i) => {
+      const fila = i + 2;
+      wq.getCell(fila, 1).value = `P${i + 1}`;
+      wq.getCell(fila, 2).value = p.texto;
+      p.opciones.forEach((o, k) => (wq.getCell(fila, 3 + k).value = o));
+      wq.getCell(fila, 3 + nMaxOpc).value = claves[i] != null ? LETRAS[claves[i]] : "?";
+      for (let c = 1; c <= 3 + nMaxOpc; c++) { wq.getCell(fila, c).border = BORDE; wq.getCell(fila, c).alignment = { wrapText: true, vertical: "top" }; }
+    });
+    wq.getColumn(1).width = 10; wq.getColumn(2).width = 70;
+    for (let c = 3; c <= 3 + nMaxOpc; c++) wq.getColumn(c).width = 26;
+
+    const buffer = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `OMAI-Quiz_SaberPro_${codigoActual}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  }
+  document.getElementById("btn-descargar-excel").onclick = () => {
+    descargarExcel().catch((e) => { console.error(e); alert("No se pudo generar el Excel: " + e.message); });
+  };
 </script>
 </body>
 </html>
