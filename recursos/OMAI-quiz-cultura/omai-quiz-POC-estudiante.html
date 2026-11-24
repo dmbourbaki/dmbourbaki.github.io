@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OMAI-Quiz POC · Ecuaciones Diferenciales — Estudiante</title>
+<meta name="description" content="Observatorio de Matemáticas Avanzadas para Ingeniería — OMAI-Quiz POC" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    --void: #f7f9fd; --abyss: #ffffff; --panel: #ffffff;
+    --gold: #f5a623; --gold-bright: #ffbe55; --gold-deep: #c9820a;
+    --cyan: #12b3a8; --rose: #ef5d7a; --grass: #29b36b; --violet: #7c5cff;
+    --good: #22a866; --bad: #e14b62;
+    --line: #e2e6f0; --line-soft: #edf0f8;
+    --ink: #1d2333; --ink-soft: #5b6577; --ink-faint: #8991a3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background-color: var(--void); color: var(--ink);
+    font-family: "Inter Tight", sans-serif; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 24px; padding-top: 76px;
+  }
+  .eyebrow {
+    font-family: "Spline Sans Mono", monospace; font-size: 12px; letter-spacing: 0.14em;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 8px;
+  }
+  h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 30px; margin: 0 0 24px 0; color: var(--ink); text-align: center; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 4px 24px rgba(30,40,80,0.06); padding: 32px; max-width: 640px; width: 100%; text-align: center; }
+  #vista-pregunta { max-width: 1040px; text-align: left; }
+  .btn {
+    font-family: "Inter Tight", sans-serif; font-weight: 600; font-size: 16px;
+    background: var(--gold); color: var(--void); border: none; border-radius: 10px;
+    padding: 14px 28px; cursor: pointer; transition: background 0.15s ease; width: 100%;
+  }
+  .btn:hover { background: var(--gold-bright); }
+  .btn:disabled { background: var(--line); color: var(--ink-faint); cursor: not-allowed; }
+  .btn-secundario { background: transparent; border: 1px solid var(--line-soft); color: var(--ink-soft); font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+  input[type=text], input[type=email] {
+    font-family: "Spline Sans Mono", monospace; background: var(--abyss); color: var(--ink);
+    border: 1px solid var(--line-soft); border-radius: 8px; padding: 12px 14px; font-size: 15px;
+    width: 100%; margin-bottom: 14px;
+  }
+  .campo-label { display: block; text-align: left; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+  #barra-sala {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: none; align-items: center; justify-content: space-between;
+    background: var(--panel); border-bottom: 1px solid var(--line); box-shadow: 0 2px 12px rgba(30,40,80,0.05); padding: 10px 24px; flex-wrap: wrap; gap: 8px;
+  }
+  #barra-sala .info-codigo { font-family: "Spline Sans Mono", monospace; font-size: 14px; color: var(--gold-deep); }
+  .eyebrow-pregunta { font-family: "Spline Sans Mono", monospace; font-size: 12px; letter-spacing: 0.1em; color: var(--gold-deep); text-transform: uppercase; margin-bottom: 6px; }
+  #cronometro {
+    font-family: "Spline Sans Mono", monospace; font-size: 40px; color: var(--gold-deep);
+    margin: 4px 0 12px 0; text-align: center;
+  }
+  #cronometro.urgente { color: var(--bad); }
+  .pregunta-layout { display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap; }
+  .pregunta-col-texto { flex: 1 1 36%; min-width: 260px; }
+  .pregunta-col-imagen { flex: 1 1 58%; min-width: 240px; display: flex; align-items: center; justify-content: center; order: -1; }
+  @media (min-width: 860px) {
+    .pregunta-col-imagen { order: 1; }
+  }
+  .pregunta-texto { font-family: "Fraunces", serif; font-size: 21px; margin: 10px 0; color: var(--ink); }
+  .pregunta-imagen-wrap {
+    width: 100%; background: var(--abyss); border: 1px solid var(--line-soft); border-radius: 12px;
+    padding: 8px; display: flex; align-items: center; justify-content: center; min-height: 100px;
+  }
+  .pregunta-imagen { max-width: 100%; max-height: 460px; border-radius: 8px; display: block; }
+  .pregunta-imagen-vacia { color: var(--ink-faint); font-size: 12px; font-family: "Spline Sans Mono", monospace; text-align: center; padding: 20px 8px; }
+  .opciones-lista { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .opcion-btn {
+    border-radius: 10px; padding: 16px; font-size: 16px; text-align: left; border: 1px solid var(--line-soft);
+    color: var(--ink); background: var(--abyss); cursor: pointer; font-family: "Inter Tight", sans-serif;
+  }
+  .opcion-btn:nth-child(1) { background: rgba(18,179,168,0.12); border-color: var(--cyan); }
+  .opcion-btn:nth-child(2) { background: rgba(239,93,122,0.12); border-color: var(--rose); }
+  .opcion-btn:nth-child(3) { background: rgba(41,179,107,0.12); border-color: var(--grass); }
+  .opcion-btn:nth-child(4) { background: rgba(124,92,255,0.12); border-color: var(--violet); }
+  .opcion-btn.elegida { outline: 3px solid var(--gold); }
+  .opcion-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .opcion-btn.correcta { outline: 3px solid var(--good); }
+  .opcion-btn.incorrecta { outline: 3px solid var(--bad); }
+  .mensaje-espera { color: var(--ink-soft); font-size: 15px; margin: 20px 0; }
+  .ranking-row { display: flex; justify-content: space-between; gap: 12px; padding: 10px 16px; background: var(--abyss); border-radius: 8px; margin-bottom: 8px; font-size: 16px; text-align: left; }
+  .ranking-row.top1 { border: 1px solid var(--gold); }
+  .ranking-row.yo { border: 1px solid var(--cyan); }
+  .config-note { font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--bad); margin-top: 20px; }
+  /* Flechas de cambio de posición */
+  .flecha { display: inline-block; width: 1.3em; text-align: center; font-weight: 700; }
+  .flecha.sube { color: var(--good); }
+  .flecha.baja { color: var(--bad); }
+  .flecha.igual { color: var(--ink-faint); }
+  /* Distribución de respuestas */
+  .dist-wrap { margin: 4px 0 20px 0; padding: 14px 10px 12px; border: 1px solid var(--line-soft); border-radius: 12px; background: var(--abyss); }
+  .dist-titulo { font-family: "Spline Sans Mono", monospace; font-size: 12px; letter-spacing: 0.12em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+  .dist-barras { display: flex; align-items: flex-end; justify-content: center; gap: 12px; height: 200px; }
+  .dist-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; width: 66px; height: 100%; }
+  .dist-num { font-family: "Spline Sans Mono", monospace; font-weight: 600; font-size: 16px; color: var(--ink-soft); margin-bottom: 4px; min-height: 24px; white-space: nowrap; }
+  .dist-col.ok .dist-num { color: var(--good); }
+  .dist-chulo { color: var(--good); font-size: 20px; font-weight: 700; }
+  .dist-barra { width: 100%; background: #b9c2d6; border-radius: 8px 8px 0 0; min-height: 3px; transition: height 0.5s ease; }
+  .dist-col.ok .dist-barra { background: var(--good); }
+  .dist-letra { font-family: "Fraunces", serif; font-weight: 700; font-size: 19px; margin-top: 6px; }
+  .dist-pct { font-family: "Spline Sans Mono", monospace; font-size: 12px; color: var(--ink-faint); }
+  .dist-pie { font-size: 14px; color: var(--ink-soft); margin-top: 10px; }
+  #podio-final { display: flex; align-items: flex-end; justify-content: center; gap: 10px; margin: 24px 0 12px 0; }
+  .podio-puesto { display: flex; flex-direction: column; align-items: center; width: 100px; }
+  .podio-animal { font-size: 36px; margin-bottom: 4px; }
+  .podio-nombre { font-weight: 600; font-size: 13px; color: var(--ink); text-align:center; word-break: break-word; }
+  .podio-puntos { font-family: "Spline Sans Mono", monospace; color: var(--gold-deep); font-size: 12px; margin-bottom: 8px; }
+  .podio-bloque {
+    width: 100%; border-radius: 10px 10px 0 0; display: flex; align-items: flex-start;
+    justify-content: center; padding-top: 8px; font-family: "Fraunces", serif; font-weight: 700; font-size: 22px;
+  }
+  .podio-1 .podio-bloque { height: 100px; background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep)); color: #08090c; }
+  .podio-2 .podio-bloque { height: 74px; background: linear-gradient(180deg, #cfd4dc, #8890a0); color: #08090c; }
+  .podio-3 .podio-bloque { height: 52px; background: linear-gradient(180deg, #d99a63, #9a6435); color: #08090c; }
+  #capa-confeti { position: fixed; inset: 0; pointer-events: none; z-index: 70; overflow: hidden; display: none; }
+  .estrella-confeti { position: absolute; top: -5%; font-size: 20px; animation: caer-confeti linear forwards; }
+  @keyframes caer-confeti {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
+  }
+</style>
+</head>
+<body>
+  <div id="barra-sala">
+    <div class="info-codigo">Sala: <b id="barra-codigo">----</b></div>
+    <button class="btn-secundario" id="btn-musica">🔊 Música</button>
+  </div>
+  <div class="eyebrow">OMAI-Quiz · POC</div>
+  <h1>Ecuaciones Diferenciales</h1>
+  <div class="card" id="vista-unirse">
+    <p style="color:var(--ink-soft)">Ingresa el código de la sala y tus datos.</p>
+    <label class="campo-label" for="input-codigo">Código de sala</label>
+    <input type="text" id="input-codigo" placeholder="Ej: AB3D" maxlength="4" style="text-transform:uppercase;" />
+    <label class="campo-label" for="input-nombre">Nombre completo</label>
+    <input type="text" id="input-nombre" placeholder="Ej: Daniel Steven Moran Pizarro" maxlength="80" autocomplete="name" />
+    <label class="campo-label" for="input-ciudad">Ciudad</label>
+    <input type="text" id="input-ciudad" placeholder="Ej: Cali" maxlength="40" autocomplete="address-level2" />
+    <label class="campo-label" for="input-correo">Correo electrónico</label>
+    <input type="email" id="input-correo" placeholder="Ej: nombre@correo.com" maxlength="80" autocomplete="email" />
+    <button class="btn" id="btn-unirse">Entrar</button>
+    <p class="config-note" id="unirse-error" style="display:none;"></p>
+    <p class="config-note" id="config-warning" style="display:none; color:var(--bad);">
+      ⚠ Falta configurar Firebase: edita el objeto <code>firebaseConfig</code> al inicio del script de esta página.
+    </p>
+  </div>
+  <div class="card" id="vista-esperando" style="display:none;">
+    <div class="eyebrow">¡Listo!</div>
+    <p id="texto-bienvenida" style="font-size:18px;"></p>
+    <p class="mensaje-espera">Esperando a que el profesor inicie o avance el quiz…</p>
+  </div>
+  <div class="card" id="vista-pregunta" style="display:none;">
+    <div class="eyebrow-pregunta" id="contador-pregunta"></div>
+    <div id="cronometro">30</div>
+    <div class="pregunta-layout">
+      <div class="pregunta-col-texto">
+        <div class="pregunta-texto" id="texto-pregunta"></div>
+        <div class="opciones-lista" id="opciones-lista"></div>
+      </div>
+      <div class="pregunta-col-imagen">
+        <div class="pregunta-imagen-wrap" id="pregunta-imagen-wrap">
+          <img id="pregunta-imagen" class="pregunta-imagen" style="display:none;" />
+          <div id="pregunta-imagen-vacia" class="pregunta-imagen-vacia" style="display:none;">Sin imagen para esta pregunta.</div>
+        </div>
+      </div>
+    </div>
+    <p class="mensaje-espera" id="mensaje-respondido" style="display:none;">✅ Respuesta enviada. Esperando a los demás…</p>
+  </div>
+  <div class="card" id="vista-resultados" style="display:none;">
+    <div id="dist-resultados"></div>
+    <div class="eyebrow">Ranking</div>
+    <div id="ranking-lista"></div>
+    <p class="mensaje-espera">Esperando la siguiente pregunta…</p>
+  </div>
+  <div id="capa-confeti"></div>
+  <div class="card" id="vista-final" style="display:none; max-width: 720px;">
+    <div class="eyebrow">Quiz terminado</div>
+    <h2 style="font-family:'Fraunces',serif; color:var(--gold-deep);">🏆 Ranking final</h2>
+    <div id="podio-final"></div>
+    <div id="ranking-final" style="margin-top:20px;"></div>
+  </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import {
+    ESTADOS, TIEMPO_LIMITE_BASE, escucharSala, ranking, unirseASala, enviarRespuesta,
+  } from "./omai-quiz-app.js";
+
+  // ---------- Utilidades compartidas (mismas que en la página del docente) ----------
+  const LETRAS = ["A", "B", "C", "D", "E", "F"];
+  function esc(t) {
+    return String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+  function indiceCorrecto(p) {
+    if (!p) return null;
+    const c = p.correcta ?? p.correct ?? p.respuestaCorrecta ?? p.respuesta ?? p.indiceCorrecto
+      ?? p.indiceCorrecta ?? p.correctaIdx ?? p.claveCorrecta ?? p.clave ?? p.answer;
+    if (typeof c === "number") return c;
+    if (typeof c === "string") {
+      const t = c.trim();
+      if (t.length === 1 && LETRAS.indexOf(t.toUpperCase()) >= 0) return LETRAS.indexOf(t.toUpperCase());
+      const i = (p.opciones || []).findIndex((o) => String(o).trim() === t);
+      if (i >= 0) return i;
+      if (/^\d+$/.test(t)) return parseInt(t, 10);
+    }
+    return null;
+  }
+  function opcionElegida(s, idx, id) {
+    const e = s.eleccion && s.eleccion[idx] && s.eleccion[idx][id];
+    if (e != null) return typeof e === "object" ? (typeof e.o === "number" ? e.o : null) : e;
+    const r = s.respuestas && s.respuestas[idx] && s.respuestas[idx][id];
+    if (r == null) return null;
+    if (typeof r === "number") return r;
+    const v = r.opcion ?? r.idxOpcion ?? r.respuesta ?? r.eleccion ?? r.indice ?? r.opcionElegida ?? r.o;
+    return typeof v === "number" ? v : null;
+  }
+  function idsQueRespondieron(s, idx) {
+    const a = Object.keys((s.eleccion && s.eleccion[idx]) || {});
+    const b = Object.keys((s.respuestas && s.respuestas[idx]) || {});
+    return [...new Set([...a, ...b])];
+  }
+  function conteoOpciones(s, idx) {
+    const p = s.preguntas[idx];
+    const cuentas = new Array(p.opciones.length).fill(0);
+    idsQueRespondieron(s, idx).forEach((id) => {
+      const o = opcionElegida(s, idx, id);
+      if (o != null && o >= 0 && o < cuentas.length) cuentas[o]++;
+    });
+    return cuentas;
+  }
+  function htmlDistribucion(s, idx, numJugadores, miId) {
+    const p = s.preguntas[idx];
+    if (!p) return "";
+    const cuentas = conteoOpciones(s, idx);
+    const total = cuentas.reduce((a, b) => a + b, 0);
+    const correcta = indiceCorrecto(p);
+    const cols = cuentas.map((c, i) => {
+      const pct = total ? Math.round((100 * c) / total) : 0;
+      const alto = Math.round(pct * 1.35);
+      const ok = i === correcta;
+      return `<div class="dist-col ${ok ? "ok" : ""}">
+        <div class="dist-num">${ok ? '<span class="dist-chulo">✔</span> ' : ""}${c}</div>
+        <div class="dist-barra" style="height:${alto}px"></div>
+        <div class="dist-letra">${LETRAS[i]}</div>
+        <div class="dist-pct">${pct}%</div>
+      </div>`;
+    }).join("");
+    const acertaron = correcta != null ? cuentas[correcta] : null;
+    const sin = Math.max(0, numJugadores - total);
+    let pie = `${total} de ${numJugadores} respondieron`;
+    if (acertaron != null) pie += ` · ${acertaron} acertaron${total ? ` (${Math.round((100 * acertaron) / total)}%)` : ""}`;
+    if (sin > 0) pie += ` · ${sin} sin responder`;
+    let mio = "";
+    if (miId) {
+      const o = opcionElegida(s, idx, miId);
+      if (o == null) mio = `<div class="dist-pie"><b>No alcanzaste a responder.</b></div>`;
+      else if (correcta == null) mio = `<div class="dist-pie">Tu respuesta: <b>${LETRAS[o]}</b></div>`;
+      else mio = `<div class="dist-pie">Tu respuesta: <b>${LETRAS[o]}</b> ${o === correcta ? "✔ ¡Correcta!" : `✘ (la correcta era ${LETRAS[correcta]})`}</div>`;
+    }
+    return `<div class="dist-wrap"><div class="dist-titulo">Respuestas de la pregunta</div>
+      <div class="dist-barras">${cols}</div><div class="dist-pie">${pie}</div>${mio}</div>`;
+  }
+  function posiciones(rk) {
+    const pos = {};
+    rk.forEach((j) => { pos[j.id] = rk.findIndex((x) => x.puntos === j.puntos) + 1; });
+    return pos;
+  }
+  function flecha(id, posActual, hist) {
+    const prev = hist && hist.prev && hist.prev[id];
+    if (prev == null) return '<span class="flecha"></span>';
+    if (posActual < prev) return '<span class="flecha sube" title="Subió">▲</span>';
+    if (posActual > prev) return '<span class="flecha baja" title="Bajó">▼</span>';
+    return '<span class="flecha igual" title="Se mantiene">–</span>';
+  }
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7na99rI4Yb-9_IrszvByRaBIu14wOF2A",
+    authDomain: "omai-quiz.firebaseapp.com",
+    databaseURL: "https://omai-quiz-default-rtdb.firebaseio.com",
+    projectId: "omai-quiz",
+    storageBucket: "omai-quiz.firebasestorage.app",
+    messagingSenderId: "44663231333",
+    appId: "1:44663231333:web:4467c56d21bca45a82878c",
+  };
+  let db;
+  let codigoActual = null;
+  let jugadorId = null;
+  let nombreJugador = "";
+  const esConfigPlaceholder = firebaseConfig.apiKey === "TU_API_KEY";
+  if (esConfigPlaceholder) {
+    document.getElementById("config-warning").style.display = "block";
+    document.getElementById("btn-unirse").disabled = true;
+  } else {
+    const app = initializeApp(firebaseConfig);
+    db = getDatabase(app);
+  }
+  // Prellenar el código si viene por URL (?sala=AB3D), como cuando se escanea el QR del docente.
+  const parametros = new URLSearchParams(location.search);
+  if (parametros.get("sala")) {
+    document.getElementById("input-codigo").value = parametros.get("sala").toUpperCase();
+  }
+
+  // ---------- Música ----------
+  let audioCtx = null;
+  let musicaActiva = false;
+  let musicaTimer = null;
+  let pasoActual = 0;
+  const PISTAS = {
+    lobby: { notas: [196.00, 246.94, 293.66, 246.94], tempo: 480, onda: "sine" },
+    juego: { notas: [261.63, 329.63, 392.00, 329.63, 261.63, 392.00, 440.00, 392.00], tempo: 260, onda: "triangle" },
+    final: { notas: [392.00, 493.88, 587.33, 493.88, 392.00, 587.33, 659.25, 587.33], tempo: 150, onda: "square" },
+  };
+  let faseMusicalActual = null;
+  function tocarNota(freq, duracion, onda) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = onda;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duracion);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duracion);
+  }
+  function iniciarMusica(clave) {
+    clearInterval(musicaTimer);
+    const p = PISTAS[clave];
+    musicaTimer = setInterval(() => {
+      tocarNota(p.notas[pasoActual % p.notas.length], p.tempo / 1000 * 1.3, p.onda);
+      pasoActual++;
+    }, p.tempo);
+  }
+  function asegurarAudioContext() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+  }
+  document.getElementById("btn-musica").onclick = () => {
+    asegurarAudioContext();
+    musicaActiva = !musicaActiva;
+    document.getElementById("btn-musica").textContent = musicaActiva ? "🔊 Música" : "🔈 Música";
+    if (musicaActiva && faseMusicalActual) iniciarMusica(faseMusicalActual); else clearInterval(musicaTimer);
+  };
+  function actualizarFaseMusical(estado) {
+    const nuevaFase = estado === ESTADOS.TERMINADO ? "final" : (estado === ESTADOS.ESPERANDO ? "lobby" : "juego");
+    if (nuevaFase === faseMusicalActual) return;
+    faseMusicalActual = nuevaFase;
+    if (musicaActiva) iniciarMusica(nuevaFase);
+  }
+
+  // ---------- KaTeX ----------
+  // Modo matemático con \( ... \) (en línea), \[ ... \] y $$ ... $$ (en bloque);
+  // se desactiva $...$ porque "$" se usa para valores en pesos (p. ej. $594.000).
+  function renderizarKatex(el) {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(el, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false },
+        ],
+        throwOnError: false,
+      });
+    }
+  }
+
+  // ---------- Unirse a sala ----------
+  const RE_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  document.getElementById("btn-unirse").onclick = async () => {
+    const codigo = document.getElementById("input-codigo").value.trim().toUpperCase();
+    const nombreCompleto = document.getElementById("input-nombre").value.trim().replace(/\s+/g, " ");
+    const ciudad = document.getElementById("input-ciudad").value.trim().replace(/\s+/g, " ");
+    const correo = document.getElementById("input-correo").value.trim();
+    const errorEl = document.getElementById("unirse-error");
+    errorEl.style.display = "none";
+    if (!codigo || !nombreCompleto || !ciudad || !correo) {
+      errorEl.textContent = "Escribe el código de la sala, tu nombre completo, tu ciudad y tu correo.";
+      errorEl.style.display = "block";
+      return;
+    }
+    if (!RE_CORREO.test(correo)) {
+      errorEl.textContent = "El correo no parece válido. Revísalo, por favor.";
+      errorEl.style.display = "block";
+      return;
+    }
+    // Nombre que verá el sistema (ranking, podio): "Nombre completo (Ciudad)"
+    const nombreVisible = `${nombreCompleto} (${ciudad})`;
+    try {
+      asegurarAudioContext();
+      jugadorId = await unirseASala(db, codigo, nombreVisible);
+      codigoActual = codigo;
+      nombreJugador = nombreVisible;
+      // Datos de contacto: solo los usa el docente para el Excel final.
+      try {
+        await set(ref(db, `salas/${codigo}/perfiles/${jugadorId}`), { nombreCompleto, ciudad, correo, unido: Date.now() });
+      } catch (e) { /* el juego sigue aunque no se guarde el perfil */ }
+      document.getElementById("barra-codigo").textContent = codigo;
+      document.getElementById("barra-sala").style.display = "flex";
+      document.getElementById("texto-bienvenida").textContent = `¡Bienvenido/a, ${nombreCompleto}!`;
+      mostrarVista("vista-esperando");
+      escucharSala(db, codigo, renderizar);
+    } catch (e) {
+      errorEl.textContent = e.message || "No se pudo unir a la sala.";
+      errorEl.style.display = "block";
+    }
+  };
+
+  // ---------- Cronómetro local ----------
+  let timerInterval = null;
+  let salaActualCache = null;
+  function iniciarCronometroLocal() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => actualizarCronometro(), 250);
+  }
+  function actualizarCronometro() {
+    if (!salaActualCache || salaActualCache.estado !== ESTADOS.PREGUNTA_ACTIVA) return;
+    const limite = (salaActualCache.tiempoLimiteBase || TIEMPO_LIMITE_BASE) + (salaActualCache.tiempoExtra || 0);
+    const transcurrido = (Date.now() - salaActualCache.inicioPregunta) / 1000;
+    const restante = Math.max(0, Math.ceil(limite - transcurrido));
+    const el = document.getElementById("cronometro");
+    el.textContent = restante;
+    el.classList.toggle("urgente", restante <= 10);
+    if (restante <= 0) clearInterval(timerInterval);
+  }
+
+  // ---------- Responder ----------
+  let yaRespondioEstaPregunta = false;
+  let inicioPreguntaLocal = null;
+  async function elegirOpcion(idxOpcion, idxPregunta) {
+    if (yaRespondioEstaPregunta) return;
+    yaRespondioEstaPregunta = true;
+    document.querySelectorAll(".opcion-btn").forEach((b) => b.disabled = true);
+    document.querySelectorAll(".opcion-btn")[idxOpcion].classList.add("elegida");
+    document.getElementById("mensaje-respondido").style.display = "block";
+    const tiempoSegundos = (Date.now() - inicioPreguntaLocal) / 1000;
+    try {
+      await enviarRespuesta(db, codigoActual, idxPregunta, jugadorId, idxOpcion, tiempoSegundos);
+      // Copia de la elección (letra y tiempo) para el diagrama de barras y el Excel del docente.
+      await set(ref(db, `salas/${codigoActual}/eleccion/${idxPregunta}/${jugadorId}`),
+        { o: idxOpcion, t: Math.round(tiempoSegundos * 10) / 10 });
+    } catch (e) {
+      // Ya se había respondido (p. ej. doble clic); no hacer nada más.
+    }
+  }
+  let ultimaPreguntaRenderizada = -1;
+  function renderizar(s) {
+    if (!s) return;
+    salaActualCache = s;
+    actualizarFaseMusical(s.estado);
+    if (s.estado === ESTADOS.ESPERANDO) {
+      mostrarVista("vista-esperando");
+    }
+    if (s.estado === ESTADOS.PREGUNTA_ACTIVA) {
+      mostrarVista("vista-pregunta");
+      const idx = s.preguntaActual;
+      const p = s.preguntas[idx];
+      document.getElementById("contador-pregunta").textContent = `Pregunta ${(s.indicesUsados || []).length} de ${s.preguntas.length}`;
+      document.getElementById("texto-pregunta").textContent = p.texto;
+      const imgEl = document.getElementById("pregunta-imagen");
+      const imgVaciaEl = document.getElementById("pregunta-imagen-vacia");
+      document.querySelector(".pregunta-col-imagen").style.display = p.imagen ? "flex" : "none";
+      if (p.imagen) {
+        imgEl.onerror = () => { imgEl.style.display = "none"; imgVaciaEl.style.display = "block"; imgVaciaEl.textContent = "No se pudo cargar la imagen."; };
+        imgEl.src = p.imagen;
+        imgEl.style.display = "block";
+        imgVaciaEl.style.display = "none";
+      } else {
+        imgEl.style.display = "none";
+        imgVaciaEl.style.display = "block";
+        imgVaciaEl.textContent = "Sin imagen para esta pregunta.";
+      }
+      const listaEl = document.getElementById("opciones-lista");
+      const yaRespondioEnSala = !!(s.respuestas && s.respuestas[idx] && s.respuestas[idx][jugadorId]);
+      listaEl.innerHTML = p.opciones.map((op, i) =>
+        `<button class="opcion-btn" data-idx="${i}" ${yaRespondioEnSala ? "disabled" : ""}>${op}</button>`
+      ).join("");
+      renderizarKatex(document.getElementById("vista-pregunta"));
+      if (idx !== ultimaPreguntaRenderizada) {
+        ultimaPreguntaRenderizada = idx;
+        yaRespondioEstaPregunta = yaRespondioEnSala;
+        inicioPreguntaLocal = Date.now();
+        document.getElementById("mensaje-respondido").style.display = yaRespondioEnSala ? "block" : "none";
+        iniciarCronometroLocal();
+      }
+      document.querySelectorAll(".opcion-btn").forEach((btn) => {
+        btn.onclick = () => elegirOpcion(parseInt(btn.dataset.idx, 10), idx);
+      });
+      actualizarCronometro();
+    } else {
+      clearInterval(timerInterval);
+    }
+    if (s.estado === ESTADOS.RESULTADOS) {
+      mostrarVista("vista-resultados");
+      const rankingActual = ranking(s);
+      const pos = posiciones(rankingActual);
+      const hist = s.rankHist;
+      const numJugadores = Object.keys(s.jugadores || {}).length;
+      document.getElementById("dist-resultados").innerHTML = htmlDistribucion(s, s.preguntaActual, numJugadores, jugadorId);
+      document.getElementById("ranking-lista").innerHTML = rankingActual
+        .map((j, i) => `<div class="ranking-row ${i === 0 ? "top1" : ""} ${j.id === jugadorId ? "yo" : ""}"><span>${flecha(j.id, pos[j.id], hist)} ${i + 1}. ${j.animal || "🎓"} ${esc(j.nombre)}</span><span>${j.puntos} pts</span></div>`).join("");
+    }
+    if (s.estado === ESTADOS.TERMINADO) {
+      mostrarVista("vista-final");
+      const rankingFinal = ranking(s);
+      renderizarPodio(rankingFinal);
+      const resto = rankingFinal.slice(3);
+      document.getElementById("ranking-final").innerHTML = resto
+        .map((j, i) => `<div class="ranking-row ${j.id === jugadorId ? "yo" : ""}"><span>${i + 4}. ${j.animal || "🎓"} ${esc(j.nombre)}</span><span>${j.puntos} pts</span></div>`).join("");
+      mostrarConfeti();
+    } else {
+      ocultarConfeti();
+    }
+  }
+  function mostrarVista(id) {
+    ["vista-unirse", "vista-esperando", "vista-pregunta", "vista-resultados", "vista-final"]
+      .forEach((v) => document.getElementById(v).style.display = v === id ? "block" : "none");
+  }
+  function renderizarPodio(rankingFinal) {
+    const cont = document.getElementById("podio-final");
+    if (rankingFinal.length === 0) { cont.innerHTML = ""; return; }
+    const medallas = ["🥇", "🥈", "🥉"];
+    const orden = [1, 0, 2].filter((i) => rankingFinal[i]);
+    cont.innerHTML = orden.map((i) => {
+      const j = rankingFinal[i];
+      const claseAltura = `podio-${i + 1}`;
+      return `<div class="podio-puesto ${claseAltura}">
+        <div class="podio-animal">${j.animal || "🎓"}</div>
+        <div class="podio-nombre">${esc(j.nombre)}</div>
+        <div class="podio-puntos">${j.puntos} pts</div>
+        <div class="podio-bloque">${medallas[i]}</div>
+      </div>`;
+    }).join("");
+  }
+  let confetiInterval = null;
+  const EMOJIS_CONFETI = ["⭐", "✨", "🌟", "🎉"];
+  function mostrarConfeti() {
+    const capa = document.getElementById("capa-confeti");
+    if (confetiInterval) return;
+    capa.style.display = "block";
+    confetiInterval = setInterval(() => {
+      const estrella = document.createElement("div");
+      estrella.className = "estrella-confeti";
+      estrella.textContent = EMOJIS_CONFETI[Math.floor(Math.random() * EMOJIS_CONFETI.length)];
+      estrella.style.left = `${Math.random() * 100}%`;
+      const duracion = 3 + Math.random() * 2.5;
+      estrella.style.animationDuration = `${duracion}s`;
+      estrella.style.fontSize = `${16 + Math.random() * 18}px`;
+      capa.appendChild(estrella);
+      setTimeout(() => estrella.remove(), duracion * 1000 + 200);
+    }, 180);
+  }
+  function ocultarConfeti() {
+    if (!confetiInterval) return;
+    clearInterval(confetiInterval);
+    confetiInterval = null;
+    document.getElementById("capa-confeti").innerHTML = "";
+    document.getElementById("capa-confeti").style.display = "none";
+  }
+</script>
+</body>
+</html>
